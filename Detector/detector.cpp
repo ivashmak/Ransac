@@ -52,7 +52,8 @@ std::vector<cv::KeyPoint> detect(std::string filename, std::string detector_name
 
 	cv::Mat img_keypoints;
 	drawKeypoints (img, keypoints, img_keypoints, cv::Scalar::all(-1), cv::DrawMatchesFlags::DEFAULT);
-  	imwrite("res/points_detection/"+detector_name+".jpg", img_keypoints);	
+  	imwrite("res/points_detection/"+detector_name+".jpg", img_keypoints);
+  	// imshow (detector_name, img_keypoints);	
   	// cv::waitKey(0);
 	
 	return keypoints;
