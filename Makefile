@@ -177,32 +177,59 @@ Generator/generator.cpp.s:
 	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Generator/generator.cpp.s
 .PHONY : Generator/generator.cpp.s
 
-ransac.o: ransac.cpp.o
+Ransac/ransac.o: Ransac/ransac.cpp.o
 
-.PHONY : ransac.o
+.PHONY : Ransac/ransac.o
 
 # target to build an object file
-ransac.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/ransac.cpp.o
-.PHONY : ransac.cpp.o
+Ransac/ransac.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/ransac.cpp.o
+.PHONY : Ransac/ransac.cpp.o
 
-ransac.i: ransac.cpp.i
+Ransac/ransac.i: Ransac/ransac.cpp.i
 
-.PHONY : ransac.i
+.PHONY : Ransac/ransac.i
 
 # target to preprocess a source file
-ransac.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/ransac.cpp.i
-.PHONY : ransac.cpp.i
+Ransac/ransac.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/ransac.cpp.i
+.PHONY : Ransac/ransac.cpp.i
 
-ransac.s: ransac.cpp.s
+Ransac/ransac.s: Ransac/ransac.cpp.s
 
-.PHONY : ransac.s
+.PHONY : Ransac/ransac.s
 
 # target to generate assembly for a file
-ransac.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/ransac.cpp.s
-.PHONY : ransac.cpp.s
+Ransac/ransac.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/ransac.cpp.s
+.PHONY : Ransac/ransac.cpp.s
+
+main.o: main.cpp.o
+
+.PHONY : main.o
+
+# target to build an object file
+main.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/main.cpp.o
+.PHONY : main.cpp.o
+
+main.i: main.cpp.i
+
+.PHONY : main.i
+
+# target to preprocess a source file
+main.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/main.cpp.i
+.PHONY : main.cpp.i
+
+main.s: main.cpp.s
+
+.PHONY : main.s
+
+# target to generate assembly for a file
+main.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/main.cpp.s
+.PHONY : main.cpp.s
 
 # Help Target
 help:
@@ -219,9 +246,12 @@ help:
 	@echo "... Generator/generator.o"
 	@echo "... Generator/generator.i"
 	@echo "... Generator/generator.s"
-	@echo "... ransac.o"
-	@echo "... ransac.i"
-	@echo "... ransac.s"
+	@echo "... Ransac/ransac.o"
+	@echo "... Ransac/ransac.i"
+	@echo "... Ransac/ransac.s"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
 .PHONY : help
 
 

@@ -1,7 +1,8 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/ransac.dir/ransac.cpp.o"
+  "CMakeFiles/ransac.dir/main.cpp.o"
   "CMakeFiles/ransac.dir/Generator/generator.cpp.o"
   "CMakeFiles/ransac.dir/Detector/detector.cpp.o"
+  "CMakeFiles/ransac.dir/Ransac/ransac.cpp.o"
   "ransac.pdb"
   "ransac"
 )

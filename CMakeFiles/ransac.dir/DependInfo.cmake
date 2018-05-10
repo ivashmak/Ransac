@@ -6,7 +6,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/ivashmak/Ransac/Detector/detector.cpp" "/home/ivashmak/Ransac/CMakeFiles/ransac.dir/Detector/detector.cpp.o"
   "/home/ivashmak/Ransac/Generator/generator.cpp" "/home/ivashmak/Ransac/CMakeFiles/ransac.dir/Generator/generator.cpp.o"
-  "/home/ivashmak/Ransac/ransac.cpp" "/home/ivashmak/Ransac/CMakeFiles/ransac.dir/ransac.cpp.o"
+  "/home/ivashmak/Ransac/Ransac/ransac.cpp" "/home/ivashmak/Ransac/CMakeFiles/ransac.dir/Ransac/ransac.cpp.o"
+  "/home/ivashmak/Ransac/main.cpp" "/home/ivashmak/Ransac/CMakeFiles/ransac.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

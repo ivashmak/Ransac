@@ -57,28 +57,28 @@ include CMakeFiles/ransac.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/ransac.dir/flags.make
 
-CMakeFiles/ransac.dir/ransac.cpp.o: CMakeFiles/ransac.dir/flags.make
-CMakeFiles/ransac.dir/ransac.cpp.o: ransac.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ransac.dir/ransac.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/ransac.cpp.o -c /home/ivashmak/Ransac/ransac.cpp
+CMakeFiles/ransac.dir/main.cpp.o: CMakeFiles/ransac.dir/flags.make
+CMakeFiles/ransac.dir/main.cpp.o: main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ransac.dir/main.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/main.cpp.o -c /home/ivashmak/Ransac/main.cpp
 
-CMakeFiles/ransac.dir/ransac.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/ransac.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/ransac.cpp > CMakeFiles/ransac.dir/ransac.cpp.i
+CMakeFiles/ransac.dir/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/main.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/main.cpp > CMakeFiles/ransac.dir/main.cpp.i
 
-CMakeFiles/ransac.dir/ransac.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/ransac.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/ransac.cpp -o CMakeFiles/ransac.dir/ransac.cpp.s
+CMakeFiles/ransac.dir/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/main.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/main.cpp -o CMakeFiles/ransac.dir/main.cpp.s
 
-CMakeFiles/ransac.dir/ransac.cpp.o.requires:
+CMakeFiles/ransac.dir/main.cpp.o.requires:
 
-.PHONY : CMakeFiles/ransac.dir/ransac.cpp.o.requires
+.PHONY : CMakeFiles/ransac.dir/main.cpp.o.requires
 
-CMakeFiles/ransac.dir/ransac.cpp.o.provides: CMakeFiles/ransac.dir/ransac.cpp.o.requires
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/ransac.cpp.o.provides.build
-.PHONY : CMakeFiles/ransac.dir/ransac.cpp.o.provides
+CMakeFiles/ransac.dir/main.cpp.o.provides: CMakeFiles/ransac.dir/main.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/main.cpp.o.provides.build
+.PHONY : CMakeFiles/ransac.dir/main.cpp.o.provides
 
-CMakeFiles/ransac.dir/ransac.cpp.o.provides.build: CMakeFiles/ransac.dir/ransac.cpp.o
+CMakeFiles/ransac.dir/main.cpp.o.provides.build: CMakeFiles/ransac.dir/main.cpp.o
 
 
 CMakeFiles/ransac.dir/Generator/generator.cpp.o: CMakeFiles/ransac.dir/flags.make
@@ -129,18 +129,44 @@ CMakeFiles/ransac.dir/Detector/detector.cpp.o.provides: CMakeFiles/ransac.dir/De
 CMakeFiles/ransac.dir/Detector/detector.cpp.o.provides.build: CMakeFiles/ransac.dir/Detector/detector.cpp.o
 
 
+CMakeFiles/ransac.dir/Ransac/ransac.cpp.o: CMakeFiles/ransac.dir/flags.make
+CMakeFiles/ransac.dir/Ransac/ransac.cpp.o: Ransac/ransac.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/ransac.dir/Ransac/ransac.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/Ransac/ransac.cpp.o -c /home/ivashmak/Ransac/Ransac/ransac.cpp
+
+CMakeFiles/ransac.dir/Ransac/ransac.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/Ransac/ransac.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/Ransac/ransac.cpp > CMakeFiles/ransac.dir/Ransac/ransac.cpp.i
+
+CMakeFiles/ransac.dir/Ransac/ransac.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/Ransac/ransac.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/Ransac/ransac.cpp -o CMakeFiles/ransac.dir/Ransac/ransac.cpp.s
+
+CMakeFiles/ransac.dir/Ransac/ransac.cpp.o.requires:
+
+.PHONY : CMakeFiles/ransac.dir/Ransac/ransac.cpp.o.requires
+
+CMakeFiles/ransac.dir/Ransac/ransac.cpp.o.provides: CMakeFiles/ransac.dir/Ransac/ransac.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/ransac.cpp.o.provides.build
+.PHONY : CMakeFiles/ransac.dir/Ransac/ransac.cpp.o.provides
+
+CMakeFiles/ransac.dir/Ransac/ransac.cpp.o.provides.build: CMakeFiles/ransac.dir/Ransac/ransac.cpp.o
+
+
 # Object files for target ransac
 ransac_OBJECTS = \
-"CMakeFiles/ransac.dir/ransac.cpp.o" \
+"CMakeFiles/ransac.dir/main.cpp.o" \
 "CMakeFiles/ransac.dir/Generator/generator.cpp.o" \
-"CMakeFiles/ransac.dir/Detector/detector.cpp.o"
+"CMakeFiles/ransac.dir/Detector/detector.cpp.o" \
+"CMakeFiles/ransac.dir/Ransac/ransac.cpp.o"
 
 # External object files for target ransac
 ransac_EXTERNAL_OBJECTS =
 
-ransac: CMakeFiles/ransac.dir/ransac.cpp.o
+ransac: CMakeFiles/ransac.dir/main.cpp.o
 ransac: CMakeFiles/ransac.dir/Generator/generator.cpp.o
 ransac: CMakeFiles/ransac.dir/Detector/detector.cpp.o
+ransac: CMakeFiles/ransac.dir/Ransac/ransac.cpp.o
 ransac: CMakeFiles/ransac.dir/build.make
 ransac: /usr/local/lib/libopencv_stitching.so.3.3.0
 ransac: /usr/local/lib/libopencv_superres.so.3.3.0
@@ -187,7 +213,7 @@ ransac: /usr/local/lib/libopencv_objdetect.so.3.3.0
 ransac: /usr/local/lib/libopencv_imgproc.so.3.3.0
 ransac: /usr/local/lib/libopencv_core.so.3.3.0
 ransac: CMakeFiles/ransac.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ivashmak/Ransac/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable ransac"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ivashmak/Ransac/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable ransac"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ransac.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -195,9 +221,10 @@ CMakeFiles/ransac.dir/build: ransac
 
 .PHONY : CMakeFiles/ransac.dir/build
 
-CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/ransac.cpp.o.requires
+CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/main.cpp.o.requires
 CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Generator/generator.cpp.o.requires
 CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Detector/detector.cpp.o.requires
+CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Ransac/ransac.cpp.o.requires
 
 .PHONY : CMakeFiles/ransac.dir/requires
 
