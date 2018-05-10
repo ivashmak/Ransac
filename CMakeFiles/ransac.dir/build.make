@@ -129,28 +129,28 @@ CMakeFiles/ransac.dir/Detector/detector.cpp.o.provides: CMakeFiles/ransac.dir/De
 CMakeFiles/ransac.dir/Detector/detector.cpp.o.provides.build: CMakeFiles/ransac.dir/Detector/detector.cpp.o
 
 
-CMakeFiles/ransac.dir/Ransac/ransac.cpp.o: CMakeFiles/ransac.dir/flags.make
-CMakeFiles/ransac.dir/Ransac/ransac.cpp.o: Ransac/ransac.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/ransac.dir/Ransac/ransac.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/Ransac/ransac.cpp.o -c /home/ivashmak/Ransac/Ransac/ransac.cpp
+CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o: CMakeFiles/ransac.dir/flags.make
+CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o: Ransac/NaiveRansac.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o -c /home/ivashmak/Ransac/Ransac/NaiveRansac.cpp
 
-CMakeFiles/ransac.dir/Ransac/ransac.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/Ransac/ransac.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/Ransac/ransac.cpp > CMakeFiles/ransac.dir/Ransac/ransac.cpp.i
+CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/Ransac/NaiveRansac.cpp > CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.i
 
-CMakeFiles/ransac.dir/Ransac/ransac.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/Ransac/ransac.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/Ransac/ransac.cpp -o CMakeFiles/ransac.dir/Ransac/ransac.cpp.s
+CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/Ransac/NaiveRansac.cpp -o CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.s
 
-CMakeFiles/ransac.dir/Ransac/ransac.cpp.o.requires:
+CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o.requires:
 
-.PHONY : CMakeFiles/ransac.dir/Ransac/ransac.cpp.o.requires
+.PHONY : CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o.requires
 
-CMakeFiles/ransac.dir/Ransac/ransac.cpp.o.provides: CMakeFiles/ransac.dir/Ransac/ransac.cpp.o.requires
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/ransac.cpp.o.provides.build
-.PHONY : CMakeFiles/ransac.dir/Ransac/ransac.cpp.o.provides
+CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o.provides: CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o.provides.build
+.PHONY : CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o.provides
 
-CMakeFiles/ransac.dir/Ransac/ransac.cpp.o.provides.build: CMakeFiles/ransac.dir/Ransac/ransac.cpp.o
+CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o.provides.build: CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o
 
 
 # Object files for target ransac
@@ -158,7 +158,7 @@ ransac_OBJECTS = \
 "CMakeFiles/ransac.dir/main.cpp.o" \
 "CMakeFiles/ransac.dir/Generator/generator.cpp.o" \
 "CMakeFiles/ransac.dir/Detector/detector.cpp.o" \
-"CMakeFiles/ransac.dir/Ransac/ransac.cpp.o"
+"CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o"
 
 # External object files for target ransac
 ransac_EXTERNAL_OBJECTS =
@@ -166,7 +166,7 @@ ransac_EXTERNAL_OBJECTS =
 ransac: CMakeFiles/ransac.dir/main.cpp.o
 ransac: CMakeFiles/ransac.dir/Generator/generator.cpp.o
 ransac: CMakeFiles/ransac.dir/Detector/detector.cpp.o
-ransac: CMakeFiles/ransac.dir/Ransac/ransac.cpp.o
+ransac: CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o
 ransac: CMakeFiles/ransac.dir/build.make
 ransac: /usr/local/lib/libopencv_stitching.so.3.3.0
 ransac: /usr/local/lib/libopencv_superres.so.3.3.0
@@ -224,7 +224,7 @@ CMakeFiles/ransac.dir/build: ransac
 CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/main.cpp.o.requires
 CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Generator/generator.cpp.o.requires
 CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Detector/detector.cpp.o.requires
-CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Ransac/ransac.cpp.o.requires
+CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o.requires
 
 .PHONY : CMakeFiles/ransac.dir/requires
 

@@ -7,6 +7,6 @@ find_package( OpenCV REQUIRED )
 add_executable(ransac main.cpp 
 				Generator/generator.cpp Generator/generator.h 
 				Detector/detector.cpp Detector/detector.h
-				Ransac/ransac.cpp Ransac/ransac.h)
+				Ransac/NaiveRansac.cpp Ransac/AbstractRansac.h Ransac/NaiveRansac.h)
 
 target_link_libraries( ransac ${OpenCV_LIBS} )

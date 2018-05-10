@@ -9,13 +9,13 @@
 
 #include "Generator/generator.h"
 #include "Detector/detector.h"
-#include "Ransac/ransac.h"
+#include "Ransac/NaiveRansac.h"
+#include "Ransac/AbstractRansac.h"
 
 // using namespace cv;
 // using namespace std;
 // using namespace cv::xfeatures2d;
 // using namespace std::chrono;
-	
 
 int main () {
 	auto total_begin = std::chrono::steady_clock::now();
@@ -29,33 +29,18 @@ int main () {
 	
 	std::cout << "detected keypoints\nstart clock\n";
 	
-	auto ransac_time_begin = std::chrono::steady_clock::now();
-	Line best_line = ransac(keypoints);
-	auto ransac_time_end = std::chrono::steady_clock::now();
+	Ransac *ransac;
+	NaiveRansac naive_ransac;
 
+	// ransac = &naive_ransac;
 
-	// Display output
-	cv::Mat img = cv::imread("data/image1.jpg");
-	int width = img.cols;
-	int height = img.rows;
-
-	float k = (best_line.x2 - best_line.x1)/(best_line.y2 - best_line.y1);
-	float b = (best_line.y1*best_line.x1 - best_line.y1*best_line.x2)/(best_line.y2-best_line.y1) + best_line.x1;
-
-	img = cv::imread("data/image1.jpg");
-			
-	draw_function (k, b, std::max(width, height), cv::Scalar(255,0,0), img);
-	imshow("Best Line",img);
+	// Line best_line;// = ransac(keypoints);
 
 	auto total_end = std::chrono::steady_clock::now();
 	
-	std::cout << "Ransac time: " << std::chrono::duration_cast<std::chrono::milliseconds>
-													(ransac_time_end - ransac_time_begin).count() << "ms\n";
+	std::cout << "Ransac time: " << " " << "ms\n";
 	std::cout << "Total time: " << std::chrono::duration_cast<std::chrono::milliseconds>
 													(total_end - total_begin).count() << "ms\n";
-		
-
-	cv::waitKey( 0 );
 
 	return 0;
 }

@@ -177,32 +177,32 @@ Generator/generator.cpp.s:
 	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Generator/generator.cpp.s
 .PHONY : Generator/generator.cpp.s
 
-Ransac/ransac.o: Ransac/ransac.cpp.o
+Ransac/NaiveRansac.o: Ransac/NaiveRansac.cpp.o
 
-.PHONY : Ransac/ransac.o
+.PHONY : Ransac/NaiveRansac.o
 
 # target to build an object file
-Ransac/ransac.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/ransac.cpp.o
-.PHONY : Ransac/ransac.cpp.o
+Ransac/NaiveRansac.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o
+.PHONY : Ransac/NaiveRansac.cpp.o
 
-Ransac/ransac.i: Ransac/ransac.cpp.i
+Ransac/NaiveRansac.i: Ransac/NaiveRansac.cpp.i
 
-.PHONY : Ransac/ransac.i
+.PHONY : Ransac/NaiveRansac.i
 
 # target to preprocess a source file
-Ransac/ransac.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/ransac.cpp.i
-.PHONY : Ransac/ransac.cpp.i
+Ransac/NaiveRansac.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.i
+.PHONY : Ransac/NaiveRansac.cpp.i
 
-Ransac/ransac.s: Ransac/ransac.cpp.s
+Ransac/NaiveRansac.s: Ransac/NaiveRansac.cpp.s
 
-.PHONY : Ransac/ransac.s
+.PHONY : Ransac/NaiveRansac.s
 
 # target to generate assembly for a file
-Ransac/ransac.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/ransac.cpp.s
-.PHONY : Ransac/ransac.cpp.s
+Ransac/NaiveRansac.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.s
+.PHONY : Ransac/NaiveRansac.cpp.s
 
 main.o: main.cpp.o
 
@@ -246,9 +246,9 @@ help:
 	@echo "... Generator/generator.o"
 	@echo "... Generator/generator.i"
 	@echo "... Generator/generator.s"
-	@echo "... Ransac/ransac.o"
-	@echo "... Ransac/ransac.i"
-	@echo "... Ransac/ransac.s"
+	@echo "... Ransac/NaiveRansac.o"
+	@echo "... Ransac/NaiveRansac.i"
+	@echo "... Ransac/NaiveRansac.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

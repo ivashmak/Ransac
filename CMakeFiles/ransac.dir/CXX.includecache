@@ -38,18 +38,16 @@ stdio.h
 opencv2/opencv.hpp
 -
 
-/home/ivashmak/Ransac/Ransac/ransac.cpp
-ransac.h
-/home/ivashmak/Ransac/Ransac/ransac.h
-
-/home/ivashmak/Ransac/Ransac/ransac.h
+/home/ivashmak/Ransac/Ransac/AbstractRansac.h
 iostream
 -
 stdio.h
 -
 string
 -
-unordered_map
+math.h
+-
+chrono
 -
 opencv2/opencv.hpp
 -
@@ -61,6 +59,14 @@ opencv2/xfeatures2d.hpp
 -
 opencv2/highgui.hpp
 -
+
+/home/ivashmak/Ransac/Ransac/NaiveRansac.cpp
+NaiveRansac.h
+/home/ivashmak/Ransac/Ransac/NaiveRansac.h
+
+/home/ivashmak/Ransac/Ransac/NaiveRansac.h
+AbstractRansac.h
+/home/ivashmak/Ransac/Ransac/AbstractRansac.h
 
 /home/ivashmak/Ransac/main.cpp
 stdio.h
@@ -81,8 +87,10 @@ Generator/generator.h
 /home/ivashmak/Ransac/Generator/generator.h
 Detector/detector.h
 /home/ivashmak/Ransac/Detector/detector.h
-Ransac/ransac.h
-/home/ivashmak/Ransac/Ransac/ransac.h
+Ransac/NaiveRansac.h
+/home/ivashmak/Ransac/Ransac/NaiveRansac.h
+Ransac/AbstractRansac.h
+/home/ivashmak/Ransac/Ransac/AbstractRansac.h
 
 /usr/local/include/opencv/cxcore.h
 opencv2/core/core_c.h
