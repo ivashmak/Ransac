@@ -2,7 +2,7 @@
 
 void Generate2DLinePoints(float noise, int inlier_number, int outlier_number,
                              int border_x, int border_y, std::vector<cv::Point2f> &points);
-void generate () {
+std::vector<cv::Point2f> generate () {
     int width = 600; // Width of the image
     int height = 600; // Height of the image
     float noise = 3.0f; // Noise sigma
@@ -20,6 +20,7 @@ void generate () {
     // imshow("Image", image);
     // cv::waitKey(0);
     imwrite( "data/image1.jpg", image );
+    return points;
 }
 
 void Generate2DLinePoints(float noise, int inlier_number, int outlier_number,

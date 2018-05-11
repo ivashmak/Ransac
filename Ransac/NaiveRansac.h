@@ -1,19 +1,21 @@
 #ifndef RANSAC_NAIVE_RANSAC_H
 #define RANSAC_NAIVE_RANSAC_H
 
-#include "AbstractRansac.h"
+#include "Estimator.h"
 
 
-void draw_function (float k, float b, float max_dimen, cv::Scalar color, cv::Mat img);
-bool fit_point (float x, float y, float k, float b1, float b2);
+bool fit_point_between_lines (float x, float y, float k, float b1, float b2);
 
-class NaiveRansac : public Ransac {
+class NaiveRansac : public Estimator {
     public:
-        // NaiveRansac();
-        
-        Line getBestLineFit (std::vector<cv::KeyPoint> keypoints);  // override;
+        NaiveRansac (cv::InputArray points, 
+                     Model& model, 
+                     Sampler& sampler, 
+                     TerminationCriteria& termination_criteria, 
+                     Quality& quality) : Estimator(points, model, sampler, termination_criteria, quality) {}
 
-  		void showResult (cv::Mat image);// override;
+        Line getBestLineFit (void) override;
+
 };
 
 #endif //RANSAC_NAIVE_RANSAC_H
