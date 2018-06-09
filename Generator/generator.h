@@ -4,6 +4,6 @@
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
 
-std::vector<cv::Point2f> generate();
+void generate(std::vector<cv::Point2f> &points);
 
 #endif //RANSAC_GENERATOR_H

@@ -23,41 +23,12 @@
 
 class Estimator {
 public:
-	Model *model;
-	Quality *quality;
-	Sampler *sampler;
-	TerminationCriteria *termination_criteria;
-	
-	cv::Point2f *points;
-	Line best_line;
-	int total_points;
+    virtual void EstimateModel(cv::InputArray points, cv::OutputArray &line, int *sample, int sample_nubmer, Model &model) = 0;
+    virtual void EstimateModelNonMinimalSample(cv::InputArray points, int *sample, int sample_nubmer, Model &model) = 0; 
+    virtual void GetError(Model &model, cv::InputArray points) = 0;
+    virtual int SampleNumber()  = 0; 
 
-	Estimator (cv::InputArray points, 
-			   Model& model, 
-			   Sampler& sampler, 
-			   TerminationCriteria& termination_criteria, 
-			   Quality& quality) {
-
-		CV_Assert(!points.empty());
-		
-		this->model = &model;
-		this->sampler = &sampler;
-		this->termination_criteria = &termination_criteria;
-		this->quality = &quality;
-
-		this->points = (cv::Point2f *) points.getMat().data;
-		this->total_points = points.size().width;	
-		// CV_Assert(sampler != nullptr);
-		// CV_Assert(quality != nullptr);
-		// CV_Assert(termination_criteria != nullptr);
-		// CV_Assert(this->model != nullptr);
-		
-	}
-
-	virtual Line getBestLineFit (void) = 0;
-	// virtual Line getBestLineFit (std::vector<cv::Point2f> keypoints) = 0;
-
-	void exitOnFail(void) {
+/*	void exitOnFail(void) {
         std::cout << "Something wrong in Ransac!\nExiting\n";
         exit(0);
     }
@@ -73,7 +44,7 @@ public:
 
     void exitOnSuccess(std::string message) {
         std::cout << message << '\n';
-    }
+    }*/
     
 };
 

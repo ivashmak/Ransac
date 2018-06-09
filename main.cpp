@@ -9,7 +9,7 @@
 
 #include "Generator/generator.h"
 #include "Detector/detector.h"
-#include "Ransac/NaiveRansac.h"
+#include "Ransac/Line2DEstimator.h"
 
 // using namespace cv;
 // using namespace std;
@@ -21,21 +21,24 @@ int main () {
 	
 	srand (time(NULL));
 	
-	std::vector<cv::Point2f> keypoints = generate();
+	std::vector<cv::Point_<float>> points;
+	generate(points);
 	std::cout << "generated image\n";
 	
-	// std::vector<cv::KeyPoint> keypoints = detect("data/image1.jpg", "sift");
-	// std::cout << "detected keypoints\nstart clock\n";
-	cv::InputArray points (keypoints);
-
+	// std::vector<cv::KeyPoint> points = detect("data/image1.jpg", "sift");
+	// std::cout << "detected points\nstart clock\n";
+	
 	Model model(10, 2, 0.99, "ransac");
 	Sampler sampler(points);
 	TerminationCriteria termination_criteria (model);
 	Quality quality;
 
-	NaiveRansac naive_ransac(points, model, sampler, termination_criteria, quality);
+	Line2DEstimator naive_ransac(points, model, sampler, termination_criteria, quality);
 	
-	Line best_line = naive_ransac.getBestLineFit();
+	std::vector<cv::Point_<float>> line(2);
+	
+	naive_ransac.EstimateModel(points, line, nullptr, points.size(), model);
+	
 
 	auto total_end = std::chrono::steady_clock::now();
 	
@@ -46,6 +49,6 @@ int main () {
 	std::cout << "Total time: " << std::chrono::duration_cast<std::chrono::milliseconds>
 													(total_end - total_begin).count() << "ms\n";
 
-	naive_ransac.quality->showResult(model, points, best_line);
+	naive_ransac.quality->showResult(model, points, line);
 	return 0;
 }

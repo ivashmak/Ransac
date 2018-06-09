@@ -177,32 +177,32 @@ Generator/generator.cpp.s:
 	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Generator/generator.cpp.s
 .PHONY : Generator/generator.cpp.s
 
-Ransac/NaiveRansac.o: Ransac/NaiveRansac.cpp.o
+Ransac/Line2DEstimator.o: Ransac/Line2DEstimator.cpp.o
 
-.PHONY : Ransac/NaiveRansac.o
+.PHONY : Ransac/Line2DEstimator.o
 
 # target to build an object file
-Ransac/NaiveRansac.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.o
-.PHONY : Ransac/NaiveRansac.cpp.o
+Ransac/Line2DEstimator.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/Line2DEstimator.cpp.o
+.PHONY : Ransac/Line2DEstimator.cpp.o
 
-Ransac/NaiveRansac.i: Ransac/NaiveRansac.cpp.i
+Ransac/Line2DEstimator.i: Ransac/Line2DEstimator.cpp.i
 
-.PHONY : Ransac/NaiveRansac.i
+.PHONY : Ransac/Line2DEstimator.i
 
 # target to preprocess a source file
-Ransac/NaiveRansac.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.i
-.PHONY : Ransac/NaiveRansac.cpp.i
+Ransac/Line2DEstimator.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/Line2DEstimator.cpp.i
+.PHONY : Ransac/Line2DEstimator.cpp.i
 
-Ransac/NaiveRansac.s: Ransac/NaiveRansac.cpp.s
+Ransac/Line2DEstimator.s: Ransac/Line2DEstimator.cpp.s
 
-.PHONY : Ransac/NaiveRansac.s
+.PHONY : Ransac/Line2DEstimator.s
 
 # target to generate assembly for a file
-Ransac/NaiveRansac.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/NaiveRansac.cpp.s
-.PHONY : Ransac/NaiveRansac.cpp.s
+Ransac/Line2DEstimator.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/Line2DEstimator.cpp.s
+.PHONY : Ransac/Line2DEstimator.cpp.s
 
 main.o: main.cpp.o
 
@@ -246,9 +246,9 @@ help:
 	@echo "... Generator/generator.o"
 	@echo "... Generator/generator.i"
 	@echo "... Generator/generator.s"
-	@echo "... Ransac/NaiveRansac.o"
-	@echo "... Ransac/NaiveRansac.i"
-	@echo "... Ransac/NaiveRansac.s"
+	@echo "... Ransac/Line2DEstimator.o"
+	@echo "... Ransac/Line2DEstimator.i"
+	@echo "... Ransac/Line2DEstimator.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

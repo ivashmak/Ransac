@@ -23,7 +23,11 @@ public:
 	}
 
 
-	void showResult (Model& model, cv::InputArray ps, Line line) {
+	void showResult (Model& model, cv::InputArray ps, cv::InputArray line) {
+		cv::Point_<float> *lpoints = (cv::Point_<float> *) line.getMat().data;
+		cv::Point_<float> p1 = lpoints[0];
+		cv::Point_<float> p2 = lpoints[1];
+
 		cv::Mat image = cv::imread("data/image1.jpg");
 
 		CV_Assert(image.depth() == CV_8U);
@@ -32,21 +36,21 @@ public:
 		int width = image.cols;
 		int height = image.rows;
 
-		float k = (line.p2.x - line.p1.x)/(line.p2.y - line.p1.y);
-		float b = (line.p1.y*line.p1.x - line.p1.y*line.p2.x)/(line.p2.y-line.p1.y) + line.p1.x;
+		float k = (p2.x - p1.x)/(p2.y - p1.y);
+		float b = (p1.y*p1.x - p1.y*p2.x)/(p2.y-p1.y) + p1.x;
 
-		draw_function (k, b-model.threshold, std::max(width, height), cv::Scalar(0,255,0), image);
+		draw_function (k, b-sqrt(pow(model.threshold,2)*pow(k,2)+pow(model.threshold,2)), std::max(width, height), cv::Scalar(0,255,0), image);
 		draw_function (k, b, std::max(width, height), cv::Scalar(255,0,0), image);
-		draw_function (k, b+model.threshold, std::max(width, height), cv::Scalar(0,255,0), image);
+		draw_function (k, b+sqrt(pow(model.threshold,2)*pow(k,2)+pow(model.threshold,2)), std::max(width, height), cv::Scalar(0,255,0), image);
 		
-		cv::Point2f *points = (cv::Point2f *) ps.getMat().data;
+		cv::Point_<float> *points = (cv::Point_<float> *) ps.getMat().data;
 		int total_points = ps.size().width;
 		float dist;
 
 		for (int kp = 0; kp < total_points; kp++) {
-			dist = abs((line.p2.y-line.p1.y)*points[kp].x - 
-				(line.p2.x-line.p1.x)*points[kp].y + 
-				line.p2.x*line.p1.y - line.p2.y*line.p1.x)/sqrt(pow(line.p2.y-line.p1.y,2)+pow(line.p2.x-line.p1.x,2));
+			dist = abs((p2.y-p1.y)*points[kp].x - 
+				(p2.x-p1.x)*points[kp].y + 
+				p2.x*p1.y - p2.y*p1.x)/sqrt(pow(p2.y-p1.y,2)+pow(p2.x-p1.x,2));
 			
 			if (dist < model.threshold) {
 		        circle(image, points[kp], 3, cv::Scalar(0, 0, 255), -1);

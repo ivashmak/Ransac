@@ -4,24 +4,30 @@
 class Sampler {
 public:
 	int total_points;
-	cv::Point2f *points;
+	cv::Mat mat_points;
+	cv::Point_<float> *points;		
 public:
 	Sampler (cv::InputArray points) {
 		CV_Assert(!points.empty());
-	
+		
 		srand (time(NULL));
 		
 		this->total_points = points.size().width;
-		this->points = (cv::Point2f *) points.getMat().data;
+		this->mat_points = points.getMat();
+		this->points = (cv::Point_<float> *) mat_points.data;
 	}
 
-	std::pair<cv::Point2f, cv::Point2f> getRandomTwoPoints () {
+	cv::Point_<float> getRandomPoint () {
+		
+		int p = rand() % total_points;
+		return cv::Point_<float>(points[p].x, points[p].y);
+	}
+
+	std::pair<cv::Point_<float>, cv::Point_<float>> getRandomTwoPoints () {
 		int r1 = rand() % total_points;
 		int r2 = rand() % total_points;
-
-		// if (r1 == r2) return getRandomTwoPoints();
-
-		return std::make_pair(cv::Point2f(points[r1].x, points[r1].y), cv::Point2f(points[r2].x, points[r2].y));
+		
+		return std::make_pair(cv::Point_<float>(points[r1].x, points[r1].y), cv::Point_<float>(points[r2].x, points[r2].y));
 	}
 };
 

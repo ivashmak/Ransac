@@ -7,7 +7,7 @@ find_package( OpenCV REQUIRED )
 add_executable(ransac main.cpp 
 				Generator/generator.cpp Generator/generator.h 
 				Detector/detector.cpp Detector/detector.h
-				Ransac/NaiveRansac.cpp Ransac/NaiveRansac.h
+				Ransac/Line2DEstimator.cpp Ransac/Line2DEstimator.h
 				Ransac/Quality.h Ransac/Model.h Ransac/Estimator.h Ransac/Sampler.h Ransac/TerminationCriteria.h
 				Ransac/Line.h)
 

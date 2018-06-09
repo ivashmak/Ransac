@@ -8,6 +8,9 @@ public:
 	float desired_prob;
 	float max_iterations = 10000;
 	std::string model_name;
+
+protected:
+    cv::Mat descriptor;
 	
 public:
 	Model () {
@@ -21,7 +24,17 @@ public:
 		this->Npoints = Npoints;
 		this->desired_prob = desired_prob;
 		this->model_name = model_name;
+		descriptor = (cv::Mat_<float>(1,3) << threshold, Npoints, desired_prob);
+		std::cout << "descriptor =  " << descriptor << '\n';
 	}
+
+    void SetDescriptor(cv::Mat _desc) { 
+    	descriptor = _desc;
+    }
+
+    void GetDescriptor(cv::Mat &_desc) { 
+    	_desc = descriptor;
+    }    
 
 	void setThreshold (float threshold) {
 		this->threshold = threshold;
