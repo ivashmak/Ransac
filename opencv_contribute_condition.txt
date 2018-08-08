@@ -1,0 +1,2 @@
+https://github.com/opencv/opencv/wiki/How_to_contribute
+

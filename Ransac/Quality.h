@@ -1,7 +1,6 @@
 #ifndef RANSAC_QUALITY_H
 #define RANSAC_QUALITY_H
 
-#include "Line.h"
 #include "Model.h"
 
 class Quality {

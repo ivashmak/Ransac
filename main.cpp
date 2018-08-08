@@ -10,13 +10,10 @@
 #include "Generator/generator.h"
 #include "Detector/detector.h"
 #include "Ransac/Line2DEstimator.h"
-
-// using namespace cv;
-// using namespace std;
-// using namespace cv::xfeatures2d;
-// using namespace std::chrono;
+#include "Ransac/Ransac.h"
 
 int main () {
+
 	auto total_begin = std::chrono::steady_clock::now();
 	
 	srand (time(NULL));
@@ -33,11 +30,11 @@ int main () {
 	TerminationCriteria termination_criteria (model);
 	Quality quality;
 
-	Line2DEstimator naive_ransac(points, model, sampler, termination_criteria, quality);
-	
+	Line2DEstimator estimator(points);
+	Ransac naive_ransac (points, model, sampler, termination_criteria, quality, estimator);
 	std::vector<cv::Point_<float>> line(2);
 	
-	naive_ransac.EstimateModel(points, line, nullptr, points.size(), model);
+	naive_ransac.run(points, line);
 	
 
 	auto total_end = std::chrono::steady_clock::now();

@@ -17,18 +17,14 @@ public:
 		this->points = (cv::Point_<float> *) mat_points.data;
 	}
 
-	cv::Point_<float> getRandomPoint () {
-		
-		int p = rand() % total_points;
-		return cv::Point_<float>(points[p].x, points[p].y);
+	void getRandomPoints (std::vector<cv::Point_<float>> &rpoints, int npoints) {
+        int point;
+        for (int i = 0; i < npoints; i++) {
+            point = rand() % total_points;
+            rpoints.push_back(cv::Point_<float>(points[point].x, points[point].y));
+        }
 	}
 
-	std::pair<cv::Point_<float>, cv::Point_<float>> getRandomTwoPoints () {
-		int r1 = rand() % total_points;
-		int r2 = rand() % total_points;
-		
-		return std::make_pair(cv::Point_<float>(points[r1].x, points[r1].y), cv::Point_<float>(points[r2].x, points[r2].y));
-	}
 };
 
 #endif //RANSAC_SAMPLER_H
