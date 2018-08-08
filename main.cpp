@@ -30,11 +30,12 @@ int main () {
 	TerminationCriteria termination_criteria (model);
 	Quality quality;
 
-	Line2DEstimator estimator(points);
-	Ransac naive_ransac (points, model, sampler, termination_criteria, quality, estimator);
+	Line2DEstimator estimator2d(points);
+
+	Ransac naive_ransac (points, model, sampler, termination_criteria, quality);
 	std::vector<cv::Point_<float>> line(2);
 	
-	naive_ransac.run(points, line);
+	naive_ransac.run(points, line, estimator2d);
 	
 
 	auto total_end = std::chrono::steady_clock::now();

@@ -1,17 +1,17 @@
 #include "Ransac.h"
 
-void Ransac::run(cv::InputArray input_points, cv::OutputArray &line) {
+void Ransac::run(cv::InputArray input_points, cv::OutputArray &line, Line2DEstimator estimator2d) {
 
     points = (cv::Point_<float> *) input_points.getMat().data;
 
-    std::vector<cv::Point_<float>> best_line(estimator->SampleNumber());
+    std::vector<cv::Point_<float>> best_line(estimator2d.SampleNumber());
 
     auto begin_time = std::chrono::steady_clock::now();
 
     float iters = 0;
     float max_iters = model->max_iterations;
 
-    float inlier_points = estimator->SampleNumber();
+    float inlier_points = estimator2d.SampleNumber();
     float quantity_in_polygon;
 
     float dist;
@@ -20,7 +20,7 @@ void Ransac::run(cv::InputArray input_points, cv::OutputArray &line) {
 
         std::vector<cv::Point_<float>> random_points;
 
-        sampler->getRandomPoints(random_points, estimator->SampleNumber());
+        sampler->getRandomPoints(random_points, estimator2d.SampleNumber());
 
         quantity_in_polygon = 0;
 
@@ -28,7 +28,7 @@ void Ransac::run(cv::InputArray input_points, cv::OutputArray &line) {
         // #pragma omp parallel for reduction (+:quantity_in_polygon)
         for (int kp = 0; kp < total_points; kp++) {
 
-            dist = estimator->GetError2(random_points, kp);
+            dist = estimator2d.GetError2(random_points, kp);
 
             if (dist < model->threshold) {
                 quantity_in_polygon++;

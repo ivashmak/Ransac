@@ -16,14 +16,17 @@ public:
 		this->mat_points = points.getMat();
 		this->points = (cv::Point_<float> *) mat_points.data;
 	}
-
-	void getRandomPoints (std::vector<cv::Point_<float>> &rpoints, int npoints) {
+ 
+    void getRandomPoints (cv::OutputArray &rpoints, int npoints) {
         int point;
+        std::vector<cv::Point_<float>> vpoints;
         for (int i = 0; i < npoints; i++) {
             point = rand() % total_points;
-            rpoints.push_back(cv::Point_<float>(points[point].x, points[point].y));
+            vpoints.push_back(cv::Point_<float>(points[point].x, points[point].y));
         }
-	}
+        cv::OutputArray temp (vpoints);
+        temp.copyTo(rpoints);
+    }
 
 };
 
