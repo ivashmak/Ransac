@@ -1,0 +1,3 @@
+/home/ivashmak/Ransac/CMakeFiles/rebuild_cache.dir
+/home/ivashmak/Ransac/CMakeFiles/edit_cache.dir
+/home/ivashmak/Ransac/CMakeFiles/ransac.dir

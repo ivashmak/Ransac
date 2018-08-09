@@ -4,7 +4,7 @@ set (CMAKE_CXX_STANDARD 11)
 project( Ransac	)
 find_package( OpenCV REQUIRED )
 
-add_executable(ransac main.cpp 
+add_executable(ransac main.cpp
 				Generator/generator.cpp Generator/generator.h 
 				Detector/detector.cpp Detector/detector.h
 				Ransac/Ransac.cpp Ransac/Ransac.h
@@ -12,7 +12,7 @@ add_executable(ransac main.cpp
 				Ransac/Quality.h
 				Ransac/Model.h
 				Ransac/Estimator.h
-				Ransac/Sampler.h
+				Ransac/Sampler.h Ransac/UniformSampler.h
 				Ransac/TerminationCriteria.h
 			)
 

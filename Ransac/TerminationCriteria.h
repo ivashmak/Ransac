@@ -3,13 +3,18 @@
 
 class TerminationCriteria {
 public:
-	Model *model;
+//	const Model * const model; // const pointer to const Model
+    const Model * model;
 public:
-	TerminationCriteria(Model& model) {
-		this->model = &model;
+	TerminationCriteria(Model& model)  {
+
+//	    Model mm(10, 2, 0.99, "ransac");
+//        const Model *const m = &mm;
+
+        this->model = &model;
 	}
-	
-	bool stopByConstantMaxIterations (float current_iteration) {
+
+    bool stopByConstantMaxIterations (float current_iteration) {
 		return current_iteration < model->max_iterations;
 	}
 
@@ -21,5 +26,6 @@ public:
 		return log(1-model->desired_prob)/log(1-pow(inlier_points/total_points, model->Npoints));
 	}
 };
+
 
 #endif //RANSAC_TERMINATION_CRITERIA_H

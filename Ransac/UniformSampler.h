@@ -1,0 +1,10 @@
+#ifndef RANSAC_UNIFORMSAMPLER_H
+#define RANSAC_UNIFORMSAMPLER_H
+
+
+class UniformSampler {
+
+};
+
+
+#endif //RANSAC_UNIFORMSAMPLER_H

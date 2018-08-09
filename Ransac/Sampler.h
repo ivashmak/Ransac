@@ -16,7 +16,7 @@ public:
 		this->mat_points = points.getMat();
 		this->points = (cv::Point_<float> *) mat_points.data;
 	}
- 
+
     void getRandomPoints (cv::OutputArray &rpoints, int npoints) {
         int point;
         std::vector<cv::Point_<float>> vpoints;
