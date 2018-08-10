@@ -3,29 +3,40 @@
 
 #include "Estimator.h"
 
-
-bool fit_point_between_lines (float x, float y, float k, float b1, float b2);
-
 class Line2DEstimator : public Estimator {
     public:
-        cv::Point_<float> *points;
+        void EstimateModel(cv::InputArray input_points, int *sample, Model &model) {
+            const int idx1 = sample[0];
+            const int idx2 = sample[1];
+            cv::Point_<float> *points = (cv::Point_<float> *) input_points.getMat().data;
 
-        Line2DEstimator (cv::InputArray points) {
-            CV_Assert(!points.empty());
+            // Estimate the model parameters from the sample
+            float tangent_x = points[idx2].x - points[idx1].x;
+            float tangent_y = points[idx2].y - points[idx1].y;
 
-            this->points = (cv::Point_<float> *) points.getMat().data;
+            float a = tangent_y;
+            float b = -tangent_x;
+            float mag = static_cast<float>(sqrt(a * a + b * b));
+            a /= mag;
+            b /= mag;
+            float c = (points[idx2].x * points[idx1].y - points[idx2].y * points[idx1].x)/mag;
+
+            // Set the model descriptor
+            cv::Mat descriptor;
+            descriptor = (cv::Mat_<float>(1,3) << a, b, c);
+            model.setDescriptor(descriptor);
         }
 
-        void EstimateModel(cv::InputArray points, cv::OutputArray &line, int *sample, int sample_number, Model &model) {}
-        void EstimateModelNonMinimalSample(cv::InputArray points, int *sample, int sample_number, Model &model) {}
-        
-        void GetError(Model &model, cv::InputArray points) {}
-        
-        float GetError2(cv::InputArray r_points, int kp) {
-            cv::Point_<float> *random_points = (cv::Point_<float> *) r_points.getMat().data;
-            cv::Point_<float> p1 = random_points[0];
-            cv::Point_<float> p2 = random_points[1];
-            return abs((p2.y-p1.y)*points[kp].x - (p2.x-p1.x)*points[kp].y + p2.x*p1.y - p2.y*p1.x)/sqrt(pow(p2.y-p1.y,2)+pow(p2.x-p1.x,2));       
+        void EstimateModelNonMinimalSample(cv::InputArray input_points, int *sample, Model &model) {}
+
+        float GetError(cv::InputArray input_points, int pidx, Model * model) {
+            cv::Point_<float> * points = (cv::Point_<float> *) input_points.getMat().data;
+            cv::Mat descriptor;
+
+            model->getDescriptor(descriptor);
+            auto * params = reinterpret_cast<float *>(descriptor.data);
+
+            return abs(params[0] * points[pidx].x + params[1]*points[pidx].y + params[2]);
         }
         
         int SampleNumber() {

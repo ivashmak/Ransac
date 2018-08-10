@@ -11,6 +11,8 @@
 #include "Detector/detector.h"
 #include "Ransac/Line2DEstimator.h"
 #include "Ransac/Ransac.h"
+#include "Ransac/UniformSampler.h"
+#include "Ransac/Drawing.h"
 
 int main () {
 
@@ -26,27 +28,33 @@ int main () {
 	// std::cout << "detected points\nstart clock\n";
 	
 	Model model(10, 2, 0.99, "ransac");
-	Sampler sampler(points);
+	UniformSampler sampler;
 	TerminationCriteria termination_criteria (model);
 	Quality quality;
 
-	Line2DEstimator estimator2d(points);
+	Estimator *estimator2d = new Line2DEstimator;
 
 	Ransac naive_ransac (points, model, sampler, termination_criteria, quality);
-	std::vector<cv::Point_<float>> line(2);
-	
-	naive_ransac.run(points, line, estimator2d);
-	
+
+	naive_ransac.run(points, estimator2d);
+
 
 	auto total_end = std::chrono::steady_clock::now();
-	
-	std::cout << "Naive Ransac time: " << naive_ransac.quality->getComputationTime() << "ms\n";
+
+    std::cout << "Naive Ransac time: " << naive_ransac.quality->getComputationTime() << "ms\n";
 	std::cout << "Naive Ransac iterations: " << naive_ransac.quality->getIterations() << "\n";
 	std::cout << "Naive Ransac points under threshold: " << naive_ransac.quality->getNumberOfPointsUnderThreshold() << "\n";
 	
 	std::cout << "Total time: " << std::chrono::duration_cast<std::chrono::milliseconds>
 													(total_end - total_begin).count() << "ms\n";
 
-	naive_ransac.quality->showResult(model, points, line);
+
+	Drawing drawing;
+
+	if (naive_ransac.best_sample.size() != 0)
+	    drawing.showResult(model, points, naive_ransac.best_sample);
+
+	drawing.showInliers(points, naive_ransac.most_inliers);
+
 	return 0;
 }

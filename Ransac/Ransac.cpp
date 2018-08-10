@@ -1,50 +1,47 @@
 #include "Ransac.h"
 
-void Ransac::run(cv::InputArray input_points, cv::OutputArray &line, Line2DEstimator estimator2d) {
+void Ransac::run(cv::InputArray input_points, Estimator *estimator2d) {
 
-    points = (cv::Point_<float> *) input_points.getMat().data;
-
-    std::vector<cv::Point_<float>> best_line(estimator2d.SampleNumber());
-
+    int total_points = input_points.size().width;
     auto begin_time = std::chrono::steady_clock::now();
 
     float iters = 0;
     float max_iters = model->max_iterations;
 
-    float inlier_points = estimator2d.SampleNumber();
-    float quantity_in_polygon;
+    Score *best_score = new Score, *current_score = new Score;
+    best_score->inlier_number = 0;
+    best_score->score = 0;
 
-    float dist;
+    int *sample = new int[estimator2d->SampleNumber()];
 
     while (iters < max_iters) {
+        sampler->getSample(sample, estimator2d->SampleNumber(), total_points);
 
-        std::vector<cv::Point_<float>> random_points;
+        estimator2d->EstimateModel(input_points, sample, *model);
 
-        sampler->getRandomPoints(random_points, estimator2d.SampleNumber());
+        current_score->score = 0;
+        current_score->inlier_number = 0;
 
-        quantity_in_polygon = 0;
+        inliers.clear();
+        quality->GetModelScore(estimator2d, model, input_points, true, *current_score, inliers);
 
-        // useful for big data
-        // #pragma omp parallel for reduction (+:quantity_in_polygon)
-        for (int kp = 0; kp < total_points; kp++) {
+        if (quality->IsBetter(best_score, current_score)) {
+            best_score->inlier_number = current_score->inlier_number;
+            best_score->score = current_score->score;
 
-            dist = estimator2d.GetError2(random_points, kp);
-
-            if (dist < model->threshold) {
-                quantity_in_polygon++;
+            inliers.swap(most_inliers);
+            /*
+            // remember best sample
+            best_sample.clear();
+            for (int i = 0; i < estimator2d->SampleNumber(); i++) {
+                best_sample.push_back(sample[i]);
             }
+            */
+
+            max_iters = termination_criteria->getUpBoundIterations(best_score->inlier_number, total_points);
+            quality->points_under_threshold = best_score->inlier_number;
         }
 
-        if (inlier_points < quantity_in_polygon) {
-            inlier_points = quantity_in_polygon;
-
-            cv::OutputArray best_line(random_points);
-
-            best_line.copyTo(line);
-
-            max_iters = termination_criteria->getUpBoundIterations(inlier_points, total_points);
-            quality->points_under_threshold = inlier_points;
-        }
         iters++;
     }
 
@@ -52,5 +49,5 @@ void Ransac::run(cv::InputArray input_points, cv::OutputArray &line, Line2DEstim
     auto end_time = std::chrono::steady_clock::now();
     std::chrono::duration<float> fs = end_time - begin_time;
     quality->total_time = std::chrono::duration_cast<std::chrono::milliseconds>(fs);
-
+    delete sample;
 }

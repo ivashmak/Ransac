@@ -3,6 +3,7 @@
 
 #include "Estimator.h"
 #include "Line2DEstimator.h"
+#include "Quality.h"
 
 class Ransac {
 public:
@@ -13,6 +14,10 @@ public:
 
     cv::Point_<float> *points;
     int total_points;
+
+    std::vector<int> inliers;
+    std::vector<int> best_sample;
+    std::vector<int> most_inliers;
 
     Ransac (cv::InputArray points,
             Model& model,
@@ -31,7 +36,7 @@ public:
         this->quality = &quality;
     }
 
-    void run (cv::InputArray input_points, cv::OutputArray &line, Line2DEstimator estimator2d);
+    void run (cv::InputArray input_points, Estimator* estimator2d);
 };
 
 
