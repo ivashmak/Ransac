@@ -26,13 +26,14 @@ int main () {
 	
 	// std::vector<cv::KeyPoint> points = detect("data/image1.jpg", "sift");
 	// std::cout << "detected points\nstart clock\n";
-	
-	Model model(10, 2, 0.99, "ransac");
+	int sample_number = 3;
+
+	Model model(10, sample_number, 0.99, "ransac");
 	UniformSampler sampler;
 	TerminationCriteria termination_criteria (model);
 	Quality quality;
 
-	Estimator *estimator2d = new Line2DEstimator;
+	Estimator *estimator2d = new Line2DEstimator(sample_number);
 
 	Ransac naive_ransac (points, model, sampler, termination_criteria, quality);
 
@@ -41,7 +42,7 @@ int main () {
 
 	auto total_end = std::chrono::steady_clock::now();
 
-    std::cout << "Naive Ransac time: " << naive_ransac.quality->getComputationTime() << "ms\n";
+    std::cout << "Naive Ransac time: " << naive_ransac.quality->getComputationTime() << "mcs\n";
 	std::cout << "Naive Ransac iterations: " << naive_ransac.quality->getIterations() << "\n";
 	std::cout << "Naive Ransac points under threshold: " << naive_ransac.quality->getNumberOfPointsUnderThreshold() << "\n";
 	
@@ -51,10 +52,11 @@ int main () {
 
 	Drawing drawing;
 
-	if (naive_ransac.best_sample.size() != 0)
-	    drawing.showResult(model, points, naive_ransac.best_sample);
-
-	drawing.showInliers(points, naive_ransac.most_inliers);
+	if (naive_ransac.best_sample.size() != 0) {
+        drawing.showResult(model, points, naive_ransac.best_sample);
+    } else {
+        drawing.showInliers(points, naive_ransac.most_inliers);
+    }
 
 	return 0;
 }

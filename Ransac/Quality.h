@@ -12,14 +12,14 @@ struct Score {
 class Quality {
 public:
     int total_iterations = 0;
-	std::chrono::milliseconds total_time;
+	std::chrono::microseconds total_time;
 	int points_under_threshold = 0;
 public:
-	int getComputationTime (void) {
+	int getComputationTime () {
 		return total_time.count();
     }
 
-	int getIterations (void) {
+	int getIterations () {
 		return total_iterations;
 	}
 

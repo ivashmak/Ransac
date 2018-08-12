@@ -4,7 +4,7 @@
 class Model {
 public:
 	float threshold;
-	float Npoints;
+	int sample_number;
 	float desired_prob;
 	float max_iterations = 10000;
 	std::string model_name;
@@ -15,13 +15,13 @@ protected:
 public:
 	Model () {
 		threshold = 10.0;
-		Npoints = 2;
+		sample_number = 2;
 		desired_prob = 0.99;
 	}
 
-	Model (float threshold, float Npoints, float desired_prob, std::string model_name) {
+	Model (float threshold, int sample_number, float desired_prob, std::string model_name) {
 		this->threshold = threshold;
-		this->Npoints = Npoints;
+		this->sample_number = sample_number;
 		this->desired_prob = desired_prob;
 		this->model_name = model_name;
 	}
@@ -38,8 +38,8 @@ public:
 		this->threshold = threshold;
 	}
 
-	void setNpoints (float Npoints) {
-		this->Npoints = Npoints;
+	void setsample_number (float sample_number) {
+		this->sample_number = sample_number;
 	}
 
 	void setDesiredProbability (float desired_prob) {

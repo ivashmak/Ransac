@@ -7,7 +7,7 @@
 class Drawing {
 public:
     void showInliers (cv::InputArray input_points, cv::InputArray input_inliers_idxes) {
-        cv::Mat image = cv::imread("data/image1.jpg");
+        cv::Mat image = cv::imread("../data/image1.jpg");
         int *inliers_idxes = (int *) input_inliers_idxes.getMat().data;
         cv::Point_<float> *points = (cv::Point_<float> *) input_points.getMat().data;
 
@@ -27,7 +27,7 @@ public:
         cv::Point_<float> p1 = points[line_idx[0]];
         cv::Point_<float> p2 = points[line_idx[1]];
 
-        cv::Mat image = cv::imread("data/image1.jpg");
+        cv::Mat image = cv::imread("../data/image1.jpg");
 
         CV_Assert(image.depth() == CV_8U);
         CV_Assert(!ps.empty());
@@ -54,7 +54,6 @@ public:
                 circle(image, points[kp], 3, cv::Scalar(0, 0, 255), -1);
             }
         }
-
         imshow("Best Line", image);
         cv::waitKey (0);
     }
