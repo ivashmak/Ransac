@@ -20,7 +20,7 @@ void generate (std::vector<cv::Point2f> &points_out) {
         circle(image, points[i], 3, cv::Scalar(0, 0, 0), -1);
     // imshow("Image", image);
     // cv::waitKey(0);
-    imwrite( "../data/image1.jpg", image );
+    imwrite( "../Ransac/data/image1.jpg", image );
 
     points_out.swap(points);
 }

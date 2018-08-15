@@ -1,5 +1,5 @@
 #!/bin/bash
 
-echo `git add .`
-echo `git commit -m "${*}"`
-echo `git push origin master`
+git add .
+git commit -m "${*}"
+git push origin master

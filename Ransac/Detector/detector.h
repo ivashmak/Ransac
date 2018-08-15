@@ -11,6 +11,8 @@
 #include <opencv2/xfeatures2d.hpp>
 #include <opencv2/highgui.hpp>
 
+// std::vector<cv::KeyPoint> points = detect("data/image1.jpg", "sift");
+
 std::vector<cv::KeyPoint> detect(std::string filename, std::string detector_name);
 
 #endif //RANSAC_DETECTOR_H

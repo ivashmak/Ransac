@@ -2,7 +2,6 @@
 #define RANSAC_LINE2DESTIMATOR_H
 
 #include "Estimator.h"
-#include "Drawing.h"
 
 class Line2DEstimator : public Estimator {
 public:

@@ -72,22 +72,43 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/ivashmak/Ransac/Detector/detector.cpp">
+		<Unit filename="/home/ivashmak/Ransac/Homographies/DLT.cpp">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Detector/detector.h">
+		<Unit filename="/home/ivashmak/Ransac/Homographies/Estimator.h">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Generator/generator.cpp">
+		<Unit filename="/home/ivashmak/Ransac/Homographies/GetNormalizingTransformation.cpp">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Generator/generator.h">
+		<Unit filename="/home/ivashmak/Ransac/Homographies/HomographyEstimator.h">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Homographies/NormalizedDLT.cpp">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Homographies/ReadPoints/ReadPoints.cpp">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Homographies/ReadPoints/ReadPoints.h">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Ransac/Detector/detector.cpp">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Ransac/Detector/detector.h">
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Ransac/Drawing.h">
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Ransac/Estimator.h">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Ransac/Generator/generator.cpp">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Ransac/Generator/generator.h">
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Ransac/Line2DEstimator.h">
@@ -115,6 +136,15 @@
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/main.cpp">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/tests/Tests.h">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/tests/testHomographies.cpp">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/tests/testRansac.cpp">
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/CMakeLists.txt">

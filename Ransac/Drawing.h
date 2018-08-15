@@ -3,6 +3,7 @@
 
 
 #include "Estimator.h"
+#include "Ransac.h"
 
 class Drawing {
 public:
@@ -16,7 +17,17 @@ public:
         }
     }
 
-    void draw_model (Model model, float max_dimen, cv::Scalar color, cv::Mat img) {
+    void draw_line (float k, float b, cv::Scalar color, cv::Mat img) {
+        int max_dimen = std::max (img.cols, img.rows);
+        float corner_y1 = max_dimen;
+        float corner_x1 = k*max_dimen + b;
+
+        float corner_y2 = -max_dimen;
+        float corner_x2 = k*(-max_dimen) + b;
+        cv::line (img, cv::Point(corner_x1, corner_y1), cv::Point(corner_x2, corner_y2), color,  2, 8);
+    }
+
+    void draw_model (Model model, float max_dimen, cv::Scalar color, cv::Mat img, bool threashold) {
         cv::Mat desc;
         model.getDescriptor(desc);
         auto * params = reinterpret_cast<float *>(desc.data);
@@ -24,14 +35,23 @@ public:
         float b = -params[2]/params[0];
         float k = -params[1]/params[0];
 
-        float corner_y1 = max_dimen;
-        float corner_x1 = k*max_dimen+b;
+        draw_line(k, b, color, img);
 
-        float corner_y2 = -max_dimen;
-        float corner_x2 = k*(-max_dimen)+b;
-        cv::line (img, cv::Point(corner_x1, corner_y1), cv::Point(corner_x2, corner_y2), color,  2, 8);
+        if (threashold) {
+            draw_line (k, b+sqrt(pow(model.threshold,2)*pow(k,2)+pow(model.threshold,2)), cv::Scalar(0,255,0), img);
+            draw_line (k, b-sqrt(pow(model.threshold,2)*pow(k,2)+pow(model.threshold,2)), cv::Scalar(0,255,0), img);
+        }
+
     }
 
+    void draw (Ransac ransac, cv::InputArray points) {
+        cv::Mat image = cv::imread("../Ransac/data/image1.jpg");
+        showInliers(points, ransac.most_inliers, image);
+        draw_model(ransac.best_model, std::max (image.cols, image.rows), cv::Scalar(0, 0, 255), image, true);
+        draw_model(ransac.non_minimal_model, std::max (image.cols, image.rows), cv::Scalar(255, 0, 0), image, false);
+        imshow("Inliers", image);
+        cv::waitKey (0);
+    }
 };
 
 

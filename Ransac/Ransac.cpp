@@ -44,7 +44,6 @@ void Ransac::run(cv::InputArray input_points, Estimator *estimator2d) {
 
     estimator2d->EstimateModelNonMinimalSample(input_points, &most_inliers[0], most_inliers.size(), non_minimal_model);
 
-
     quality->total_iterations = (int) iters;
     auto end_time = std::chrono::steady_clock::now();
     std::chrono::duration<float> fs = end_time - begin_time;
