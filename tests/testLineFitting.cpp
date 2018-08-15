@@ -3,10 +3,10 @@
 
 #include "../Generator/generator.h"
 #include "../Detector/detector.h"
-#include "../Ransac/Line2DEstimator.h"
-#include "../Ransac/Ransac.h"
-#include "../Ransac/UniformSampler.h"
-#include "../Ransac/Drawing.h"
+#include "../Usac/Line2DEstimator.h"
+#include "../Usac/Ransac.h"
+#include "../Usac/UniformSampler.h"
+#include "../Usac/Drawing.h"
 
 void Tests::testLineFitting() {
 
@@ -23,15 +23,16 @@ void Tests::testLineFitting() {
 
     Estimator *estimator2d = new Line2DEstimator;
 
-    Ransac naive_ransac (points, model, sampler, termination_criteria, quality);
+    Ransac ransac (points, model, sampler, termination_criteria, quality);
 
-    naive_ransac.run(points, estimator2d);
+
+    ransac.run(points, estimator2d);
 
     Drawing drawing;
-    drawing.draw(naive_ransac, points);
+    drawing.draw(ransac, points);
 
-    std::cout << "Naive Ransac time: " << naive_ransac.quality->getComputationTime() << "mcs\n";
-    std::cout << "Naive Ransac iterations: " << naive_ransac.quality->getIterations() << "\n";
-    std::cout << "Naive Ransac points under threshold: " << naive_ransac.quality->getNumberOfPointsUnderThreshold() << "\n";
+    std::cout << "Naive Usac time: " << ransac.quality->getComputationTime() << "mcs\n";
+    std::cout << "Naive Usac iterations: " << ransac.quality->getIterations() << "\n";
+    std::cout << "Naive Usac points under threshold: " << ransac.quality->getNumberOfPointsUnderThreshold() << "\n";
 
 }

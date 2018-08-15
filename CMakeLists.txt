@@ -1,28 +1,30 @@
 cmake_minimum_required(VERSION 2.8)
 set (CMAKE_CXX_STANDARD 11)
 
-project( Ransac	)
+project(Usac)
 find_package( OpenCV REQUIRED )
 
 add_executable(
         ransac main.cpp
         Generator/generator.cpp Generator/generator.h
         Detector/detector.cpp Detector/detector.h
-        Ransac/Estimator.h
-        Ransac/Ransac.cpp Ransac/Ransac.h
-        Ransac/Line2DEstimator.h
-        Ransac/Quality.h
-        Ransac/Model.h
-        Ransac/Sampler.h Ransac/UniformSampler.h
-        Ransac/TerminationCriteria.h
-        Ransac/Drawing.h
+        Usac/Estimator.h
+        Usac/Ransac.cpp Usac/Ransac.h
+        Usac/Line2DEstimator.h
+        Usac/Quality.h
+        Usac/Model.h
+        Usac/Sampler.h Usac/UniformSampler.h
+        Usac/TerminationCriteria.h
+        Usac/Drawing.h
 
         Detector/ReadPoints.cpp Detector/ReadPoints.h
-        Ransac/HomographyEstimator.h
-        Ransac/DLT.cpp
-        Ransac/NormalizedDLT.cpp
-        Ransac/GetNormalizingTransformation.cpp
-        Ransac/HomographyMethods.h
+        Usac/HomographyEstimator.h
+        Usac/DLT.cpp
+        Usac/NormalizedDLT.cpp
+        Usac/GetNormalizingTransformation.cpp
+        Usac/HomographyMethods.h
+
+        Usac/Prosac.cpp Usac/Prosac.h
 
         tests/Tests.h
         tests/testHomographyFitting.cpp
