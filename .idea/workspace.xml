@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/Ransac/Drawing.h" line="38" />
+  </component>
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="true">
     <generated>
       <config projectName="Ransac" targetName="ransac" />
@@ -12,51 +15,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2349f0c5-205e-48e6-8262-3d8b481d3476" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homographies/DLT.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homographies/Estimator.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homographies/GetNormalizingTransformation.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homographies/HomographyEstimator.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homographies/NormalizedDLT.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homographies/ReadPoints/ReadPoints.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homographies/ReadPoints/ReadPoints.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homographies/images/img1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homographies/images/img2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homographies/matlab/DLT.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homographies/matlab/GetNormalizingTransformation.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homographies/matlab/NormalizedDLT.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homographies/matlab/read_points.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homographies/points/graf_pts.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ransac/Detector/detector.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ransac/Detector/detector.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Ransac/Drawing.h" beforeDir="false" afterPath="$PROJECT_DIR$/Ransac/Drawing.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ransac/Generator/generator.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ransac/Generator/generator.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ransac/data/image1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/CXX.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/DependInfo.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Homographies/DLT.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Homographies/GetNormalizingTransformation.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Homographies/NormalizedDLT.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Homographies/ReadPoints/ReadPoints.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Ransac/Detector/detector.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Ransac/Generator/generator.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/build.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/cmake_clean.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/cmake_clean.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/depend.internal" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/depend.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/link.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/main.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/tests/testHomographies.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/tests/testRansac.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/build/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Ransac.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/build/Ransac.cbp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ransac" beforeDir="false" afterPath="$PROJECT_DIR$/build/ransac" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Tests.h" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Tests.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/testHomographies.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/testHomographyFitting.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/testRansac.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/testLineFitting.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ransac/UniformSampler.h" beforeDir="false" afterPath="$PROJECT_DIR$/Ransac/UniformSampler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images/image1.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/linefitting.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/res/linefitting.jpg" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/CMakeFiles/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -88,26 +50,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Drawing.h" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Drawing.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Ransac/Drawing.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="460">
-              <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
+            <state relative-caret-position="445">
+              <caret line="38" column="24" selection-start-line="38" selection-start-column="24" selection-end-line="38" selection-end-column="24" />
               <folding>
-                <element signature="e#52#74#0" expanded="true" />
+                <element signature="e#52#70#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NormalizedDLT.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Ransac/NormalizedDLT.cpp">
+      <file leaf-file-name="Sampler.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Ransac/Sampler.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="20" column="18" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="18" />
-              <folding>
-                <element signature="e#0#27#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="120">
+              <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -120,6 +79,15 @@
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UniformSampler.h" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Ransac/UniformSampler.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="20" column="22" selection-start-line="20" selection-start-column="22" selection-end-line="20" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -166,15 +134,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DLT.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Ransac/DLT.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="5" selection-start-line="5" selection-end-line="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FindInProjectRecents">
@@ -197,7 +156,6 @@
         <option value="$PROJECT_DIR$/Ransac/Line.h" />
         <option value="$PROJECT_DIR$/Ransac/Drawing.cpp" />
         <option value="$PROJECT_DIR$/Ransac/Sampler.h" />
-        <option value="$PROJECT_DIR$/Ransac/UniformSampler.h" />
         <option value="$PROJECT_DIR$/Ransac/Quality.h" />
         <option value="$PROJECT_DIR$/Ransac/Model.h" />
         <option value="$PROJECT_DIR$/Ransac/TerminationCriteria.h" />
@@ -223,6 +181,7 @@
         <option value="$PROJECT_DIR$/Ransac/Line2DEstimator.h" />
         <option value="$PROJECT_DIR$/Ransac/HomographyEstimator.h" />
         <option value="$PROJECT_DIR$/Ransac/Drawing.h" />
+        <option value="$PROJECT_DIR$/Ransac/UniformSampler.h" />
       </list>
     </option>
   </component>
@@ -316,12 +275,12 @@
       <workItem from="1533995564858" duration="822000" />
       <workItem from="1533997808530" duration="2300000" />
       <workItem from="1534069424127" duration="13206000" />
-      <workItem from="1534321634327" duration="17059000" />
+      <workItem from="1534321634327" duration="18222000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="62325000" />
+    <option name="totallyTimeSpent" value="63488000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1217" height="1036" extended-state="6" />
@@ -499,20 +458,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Ransac/Line.h" />
     <entry file="file://$PROJECT_DIR$/Ransac/Drawing.cpp" />
-    <entry file="file://$PROJECT_DIR$/Ransac/UniformSampler.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="5" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Ransac/Sampler.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Ransac/Generator/generator.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -736,11 +681,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Ransac/Drawing.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
+        <state relative-caret-position="445">
+          <caret line="38" column="24" selection-start-line="38" selection-start-column="24" selection-end-line="38" selection-end-column="24" />
           <folding>
-            <element signature="e#52#74#0" expanded="true" />
+            <element signature="e#52#70#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Ransac/Sampler.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Ransac/UniformSampler.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="22" selection-start-line="20" selection-start-column="22" selection-end-line="20" selection-end-column="22" />
         </state>
       </provider>
     </entry>
