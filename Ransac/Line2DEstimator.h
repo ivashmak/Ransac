@@ -35,6 +35,8 @@ private:
         }
 
         void EstimateModelNonMinimalSample(cv::InputArray input_points, int *sample, Model &model) {
+//            https://docs.opencv.org/3.4/d1/dee/tutorial_introduction_to_pca.html
+//            http://mres.uni-potsdam.de/index.php/2017/09/14/principal-component-analysis-in-6-steps/
 
             cv::Mat points = cv::Mat(model.sample_number, 2, CV_32FC1);
 
@@ -73,7 +75,7 @@ private:
             for (int i = 0; i < model.sample_number; i++) {
                 circle(image, points_arr[sample[i]], 3, cv::Scalar(255, 0, 0), -1);
             }
-            
+
 //            Drawing draw;
 //            draw.draw_function(a/b, c, std::max(width, height), cv::Scalar(0,0,255), image);
 //            imshow("estimate", image);
