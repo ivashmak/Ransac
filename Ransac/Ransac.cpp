@@ -27,7 +27,7 @@ void Ransac::run(cv::InputArray input_points, Estimator *estimator2d) {
         current_score->inlier_number = 0;
 
         inliers.clear();
-        inliers.reserve(2);
+//        inliers.reserve(2);
         quality->GetModelScore(estimator2d, model, input_points, true, *current_score, inliers);
 
 //        Drawing draw;
