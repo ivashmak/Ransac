@@ -12,17 +12,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2349f0c5-205e-48e6-8262-3d8b481d3476" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ransac/Drawing.h" beforeDir="false" afterPath="$PROJECT_DIR$/Ransac/Drawing.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ransac/Estimator.h" beforeDir="false" afterPath="$PROJECT_DIR$/Ransac/Estimator.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ransac/Line2DEstimator.h" beforeDir="false" afterPath="$PROJECT_DIR$/Ransac/Line2DEstimator.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Ransac/Ransac.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Ransac/Ransac.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ransac/Ransac.h" beforeDir="false" afterPath="$PROJECT_DIR$/Ransac/Ransac.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Ransac/Ransac.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Ransac/Ransac.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/main.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ransac" beforeDir="false" afterPath="$PROJECT_DIR$/build/ransac" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/image1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/data/image1.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Ransac/Ransac.cpp.o" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/CMakeFiles/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -48,7 +39,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="82">
@@ -99,11 +90,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Ransac.cpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Ransac.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Ransac/Ransac.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="337">
-              <caret line="53" column="75" selection-start-line="53" selection-start-column="75" selection-end-line="53" selection-end-column="75" />
+              <caret line="49" column="90" lean-forward="true" selection-start-line="49" selection-start-column="90" selection-end-line="49" selection-end-column="90" />
             </state>
           </provider>
         </entry>
@@ -168,10 +159,10 @@
         <option value="$PROJECT_DIR$/Ransac/TerminationCriteria.h" />
         <option value="$PROJECT_DIR$/Ransac/Ransac.h" />
         <option value="$PROJECT_DIR$/Ransac/Estimator.h" />
-        <option value="$PROJECT_DIR$/Ransac/Ransac.cpp" />
         <option value="$PROJECT_DIR$/Ransac/Drawing.h" />
         <option value="$PROJECT_DIR$/Ransac/Line2DEstimator.h" />
         <option value="$PROJECT_DIR$/main.cpp" />
+        <option value="$PROJECT_DIR$/Ransac/Ransac.cpp" />
       </list>
     </option>
   </component>
@@ -265,12 +256,12 @@
       <workItem from="1533995564858" duration="822000" />
       <workItem from="1533997808530" duration="2300000" />
       <workItem from="1534069424127" duration="13206000" />
-      <workItem from="1534321634327" duration="10319000" />
+      <workItem from="1534321634327" duration="10581000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="55585000" />
+    <option name="totallyTimeSpent" value="55847000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1217" height="1036" extended-state="6" />
@@ -671,13 +662,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Ransac/Ransac.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="337">
-          <caret line="53" column="75" selection-start-line="53" selection-start-column="75" selection-end-line="53" selection-end-column="75" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Ransac/Estimator.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -712,6 +696,13 @@
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Ransac/Ransac.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="337">
+          <caret line="49" column="90" lean-forward="true" selection-start-line="49" selection-start-column="90" selection-end-line="49" selection-end-column="90" />
         </state>
       </provider>
     </entry>
