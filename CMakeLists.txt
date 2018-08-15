@@ -6,8 +6,8 @@ find_package( OpenCV REQUIRED )
 
 add_executable(
         ransac main.cpp
-        Ransac/Generator/generator.cpp Ransac/Generator/generator.h
-        Ransac/Detector/detector.cpp Ransac/Detector/detector.h
+        Generator/generator.cpp Generator/generator.h
+        Detector/detector.cpp Detector/detector.h
         Ransac/Estimator.h
         Ransac/Ransac.cpp Ransac/Ransac.h
         Ransac/Line2DEstimator.h
@@ -17,16 +17,16 @@ add_executable(
         Ransac/TerminationCriteria.h
         Ransac/Drawing.h
 
-        Homographies/ReadPoints/ReadPoints.cpp Homographies/ReadPoints/ReadPoints.h
-        Homographies/Estimator.h
-        Homographies/HomographyEstimator.h
-        Homographies/DLT.cpp
-        Homographies/NormalizedDLT.cpp
-        Homographies/GetNormalizingTransformation.cpp
+        Detector/ReadPoints.cpp Detector/ReadPoints.h
+        Ransac/HomographyEstimator.h
+        Ransac/DLT.cpp
+        Ransac/NormalizedDLT.cpp
+        Ransac/GetNormalizingTransformation.cpp
+        Ransac/HomographyMethods.h
 
         tests/Tests.h
-        tests/testHomographies.cpp
-        tests/testRansac.cpp
+        tests/testHomographyFitting.cpp
+        tests/testLineFitting.cpp
 )
 
 # set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -pthread -fopenmp -Wextra" )

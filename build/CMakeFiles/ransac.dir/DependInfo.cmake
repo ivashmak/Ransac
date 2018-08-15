@@ -4,16 +4,16 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/ivashmak/Ransac/Homographies/DLT.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Homographies/DLT.cpp.o"
-  "/home/ivashmak/Ransac/Homographies/GetNormalizingTransformation.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Homographies/GetNormalizingTransformation.cpp.o"
-  "/home/ivashmak/Ransac/Homographies/NormalizedDLT.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Homographies/NormalizedDLT.cpp.o"
-  "/home/ivashmak/Ransac/Homographies/ReadPoints/ReadPoints.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Homographies/ReadPoints/ReadPoints.cpp.o"
-  "/home/ivashmak/Ransac/Ransac/Detector/detector.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Ransac/Detector/detector.cpp.o"
-  "/home/ivashmak/Ransac/Ransac/Generator/generator.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Ransac/Generator/generator.cpp.o"
+  "/home/ivashmak/Ransac/Detector/ReadPoints.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.o"
+  "/home/ivashmak/Ransac/Detector/detector.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Detector/detector.cpp.o"
+  "/home/ivashmak/Ransac/Generator/generator.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Generator/generator.cpp.o"
+  "/home/ivashmak/Ransac/Ransac/DLT.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Ransac/DLT.cpp.o"
+  "/home/ivashmak/Ransac/Ransac/GetNormalizingTransformation.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Ransac/GetNormalizingTransformation.cpp.o"
+  "/home/ivashmak/Ransac/Ransac/NormalizedDLT.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Ransac/NormalizedDLT.cpp.o"
   "/home/ivashmak/Ransac/Ransac/Ransac.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Ransac/Ransac.cpp.o"
   "/home/ivashmak/Ransac/main.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/main.cpp.o"
-  "/home/ivashmak/Ransac/tests/testHomographies.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/tests/testHomographies.cpp.o"
-  "/home/ivashmak/Ransac/tests/testRansac.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/tests/testRansac.cpp.o"
+  "/home/ivashmak/Ransac/tests/testHomographyFitting.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o"
+  "/home/ivashmak/Ransac/tests/testLineFitting.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

@@ -1,6 +1,7 @@
-#include "HomographyEstimator.h"
+#include <opencv2/core.hpp>
+#include "HomographyMethods.h"
 
-void HomographyEstimator::NormalizedDLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
+void HomographyMethods::NormalizedDLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
     CV_Assert(!pts1.empty());
     CV_Assert(!pts2.empty());
 

@@ -69,8 +69,8 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/home/ivashmak/clion-2018.1.2/bin/cmake/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -123,167 +123,167 @@ ransac/fast:
 	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/build
 .PHONY : ransac/fast
 
-Homographies/DLT.o: Homographies/DLT.cpp.o
+Detector/ReadPoints.o: Detector/ReadPoints.cpp.o
 
-.PHONY : Homographies/DLT.o
-
-# target to build an object file
-Homographies/DLT.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Homographies/DLT.cpp.o
-.PHONY : Homographies/DLT.cpp.o
-
-Homographies/DLT.i: Homographies/DLT.cpp.i
-
-.PHONY : Homographies/DLT.i
-
-# target to preprocess a source file
-Homographies/DLT.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Homographies/DLT.cpp.i
-.PHONY : Homographies/DLT.cpp.i
-
-Homographies/DLT.s: Homographies/DLT.cpp.s
-
-.PHONY : Homographies/DLT.s
-
-# target to generate assembly for a file
-Homographies/DLT.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Homographies/DLT.cpp.s
-.PHONY : Homographies/DLT.cpp.s
-
-Homographies/GetNormalizingTransformation.o: Homographies/GetNormalizingTransformation.cpp.o
-
-.PHONY : Homographies/GetNormalizingTransformation.o
+.PHONY : Detector/ReadPoints.o
 
 # target to build an object file
-Homographies/GetNormalizingTransformation.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Homographies/GetNormalizingTransformation.cpp.o
-.PHONY : Homographies/GetNormalizingTransformation.cpp.o
+Detector/ReadPoints.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.o
+.PHONY : Detector/ReadPoints.cpp.o
 
-Homographies/GetNormalizingTransformation.i: Homographies/GetNormalizingTransformation.cpp.i
+Detector/ReadPoints.i: Detector/ReadPoints.cpp.i
 
-.PHONY : Homographies/GetNormalizingTransformation.i
+.PHONY : Detector/ReadPoints.i
 
 # target to preprocess a source file
-Homographies/GetNormalizingTransformation.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Homographies/GetNormalizingTransformation.cpp.i
-.PHONY : Homographies/GetNormalizingTransformation.cpp.i
+Detector/ReadPoints.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.i
+.PHONY : Detector/ReadPoints.cpp.i
 
-Homographies/GetNormalizingTransformation.s: Homographies/GetNormalizingTransformation.cpp.s
+Detector/ReadPoints.s: Detector/ReadPoints.cpp.s
 
-.PHONY : Homographies/GetNormalizingTransformation.s
+.PHONY : Detector/ReadPoints.s
 
 # target to generate assembly for a file
-Homographies/GetNormalizingTransformation.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Homographies/GetNormalizingTransformation.cpp.s
-.PHONY : Homographies/GetNormalizingTransformation.cpp.s
+Detector/ReadPoints.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.s
+.PHONY : Detector/ReadPoints.cpp.s
 
-Homographies/NormalizedDLT.o: Homographies/NormalizedDLT.cpp.o
+Detector/detector.o: Detector/detector.cpp.o
 
-.PHONY : Homographies/NormalizedDLT.o
+.PHONY : Detector/detector.o
 
 # target to build an object file
-Homographies/NormalizedDLT.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Homographies/NormalizedDLT.cpp.o
-.PHONY : Homographies/NormalizedDLT.cpp.o
+Detector/detector.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Detector/detector.cpp.o
+.PHONY : Detector/detector.cpp.o
 
-Homographies/NormalizedDLT.i: Homographies/NormalizedDLT.cpp.i
+Detector/detector.i: Detector/detector.cpp.i
 
-.PHONY : Homographies/NormalizedDLT.i
+.PHONY : Detector/detector.i
 
 # target to preprocess a source file
-Homographies/NormalizedDLT.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Homographies/NormalizedDLT.cpp.i
-.PHONY : Homographies/NormalizedDLT.cpp.i
+Detector/detector.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Detector/detector.cpp.i
+.PHONY : Detector/detector.cpp.i
 
-Homographies/NormalizedDLT.s: Homographies/NormalizedDLT.cpp.s
+Detector/detector.s: Detector/detector.cpp.s
 
-.PHONY : Homographies/NormalizedDLT.s
+.PHONY : Detector/detector.s
 
 # target to generate assembly for a file
-Homographies/NormalizedDLT.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Homographies/NormalizedDLT.cpp.s
-.PHONY : Homographies/NormalizedDLT.cpp.s
+Detector/detector.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Detector/detector.cpp.s
+.PHONY : Detector/detector.cpp.s
 
-Homographies/ReadPoints/ReadPoints.o: Homographies/ReadPoints/ReadPoints.cpp.o
+Generator/generator.o: Generator/generator.cpp.o
 
-.PHONY : Homographies/ReadPoints/ReadPoints.o
+.PHONY : Generator/generator.o
 
 # target to build an object file
-Homographies/ReadPoints/ReadPoints.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Homographies/ReadPoints/ReadPoints.cpp.o
-.PHONY : Homographies/ReadPoints/ReadPoints.cpp.o
+Generator/generator.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Generator/generator.cpp.o
+.PHONY : Generator/generator.cpp.o
 
-Homographies/ReadPoints/ReadPoints.i: Homographies/ReadPoints/ReadPoints.cpp.i
+Generator/generator.i: Generator/generator.cpp.i
 
-.PHONY : Homographies/ReadPoints/ReadPoints.i
+.PHONY : Generator/generator.i
 
 # target to preprocess a source file
-Homographies/ReadPoints/ReadPoints.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Homographies/ReadPoints/ReadPoints.cpp.i
-.PHONY : Homographies/ReadPoints/ReadPoints.cpp.i
+Generator/generator.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Generator/generator.cpp.i
+.PHONY : Generator/generator.cpp.i
 
-Homographies/ReadPoints/ReadPoints.s: Homographies/ReadPoints/ReadPoints.cpp.s
+Generator/generator.s: Generator/generator.cpp.s
 
-.PHONY : Homographies/ReadPoints/ReadPoints.s
+.PHONY : Generator/generator.s
 
 # target to generate assembly for a file
-Homographies/ReadPoints/ReadPoints.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Homographies/ReadPoints/ReadPoints.cpp.s
-.PHONY : Homographies/ReadPoints/ReadPoints.cpp.s
+Generator/generator.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Generator/generator.cpp.s
+.PHONY : Generator/generator.cpp.s
 
-Ransac/Detector/detector.o: Ransac/Detector/detector.cpp.o
+Ransac/DLT.o: Ransac/DLT.cpp.o
 
-.PHONY : Ransac/Detector/detector.o
+.PHONY : Ransac/DLT.o
 
 # target to build an object file
-Ransac/Detector/detector.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/Detector/detector.cpp.o
-.PHONY : Ransac/Detector/detector.cpp.o
+Ransac/DLT.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/DLT.cpp.o
+.PHONY : Ransac/DLT.cpp.o
 
-Ransac/Detector/detector.i: Ransac/Detector/detector.cpp.i
+Ransac/DLT.i: Ransac/DLT.cpp.i
 
-.PHONY : Ransac/Detector/detector.i
+.PHONY : Ransac/DLT.i
 
 # target to preprocess a source file
-Ransac/Detector/detector.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/Detector/detector.cpp.i
-.PHONY : Ransac/Detector/detector.cpp.i
+Ransac/DLT.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/DLT.cpp.i
+.PHONY : Ransac/DLT.cpp.i
 
-Ransac/Detector/detector.s: Ransac/Detector/detector.cpp.s
+Ransac/DLT.s: Ransac/DLT.cpp.s
 
-.PHONY : Ransac/Detector/detector.s
+.PHONY : Ransac/DLT.s
 
 # target to generate assembly for a file
-Ransac/Detector/detector.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/Detector/detector.cpp.s
-.PHONY : Ransac/Detector/detector.cpp.s
+Ransac/DLT.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/DLT.cpp.s
+.PHONY : Ransac/DLT.cpp.s
 
-Ransac/Generator/generator.o: Ransac/Generator/generator.cpp.o
+Ransac/GetNormalizingTransformation.o: Ransac/GetNormalizingTransformation.cpp.o
 
-.PHONY : Ransac/Generator/generator.o
+.PHONY : Ransac/GetNormalizingTransformation.o
 
 # target to build an object file
-Ransac/Generator/generator.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/Generator/generator.cpp.o
-.PHONY : Ransac/Generator/generator.cpp.o
+Ransac/GetNormalizingTransformation.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/GetNormalizingTransformation.cpp.o
+.PHONY : Ransac/GetNormalizingTransformation.cpp.o
 
-Ransac/Generator/generator.i: Ransac/Generator/generator.cpp.i
+Ransac/GetNormalizingTransformation.i: Ransac/GetNormalizingTransformation.cpp.i
 
-.PHONY : Ransac/Generator/generator.i
+.PHONY : Ransac/GetNormalizingTransformation.i
 
 # target to preprocess a source file
-Ransac/Generator/generator.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/Generator/generator.cpp.i
-.PHONY : Ransac/Generator/generator.cpp.i
+Ransac/GetNormalizingTransformation.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/GetNormalizingTransformation.cpp.i
+.PHONY : Ransac/GetNormalizingTransformation.cpp.i
 
-Ransac/Generator/generator.s: Ransac/Generator/generator.cpp.s
+Ransac/GetNormalizingTransformation.s: Ransac/GetNormalizingTransformation.cpp.s
 
-.PHONY : Ransac/Generator/generator.s
+.PHONY : Ransac/GetNormalizingTransformation.s
 
 # target to generate assembly for a file
-Ransac/Generator/generator.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/Generator/generator.cpp.s
-.PHONY : Ransac/Generator/generator.cpp.s
+Ransac/GetNormalizingTransformation.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/GetNormalizingTransformation.cpp.s
+.PHONY : Ransac/GetNormalizingTransformation.cpp.s
+
+Ransac/NormalizedDLT.o: Ransac/NormalizedDLT.cpp.o
+
+.PHONY : Ransac/NormalizedDLT.o
+
+# target to build an object file
+Ransac/NormalizedDLT.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/NormalizedDLT.cpp.o
+.PHONY : Ransac/NormalizedDLT.cpp.o
+
+Ransac/NormalizedDLT.i: Ransac/NormalizedDLT.cpp.i
+
+.PHONY : Ransac/NormalizedDLT.i
+
+# target to preprocess a source file
+Ransac/NormalizedDLT.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/NormalizedDLT.cpp.i
+.PHONY : Ransac/NormalizedDLT.cpp.i
+
+Ransac/NormalizedDLT.s: Ransac/NormalizedDLT.cpp.s
+
+.PHONY : Ransac/NormalizedDLT.s
+
+# target to generate assembly for a file
+Ransac/NormalizedDLT.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Ransac/NormalizedDLT.cpp.s
+.PHONY : Ransac/NormalizedDLT.cpp.s
 
 Ransac/Ransac.o: Ransac/Ransac.cpp.o
 
@@ -339,59 +339,59 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/main.cpp.s
 .PHONY : main.cpp.s
 
-tests/testHomographies.o: tests/testHomographies.cpp.o
+tests/testHomographyFitting.o: tests/testHomographyFitting.cpp.o
 
-.PHONY : tests/testHomographies.o
-
-# target to build an object file
-tests/testHomographies.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testHomographies.cpp.o
-.PHONY : tests/testHomographies.cpp.o
-
-tests/testHomographies.i: tests/testHomographies.cpp.i
-
-.PHONY : tests/testHomographies.i
-
-# target to preprocess a source file
-tests/testHomographies.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testHomographies.cpp.i
-.PHONY : tests/testHomographies.cpp.i
-
-tests/testHomographies.s: tests/testHomographies.cpp.s
-
-.PHONY : tests/testHomographies.s
-
-# target to generate assembly for a file
-tests/testHomographies.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testHomographies.cpp.s
-.PHONY : tests/testHomographies.cpp.s
-
-tests/testRansac.o: tests/testRansac.cpp.o
-
-.PHONY : tests/testRansac.o
+.PHONY : tests/testHomographyFitting.o
 
 # target to build an object file
-tests/testRansac.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testRansac.cpp.o
-.PHONY : tests/testRansac.cpp.o
+tests/testHomographyFitting.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o
+.PHONY : tests/testHomographyFitting.cpp.o
 
-tests/testRansac.i: tests/testRansac.cpp.i
+tests/testHomographyFitting.i: tests/testHomographyFitting.cpp.i
 
-.PHONY : tests/testRansac.i
+.PHONY : tests/testHomographyFitting.i
 
 # target to preprocess a source file
-tests/testRansac.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testRansac.cpp.i
-.PHONY : tests/testRansac.cpp.i
+tests/testHomographyFitting.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.i
+.PHONY : tests/testHomographyFitting.cpp.i
 
-tests/testRansac.s: tests/testRansac.cpp.s
+tests/testHomographyFitting.s: tests/testHomographyFitting.cpp.s
 
-.PHONY : tests/testRansac.s
+.PHONY : tests/testHomographyFitting.s
 
 # target to generate assembly for a file
-tests/testRansac.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testRansac.cpp.s
-.PHONY : tests/testRansac.cpp.s
+tests/testHomographyFitting.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.s
+.PHONY : tests/testHomographyFitting.cpp.s
+
+tests/testLineFitting.o: tests/testLineFitting.cpp.o
+
+.PHONY : tests/testLineFitting.o
+
+# target to build an object file
+tests/testLineFitting.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o
+.PHONY : tests/testLineFitting.cpp.o
+
+tests/testLineFitting.i: tests/testLineFitting.cpp.i
+
+.PHONY : tests/testLineFitting.i
+
+# target to preprocess a source file
+tests/testLineFitting.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testLineFitting.cpp.i
+.PHONY : tests/testLineFitting.cpp.i
+
+tests/testLineFitting.s: tests/testLineFitting.cpp.s
+
+.PHONY : tests/testLineFitting.s
+
+# target to generate assembly for a file
+tests/testLineFitting.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testLineFitting.cpp.s
+.PHONY : tests/testLineFitting.cpp.s
 
 # Help Target
 help:
@@ -402,36 +402,36 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... ransac"
-	@echo "... Homographies/DLT.o"
-	@echo "... Homographies/DLT.i"
-	@echo "... Homographies/DLT.s"
-	@echo "... Homographies/GetNormalizingTransformation.o"
-	@echo "... Homographies/GetNormalizingTransformation.i"
-	@echo "... Homographies/GetNormalizingTransformation.s"
-	@echo "... Homographies/NormalizedDLT.o"
-	@echo "... Homographies/NormalizedDLT.i"
-	@echo "... Homographies/NormalizedDLT.s"
-	@echo "... Homographies/ReadPoints/ReadPoints.o"
-	@echo "... Homographies/ReadPoints/ReadPoints.i"
-	@echo "... Homographies/ReadPoints/ReadPoints.s"
-	@echo "... Ransac/Detector/detector.o"
-	@echo "... Ransac/Detector/detector.i"
-	@echo "... Ransac/Detector/detector.s"
-	@echo "... Ransac/Generator/generator.o"
-	@echo "... Ransac/Generator/generator.i"
-	@echo "... Ransac/Generator/generator.s"
+	@echo "... Detector/ReadPoints.o"
+	@echo "... Detector/ReadPoints.i"
+	@echo "... Detector/ReadPoints.s"
+	@echo "... Detector/detector.o"
+	@echo "... Detector/detector.i"
+	@echo "... Detector/detector.s"
+	@echo "... Generator/generator.o"
+	@echo "... Generator/generator.i"
+	@echo "... Generator/generator.s"
+	@echo "... Ransac/DLT.o"
+	@echo "... Ransac/DLT.i"
+	@echo "... Ransac/DLT.s"
+	@echo "... Ransac/GetNormalizingTransformation.o"
+	@echo "... Ransac/GetNormalizingTransformation.i"
+	@echo "... Ransac/GetNormalizingTransformation.s"
+	@echo "... Ransac/NormalizedDLT.o"
+	@echo "... Ransac/NormalizedDLT.i"
+	@echo "... Ransac/NormalizedDLT.s"
 	@echo "... Ransac/Ransac.o"
 	@echo "... Ransac/Ransac.i"
 	@echo "... Ransac/Ransac.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... tests/testHomographies.o"
-	@echo "... tests/testHomographies.i"
-	@echo "... tests/testHomographies.s"
-	@echo "... tests/testRansac.o"
-	@echo "... tests/testRansac.i"
-	@echo "... tests/testRansac.s"
+	@echo "... tests/testHomographyFitting.o"
+	@echo "... tests/testHomographyFitting.i"
+	@echo "... tests/testHomographyFitting.s"
+	@echo "... tests/testLineFitting.o"
+	@echo "... tests/testLineFitting.i"
+	@echo "... tests/testLineFitting.s"
 .PHONY : help
 
 

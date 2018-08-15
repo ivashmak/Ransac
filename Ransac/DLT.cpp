@@ -3,9 +3,9 @@
 #include <opencv2/features2d.hpp>
 #include <opencv2/xfeatures2d.hpp>
 
-#include "HomographyEstimator.h"
+#include "HomographyMethods.h"
 
-void HomographyEstimator::DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
+void HomographyMethods::DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
     CV_Assert(!pts1.empty());
     CV_Assert(!pts2.empty());
 

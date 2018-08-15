@@ -27,7 +27,7 @@ public:
         cv::line (img, cv::Point(corner_x1, corner_y1), cv::Point(corner_x2, corner_y2), color,  2, 8);
     }
 
-    void draw_model (Model model, float max_dimen, cv::Scalar color, cv::Mat img, bool threashold) {
+    void draw_model (Model model, float max_dimen, cv::Scalar color, cv::Mat img, bool threshold) {
         cv::Mat desc;
         model.getDescriptor(desc);
         auto * params = reinterpret_cast<float *>(desc.data);
@@ -37,19 +37,20 @@ public:
 
         draw_line(k, b, color, img);
 
-        if (threashold) {
-            draw_line (k, b+sqrt(pow(model.threshold,2)*pow(k,2)+pow(model.threshold,2)), cv::Scalar(0,255,0), img);
-            draw_line (k, b-sqrt(pow(model.threshold,2)*pow(k,2)+pow(model.threshold,2)), cv::Scalar(0,255,0), img);
+        if (threshold) {
+            draw_line (k, b+sqrt(pow(model.threshold,2)*pow(k,2)+pow(model.threshold,2)), cv::Scalar(0,0,255), img);
+            draw_line (k, b-sqrt(pow(model.threshold,2)*pow(k,2)+pow(model.threshold,2)), cv::Scalar(0,0,255), img);
         }
 
     }
 
     void draw (Ransac ransac, cv::InputArray points) {
-        cv::Mat image = cv::imread("../Ransac/data/image1.jpg");
+        cv::Mat image = cv::imread("../images/image1.jpg");
         showInliers(points, ransac.most_inliers, image);
-        draw_model(ransac.best_model, std::max (image.cols, image.rows), cv::Scalar(0, 0, 255), image, true);
-        draw_model(ransac.non_minimal_model, std::max (image.cols, image.rows), cv::Scalar(255, 0, 0), image, false);
+        draw_model(ransac.best_model, std::max (image.cols, image.rows), cv::Scalar(255, 0, 0), image, false);
+        draw_model(ransac.non_minimal_model, std::max (image.cols, image.rows), cv::Scalar(0, 255, 0), image, false);
         imshow("Inliers", image);
+        cv::imwrite( "../res/linefitting.jpg", image);
         cv::waitKey (0);
     }
 };

@@ -1,8 +1,10 @@
 
 #include <cmath>
-#include "HomographyEstimator.h"
+#include <opencv2/core.hpp>
+#include <iostream>
+#include "HomographyMethods.h"
 
-void HomographyEstimator::GetNormalizingTransformation (cv::InputArray pts, cv::Mat &T, cv::Mat &offset, float * s, float *s1, float * s2) {
+void HomographyMethods::GetNormalizingTransformation (cv::InputArray pts, cv::Mat &T, cv::Mat &offset, float * s, float *s1, float * s2) {
     CV_Assert(!pts.empty());
 
     cv::Mat points = pts.getMat();

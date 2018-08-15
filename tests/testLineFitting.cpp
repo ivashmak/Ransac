@@ -1,14 +1,14 @@
 #include <cstdlib>
 #include "Tests.h"
 
-#include "../Ransac/Generator/generator.h"
-#include "../Ransac/Detector/detector.h"
+#include "../Generator/generator.h"
+#include "../Detector/detector.h"
 #include "../Ransac/Line2DEstimator.h"
 #include "../Ransac/Ransac.h"
 #include "../Ransac/UniformSampler.h"
 #include "../Ransac/Drawing.h"
 
-void Tests::testRansac() {
+void Tests::testLineFitting() {
 
     srand (time(NULL));
 

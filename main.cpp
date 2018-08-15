@@ -3,8 +3,8 @@
 int main (int args, char ** argv) {
     Tests tests;
 
-    tests.testRansac();
+    tests.testLineFitting();
+    tests.testHomographyFitting();
 
-    tests.testHomographies();
 	return 0;
 }
