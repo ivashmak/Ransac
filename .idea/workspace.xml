@@ -13,12 +13,16 @@
   <component name="ChangeListManager">
     <list default="true" id="2349f0c5-205e-48e6-8262-3d8b481d3476" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ransac/Drawing.h" beforeDir="false" afterPath="$PROJECT_DIR$/Ransac/Drawing.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ransac/Estimator.h" beforeDir="false" afterPath="$PROJECT_DIR$/Ransac/Estimator.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Ransac/Line2DEstimator.h" beforeDir="false" afterPath="$PROJECT_DIR$/Ransac/Line2DEstimator.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Ransac/Ransac.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Ransac/Ransac.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ransac/Ransac.h" beforeDir="false" afterPath="$PROJECT_DIR$/Ransac/Ransac.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Ransac/Ransac.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Ransac/Ransac.cpp.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/main.cpp.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/ransac" beforeDir="false" afterPath="$PROJECT_DIR$/build/ransac" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/image1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/data/image1.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/CMakeFiles/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -32,11 +36,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Default" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Line2DEstimator.h" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Line2DEstimator.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Ransac/Line2DEstimator.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="59" column="12" selection-start-line="59" selection-start-column="12" selection-end-line="59" selection-end-column="12" />
+            <state relative-caret-position="465">
+              <caret line="31" selection-start-line="31" selection-end-line="31" />
               <folding>
                 <element signature="e#67#89#0" expanded="true" />
               </folding>
@@ -44,13 +48,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="30" column="17" selection-start-line="30" selection-start-column="17" selection-end-line="30" selection-end-column="17" />
+            <state relative-caret-position="82">
+              <caret line="24" column="34" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Estimator.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Ransac/Estimator.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="22" column="88" selection-start-line="22" selection-start-column="88" selection-end-line="22" selection-end-column="88" />
+              <folding>
+                <element signature="e#55#74#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -59,20 +75,8 @@
       <file leaf-file-name="Drawing.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Ransac/Drawing.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="29" column="57" lean-forward="true" selection-start-line="29" selection-start-column="57" selection-end-line="29" selection-end-column="57" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Quality.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Ransac/Quality.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="28" selection-start-line="28" selection-end-line="28" />
-              <folding>
-                <element signature="e#51#73#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="330">
+              <caret line="22" column="32" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -80,7 +84,7 @@
       <file leaf-file-name="Model.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Ransac/Model.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="585">
+            <state relative-caret-position="442">
               <caret line="39" selection-start-line="39" selection-end-line="39" />
             </state>
           </provider>
@@ -98,8 +102,8 @@
       <file leaf-file-name="Ransac.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Ransac/Ransac.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="30" column="28" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="28" />
+            <state relative-caret-position="337">
+              <caret line="53" column="75" selection-start-line="53" selection-start-column="75" selection-end-line="53" selection-end-column="75" />
             </state>
           </provider>
         </entry>
@@ -107,8 +111,8 @@
       <file leaf-file-name="Ransac.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Ransac/Ransac.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="20" selection-start-line="20" selection-end-line="20" />
+            <state relative-caret-position="255">
+              <caret line="22" selection-start-line="22" selection-end-line="22" />
               <folding>
                 <element signature="e#49#71#0" expanded="true" />
               </folding>
@@ -121,6 +125,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="315">
               <caret line="21" column="100" selection-start-line="21" selection-start-column="100" selection-end-line="21" selection-end-column="100" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Sampler.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Ransac/Sampler.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -148,17 +161,17 @@
         <option value="$PROJECT_DIR$/Ransac/Drawing.cpp" />
         <option value="$PROJECT_DIR$/Ransac/Sampler.h" />
         <option value="$PROJECT_DIR$/Ransac/UniformSampler.h" />
-        <option value="$PROJECT_DIR$/Ransac/Estimator.h" />
-        <option value="$PROJECT_DIR$/Ransac/Ransac.h" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/Generator/generator.cpp" />
         <option value="$PROJECT_DIR$/Ransac/Quality.h" />
         <option value="$PROJECT_DIR$/Ransac/Model.h" />
         <option value="$PROJECT_DIR$/Ransac/TerminationCriteria.h" />
-        <option value="$PROJECT_DIR$/main.cpp" />
-        <option value="$PROJECT_DIR$/Ransac/Drawing.h" />
+        <option value="$PROJECT_DIR$/Ransac/Ransac.h" />
+        <option value="$PROJECT_DIR$/Ransac/Estimator.h" />
         <option value="$PROJECT_DIR$/Ransac/Ransac.cpp" />
+        <option value="$PROJECT_DIR$/Ransac/Drawing.h" />
         <option value="$PROJECT_DIR$/Ransac/Line2DEstimator.h" />
+        <option value="$PROJECT_DIR$/main.cpp" />
       </list>
     </option>
   </component>
@@ -252,12 +265,12 @@
       <workItem from="1533995564858" duration="822000" />
       <workItem from="1533997808530" duration="2300000" />
       <workItem from="1534069424127" duration="13206000" />
-      <workItem from="1534321634327" duration="6626000" />
+      <workItem from="1534321634327" duration="10319000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="51892000" />
+    <option name="totallyTimeSpent" value="55585000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1217" height="1036" extended-state="6" />
@@ -311,7 +324,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="2" />
+      <option name="time" value="3" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -610,17 +623,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Ransac/Estimator.h">
+    <entry file="file://$PROJECT_DIR$/Ransac/Quality.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="5" selection-start-line="13" selection-start-column="5" selection-end-line="13" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Ransac/Sampler.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
+        <state relative-caret-position="367">
+          <caret line="28" selection-start-line="28" selection-end-line="28" />
+          <folding>
+            <element signature="e#51#73#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -631,23 +640,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Ransac/Model.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="39" selection-start-line="39" selection-end-line="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Ransac/Ransac.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
-          <folding>
-            <element signature="e#49#71#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Ransac/UniformSampler.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -655,46 +647,70 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.cpp">
+    <entry file="file://$PROJECT_DIR$/Ransac/Sampler.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="30" column="17" selection-start-line="30" selection-start-column="17" selection-end-line="30" selection-end-column="17" />
+        <state relative-caret-position="120">
+          <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Ransac/Model.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="39" selection-start-line="39" selection-end-line="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Ransac/Ransac.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#49#71#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Ransac/Ransac.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="30" column="28" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="28" />
+        <state relative-caret-position="337">
+          <caret line="53" column="75" selection-start-line="53" selection-start-column="75" selection-end-line="53" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Ransac/Estimator.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="88" selection-start-line="22" selection-start-column="88" selection-end-line="22" selection-end-column="88" />
+          <folding>
+            <element signature="e#55#74#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Ransac/Drawing.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="29" column="57" lean-forward="true" selection-start-line="29" selection-start-column="57" selection-end-line="29" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Ransac/Quality.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="28" selection-start-line="28" selection-end-line="28" />
-          <folding>
-            <element signature="e#51#73#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="330">
+          <caret line="22" column="32" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Ransac/Line2DEstimator.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="59" column="12" selection-start-line="59" selection-start-column="12" selection-end-line="59" selection-end-column="12" />
+        <state relative-caret-position="465">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
           <folding>
             <element signature="e#67#89#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="82">
+          <caret line="24" column="34" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

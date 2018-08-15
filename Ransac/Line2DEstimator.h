@@ -5,13 +5,7 @@
 #include "Drawing.h"
 
 class Line2DEstimator : public Estimator {
-private:
-    int sample_number;
-    public:
-        Line2DEstimator (int sample_number) {
-            this->sample_number = sample_number;
-        }
-
+public:
         void EstimateModel(cv::InputArray input_points, int *sample, Model &model) {
             const int idx1 = sample[0];
             const int idx2 = sample[1];
@@ -34,52 +28,24 @@ private:
             model.setDescriptor(descriptor);
         }
 
-        void EstimateModelNonMinimalSample(cv::InputArray input_points, int *sample, Model &model) {
-//            https://docs.opencv.org/3.4/d1/dee/tutorial_introduction_to_pca.html
-//            http://mres.uni-potsdam.de/index.php/2017/09/14/principal-component-analysis-in-6-steps/
-
-            cv::Mat points = cv::Mat(model.sample_number, 2, CV_32FC1);
+        void EstimateModelNonMinimalSample(cv::InputArray input_points, int *sample, int sample_size, Model &model) {
+            cv::Mat points = cv::Mat(sample_size, 2, CV_32FC1);
 
             cv::Point_<float> *points_arr = (cv::Point_<float> *) input_points.getMat().data;
 
-            for (int i = 0; i < model.sample_number; i++) {
+            for (int i = 0; i < sample_size; i++) {
                 points.at<float>(i,0) = points_arr[sample[i]].x;
                 points.at<float>(i,1) = points_arr[sample[i]].y;
             }
-//            std::cout << "pts = " << points << ";\n";
 
-//            cv::Scalar mean1 = cv::mean(points.col(0));
-//            cv::Scalar mean2 = cv::mean(points.col(1));
-//            cv::Mat means1 = (cv::Mat_<float> (1,2) << mean1.val[0], mean2.val[0]);
-//            cv::Mat ones = cv::Mat::ones(model.sample_number, 1, CV_32FC1);
-//            cv::Mat centered = points - ones*means;
-
-            cv::Mat covar, means;
+            cv::Mat covar, means, eigenvecs, eigenvals;;
             cv::calcCovarMatrix(points, covar, means, CV_COVAR_NORMAL | CV_COVAR_ROWS);
-//            covar = covar / (points.rows - 1);
-
-            cv::Mat eigenvecs, eigenvals;
             cv::eigen (covar, eigenvals, eigenvecs);
-//            std::cout << "eigenvecs = \n" << eigenvecs << "\n\n";
 
             float a, b, c;
-            a = (float) eigenvecs.at<double>(0,0);
-            b = (float) eigenvecs.at<double>(0,1);
+            a = (float) eigenvecs.at<double>(1,0);
+            b = (float) eigenvecs.at<double>(1,1);
             c = (float) (-a*means.at<double>(0) - b*means.at<double>(1));
-
-
-            cv::Mat image = cv::imread("../data/image1.jpg");
-            int width = image.cols;
-            int height = image.rows;
-
-            for (int i = 0; i < model.sample_number; i++) {
-                circle(image, points_arr[sample[i]], 3, cv::Scalar(255, 0, 0), -1);
-            }
-
-//            Drawing draw;
-//            draw.draw_function(a/b, c, std::max(width, height), cv::Scalar(0,0,255), image);
-//            imshow("estimate", image);
-//            cv::waitKey (0);
 
             cv::Mat descriptor;
             descriptor = (cv::Mat_<float>(1,3) << a, b, c);
@@ -97,8 +63,8 @@ private:
         }
         
         int SampleNumber() {
-        	return sample_number;
-        } 
+        	return 2;
+        }
 };
 
 

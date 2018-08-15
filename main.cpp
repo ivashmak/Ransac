@@ -22,18 +22,17 @@ int main () {
 	
 	std::vector<cv::Point_<float>> points;
 	generate(points);
-	std::cout << "generated image\n";
+	std::cout << "generated points\n";
 	
 	// std::vector<cv::KeyPoint> points = detect("data/image1.jpg", "sift");
 	// std::cout << "detected points\nstart clock\n";
-	int sample_number = 3;
 
-	Model model(10, sample_number, 0.99, "ransac");
+	Model model(10, 2, 0.99, "ransac");
 	UniformSampler sampler;
 	TerminationCriteria termination_criteria (model);
 	Quality quality;
 
-	Estimator *estimator2d = new Line2DEstimator(sample_number);
+	Estimator *estimator2d = new Line2DEstimator;
 
 	Ransac naive_ransac (points, model, sampler, termination_criteria, quality);
 
@@ -51,12 +50,22 @@ int main () {
 
 
 	Drawing drawing;
+    cv::Mat image = cv::imread("../data/image1.jpg");
 
-	if (naive_ransac.best_sample.size() != 0) {
-        drawing.showResult(model, points, naive_ransac.best_sample);
-    } else {
-        drawing.showInliers(points, naive_ransac.most_inliers);
-    }
+    drawing.showInliers(points, naive_ransac.most_inliers, image);
+
+    drawing.draw_model(naive_ransac.best_model, std::max (image.cols, image.rows), cv::Scalar(0, 0, 255), image);
+    drawing.draw_model(naive_ransac.non_minimal_model, std::max (image.cols, image.rows), cv::Scalar(255, 0, 0), image);
+
+
+    imshow("Inliers", image);
+    cv::waitKey (0);
+
+//	if (naive_ransac.best_sample.size() != 0) {
+//        drawing.showResult(model, points, naive_ransac.best_sample);
+//    } else {
+//        drawing.showInliers(points, naive_ransac.most_inliers);
+//    }
 
 	return 0;
 }

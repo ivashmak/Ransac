@@ -16,8 +16,10 @@ public:
     int total_points;
 
     std::vector<int> inliers;
-    std::vector<int> best_sample;
     std::vector<int> most_inliers;
+
+    Model best_model;
+    Model non_minimal_model;
 
     Ransac (cv::InputArray points,
             Model& model,

@@ -20,7 +20,7 @@
 class Estimator {
 public:
     virtual void EstimateModel(cv::InputArray input_points, int *sample, Model &model) = 0;
-    virtual void EstimateModelNonMinimalSample(cv::InputArray input_points, int *sample, Model &model) = 0;
+    virtual void EstimateModelNonMinimalSample(cv::InputArray input_points, int *sample, int sample_size, Model &model) = 0;
     virtual float GetError(cv::InputArray input_points, int pidx, Model * model) = 0;
     virtual int SampleNumber()  = 0;
 };

@@ -17,22 +17,14 @@ void Ransac::run(cv::InputArray input_points, Estimator *estimator2d) {
     while (iters < max_iters) {
         sampler->getSample(sample, estimator2d->SampleNumber(), total_points);
 
-        if (estimator2d->SampleNumber() == 2) {
-            estimator2d->EstimateModel(input_points, sample, *model);
-        } else {
-            estimator2d->EstimateModelNonMinimalSample(input_points, sample, *model);
-        }
+        estimator2d->EstimateModel(input_points, sample, *model);
 
         current_score->score = 0;
         current_score->inlier_number = 0;
 
         inliers.clear();
-//        inliers.reserve(2);
+        inliers.reserve(2);
         quality->GetModelScore(estimator2d, model, input_points, true, *current_score, inliers);
-
-//        Drawing draw;
-        std::cout << "inliers size = " << inliers.size() << '\n';
-//        draw.showInliers(input_points, inliers);
 
         if (quality->IsBetter(best_score, current_score)) {
             best_score->inlier_number = current_score->inlier_number;
@@ -40,14 +32,8 @@ void Ransac::run(cv::InputArray input_points, Estimator *estimator2d) {
 
             inliers.swap(most_inliers);
 
-/*
-            // remember best sample
-            best_sample.clear();
-            for (int i = 0; i < estimator2d->SampleNumber(); i++) {
-                best_sample.push_back(sample[i]);
-            }
-            */
-
+            // remember best model
+            best_model = *model;
 
             max_iters = termination_criteria->getUpBoundIterations(best_score->inlier_number, total_points);
             quality->points_under_threshold = best_score->inlier_number;
@@ -55,6 +41,18 @@ void Ransac::run(cv::InputArray input_points, Estimator *estimator2d) {
 
         iters++;
     }
+
+    int non_minimal_sample = 5;
+    sample = new int[non_minimal_sample];
+    int *sample_inliers = new int[non_minimal_sample];
+    sampler->getSample(sample, non_minimal_sample, most_inliers.size());
+
+    for (int i = 0; i < non_minimal_sample; i++) {
+        sample_inliers[i] = most_inliers[sample[i]];
+    }
+
+    estimator2d->EstimateModelNonMinimalSample(input_points, sample_inliers, non_minimal_sample, non_minimal_model);
+
 
     quality->total_iterations = (int) iters;
     auto end_time = std::chrono::steady_clock::now();
