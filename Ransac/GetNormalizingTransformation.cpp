@@ -1,4 +1,3 @@
-
 #include <cmath>
 #include <opencv2/core.hpp>
 #include <iostream>

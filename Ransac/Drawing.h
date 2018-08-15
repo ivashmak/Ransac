@@ -1,7 +1,6 @@
 #ifndef RANSAC_DRAWING_H
 #define RANSAC_DRAWING_H
 
-
 #include <utility>
 #include "Estimator.h"
 #include "Ransac.h"

@@ -58,7 +58,7 @@ public:
             model->getDescriptor(descriptor);
             auto * params = reinterpret_cast<float *>(descriptor.data);
 
-            return abs(params[0] * points[pidx].x + params[1]*points[pidx].y + params[2]);
+            return abs((int)(params[0] * points[pidx].x + params[1] * points[pidx].y + params[2]));
         }
         
         int SampleNumber() {
