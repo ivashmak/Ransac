@@ -42,12 +42,7 @@ void Ransac::run(cv::InputArray input_points, Estimator *estimator2d) {
         iters++;
     }
 
-    sample = new int[most_inliers.size()];
-    for (int i = 0; i < most_inliers.size(); i++) {
-        sample[i] = most_inliers[i];
-    }
-
-    estimator2d->EstimateModelNonMinimalSample(input_points, sample, most_inliers.size(), non_minimal_model);
+    estimator2d->EstimateModelNonMinimalSample(input_points, &most_inliers[0], most_inliers.size(), non_minimal_model);
 
 
     quality->total_iterations = (int) iters;
