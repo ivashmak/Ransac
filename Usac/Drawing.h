@@ -44,11 +44,11 @@ public:
 
     }
 
-    void draw (Ransac ransac, cv::InputArray points) {
+    void draw (cv::InputArray inliers, Model best_model, Model non_minimal_model, cv::InputArray points) {
         cv::Mat image = cv::imread("../images/image1.jpg");
-        showInliers(points, ransac.most_inliers, image);
-        draw_model(ransac.best_model, std::max (image.cols, image.rows), cv::Scalar(255, 0, 0), image, false);
-        draw_model(ransac.non_minimal_model, std::max (image.cols, image.rows), cv::Scalar(0, 255, 0), image, false);
+        showInliers(points, inliers, image);
+        draw_model(best_model, std::max (image.cols, image.rows), cv::Scalar(255, 0, 0), image, false);
+        draw_model(non_minimal_model, std::max (image.cols, image.rows), cv::Scalar(0, 255, 0), image, false);
         imshow("Inliers", image);
         cv::imwrite( "../res/linefitting.jpg", image);
         cv::waitKey (0);

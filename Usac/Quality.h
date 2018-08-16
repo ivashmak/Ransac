@@ -15,7 +15,7 @@ public:
 	std::chrono::microseconds total_time;
 	int points_under_threshold = 0;
 public:
-	int getComputationTime () {
+	long getComputationTime () {
 		return total_time.count();
     }
 
@@ -53,8 +53,6 @@ public:
         return s1->score < s2->score;
     }
 };
-
-
 
 
 #endif //RANSAC_QUALITY_H

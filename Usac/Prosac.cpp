@@ -10,19 +10,29 @@ void Prosac::run (cv::InputArray input_points, Estimator *estimator2d) {
 
     int Tn_prime = 1;
 
-    int *sample = new int[model->sample_number];
+    int In_star = model->sample_number; // In_star is number of inliers
+    int In_min = total_points;
+
+    auto *sample = new int[model->sample_number];
+    Score *score = new Score;
 
     while (true) {
-        // choice of the hypothesis generation set
+        // 1. choice of the hypothesis generation set
         t += 1;
         if (t == Tn_prime && n < nstar) {
             n += 1;
         }
 
-        // semi-random sample Mt from size m
+        // 2. semi-random sample Mt from size m
         if (Tn_prime >= t) {
+            // select m points at random
             sampler->getSample(sample, model->sample_number, total_points);
         }
+
+        // 3. model parameter estimation
+        estimator2d->EstimateModel(input_points, sample, *model);
+
+        // 4. model verification
 
     }
 
