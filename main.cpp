@@ -1,6 +1,6 @@
 #include <ctime>
 #include <cstdlib>
-#include "tests/Tests.h"
+#include "Tests/Tests.h"
 
 int main (int args, char ** argv) {
     srand (time(NULL));
@@ -8,7 +8,7 @@ int main (int args, char ** argv) {
     Tests tests;
 
     tests.testLineFitting();
-//    tests.testHomographyFitting();
+//    Tests.testHomographyFitting();
 
 	return 0;
 }

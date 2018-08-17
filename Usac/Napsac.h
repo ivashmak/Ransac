@@ -1,8 +1,8 @@
 #ifndef USAC_NAPSAC_H
 #define USAC_NAPSAC_H
 
-#include "Estimator.h"
-#include "Line2DEstimator.h"
+#include "Estimator/Estimator.h"
+#include "Estimator/Line2DEstimator.h"
 #include "Quality.h"
 
 class Napsac {

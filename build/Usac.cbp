@@ -108,25 +108,37 @@
 		<Unit filename="/home/ivashmak/Ransac/Generator/generator.h">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/DLT.cpp">
+		<Unit filename="/home/ivashmak/Ransac/Tests/Tests.h">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/Drawing.h">
+		<Unit filename="/home/ivashmak/Ransac/Tests/testHomographyFitting.cpp">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/Estimator.h">
+		<Unit filename="/home/ivashmak/Ransac/Tests/testLineFitting.cpp">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/GetNormalizingTransformation.cpp">
+		<Unit filename="/home/ivashmak/Ransac/Usac/Estimator/Estimator.h">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/HomographyEstimator.h">
+		<Unit filename="/home/ivashmak/Ransac/Usac/Estimator/HomographyEstimator.h">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/HomographyMethods.h">
+		<Unit filename="/home/ivashmak/Ransac/Usac/Estimator/Line2DEstimator.h">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/Line2DEstimator.h">
+		<Unit filename="/home/ivashmak/Ransac/Usac/Helper/Drawing.h">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/Homographies/DLT.cpp">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/Homographies/GetNormalizingTransformation.cpp">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/Homographies/HomographyMethods.h">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/Homographies/NormalizedDLT.cpp">
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Usac/Model.h">
@@ -136,9 +148,6 @@
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Usac/Napsac.h">
-			<Option target="ransac"/>
-		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/NormalizedDLT.cpp">
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Usac/Prosac.cpp">
@@ -156,25 +165,19 @@
 		<Unit filename="/home/ivashmak/Ransac/Usac/Ransac.h">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/Sampler.h">
+		<Unit filename="/home/ivashmak/Ransac/Usac/Sampler/NapsacSampler.h">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/Sampler/Sampler.h">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/Sampler/UniformSampler.h">
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Usac/TerminationCriteria.h">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/UniformSampler.h">
-			<Option target="ransac"/>
-		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/main.cpp">
-			<Option target="ransac"/>
-		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/tests/Tests.h">
-			<Option target="ransac"/>
-		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/tests/testHomographyFitting.cpp">
-			<Option target="ransac"/>
-		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/tests/testLineFitting.cpp">
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/CMakeLists.txt">

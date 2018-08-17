@@ -204,59 +204,140 @@ Generator/generator.cpp.s:
 	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Generator/generator.cpp.s
 .PHONY : Generator/generator.cpp.s
 
-Usac/DLT.o: Usac/DLT.cpp.o
+Tests/testHomographyFitting.o: Tests/testHomographyFitting.cpp.o
 
-.PHONY : Usac/DLT.o
-
-# target to build an object file
-Usac/DLT.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/DLT.cpp.o
-.PHONY : Usac/DLT.cpp.o
-
-Usac/DLT.i: Usac/DLT.cpp.i
-
-.PHONY : Usac/DLT.i
-
-# target to preprocess a source file
-Usac/DLT.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/DLT.cpp.i
-.PHONY : Usac/DLT.cpp.i
-
-Usac/DLT.s: Usac/DLT.cpp.s
-
-.PHONY : Usac/DLT.s
-
-# target to generate assembly for a file
-Usac/DLT.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/DLT.cpp.s
-.PHONY : Usac/DLT.cpp.s
-
-Usac/GetNormalizingTransformation.o: Usac/GetNormalizingTransformation.cpp.o
-
-.PHONY : Usac/GetNormalizingTransformation.o
+.PHONY : Tests/testHomographyFitting.o
 
 # target to build an object file
-Usac/GetNormalizingTransformation.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o
-.PHONY : Usac/GetNormalizingTransformation.cpp.o
+Tests/testHomographyFitting.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o
+.PHONY : Tests/testHomographyFitting.cpp.o
 
-Usac/GetNormalizingTransformation.i: Usac/GetNormalizingTransformation.cpp.i
+Tests/testHomographyFitting.i: Tests/testHomographyFitting.cpp.i
 
-.PHONY : Usac/GetNormalizingTransformation.i
+.PHONY : Tests/testHomographyFitting.i
 
 # target to preprocess a source file
-Usac/GetNormalizingTransformation.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.i
-.PHONY : Usac/GetNormalizingTransformation.cpp.i
+Tests/testHomographyFitting.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.i
+.PHONY : Tests/testHomographyFitting.cpp.i
 
-Usac/GetNormalizingTransformation.s: Usac/GetNormalizingTransformation.cpp.s
+Tests/testHomographyFitting.s: Tests/testHomographyFitting.cpp.s
 
-.PHONY : Usac/GetNormalizingTransformation.s
+.PHONY : Tests/testHomographyFitting.s
 
 # target to generate assembly for a file
-Usac/GetNormalizingTransformation.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.s
-.PHONY : Usac/GetNormalizingTransformation.cpp.s
+Tests/testHomographyFitting.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.s
+.PHONY : Tests/testHomographyFitting.cpp.s
+
+Tests/testLineFitting.o: Tests/testLineFitting.cpp.o
+
+.PHONY : Tests/testLineFitting.o
+
+# target to build an object file
+Tests/testLineFitting.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o
+.PHONY : Tests/testLineFitting.cpp.o
+
+Tests/testLineFitting.i: Tests/testLineFitting.cpp.i
+
+.PHONY : Tests/testLineFitting.i
+
+# target to preprocess a source file
+Tests/testLineFitting.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.i
+.PHONY : Tests/testLineFitting.cpp.i
+
+Tests/testLineFitting.s: Tests/testLineFitting.cpp.s
+
+.PHONY : Tests/testLineFitting.s
+
+# target to generate assembly for a file
+Tests/testLineFitting.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.s
+.PHONY : Tests/testLineFitting.cpp.s
+
+Usac/Homographies/DLT.o: Usac/Homographies/DLT.cpp.o
+
+.PHONY : Usac/Homographies/DLT.o
+
+# target to build an object file
+Usac/Homographies/DLT.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o
+.PHONY : Usac/Homographies/DLT.cpp.o
+
+Usac/Homographies/DLT.i: Usac/Homographies/DLT.cpp.i
+
+.PHONY : Usac/Homographies/DLT.i
+
+# target to preprocess a source file
+Usac/Homographies/DLT.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.i
+.PHONY : Usac/Homographies/DLT.cpp.i
+
+Usac/Homographies/DLT.s: Usac/Homographies/DLT.cpp.s
+
+.PHONY : Usac/Homographies/DLT.s
+
+# target to generate assembly for a file
+Usac/Homographies/DLT.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.s
+.PHONY : Usac/Homographies/DLT.cpp.s
+
+Usac/Homographies/GetNormalizingTransformation.o: Usac/Homographies/GetNormalizingTransformation.cpp.o
+
+.PHONY : Usac/Homographies/GetNormalizingTransformation.o
+
+# target to build an object file
+Usac/Homographies/GetNormalizingTransformation.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o
+.PHONY : Usac/Homographies/GetNormalizingTransformation.cpp.o
+
+Usac/Homographies/GetNormalizingTransformation.i: Usac/Homographies/GetNormalizingTransformation.cpp.i
+
+.PHONY : Usac/Homographies/GetNormalizingTransformation.i
+
+# target to preprocess a source file
+Usac/Homographies/GetNormalizingTransformation.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.i
+.PHONY : Usac/Homographies/GetNormalizingTransformation.cpp.i
+
+Usac/Homographies/GetNormalizingTransformation.s: Usac/Homographies/GetNormalizingTransformation.cpp.s
+
+.PHONY : Usac/Homographies/GetNormalizingTransformation.s
+
+# target to generate assembly for a file
+Usac/Homographies/GetNormalizingTransformation.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.s
+.PHONY : Usac/Homographies/GetNormalizingTransformation.cpp.s
+
+Usac/Homographies/NormalizedDLT.o: Usac/Homographies/NormalizedDLT.cpp.o
+
+.PHONY : Usac/Homographies/NormalizedDLT.o
+
+# target to build an object file
+Usac/Homographies/NormalizedDLT.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o
+.PHONY : Usac/Homographies/NormalizedDLT.cpp.o
+
+Usac/Homographies/NormalizedDLT.i: Usac/Homographies/NormalizedDLT.cpp.i
+
+.PHONY : Usac/Homographies/NormalizedDLT.i
+
+# target to preprocess a source file
+Usac/Homographies/NormalizedDLT.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.i
+.PHONY : Usac/Homographies/NormalizedDLT.cpp.i
+
+Usac/Homographies/NormalizedDLT.s: Usac/Homographies/NormalizedDLT.cpp.s
+
+.PHONY : Usac/Homographies/NormalizedDLT.s
+
+# target to generate assembly for a file
+Usac/Homographies/NormalizedDLT.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.s
+.PHONY : Usac/Homographies/NormalizedDLT.cpp.s
 
 Usac/Napsac.o: Usac/Napsac.cpp.o
 
@@ -284,33 +365,6 @@ Usac/Napsac.s: Usac/Napsac.cpp.s
 Usac/Napsac.cpp.s:
 	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Napsac.cpp.s
 .PHONY : Usac/Napsac.cpp.s
-
-Usac/NormalizedDLT.o: Usac/NormalizedDLT.cpp.o
-
-.PHONY : Usac/NormalizedDLT.o
-
-# target to build an object file
-Usac/NormalizedDLT.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o
-.PHONY : Usac/NormalizedDLT.cpp.o
-
-Usac/NormalizedDLT.i: Usac/NormalizedDLT.cpp.i
-
-.PHONY : Usac/NormalizedDLT.i
-
-# target to preprocess a source file
-Usac/NormalizedDLT.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.i
-.PHONY : Usac/NormalizedDLT.cpp.i
-
-Usac/NormalizedDLT.s: Usac/NormalizedDLT.cpp.s
-
-.PHONY : Usac/NormalizedDLT.s
-
-# target to generate assembly for a file
-Usac/NormalizedDLT.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.s
-.PHONY : Usac/NormalizedDLT.cpp.s
 
 Usac/Prosac.o: Usac/Prosac.cpp.o
 
@@ -393,60 +447,6 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/main.cpp.s
 .PHONY : main.cpp.s
 
-tests/testHomographyFitting.o: tests/testHomographyFitting.cpp.o
-
-.PHONY : tests/testHomographyFitting.o
-
-# target to build an object file
-tests/testHomographyFitting.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o
-.PHONY : tests/testHomographyFitting.cpp.o
-
-tests/testHomographyFitting.i: tests/testHomographyFitting.cpp.i
-
-.PHONY : tests/testHomographyFitting.i
-
-# target to preprocess a source file
-tests/testHomographyFitting.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.i
-.PHONY : tests/testHomographyFitting.cpp.i
-
-tests/testHomographyFitting.s: tests/testHomographyFitting.cpp.s
-
-.PHONY : tests/testHomographyFitting.s
-
-# target to generate assembly for a file
-tests/testHomographyFitting.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.s
-.PHONY : tests/testHomographyFitting.cpp.s
-
-tests/testLineFitting.o: tests/testLineFitting.cpp.o
-
-.PHONY : tests/testLineFitting.o
-
-# target to build an object file
-tests/testLineFitting.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o
-.PHONY : tests/testLineFitting.cpp.o
-
-tests/testLineFitting.i: tests/testLineFitting.cpp.i
-
-.PHONY : tests/testLineFitting.i
-
-# target to preprocess a source file
-tests/testLineFitting.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testLineFitting.cpp.i
-.PHONY : tests/testLineFitting.cpp.i
-
-tests/testLineFitting.s: tests/testLineFitting.cpp.s
-
-.PHONY : tests/testLineFitting.s
-
-# target to generate assembly for a file
-tests/testLineFitting.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testLineFitting.cpp.s
-.PHONY : tests/testLineFitting.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -465,18 +465,24 @@ help:
 	@echo "... Generator/generator.o"
 	@echo "... Generator/generator.i"
 	@echo "... Generator/generator.s"
-	@echo "... Usac/DLT.o"
-	@echo "... Usac/DLT.i"
-	@echo "... Usac/DLT.s"
-	@echo "... Usac/GetNormalizingTransformation.o"
-	@echo "... Usac/GetNormalizingTransformation.i"
-	@echo "... Usac/GetNormalizingTransformation.s"
+	@echo "... Tests/testHomographyFitting.o"
+	@echo "... Tests/testHomographyFitting.i"
+	@echo "... Tests/testHomographyFitting.s"
+	@echo "... Tests/testLineFitting.o"
+	@echo "... Tests/testLineFitting.i"
+	@echo "... Tests/testLineFitting.s"
+	@echo "... Usac/Homographies/DLT.o"
+	@echo "... Usac/Homographies/DLT.i"
+	@echo "... Usac/Homographies/DLT.s"
+	@echo "... Usac/Homographies/GetNormalizingTransformation.o"
+	@echo "... Usac/Homographies/GetNormalizingTransformation.i"
+	@echo "... Usac/Homographies/GetNormalizingTransformation.s"
+	@echo "... Usac/Homographies/NormalizedDLT.o"
+	@echo "... Usac/Homographies/NormalizedDLT.i"
+	@echo "... Usac/Homographies/NormalizedDLT.s"
 	@echo "... Usac/Napsac.o"
 	@echo "... Usac/Napsac.i"
 	@echo "... Usac/Napsac.s"
-	@echo "... Usac/NormalizedDLT.o"
-	@echo "... Usac/NormalizedDLT.i"
-	@echo "... Usac/NormalizedDLT.s"
 	@echo "... Usac/Prosac.o"
 	@echo "... Usac/Prosac.i"
 	@echo "... Usac/Prosac.s"
@@ -486,12 +492,6 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... tests/testHomographyFitting.o"
-	@echo "... tests/testHomographyFitting.i"
-	@echo "... tests/testHomographyFitting.s"
-	@echo "... tests/testLineFitting.o"
-	@echo "... tests/testLineFitting.i"
-	@echo "... tests/testLineFitting.s"
 .PHONY : help
 
 

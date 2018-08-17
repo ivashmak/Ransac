@@ -1,7 +1,7 @@
 #ifndef RANSAC_QUALITY_H
 #define RANSAC_QUALITY_H
 
-#include "Estimator.h"
+#include "Estimator/Estimator.h"
 #include "Model.h"
 
 struct Score {

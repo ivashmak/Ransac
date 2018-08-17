@@ -1,7 +1,7 @@
 #ifndef RANSAC_UNIFORMSAMPLER_H
 #define RANSAC_UNIFORMSAMPLER_H
 
-#include "Estimator.h"
+#include "../Estimator/Estimator.h"
 
 // https://stackoverflow.com/questions/288739/generate-random-numbers-uniformly-over-an-entire-range
 

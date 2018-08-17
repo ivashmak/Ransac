@@ -7,9 +7,9 @@
 #include <opencv2/core/types.hpp>
 
 #include "../Detector/ReadPoints.h"
-#include "../Usac/Estimator.h"
-#include "../Usac/HomographyEstimator.h"
-#include "../Usac/HomographyMethods.h"
+#include "../Usac/Estimator/Estimator.h"
+#include "../Usac/Estimator/HomographyEstimator.h"
+#include "../Usac/Homographies/HomographyMethods.h"
 
 
 void Tests::testHomographyFitting() {

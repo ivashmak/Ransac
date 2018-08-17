@@ -7,15 +7,15 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/ivashmak/Ransac/Detector/ReadPoints.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.o"
   "/home/ivashmak/Ransac/Detector/detector.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Detector/detector.cpp.o"
   "/home/ivashmak/Ransac/Generator/generator.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Generator/generator.cpp.o"
-  "/home/ivashmak/Ransac/Usac/DLT.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/DLT.cpp.o"
-  "/home/ivashmak/Ransac/Usac/GetNormalizingTransformation.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o"
+  "/home/ivashmak/Ransac/Tests/testHomographyFitting.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o"
+  "/home/ivashmak/Ransac/Tests/testLineFitting.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o"
+  "/home/ivashmak/Ransac/Usac/Homographies/DLT.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o"
+  "/home/ivashmak/Ransac/Usac/Homographies/GetNormalizingTransformation.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o"
+  "/home/ivashmak/Ransac/Usac/Homographies/NormalizedDLT.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o"
   "/home/ivashmak/Ransac/Usac/Napsac.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Napsac.cpp.o"
-  "/home/ivashmak/Ransac/Usac/NormalizedDLT.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o"
   "/home/ivashmak/Ransac/Usac/Prosac.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Prosac.cpp.o"
   "/home/ivashmak/Ransac/Usac/Ransac.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Ransac.cpp.o"
   "/home/ivashmak/Ransac/main.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/main.cpp.o"
-  "/home/ivashmak/Ransac/tests/testHomographyFitting.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o"
-  "/home/ivashmak/Ransac/tests/testLineFitting.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

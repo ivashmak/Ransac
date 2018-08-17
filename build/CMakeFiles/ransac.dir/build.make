@@ -105,33 +105,9 @@ CMakeFiles/ransac.dir/Generator/generator.cpp.o.provides: CMakeFiles/ransac.dir/
 CMakeFiles/ransac.dir/Generator/generator.cpp.o.provides.build: CMakeFiles/ransac.dir/Generator/generator.cpp.o
 
 
-CMakeFiles/ransac.dir/Detector/detector.cpp.o: CMakeFiles/ransac.dir/flags.make
-CMakeFiles/ransac.dir/Detector/detector.cpp.o: ../Detector/detector.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ransac.dir/Detector/detector.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/Detector/detector.cpp.o -c /home/ivashmak/Ransac/Detector/detector.cpp
-
-CMakeFiles/ransac.dir/Detector/detector.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/Detector/detector.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/Detector/detector.cpp > CMakeFiles/ransac.dir/Detector/detector.cpp.i
-
-CMakeFiles/ransac.dir/Detector/detector.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/Detector/detector.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/Detector/detector.cpp -o CMakeFiles/ransac.dir/Detector/detector.cpp.s
-
-CMakeFiles/ransac.dir/Detector/detector.cpp.o.requires:
-
-.PHONY : CMakeFiles/ransac.dir/Detector/detector.cpp.o.requires
-
-CMakeFiles/ransac.dir/Detector/detector.cpp.o.provides: CMakeFiles/ransac.dir/Detector/detector.cpp.o.requires
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Detector/detector.cpp.o.provides.build
-.PHONY : CMakeFiles/ransac.dir/Detector/detector.cpp.o.provides
-
-CMakeFiles/ransac.dir/Detector/detector.cpp.o.provides.build: CMakeFiles/ransac.dir/Detector/detector.cpp.o
-
-
 CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.o: CMakeFiles/ransac.dir/flags.make
 CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.o: ../Detector/ReadPoints.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.o -c /home/ivashmak/Ransac/Detector/ReadPoints.cpp
 
 CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.i: cmake_force
@@ -153,76 +129,100 @@ CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.o.provides: CMakeFiles/ransac.dir/
 CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.o.provides.build: CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.o
 
 
-CMakeFiles/ransac.dir/Usac/DLT.cpp.o: CMakeFiles/ransac.dir/flags.make
-CMakeFiles/ransac.dir/Usac/DLT.cpp.o: ../Usac/DLT.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/ransac.dir/Usac/DLT.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/Usac/DLT.cpp.o -c /home/ivashmak/Ransac/Usac/DLT.cpp
+CMakeFiles/ransac.dir/Detector/detector.cpp.o: CMakeFiles/ransac.dir/flags.make
+CMakeFiles/ransac.dir/Detector/detector.cpp.o: ../Detector/detector.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/ransac.dir/Detector/detector.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/Detector/detector.cpp.o -c /home/ivashmak/Ransac/Detector/detector.cpp
 
-CMakeFiles/ransac.dir/Usac/DLT.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/Usac/DLT.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/Usac/DLT.cpp > CMakeFiles/ransac.dir/Usac/DLT.cpp.i
+CMakeFiles/ransac.dir/Detector/detector.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/Detector/detector.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/Detector/detector.cpp > CMakeFiles/ransac.dir/Detector/detector.cpp.i
 
-CMakeFiles/ransac.dir/Usac/DLT.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/Usac/DLT.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/Usac/DLT.cpp -o CMakeFiles/ransac.dir/Usac/DLT.cpp.s
+CMakeFiles/ransac.dir/Detector/detector.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/Detector/detector.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/Detector/detector.cpp -o CMakeFiles/ransac.dir/Detector/detector.cpp.s
 
-CMakeFiles/ransac.dir/Usac/DLT.cpp.o.requires:
+CMakeFiles/ransac.dir/Detector/detector.cpp.o.requires:
 
-.PHONY : CMakeFiles/ransac.dir/Usac/DLT.cpp.o.requires
+.PHONY : CMakeFiles/ransac.dir/Detector/detector.cpp.o.requires
 
-CMakeFiles/ransac.dir/Usac/DLT.cpp.o.provides: CMakeFiles/ransac.dir/Usac/DLT.cpp.o.requires
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/DLT.cpp.o.provides.build
-.PHONY : CMakeFiles/ransac.dir/Usac/DLT.cpp.o.provides
+CMakeFiles/ransac.dir/Detector/detector.cpp.o.provides: CMakeFiles/ransac.dir/Detector/detector.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Detector/detector.cpp.o.provides.build
+.PHONY : CMakeFiles/ransac.dir/Detector/detector.cpp.o.provides
 
-CMakeFiles/ransac.dir/Usac/DLT.cpp.o.provides.build: CMakeFiles/ransac.dir/Usac/DLT.cpp.o
-
-
-CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o: CMakeFiles/ransac.dir/flags.make
-CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o: ../Usac/NormalizedDLT.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o -c /home/ivashmak/Ransac/Usac/NormalizedDLT.cpp
-
-CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/Usac/NormalizedDLT.cpp > CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.i
-
-CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/Usac/NormalizedDLT.cpp -o CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.s
-
-CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o.requires:
-
-.PHONY : CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o.requires
-
-CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o.provides: CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o.requires
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o.provides.build
-.PHONY : CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o.provides
-
-CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o.provides.build: CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o
+CMakeFiles/ransac.dir/Detector/detector.cpp.o.provides.build: CMakeFiles/ransac.dir/Detector/detector.cpp.o
 
 
-CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o: CMakeFiles/ransac.dir/flags.make
-CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o: ../Usac/GetNormalizingTransformation.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o -c /home/ivashmak/Ransac/Usac/GetNormalizingTransformation.cpp
+CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o: CMakeFiles/ransac.dir/flags.make
+CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o: ../Usac/Homographies/DLT.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o -c /home/ivashmak/Ransac/Usac/Homographies/DLT.cpp
 
-CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/Usac/GetNormalizingTransformation.cpp > CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.i
+CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/Usac/Homographies/DLT.cpp > CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.i
 
-CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/Usac/GetNormalizingTransformation.cpp -o CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.s
+CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/Usac/Homographies/DLT.cpp -o CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.s
 
-CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o.requires:
+CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o.requires:
 
-.PHONY : CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o.requires
+.PHONY : CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o.requires
 
-CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o.provides: CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o.requires
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o.provides.build
-.PHONY : CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o.provides
+CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o.provides: CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o.provides.build
+.PHONY : CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o.provides
 
-CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o.provides.build: CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o
+CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o.provides.build: CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o
+
+
+CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o: CMakeFiles/ransac.dir/flags.make
+CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o: ../Usac/Homographies/NormalizedDLT.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o -c /home/ivashmak/Ransac/Usac/Homographies/NormalizedDLT.cpp
+
+CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/Usac/Homographies/NormalizedDLT.cpp > CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.i
+
+CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/Usac/Homographies/NormalizedDLT.cpp -o CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.s
+
+CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o.requires:
+
+.PHONY : CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o.requires
+
+CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o.provides: CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o.provides.build
+.PHONY : CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o.provides
+
+CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o.provides.build: CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o
+
+
+CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o: CMakeFiles/ransac.dir/flags.make
+CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o: ../Usac/Homographies/GetNormalizingTransformation.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o -c /home/ivashmak/Ransac/Usac/Homographies/GetNormalizingTransformation.cpp
+
+CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/Usac/Homographies/GetNormalizingTransformation.cpp > CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.i
+
+CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/Usac/Homographies/GetNormalizingTransformation.cpp -o CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.s
+
+CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o.requires:
+
+.PHONY : CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o.requires
+
+CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o.provides: CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o.provides.build
+.PHONY : CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o.provides
+
+CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o.provides.build: CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o
 
 
 CMakeFiles/ransac.dir/Usac/Prosac.cpp.o: CMakeFiles/ransac.dir/flags.make
@@ -297,84 +297,84 @@ CMakeFiles/ransac.dir/Usac/Napsac.cpp.o.provides: CMakeFiles/ransac.dir/Usac/Nap
 CMakeFiles/ransac.dir/Usac/Napsac.cpp.o.provides.build: CMakeFiles/ransac.dir/Usac/Napsac.cpp.o
 
 
-CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o: CMakeFiles/ransac.dir/flags.make
-CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o: ../tests/testHomographyFitting.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o -c /home/ivashmak/Ransac/tests/testHomographyFitting.cpp
+CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: CMakeFiles/ransac.dir/flags.make
+CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Tests/testHomographyFitting.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o -c /home/ivashmak/Ransac/Tests/testHomographyFitting.cpp
 
-CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/tests/testHomographyFitting.cpp > CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.i
+CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/Tests/testHomographyFitting.cpp > CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.i
 
-CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/tests/testHomographyFitting.cpp -o CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.s
+CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/Tests/testHomographyFitting.cpp -o CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.s
 
-CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o.requires:
+CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o.requires:
 
-.PHONY : CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o.requires
+.PHONY : CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o.requires
 
-CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o.provides: CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o.requires
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o.provides.build
-.PHONY : CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o.provides
+CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o.provides: CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o.provides.build
+.PHONY : CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o.provides
 
-CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o.provides.build: CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o
+CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o.provides.build: CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o
 
 
-CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o: CMakeFiles/ransac.dir/flags.make
-CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o: ../tests/testLineFitting.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o -c /home/ivashmak/Ransac/tests/testLineFitting.cpp
+CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: CMakeFiles/ransac.dir/flags.make
+CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Tests/testLineFitting.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ivashmak/Ransac/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o -c /home/ivashmak/Ransac/Tests/testLineFitting.cpp
 
-CMakeFiles/ransac.dir/tests/testLineFitting.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/tests/testLineFitting.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/tests/testLineFitting.cpp > CMakeFiles/ransac.dir/tests/testLineFitting.cpp.i
+CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ivashmak/Ransac/Tests/testLineFitting.cpp > CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.i
 
-CMakeFiles/ransac.dir/tests/testLineFitting.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/tests/testLineFitting.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/tests/testLineFitting.cpp -o CMakeFiles/ransac.dir/tests/testLineFitting.cpp.s
+CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ivashmak/Ransac/Tests/testLineFitting.cpp -o CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.s
 
-CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o.requires:
+CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o.requires:
 
-.PHONY : CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o.requires
+.PHONY : CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o.requires
 
-CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o.provides: CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o.requires
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o.provides.build
-.PHONY : CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o.provides
+CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o.provides: CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o.provides.build
+.PHONY : CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o.provides
 
-CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o.provides.build: CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o
+CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o.provides.build: CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o
 
 
 # Object files for target ransac
 ransac_OBJECTS = \
 "CMakeFiles/ransac.dir/main.cpp.o" \
 "CMakeFiles/ransac.dir/Generator/generator.cpp.o" \
-"CMakeFiles/ransac.dir/Detector/detector.cpp.o" \
 "CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.o" \
-"CMakeFiles/ransac.dir/Usac/DLT.cpp.o" \
-"CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o" \
-"CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o" \
+"CMakeFiles/ransac.dir/Detector/detector.cpp.o" \
+"CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o" \
+"CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o" \
+"CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o" \
 "CMakeFiles/ransac.dir/Usac/Prosac.cpp.o" \
 "CMakeFiles/ransac.dir/Usac/Ransac.cpp.o" \
 "CMakeFiles/ransac.dir/Usac/Napsac.cpp.o" \
-"CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o" \
-"CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o"
+"CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o" \
+"CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o"
 
 # External object files for target ransac
 ransac_EXTERNAL_OBJECTS =
 
 ransac: CMakeFiles/ransac.dir/main.cpp.o
 ransac: CMakeFiles/ransac.dir/Generator/generator.cpp.o
-ransac: CMakeFiles/ransac.dir/Detector/detector.cpp.o
 ransac: CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.o
-ransac: CMakeFiles/ransac.dir/Usac/DLT.cpp.o
-ransac: CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o
-ransac: CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o
+ransac: CMakeFiles/ransac.dir/Detector/detector.cpp.o
+ransac: CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o
+ransac: CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o
+ransac: CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o
 ransac: CMakeFiles/ransac.dir/Usac/Prosac.cpp.o
 ransac: CMakeFiles/ransac.dir/Usac/Ransac.cpp.o
 ransac: CMakeFiles/ransac.dir/Usac/Napsac.cpp.o
-ransac: CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o
-ransac: CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o
+ransac: CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o
+ransac: CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o
 ransac: CMakeFiles/ransac.dir/build.make
 ransac: /usr/local/lib/libopencv_stitching.so.3.3.0
 ransac: /usr/local/lib/libopencv_superres.so.3.3.0
@@ -431,16 +431,16 @@ CMakeFiles/ransac.dir/build: ransac
 
 CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/main.cpp.o.requires
 CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Generator/generator.cpp.o.requires
-CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Detector/detector.cpp.o.requires
 CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Detector/ReadPoints.cpp.o.requires
-CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Usac/DLT.cpp.o.requires
-CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o.requires
-CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o.requires
+CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Detector/detector.cpp.o.requires
+CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o.requires
+CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o.requires
+CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o.requires
 CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Usac/Prosac.cpp.o.requires
 CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Usac/Ransac.cpp.o.requires
 CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Usac/Napsac.cpp.o.requires
-CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/tests/testHomographyFitting.cpp.o.requires
-CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/tests/testLineFitting.cpp.o.requires
+CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o.requires
+CMakeFiles/ransac.dir/requires: CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o.requires
 
 .PHONY : CMakeFiles/ransac.dir/requires
 

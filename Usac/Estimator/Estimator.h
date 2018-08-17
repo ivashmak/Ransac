@@ -13,9 +13,9 @@
 #include <opencv2/xfeatures2d.hpp>
 #include <opencv2/highgui.hpp>
 
-#include "Sampler.h"
-#include "Model.h"
-#include "TerminationCriteria.h"
+#include "../Sampler/Sampler.h"
+#include "../Model.h"
+#include "../TerminationCriteria.h"
 
 class Estimator {
 public:

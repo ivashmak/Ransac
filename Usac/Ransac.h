@@ -1,17 +1,19 @@
 #ifndef RANSAC_RANSAC_H
 #define RANSAC_RANSAC_H
 
-#include "Estimator.h"
-#include "Line2DEstimator.h"
+#include "Estimator/Estimator.h"
+#include "Estimator/Line2DEstimator.h"
 #include "Quality.h"
+#include "Sampler/UniformSampler.h"
 
 class Ransac {
-public:
+protected:
     Model *model;
     Quality *quality;
     Sampler *sampler;
     TerminationCriteria *termination_criteria;
 
+public:
     cv::Point_<float> *points;
     int total_points;
 
@@ -38,6 +40,38 @@ public:
     }
 
     void run (cv::InputArray input_points, Estimator *estimator2d);
+
+    void setSampler (Sampler &sampler) {
+        this->sampler = &sampler;
+    }
+
+    Sampler& getUniformSamler () {
+        return *sampler;
+    }
+
+    void setModel (Model &model) {
+        this->model = &model;
+    }
+
+    Model getModel () {
+        return *model;
+    }
+
+    void setTerminationCriteria (TerminationCriteria &termination_criteria) {
+        this->termination_criteria = &termination_criteria;
+    }
+
+    TerminationCriteria getTerminationCriteria () {
+        return *termination_criteria;
+    }
+
+    void setQuality (Quality& quality) {
+        this->quality = &quality;
+    }
+
+    Quality getQuality () {
+        return *quality;
+    }
 };
 
 

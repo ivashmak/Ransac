@@ -1,5 +1,5 @@
 #include "Prosac.h"
-#include "Estimator.h"
+#include "Estimator/Estimator.h"
 
 // https://github.com/jordyantunes/GPGPU-Region-Growing-for-Dynamic-3D-Reconstruction/blob/5afa243ee0245ff9723cacf22f30012384a4274f/sample_consensus/include/pcl/sample_consensus/impl/prosac.hpp
 // https://github.com/imbinwang/posest/blob/master/prosac.c
