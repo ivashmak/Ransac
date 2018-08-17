@@ -15,7 +15,6 @@ public:
     cv::Point_<float> *points;
     int total_points;
 
-    std::vector<int> inliers;
     std::vector<int> most_inliers;
 
     Model best_model;

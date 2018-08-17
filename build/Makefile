@@ -258,6 +258,33 @@ Usac/GetNormalizingTransformation.cpp.s:
 	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.s
 .PHONY : Usac/GetNormalizingTransformation.cpp.s
 
+Usac/Napsac.o: Usac/Napsac.cpp.o
+
+.PHONY : Usac/Napsac.o
+
+# target to build an object file
+Usac/Napsac.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Napsac.cpp.o
+.PHONY : Usac/Napsac.cpp.o
+
+Usac/Napsac.i: Usac/Napsac.cpp.i
+
+.PHONY : Usac/Napsac.i
+
+# target to preprocess a source file
+Usac/Napsac.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Napsac.cpp.i
+.PHONY : Usac/Napsac.cpp.i
+
+Usac/Napsac.s: Usac/Napsac.cpp.s
+
+.PHONY : Usac/Napsac.s
+
+# target to generate assembly for a file
+Usac/Napsac.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Napsac.cpp.s
+.PHONY : Usac/Napsac.cpp.s
+
 Usac/NormalizedDLT.o: Usac/NormalizedDLT.cpp.o
 
 .PHONY : Usac/NormalizedDLT.o
@@ -444,6 +471,9 @@ help:
 	@echo "... Usac/GetNormalizingTransformation.o"
 	@echo "... Usac/GetNormalizingTransformation.i"
 	@echo "... Usac/GetNormalizingTransformation.s"
+	@echo "... Usac/Napsac.o"
+	@echo "... Usac/Napsac.i"
+	@echo "... Usac/Napsac.s"
 	@echo "... Usac/NormalizedDLT.o"
 	@echo "... Usac/NormalizedDLT.i"
 	@echo "... Usac/NormalizedDLT.s"

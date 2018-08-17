@@ -18,7 +18,7 @@ public:
     }
 
     void getSample (int *sample, int npoints, int total_points) {
-        distribution = std::uniform_int_distribution<int>(0, total_points);
+        distribution = std::uniform_int_distribution<int>(0, total_points-1);
 
         for (int i = 0; i < npoints; i++) {
             sample[i] = distribution(generator);

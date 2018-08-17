@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/ivashmak/Ransac/Generator/generator.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Generator/generator.cpp.o"
   "/home/ivashmak/Ransac/Usac/DLT.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/DLT.cpp.o"
   "/home/ivashmak/Ransac/Usac/GetNormalizingTransformation.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/GetNormalizingTransformation.cpp.o"
+  "/home/ivashmak/Ransac/Usac/Napsac.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Napsac.cpp.o"
   "/home/ivashmak/Ransac/Usac/NormalizedDLT.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/NormalizedDLT.cpp.o"
   "/home/ivashmak/Ransac/Usac/Prosac.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Prosac.cpp.o"
   "/home/ivashmak/Ransac/Usac/Ransac.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Ransac.cpp.o"

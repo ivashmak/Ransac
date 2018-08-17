@@ -8,7 +8,12 @@ public:
         void EstimateModel(cv::InputArray input_points, int *sample, Model &model) {
             const int idx1 = sample[0];
             const int idx2 = sample[1];
+
             cv::Point_<float> *points = (cv::Point_<float> *) input_points.getMat().data;
+
+//            std::cout << points[idx1].x << " " << points[idx1].y << '\n';
+//            std::cout << points[idx2].x << " " << points[idx2].y << '\n';
+
 
             // Estimate the model parameters from the sample
             float tangent_x = points[idx2].x - points[idx1].x;

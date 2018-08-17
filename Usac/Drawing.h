@@ -50,7 +50,8 @@ public:
         draw_model(best_model, std::max (image.cols, image.rows), cv::Scalar(255, 0, 0), image, false);
         draw_model(non_minimal_model, std::max (image.cols, image.rows), cv::Scalar(0, 255, 0), image, false);
         imshow("Inliers", image);
-        cv::imwrite( "../res/linefitting.jpg", image);
+        std::string filename = "../res/linefitting_"+best_model.model_name+".jpg";
+        cv::imwrite(filename, image);
         cv::waitKey (0);
     }
 };

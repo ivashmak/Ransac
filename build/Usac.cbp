@@ -132,6 +132,12 @@
 		<Unit filename="/home/ivashmak/Ransac/Usac/Model.h">
 			<Option target="ransac"/>
 		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/Napsac.cpp">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/Napsac.h">
+			<Option target="ransac"/>
+		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Usac/NormalizedDLT.cpp">
 			<Option target="ransac"/>
 		</Unit>

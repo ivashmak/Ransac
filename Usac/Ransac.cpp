@@ -13,6 +13,7 @@ void Ransac::run(cv::InputArray input_points, Estimator *estimator2d) {
     best_score->score = 0;
 
     int *sample = new int[estimator2d->SampleNumber()];
+    std::vector<int> inliers;
 
     while (iters < max_iters) {
         sampler->getSample(sample, estimator2d->SampleNumber(), total_points);

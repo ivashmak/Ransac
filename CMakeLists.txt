@@ -9,7 +9,6 @@ add_executable(
         Generator/generator.cpp Generator/generator.h
         Detector/detector.cpp Detector/detector.h
         Usac/Estimator.h
-        Usac/Ransac.cpp Usac/Ransac.h
         Usac/Line2DEstimator.h
         Usac/Quality.h
         Usac/Model.h
@@ -25,6 +24,8 @@ add_executable(
         Usac/HomographyMethods.h
 
         Usac/Prosac.cpp Usac/Prosac.h
+        Usac/Ransac.cpp Usac/Ransac.h
+        Usac/Napsac.cpp Usac/Napsac.h
 
         tests/Tests.h
         tests/testHomographyFitting.cpp

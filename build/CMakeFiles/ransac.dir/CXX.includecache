@@ -120,6 +120,18 @@ Estimator.h
 
 /home/ivashmak/Ransac/Usac/Model.h
 
+/home/ivashmak/Ransac/Usac/Napsac.cpp
+Napsac.h
+/home/ivashmak/Ransac/Usac/Napsac.h
+
+/home/ivashmak/Ransac/Usac/Napsac.h
+Estimator.h
+/home/ivashmak/Ransac/Usac/Estimator.h
+Line2DEstimator.h
+/home/ivashmak/Ransac/Usac/Line2DEstimator.h
+Quality.h
+/home/ivashmak/Ransac/Usac/Quality.h
+
 /home/ivashmak/Ransac/Usac/NormalizedDLT.cpp
 opencv2/core.hpp
 -
@@ -215,6 +227,8 @@ Tests.h
 /home/ivashmak/Ransac/Usac/Drawing.h
 ../Usac/Prosac.h
 /home/ivashmak/Ransac/Usac/Prosac.h
+../Usac/Napsac.h
+/home/ivashmak/Ransac/Usac/Napsac.h
 
 /usr/local/include/opencv/cxcore.h
 opencv2/core/core_c.h

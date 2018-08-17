@@ -1,11 +1,11 @@
-#ifndef RANSAC_PROSAC_H
-#define RANSAC_PROSAC_H
-
+#ifndef USAC_NAPSAC_H
+#define USAC_NAPSAC_H
 
 #include "Estimator.h"
+#include "Line2DEstimator.h"
 #include "Quality.h"
 
-class Prosac {
+class Napsac {
 public:
     Model *model;
     Quality *quality;
@@ -20,10 +20,10 @@ public:
     Model best_model;
     Model non_minimal_model;
 
-    Prosac (cv::InputArray points,
-            Model& model,
+    Napsac (cv::InputArray points,
+    Model& model,
             Sampler& sampler,
-            TerminationCriteria& termination_criteria,
+    TerminationCriteria& termination_criteria,
             Quality& quality) {
 
         CV_Assert(!points.empty());
@@ -37,8 +37,8 @@ public:
         this->quality = &quality;
     }
 
-    void run (cv::InputArray input_points, Estimator *estimator2d );
+    void run (cv::InputArray input_points, Estimator *estimator2d);
 };
 
 
-#endif //RANSAC_PROSAC_H
+#endif //USAC_NAPSAC_H
