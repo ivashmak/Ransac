@@ -93,6 +93,10 @@ Tests.h
 /home/ivashmak/Ransac/Usac/Prosac.h
 ../Usac/Sampler/NapsacSampler.h
 /home/ivashmak/Ransac/Usac/Sampler/NapsacSampler.h
+../Usac/Evsac.h
+/home/ivashmak/Ransac/Usac/Evsac.h
+../Detector/ReadPoints.h
+/home/ivashmak/Ransac/Detector/ReadPoints.h
 
 /home/ivashmak/Ransac/Usac/Estimator/Estimator.h
 iostream
@@ -129,6 +133,22 @@ Estimator.h
 /home/ivashmak/Ransac/Usac/Estimator/Line2DEstimator.h
 Estimator.h
 /home/ivashmak/Ransac/Usac/Estimator/Estimator.h
+
+/home/ivashmak/Ransac/Usac/Evsac.cpp
+Evsac.h
+/home/ivashmak/Ransac/Usac/Evsac.h
+Helper/Drawing.h
+/home/ivashmak/Ransac/Usac/Helper/Drawing.h
+
+/home/ivashmak/Ransac/Usac/Evsac.h
+Estimator/Estimator.h
+/home/ivashmak/Ransac/Usac/Estimator/Estimator.h
+Estimator/Line2DEstimator.h
+/home/ivashmak/Ransac/Usac/Estimator/Line2DEstimator.h
+Quality.h
+/home/ivashmak/Ransac/Usac/Quality.h
+Sampler/UniformSampler.h
+/home/ivashmak/Ransac/Usac/Sampler/UniformSampler.h
 
 /home/ivashmak/Ransac/Usac/Helper/Drawing.h
 ../Estimator/Estimator.h
@@ -179,8 +199,12 @@ Estimator/Estimator.h
 /home/ivashmak/Ransac/Usac/Prosac.h
 Estimator/Estimator.h
 /home/ivashmak/Ransac/Usac/Estimator/Estimator.h
+Estimator/Line2DEstimator.h
+/home/ivashmak/Ransac/Usac/Estimator/Line2DEstimator.h
 Quality.h
 /home/ivashmak/Ransac/Usac/Quality.h
+Sampler/UniformSampler.h
+/home/ivashmak/Ransac/Usac/Sampler/UniformSampler.h
 
 /home/ivashmak/Ransac/Usac/Quality.h
 Estimator/Estimator.h

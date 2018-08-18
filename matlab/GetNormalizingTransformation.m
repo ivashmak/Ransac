@@ -15,7 +15,7 @@ function [T,offset,s,s1,s2]=GetNormalizingTransformation(pts)
     s2 = sqrt(summa2/NUMP);
 
     s=sqrt((summa1+summa2)/NUMP)/sqrt(2);
-    keyboard
+
     T1 = eye(3);
     T2 = eye(3);
     T1(1:2,3) = -offset;

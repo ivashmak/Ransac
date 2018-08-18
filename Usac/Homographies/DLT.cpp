@@ -5,6 +5,7 @@
 
 #include "HomographyMethods.h"
 
+// Direct Linear Transformation
 void HomographyMethods::DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
     CV_Assert(!pts1.empty());
     CV_Assert(!pts2.empty());
@@ -18,7 +19,7 @@ void HomographyMethods::DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &
 
     std::cout << "NUMP = "<< points1.size << "\n";
 
-    cv::Mat Am = cv::Mat(2*NUMP, 9, CV_32FC1), tmp1, tmp2, vt;
+    cv::Mat A = cv::Mat(2*NUMP, 9, CV_32FC1), tmp1, tmp2, vt;
 
     for (int i = 1; i <= NUMP; i++) {
         x1 = points1.at<float>(i-1,0);
@@ -27,28 +28,28 @@ void HomographyMethods::DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &
         x2 = points2.at<float>(i-1,0);
         y2 = points2.at<float>(i-1,1);
 
-        Am.at<float>(2*i-2, 0) = -x1;
-        Am.at<float>(2*i-2, 1) = -y1;
-        Am.at<float>(2*i-2, 2) = -1;
-        Am.at<float>(2*i-2, 3) = 0;
-        Am.at<float>(2*i-2, 4) = 0;
-        Am.at<float>(2*i-2, 5) = 0;
-        Am.at<float>(2*i-2, 6) = x2*x1;
-        Am.at<float>(2*i-2, 7) = x2*y1;
-        Am.at<float>(2*i-2, 8) = x2;
+        A.at<float>(2*i-2, 0) = -x1;
+        A.at<float>(2*i-2, 1) = -y1;
+        A.at<float>(2*i-2, 2) = -1;
+        A.at<float>(2*i-2, 3) = 0;
+        A.at<float>(2*i-2, 4) = 0;
+        A.at<float>(2*i-2, 5) = 0;
+        A.at<float>(2*i-2, 6) = x2*x1;
+        A.at<float>(2*i-2, 7) = x2*y1;
+        A.at<float>(2*i-2, 8) = x2;
 
-        Am.at<float>(2*i-1, 0) = 0;
-        Am.at<float>(2*i-1, 1) = 0;
-        Am.at<float>(2*i-1, 2) = 0;
-        Am.at<float>(2*i-1, 3) = -x1;
-        Am.at<float>(2*i-1, 4) = -y1;
-        Am.at<float>(2*i-1, 5) = -1;
-        Am.at<float>(2*i-1, 6) = y2*x1;
-        Am.at<float>(2*i-1, 7) = y2*y1;
-        Am.at<float>(2*i-1, 8) = y2;
+        A.at<float>(2*i-1, 0) = 0;
+        A.at<float>(2*i-1, 1) = 0;
+        A.at<float>(2*i-1, 2) = 0;
+        A.at<float>(2*i-1, 3) = -x1;
+        A.at<float>(2*i-1, 4) = -y1;
+        A.at<float>(2*i-1, 5) = -1;
+        A.at<float>(2*i-1, 6) = y2*x1;
+        A.at<float>(2*i-1, 7) = y2*y1;
+        A.at<float>(2*i-1, 8) = y2;
     }
 
-    cv::SVD::compute(Am, tmp1, tmp2, vt);
+    cv::SVD::compute(A, tmp1, tmp2, vt);
     cv::transpose(vt, vt);
 
     cv::Mat h;

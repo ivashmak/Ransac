@@ -31,6 +31,7 @@ add_executable(
 
         Usac/Ransac/Ransac.cpp Usac/Ransac/Ransac.h
         Usac/Prosac.cpp Usac/Prosac.h
+        Usac/Evsac.cpp Usac/Evsac.h
 
         Tests/Tests.h
         Tests/testHomographyFitting.cpp

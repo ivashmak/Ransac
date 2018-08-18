@@ -258,6 +258,33 @@ Tests/testLineFitting.cpp.s:
 	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.s
 .PHONY : Tests/testLineFitting.cpp.s
 
+Usac/Evsac.o: Usac/Evsac.cpp.o
+
+.PHONY : Usac/Evsac.o
+
+# target to build an object file
+Usac/Evsac.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Evsac.cpp.o
+.PHONY : Usac/Evsac.cpp.o
+
+Usac/Evsac.i: Usac/Evsac.cpp.i
+
+.PHONY : Usac/Evsac.i
+
+# target to preprocess a source file
+Usac/Evsac.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Evsac.cpp.i
+.PHONY : Usac/Evsac.cpp.i
+
+Usac/Evsac.s: Usac/Evsac.cpp.s
+
+.PHONY : Usac/Evsac.s
+
+# target to generate assembly for a file
+Usac/Evsac.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Evsac.cpp.s
+.PHONY : Usac/Evsac.cpp.s
+
 Usac/Homographies/DLT.o: Usac/Homographies/DLT.cpp.o
 
 .PHONY : Usac/Homographies/DLT.o
@@ -444,6 +471,9 @@ help:
 	@echo "... Tests/testLineFitting.o"
 	@echo "... Tests/testLineFitting.i"
 	@echo "... Tests/testLineFitting.s"
+	@echo "... Usac/Evsac.o"
+	@echo "... Usac/Evsac.i"
+	@echo "... Usac/Evsac.s"
 	@echo "... Usac/Homographies/DLT.o"
 	@echo "... Usac/Homographies/DLT.i"
 	@echo "... Usac/Homographies/DLT.s"

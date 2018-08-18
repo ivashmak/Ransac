@@ -9,10 +9,13 @@
 #include "../Usac/Helper/Drawing.h"
 #include "../Usac/Prosac.h"
 #include "../Usac/Sampler/NapsacSampler.h"
+#include "../Usac/Evsac.h"
+#include "../Detector/ReadPoints.h"
 
 void testRansac(cv::InputArray points);
 void testNapsac(cv::InputArray points);
 void testProsac(cv::InputArray points);
+void testEvsac(cv::InputArray points);
 
 Sampler *sampler;
 Estimator *estimator2d;
@@ -32,9 +35,10 @@ void Tests::testLineFitting() {
 
     init();
 
-//    testRansac(points);
+    testRansac(points);
     testNapsac(points);
 //    testProsac(points);
+//    testEvsac(points);
 }
 
 
@@ -55,9 +59,6 @@ void testRansac (cv::InputArray points) {
 void testNapsac (cv::InputArray points) {
     int knn = 10;
     Sampler *napsac_sampler = new NapsacSampler(points, knn);
-//    int * pts = new int[2];
-//    napsac_sampler->getSample(pts, 2, 33);
-//    exit (0);
 
     Model model(10, 2, 0.99, "napsac");
     TerminationCriteria termination_criteria (model);
@@ -72,6 +73,18 @@ void testNapsac (cv::InputArray points) {
     std::cout << "-----------------------------------------------------------------------------------------\n";
 }
 
+void testEvsac (cv::InputArray points) {
+    Model model(10, 2, 0.95, "prosac");
+    TerminationCriteria termination_criteria (model);
+
+    cv::Mat points1, points2;
+    read_points (points1, points2);
+
+    Evsac evsac (points, model, *sampler, termination_criteria, quality);
+    evsac.run(points1, points2, estimator2d);
+}
+
+
 void testProsac (cv::InputArray points) {
     Model model(10, 2, 0.95, "prosac");
     TerminationCriteria termination_criteria (model);
@@ -80,8 +93,8 @@ void testProsac (cv::InputArray points) {
     prosac.run(points, estimator2d);
     drawing.draw(prosac.most_inliers, prosac.best_model, prosac.non_minimal_model, points);
 
-    std::cout << "Prosac time: " << prosac.quality->getComputationTime() << "mcs\n";
-    std::cout << "Prosac iterations: " << prosac.quality->getIterations() << "\n";
-    std::cout << "Prosac points under threshold: " << prosac.quality->getNumberOfPointsUnderThreshold() << "\n";
+    std::cout << "Prosac time: " << prosac.getQuality().getComputationTime() << "mcs\n";
+    std::cout << "Prosac iterations: " << prosac.getQuality().getIterations() << "\n";
+    std::cout << "Prosac points under threshold: " << prosac.getQuality().getNumberOfPointsUnderThreshold() << "\n";
     std::cout << "-----------------------------------------------------------------------------------------\n";
 }

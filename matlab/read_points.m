@@ -1,3 +1,5 @@
+close all;
+
 fileID = fopen('../points/graf_pts.txt','r');
 formatSpec = '%f';
 sizeA = [7 Inf];
@@ -5,6 +7,7 @@ A = fscanf(fileID, formatSpec, sizeA);
 A = A';
 sz = size(A, 1);
 
+clear pts1 pts2;
 for i = 1:sz
     pts1(i, 1) = A(i, 1);
     pts1(i, 2) = A(i, 2);
@@ -14,8 +17,41 @@ for i = 1:sz
     pts2(i, 2) = A(i, 5);
 %     pts2(i, 3) = A(i, 6);
 end
+
+img1 = imread('../images/img1.png');
+img2 = imread('../images/img2.png');
+
+figure; imshow (img2);
+hold on
+plot(pts1(:,1), pts1(:,2), 'o', 'Color', 'white', 'LineWidth', 2);
+hold off
+
+figure; imshow (img1);
+hold on
+plot(pts2(:,1), pts2(:,2), '+', 'Color', 'white', 'LineWidth', 2);
+hold off
+
+
 % keyboard
-H_DLT = DLT(pts1, pts2)
-[T_1, offset_1, s_1, s1_1, s2_1] = GetNormalizingTransformation(pts1)
-NormalizedDLT_res = NormalizedDLT(pts1, pts2)
-% [T_2, offset_2, s_2, s1_2, s2_2] = GetNormalizingTransformation(pts2)
+H_DLT = DLT(pts1, pts2);
+[T_1, offset_1, s_1, s1_1, s2_1] = GetNormalizingTransformation(pts1);
+[T_2, offset_2, s_2, s1_2, s2_2] = GetNormalizingTransformation(pts2);
+H_NormalizedDLT = NormalizedDLT(pts1, pts2);
+
+tform1 = projective2d(T_1');
+tform2 = projective2d(T_2');
+
+out1 = transformPointsForward(tform1, pts1)
+out2 = transformPointsForward(tform2, pts1)
+
+
+outI1 = imwarp(img1, tform2);
+outI2 = imwarp(img2, tform2);
+
+% figure; imshow(outI1);
+% figure; imshow(outI2);
+
+
+% keyboard
+
+

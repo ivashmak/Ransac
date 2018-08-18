@@ -126,6 +126,12 @@
 		<Unit filename="/home/ivashmak/Ransac/Usac/Estimator/Line2DEstimator.h">
 			<Option target="ransac"/>
 		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/Evsac.cpp">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/Evsac.h">
+			<Option target="ransac"/>
+		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Usac/Helper/Drawing.h">
 			<Option target="ransac"/>
 		</Unit>

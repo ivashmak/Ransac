@@ -8,6 +8,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o"
   "CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.o"
   "CMakeFiles/ransac.dir/Usac/Prosac.cpp.o"
+  "CMakeFiles/ransac.dir/Usac/Evsac.cpp.o"
   "CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o"
   "CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o"
   "ransac.pdb"

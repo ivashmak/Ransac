@@ -8,7 +8,7 @@ int main (int args, char ** argv) {
     Tests tests;
 
     tests.testLineFitting();
-//    Tests.testHomographyFitting();
+    tests.testHomographyFitting();
 
 	return 0;
 }

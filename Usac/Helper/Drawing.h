@@ -30,7 +30,7 @@ public:
         cv::Mat desc;
         model.getDescriptor(desc);
         auto * params = reinterpret_cast<float *>(desc.data);
-        std::cout <<"model = "<< params[0] << " " << params[1] << " " <<params[2] << '\n';
+        std::cout <<"model: a = "<< params[0] << " b = " << params[1] << " c = " <<params[2] << '\n';
         float b = -params[2]/params[0];
         float k = -params[1]/params[0];
 
