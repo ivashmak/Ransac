@@ -63,7 +63,7 @@ void Prosac::run (cv::InputArray input_points, Estimator *estimator2d) {
         // the probability, that an incorrect model calculated from a random sample containing
         // an outlier is supported by a correspondence not included in the sample
         float beta = ((total_points-inliers_size)/total_points) * // prob that sample contains outlier
-                pow(inliers_size/total_points, model->sample_number); // prob that all points in sample are inliers
+                     pow(inliers_size/total_points, model->sample_number); // prob that all points in sample are inliers
 
     }
 

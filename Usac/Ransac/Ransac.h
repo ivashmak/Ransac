@@ -1,10 +1,10 @@
 #ifndef RANSAC_RANSAC_H
 #define RANSAC_RANSAC_H
 
-#include "Estimator/Estimator.h"
-#include "Estimator/Line2DEstimator.h"
-#include "Quality.h"
-#include "Sampler/UniformSampler.h"
+#include "../Estimator/Estimator.h"
+#include "../Estimator/Line2DEstimator.h"
+#include "../Quality.h"
+#include "../Sampler/UniformSampler.h"
 
 class Ransac {
 protected:

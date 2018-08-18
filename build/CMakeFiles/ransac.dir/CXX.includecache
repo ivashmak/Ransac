@@ -83,16 +83,14 @@ Tests.h
 /home/ivashmak/Ransac/Detector/detector.h
 ../Usac/Estimator/Line2DEstimator.h
 /home/ivashmak/Ransac/Usac/Estimator/Line2DEstimator.h
-../Usac/Ransac.h
-/home/ivashmak/Ransac/Usac/Ransac.h
+../Usac/Ransac/Ransac.h
+/home/ivashmak/Ransac/Usac/Ransac/Ransac.h
 ../Usac/Sampler/UniformSampler.h
 /home/ivashmak/Ransac/Usac/Sampler/UniformSampler.h
 ../Usac/Helper/Drawing.h
 /home/ivashmak/Ransac/Usac/Helper/Drawing.h
 ../Usac/Prosac.h
 /home/ivashmak/Ransac/Usac/Prosac.h
-../Usac/Napsac.h
-/home/ivashmak/Ransac/Usac/Napsac.h
 ../Usac/Sampler/NapsacSampler.h
 /home/ivashmak/Ransac/Usac/Sampler/NapsacSampler.h
 
@@ -133,12 +131,10 @@ Estimator.h
 /home/ivashmak/Ransac/Usac/Estimator/Estimator.h
 
 /home/ivashmak/Ransac/Usac/Helper/Drawing.h
-utility
--
 ../Estimator/Estimator.h
 /home/ivashmak/Ransac/Usac/Estimator/Estimator.h
-../Ransac.h
-/home/ivashmak/Ransac/Usac/Ransac.h
+../Ransac/Ransac.h
+/home/ivashmak/Ransac/Usac/Ransac/Ransac.h
 
 /home/ivashmak/Ransac/Usac/Homographies/DLT.cpp
 opencv2/opencv.hpp
@@ -174,18 +170,6 @@ HomographyMethods.h
 
 /home/ivashmak/Ransac/Usac/Model.h
 
-/home/ivashmak/Ransac/Usac/Napsac.cpp
-Napsac.h
-/home/ivashmak/Ransac/Usac/Napsac.h
-
-/home/ivashmak/Ransac/Usac/Napsac.h
-Estimator/Estimator.h
-/home/ivashmak/Ransac/Usac/Estimator/Estimator.h
-Estimator/Line2DEstimator.h
-/home/ivashmak/Ransac/Usac/Estimator/Line2DEstimator.h
-Quality.h
-/home/ivashmak/Ransac/Usac/Quality.h
-
 /home/ivashmak/Ransac/Usac/Prosac.cpp
 Prosac.h
 /home/ivashmak/Ransac/Usac/Prosac.h
@@ -204,18 +188,18 @@ Estimator/Estimator.h
 Model.h
 /home/ivashmak/Ransac/Usac/Model.h
 
-/home/ivashmak/Ransac/Usac/Ransac.cpp
+/home/ivashmak/Ransac/Usac/Ransac/Ransac.cpp
 Ransac.h
-/home/ivashmak/Ransac/Usac/Ransac.h
+/home/ivashmak/Ransac/Usac/Ransac/Ransac.h
 
-/home/ivashmak/Ransac/Usac/Ransac.h
-Estimator/Estimator.h
+/home/ivashmak/Ransac/Usac/Ransac/Ransac.h
+../Estimator/Estimator.h
 /home/ivashmak/Ransac/Usac/Estimator/Estimator.h
-Estimator/Line2DEstimator.h
+../Estimator/Line2DEstimator.h
 /home/ivashmak/Ransac/Usac/Estimator/Line2DEstimator.h
-Quality.h
+../Quality.h
 /home/ivashmak/Ransac/Usac/Quality.h
-Sampler/UniformSampler.h
+../Sampler/UniformSampler.h
 /home/ivashmak/Ransac/Usac/Sampler/UniformSampler.h
 
 /home/ivashmak/Ransac/Usac/Sampler/NapsacSampler.h
@@ -225,6 +209,8 @@ opencv2/flann/flann.hpp
 -
 Sampler.h
 /home/ivashmak/Ransac/Usac/Sampler/Sampler.h
+../Helper/Drawing.h
+/home/ivashmak/Ransac/Usac/Helper/Drawing.h
 
 /home/ivashmak/Ransac/Usac/Sampler/Sampler.h
 

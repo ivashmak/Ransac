@@ -339,33 +339,6 @@ Usac/Homographies/NormalizedDLT.cpp.s:
 	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.s
 .PHONY : Usac/Homographies/NormalizedDLT.cpp.s
 
-Usac/Napsac.o: Usac/Napsac.cpp.o
-
-.PHONY : Usac/Napsac.o
-
-# target to build an object file
-Usac/Napsac.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Napsac.cpp.o
-.PHONY : Usac/Napsac.cpp.o
-
-Usac/Napsac.i: Usac/Napsac.cpp.i
-
-.PHONY : Usac/Napsac.i
-
-# target to preprocess a source file
-Usac/Napsac.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Napsac.cpp.i
-.PHONY : Usac/Napsac.cpp.i
-
-Usac/Napsac.s: Usac/Napsac.cpp.s
-
-.PHONY : Usac/Napsac.s
-
-# target to generate assembly for a file
-Usac/Napsac.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Napsac.cpp.s
-.PHONY : Usac/Napsac.cpp.s
-
 Usac/Prosac.o: Usac/Prosac.cpp.o
 
 .PHONY : Usac/Prosac.o
@@ -393,32 +366,32 @@ Usac/Prosac.cpp.s:
 	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Prosac.cpp.s
 .PHONY : Usac/Prosac.cpp.s
 
-Usac/Ransac.o: Usac/Ransac.cpp.o
+Usac/Ransac/Ransac.o: Usac/Ransac/Ransac.cpp.o
 
-.PHONY : Usac/Ransac.o
+.PHONY : Usac/Ransac/Ransac.o
 
 # target to build an object file
-Usac/Ransac.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Ransac.cpp.o
-.PHONY : Usac/Ransac.cpp.o
+Usac/Ransac/Ransac.cpp.o:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.o
+.PHONY : Usac/Ransac/Ransac.cpp.o
 
-Usac/Ransac.i: Usac/Ransac.cpp.i
+Usac/Ransac/Ransac.i: Usac/Ransac/Ransac.cpp.i
 
-.PHONY : Usac/Ransac.i
+.PHONY : Usac/Ransac/Ransac.i
 
 # target to preprocess a source file
-Usac/Ransac.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Ransac.cpp.i
-.PHONY : Usac/Ransac.cpp.i
+Usac/Ransac/Ransac.cpp.i:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.i
+.PHONY : Usac/Ransac/Ransac.cpp.i
 
-Usac/Ransac.s: Usac/Ransac.cpp.s
+Usac/Ransac/Ransac.s: Usac/Ransac/Ransac.cpp.s
 
-.PHONY : Usac/Ransac.s
+.PHONY : Usac/Ransac/Ransac.s
 
 # target to generate assembly for a file
-Usac/Ransac.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Ransac.cpp.s
-.PHONY : Usac/Ransac.cpp.s
+Usac/Ransac/Ransac.cpp.s:
+	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.s
+.PHONY : Usac/Ransac/Ransac.cpp.s
 
 main.o: main.cpp.o
 
@@ -480,15 +453,12 @@ help:
 	@echo "... Usac/Homographies/NormalizedDLT.o"
 	@echo "... Usac/Homographies/NormalizedDLT.i"
 	@echo "... Usac/Homographies/NormalizedDLT.s"
-	@echo "... Usac/Napsac.o"
-	@echo "... Usac/Napsac.i"
-	@echo "... Usac/Napsac.s"
 	@echo "... Usac/Prosac.o"
 	@echo "... Usac/Prosac.i"
 	@echo "... Usac/Prosac.s"
-	@echo "... Usac/Ransac.o"
-	@echo "... Usac/Ransac.i"
-	@echo "... Usac/Ransac.s"
+	@echo "... Usac/Ransac/Ransac.o"
+	@echo "... Usac/Ransac/Ransac.i"
+	@echo "... Usac/Ransac/Ransac.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

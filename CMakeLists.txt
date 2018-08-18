@@ -29,9 +29,8 @@ add_executable(
         Usac/Homographies/GetNormalizingTransformation.cpp
         Usac/Homographies/HomographyMethods.h
 
+        Usac/Ransac/Ransac.cpp Usac/Ransac/Ransac.h
         Usac/Prosac.cpp Usac/Prosac.h
-        Usac/Ransac.cpp Usac/Ransac.h
-        Usac/Napsac.cpp Usac/Napsac.h
 
         Tests/Tests.h
         Tests/testHomographyFitting.cpp

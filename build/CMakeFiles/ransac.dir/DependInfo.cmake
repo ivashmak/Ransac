@@ -12,9 +12,8 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/ivashmak/Ransac/Usac/Homographies/DLT.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o"
   "/home/ivashmak/Ransac/Usac/Homographies/GetNormalizingTransformation.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o"
   "/home/ivashmak/Ransac/Usac/Homographies/NormalizedDLT.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o"
-  "/home/ivashmak/Ransac/Usac/Napsac.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Napsac.cpp.o"
   "/home/ivashmak/Ransac/Usac/Prosac.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Prosac.cpp.o"
-  "/home/ivashmak/Ransac/Usac/Ransac.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Ransac.cpp.o"
+  "/home/ivashmak/Ransac/Usac/Ransac/Ransac.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.o"
   "/home/ivashmak/Ransac/main.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

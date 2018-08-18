@@ -4,11 +4,10 @@
 #include "../Generator/generator.h"
 #include "../Detector/detector.h"
 #include "../Usac/Estimator/Line2DEstimator.h"
-#include "../Usac/Ransac.h"
+#include "../Usac/Ransac/Ransac.h"
 #include "../Usac/Sampler/UniformSampler.h"
 #include "../Usac/Helper/Drawing.h"
 #include "../Usac/Prosac.h"
-#include "../Usac/Napsac.h"
 #include "../Usac/Sampler/NapsacSampler.h"
 
 void testRansac(cv::InputArray points);
@@ -33,7 +32,7 @@ void Tests::testLineFitting() {
 
     init();
 
-    testRansac(points);
+//    testRansac(points);
     testNapsac(points);
 //    testProsac(points);
 }
@@ -54,18 +53,22 @@ void testRansac (cv::InputArray points) {
 }
 
 void testNapsac (cv::InputArray points) {
-    Sampler *napsac_sampler = new NapsacSampler;
+    int knn = 10;
+    Sampler *napsac_sampler = new NapsacSampler(points, knn);
+//    int * pts = new int[2];
+//    napsac_sampler->getSample(pts, 2, 33);
+//    exit (0);
 
     Model model(10, 2, 0.99, "napsac");
     TerminationCriteria termination_criteria (model);
 
-    Napsac napsac (points, model, *sampler, termination_criteria, quality);
+    Ransac napsac (points, model, *napsac_sampler, termination_criteria, quality);
     napsac.run(points, estimator2d);
     drawing.draw(napsac.most_inliers, napsac.best_model, napsac.non_minimal_model, points);
 
-    std::cout << "Napsac time: " << napsac.quality->getComputationTime() << "mcs\n";
-    std::cout << "Napsac iterations: " << napsac.quality->getIterations() << "\n";
-    std::cout << "Napsac points under threshold: " << napsac.quality->getNumberOfPointsUnderThreshold() << "\n";
+    std::cout << "Napsac time: " << napsac.getQuality().getComputationTime() << "mcs\n";
+    std::cout << "Napsac iterations: " << napsac.getQuality().getIterations() << "\n";
+    std::cout << "Napsac points under threshold: " << napsac.getQuality().getNumberOfPointsUnderThreshold() << "\n";
     std::cout << "-----------------------------------------------------------------------------------------\n";
 }
 

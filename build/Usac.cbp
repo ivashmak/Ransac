@@ -144,12 +144,6 @@
 		<Unit filename="/home/ivashmak/Ransac/Usac/Model.h">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/Napsac.cpp">
-			<Option target="ransac"/>
-		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/Napsac.h">
-			<Option target="ransac"/>
-		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Usac/Prosac.cpp">
 			<Option target="ransac"/>
 		</Unit>
@@ -159,10 +153,10 @@
 		<Unit filename="/home/ivashmak/Ransac/Usac/Quality.h">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/Ransac.cpp">
+		<Unit filename="/home/ivashmak/Ransac/Usac/Ransac/Ransac.cpp">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/Ransac.h">
+		<Unit filename="/home/ivashmak/Ransac/Usac/Ransac/Ransac.h">
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Usac/Sampler/NapsacSampler.h">

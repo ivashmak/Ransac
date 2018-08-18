@@ -1,9 +1,8 @@
 #ifndef RANSAC_DRAWING_H
 #define RANSAC_DRAWING_H
 
-#include <utility>
 #include "../Estimator/Estimator.h"
-#include "../Ransac.h"
+#include "../Ransac/Ransac.h"
 
 class Drawing {
 public:
