@@ -1,8 +1,29 @@
 #include "Evsac.h"
 #include "Helper/Drawing.h"
+// https://github.com/feixh/PnPRANAAC/blob/a20df02db963128d4796f29dca35ed4becfddfbe/include/theia/solvers/evsac_sampler.h
+
+
+
+void fitGEV (cv::InputArray points, float *mu, float *sigma, float *epsilon) {
+
+}
+
+// fit a two-parameter Gamma distribution to the data identified as correct to estimate Fc.
+void fitGamma (cv::InputArray points, float *alpha, float *beta) {
+    // https://stats.stackexchange.com/questions/342639/how-to-find-alpha-and-beta-from-a-gamma-distribution
+    cv::Scalar mean, standard_deviation;
+    cv::meanStdDev(points, mean, standard_deviation);
+
+    float mean_v = (float) mean.val[0];
+    float variance = (float) pow(standard_deviation.val[0], 2);
+
+    *alpha = (float) (pow(mean_v, 2) / variance);
+    *beta = mean_v/variance;
+}
 
 // require: image feature correspondences. (n image points sets)
 // require: k nearest neighbor matching scores sorted in an ascending order for every i-th correspondence.
+
 void Evsac::run (cv::InputArray input_points1, cv::InputArray input_points2, Estimator *estimator2d) {
     int knn = 10;
 
@@ -42,35 +63,66 @@ void Evsac::run (cv::InputArray input_points1, cv::InputArray input_points2, Est
     cv::flann::Index flannIndex1 (cv::Mat(points1).reshape(1), flannIndexParams);
     query = cv::Mat(1, 2, CV_32F, &initial_point);
     flannIndex1.knnSearch(query, indicies1, dists, knn);
+    std::cout << "indicies1 = " << indicies1 << '\n';
 
     cv::flann::Index flannIndex2 (cv::Mat(points1).reshape(1), flannIndexParams);
     query = cv::Mat (1, 2, CV_32F, &corr_initial_point);
     flannIndex2.knnSearch(query, indicies2, dists, knn);
+    std::cout << "indicies2 = " << indicies2 << '\n';
 
 
+    // Our algorithm begins by computing the distributions for correct and incorrect matches for
+    // the data provided. In order to start the process, we need a correct-match predictor to
+    // preliminarily label each match as correct or incorrect (e.g., Lowe's ratio [11] or MR-Rayleigh [8]).
     std::vector<std::vector<cv::DMatch>> matches;
     cv::BFMatcher matcher;
-//    matcher.knn
-//    matcher.knnMatch(descriptors_1, descriptors_2, matches, 2);  // Find two nearest matches
+
+//    matcher.knnMatch(points1, points2, matches, 2);  // Find two nearest matches
+    matcher.knnMatch(points1, points2, matches, 2);  // Find two nearest matches
+
     std::vector<cv::DMatch> good_matches;
-    for (int i = 0; i < matches.size(); ++i)
-    {
+    std::vector<cv::DMatch> match1;
+    std::vector<cv::DMatch> match2;
+    for (int i = 0; i < matches.size(); ++i) {
+        match1.push_back(matches[i][0]);
+        match2.push_back(matches[i][1]);
+
         const float ratio = 0.8; // As in Lowe's paper; can be tuned
         if (matches[i][0].distance < ratio * matches[i][1].distance) {
             good_matches.push_back(matches[i][0]);
         }
     }
 
+
+    // Then fit a two-parameter Gamma distribution to the data identified as correct to estimate Fc.
+    std::gamma_distribution();
+
+
     // helper
+    Drawing draw;
     cv::Mat image1 = cv::imread("../images/img1.png");
     cv::Mat image2 = cv::imread("../images/img2.png");
+
+    cv::Mat img_matches1 = cv::imread("../images/img1.png");
+    cv::Mat img_matches2 = cv::imread("../images/img2.png");
+
+    std::vector<cv::KeyPoint> keypoints1, keypoints2;
+    for (int i = 0; i < total_points; i++) {
+        keypoints1.push_back(cv::KeyPoint(points1.at<float>(i, 0), points1.at<float>(i, 1), 1));
+        keypoints2.push_back(cv::KeyPoint(points2.at<float>(i, 0), points1.at<float>(i, 1), 1));
+    }
+
+    cv::drawMatches(image1, keypoints1, image2, keypoints2, match1, img_matches1);
+    cv::drawMatches(image1, keypoints1, image2, keypoints2, match2, img_matches2);
+
+    imshow("matches1", img_matches1);
+    imshow("matches1", img_matches2);
 
     std::vector<int> v_inds1, v_inds2;
     for (int i = 0; i < knn; i++) {
         v_inds1.push_back(indicies1.at<int>(i));
         v_inds2.push_back(indicies2.at<int>(i));
     }
-    Drawing draw;
     draw.showInliers(input_points1, v_inds1, image2);
     draw.showInliers(input_points2, v_inds2, image1);
 

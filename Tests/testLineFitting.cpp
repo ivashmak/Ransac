@@ -35,10 +35,10 @@ void Tests::testLineFitting() {
 
     init();
 
-    testRansac(points);
-    testNapsac(points);
+//    testRansac(points);
+//    testNapsac(points);
 //    testProsac(points);
-//    testEvsac(points);
+    testEvsac(points);
 }
 
 
