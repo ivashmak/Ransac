@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_FLAGS =   -std=gnu++11
 
-CXX_DEFINES = 
+CXX_DEFINES = -DGFLAGS_IS_A_DLL=0 -DGOOGLE_GLOG_DLL_DECL="" -DTHEIA_GFLAGS_NAMESPACE=google -DTHEIA_SUITESPARSE_VERSION=\"4.4.6\"
 
-CXX_INCLUDES = -isystem /usr/local/include -isystem /usr/local/include/opencv 
+CXX_INCLUDES = -isystem /usr/local/include -I/usr/include/eigen3 -I/usr/include/suitesparse -I/usr/local/include/theia/libraries -I/usr/local/include/theia/libraries/akaze -I/usr/local/include/theia/libraries/cereal -I/usr/local/include/theia/libraries/cereal/include -I/usr/local/include/theia/libraries/flann -I/usr/local/include/theia/libraries/gtest -I/usr/local/include/theia/libraries/gtest/include -I/usr/local/include/theia/libraries/optimo -I/usr/local/include/theia/libraries/spectra -I/usr/local/include/theia/libraries/statx -I/usr/local/include/theia/libraries/stlplus3 -I/usr/local/include/theia/libraries/vlfeat -I/usr/local/include/theia/libraries/visual_sfm -isystem /usr/local/include/opencv 
 

@@ -4,6 +4,10 @@ set (CMAKE_CXX_STANDARD 11)
 project(Usac)
 find_package( OpenCV REQUIRED )
 
+# theia
+find_package(Theia REQUIRED)
+include_directories(${THEIA_INCLUDE_DIRS})
+
 add_executable(
         ransac main.cpp
         Generator/generator.cpp Generator/generator.h
@@ -23,6 +27,8 @@ add_executable(
         Usac/Sampler/Sampler.h
         Usac/Sampler/UniformSampler.h
         Usac/Sampler/NapsacSampler.h
+        Usac/Sampler/EvsacSampler.h
+        Usac/Sampler/ProsacSampler.h
 
         Usac/Homographies/DLT.cpp
         Usac/Homographies/NormalizedDLT.cpp
@@ -30,8 +36,6 @@ add_executable(
         Usac/Homographies/HomographyMethods.h
 
         Usac/Ransac/Ransac.cpp Usac/Ransac/Ransac.h
-        Usac/Prosac.cpp Usac/Prosac.h
-        Usac/Evsac.cpp Usac/Evsac.h
 
         Tests/Tests.h
         Tests/testHomographyFitting.cpp
@@ -40,4 +44,6 @@ add_executable(
 
 # set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -pthread -fopenmp -Wextra" )
 
-target_link_libraries( ransac ${OpenCV_LIBS} )
+target_link_libraries (ransac ${OpenCV_LIBS} )
+target_link_libraries (ransac ${THEIA_LIBRARIES})
+

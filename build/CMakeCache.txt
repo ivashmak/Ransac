@@ -14,6 +14,36 @@
 # EXTERNAL cache entries
 ########################
 
+//Path to a file.
+AMD_INCLUDE_DIR:PATH=/usr/include/suitesparse
+
+//Path to a library.
+AMD_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libamd.so
+
+//Path to a library.
+BLAS_goto2_LIBRARY:FILEPATH=BLAS_goto2_LIBRARY-NOTFOUND
+
+//Path to a library.
+BLAS_openblas_LIBRARY:FILEPATH=/usr/lib/libopenblas.so
+
+//Path to a file.
+CAMD_INCLUDE_DIR:PATH=/usr/include/suitesparse
+
+//Path to a library.
+CAMD_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libcamd.so
+
+//Path to a file.
+CCOLAMD_INCLUDE_DIR:PATH=/usr/include/suitesparse
+
+//Path to a library.
+CCOLAMD_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libccolamd.so
+
+//Path to a file.
+CHOLMOD_INCLUDE_DIR:PATH=/usr/include/suitesparse
+
+//Path to a library.
+CHOLMOD_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libcholmod.so
+
 //Path to a program.
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
@@ -188,6 +218,36 @@ CMAKE_STRIP:FILEPATH=/usr/bin/strip
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
+//Path to a file.
+COLAMD_INCLUDE_DIR:PATH=/usr/include/suitesparse
+
+//Path to a library.
+COLAMD_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libcolamd.so
+
+//The directory containing a CMake configuration file for Ceres.
+Ceres_DIR:PATH=/usr/local/lib/cmake/Ceres
+
+//Eigen include directory
+EIGEN_INCLUDE_DIR:STRING=/usr/include/eigen3
+
+//Path to a library.
+LAPACK_goto2_LIBRARY:FILEPATH=LAPACK_goto2_LIBRARY-NOTFOUND
+
+//Path to a library.
+LAPACK_openblas_LIBRARY:FILEPATH=/usr/lib/libopenblas.so
+
+//Path to a library.
+LIBRT_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/librt.so
+
+//Path to a library.
+METIS_LIBRARY:FILEPATH=METIS_LIBRARY-NOTFOUND
+
+//Path to a file.
+OPENIMAGEIO_INCLUDE_DIR:PATH=/usr/local/include
+
+//Path to a library.
+OPENIMAGEIO_LIBRARY:FILEPATH=/usr/local/lib/libOpenImageIO.so
+
 //The directory containing a CMake configuration file for OpenCV.
 OpenCV_DIR:PATH=/usr/local/share/OpenCV
 
@@ -196,6 +256,27 @@ ProcessorCount_cmd_getconf:FILEPATH=/usr/bin/getconf
 
 //Path to a program.
 ProcessorCount_cmd_sysctl:FILEPATH=/sbin/sysctl
+
+//Path to a file.
+SUITESPARSEQR_INCLUDE_DIR:PATH=/usr/include/suitesparse
+
+//Path to a library.
+SUITESPARSEQR_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libspqr.so
+
+//Path to a file.
+SUITESPARSE_CONFIG_INCLUDE_DIR:PATH=/usr/include/suitesparse
+
+//Path to a library.
+SUITESPARSE_CONFIG_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libsuitesparseconfig.so
+
+//Path to a library.
+TBB_LIBRARY:FILEPATH=/usr/local/lib/libtbb.so
+
+//Path to a library.
+TBB_MALLOC_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libtbbmalloc.so
+
+//The directory containing a CMake configuration file for Theia.
+Theia_DIR:PATH=/usr/local/share/Theia
 
 //Value Computed by CMake
 Usac_BINARY_DIR:STATIC=/home/ivashmak/Ransac/build
@@ -208,6 +289,30 @@ Usac_SOURCE_DIR:STATIC=/home/ivashmak/Ransac
 # INTERNAL cache entries
 ########################
 
+//ADVANCED property for variable: AMD_INCLUDE_DIR
+AMD_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: AMD_LIBRARY
+AMD_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: BLAS_goto2_LIBRARY
+BLAS_goto2_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: BLAS_openblas_LIBRARY
+BLAS_openblas_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: BLAS_openblas_WORKS
+BLAS_openblas_WORKS-ADVANCED:INTERNAL=1
+//Have function sgemm_
+BLAS_openblas_WORKS:INTERNAL=1
+//ADVANCED property for variable: CAMD_INCLUDE_DIR
+CAMD_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CAMD_LIBRARY
+CAMD_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CCOLAMD_INCLUDE_DIR
+CCOLAMD_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CCOLAMD_LIBRARY
+CCOLAMD_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CHOLMOD_INCLUDE_DIR
+CHOLMOD_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CHOLMOD_LIBRARY
+CHOLMOD_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
 CMAKE_AR-ADVANCED:INTERNAL=1
 //This is the directory where this CMakeCache.txt was created
@@ -288,6 +393,14 @@ CMAKE_GENERATOR:INTERNAL=Unix Makefiles
 CMAKE_GENERATOR_PLATFORM:INTERNAL=
 //Name of generator toolset.
 CMAKE_GENERATOR_TOOLSET:INTERNAL=
+//Have symbol pthread_create
+CMAKE_HAVE_LIBC_CREATE:INTERNAL=
+//Have library pthreads
+CMAKE_HAVE_PTHREADS_CREATE:INTERNAL=
+//Have library pthread
+CMAKE_HAVE_PTHREAD_CREATE:INTERNAL=1
+//Have include pthread.h
+CMAKE_HAVE_PTHREAD_H:INTERNAL=1
 //Source directory with the top level CMakeLists.txt file for this
 // project
 CMAKE_HOME_DIRECTORY:INTERNAL=/home/ivashmak/Ransac
@@ -351,10 +464,44 @@ CMAKE_STRIP-ADVANCED:INTERNAL=1
 CMAKE_UNAME:INTERNAL=/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: COLAMD_INCLUDE_DIR
+COLAMD_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: COLAMD_LIBRARY
+COLAMD_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: EIGEN_INCLUDE_DIR
+EIGEN_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //Details about finding OpenCV
 FIND_PACKAGE_MESSAGE_DETAILS_OpenCV:INTERNAL=[/usr/local][v3.3.0()]
+//Details about finding Threads
+FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
+//ADVANCED property for variable: LAPACK_goto2_LIBRARY
+LAPACK_goto2_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LAPACK_openblas_LIBRARY
+LAPACK_openblas_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: LAPACK_openblas_WORKS
+LAPACK_openblas_WORKS-ADVANCED:INTERNAL=1
+//Have function cheev_
+LAPACK_openblas_WORKS:INTERNAL=1
+//ADVANCED property for variable: LIBRT_LIBRARY
+LIBRT_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: OPENIMAGEIO_INCLUDE_DIR
+OPENIMAGEIO_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: OPENIMAGEIO_LIBRARY
+OPENIMAGEIO_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: ProcessorCount_cmd_getconf
 ProcessorCount_cmd_getconf-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: ProcessorCount_cmd_sysctl
 ProcessorCount_cmd_sysctl-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: SUITESPARSEQR_INCLUDE_DIR
+SUITESPARSEQR_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: SUITESPARSEQR_LIBRARY
+SUITESPARSEQR_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: SUITESPARSE_CONFIG_INCLUDE_DIR
+SUITESPARSE_CONFIG_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: SUITESPARSE_CONFIG_LIBRARY
+SUITESPARSE_CONFIG_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: TBB_LIBRARY
+TBB_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: TBB_MALLOC_LIBRARY
+TBB_MALLOC_LIBRARY-ADVANCED:INTERNAL=1
 

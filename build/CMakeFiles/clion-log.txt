@@ -1,4 +1,46 @@
 /home/ivashmak/clion-2018.1.2/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE= -G "CodeBlocks - Unix Makefiles" /home/ivashmak/Ransac
+-- Found required Theia dependency: Eigen version 3.2.92 in /usr/include/eigen3
+-- Found installed version of Eigen: /usr/lib/cmake/eigen3
+-- Found required Ceres dependency: Eigen version 3.2.92 in /usr/include/eigen3
+-- Found installed version of glog: /usr/local/lib/cmake/glog
+-- Detected glog version: 0.3.5
+-- Found required Ceres dependency: glog
+-- Found installed version of gflags: /usr/local/lib/cmake/gflags
+-- Detected gflags version: 2.2.1
+-- Found required Ceres dependency: gflags
+-- Found Ceres version: 1.14.0 installed in: /usr/local with components: [EigenSparse, SparseLinearAlgebraLibrary, LAPACK, SuiteSparse, CXSparse, SchurSpecializations, OpenMP, Multithreading]
+-- Found required Theia dependency: Ceres in /usr/local/include;/usr/include/eigen3
+-- Found installed version of glog: /usr/local/lib/cmake/glog
+-- Detected glog version: 0.3.5
+-- Found required Theia dependency: Glog in 
+-- Found installed version of gflags: /usr/local/lib/cmake/gflags
+-- Detected gflags version: 2.2.1
+-- Found required Theia dependency: Google Flags in /usr/local/include in namespace: google
+-- Found Theia dependency: OpenImageIO in /usr/local/include
+-- A library with BLAS API found.
+-- Found AMD headers in: /usr/include/suitesparse
+-- Found AMD library: /usr/lib/x86_64-linux-gnu/libamd.so
+-- Found CAMD headers in: /usr/include/suitesparse
+-- Found CAMD library: /usr/lib/x86_64-linux-gnu/libcamd.so
+-- Found COLAMD headers in: /usr/include/suitesparse
+-- Found COLAMD library: /usr/lib/x86_64-linux-gnu/libcolamd.so
+-- Found CCOLAMD headers in: /usr/include/suitesparse
+-- Found CCOLAMD library: /usr/lib/x86_64-linux-gnu/libccolamd.so
+-- Found CHOLMOD headers in: /usr/include/suitesparse
+-- Found CHOLMOD library: /usr/lib/x86_64-linux-gnu/libcholmod.so
+-- Found SUITESPARSEQR headers in: /usr/include/suitesparse
+-- Found SUITESPARSEQR library: /usr/lib/x86_64-linux-gnu/libspqr.so
+-- Found TBB library: /usr/local/lib/libtbb.so
+-- Found Intel Thread Building Blocks (TBB) library: /usr/local/lib/libtbb.so, assuming SuiteSparseQR was compiled with TBB.
+-- Found TBB_MALLOC library: /usr/lib/x86_64-linux-gnu/libtbbmalloc.so
+-- Found Intel Thread Building Blocks (TBB) Malloc library: /usr/lib/x86_64-linux-gnu/libtbbmalloc.so
+-- Found SUITESPARSE_CONFIG headers in: /usr/include/suitesparse
+-- Found SUITESPARSE_CONFIG library: /usr/lib/x86_64-linux-gnu/libsuitesparseconfig.so
+-- Found LIBRT library: /usr/lib/x86_64-linux-gnu/librt.so
+-- Adding librt: /usr/lib/x86_64-linux-gnu/librt.so to SuiteSparse_config libraries (required on Linux & Unix [not OSX] if SuiteSparse is compiled with timing).
+-- Did not find METIS library (optional SuiteSparse dependency)
+-- Found SuiteSparse 4.4.6
+-- Found Theia version: 0.7.0 installed in: /usr/local
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /home/ivashmak/Ransac/build

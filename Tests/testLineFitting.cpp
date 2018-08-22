@@ -7,24 +7,31 @@
 #include "../Usac/Ransac/Ransac.h"
 #include "../Usac/Sampler/UniformSampler.h"
 #include "../Usac/Helper/Drawing.h"
-#include "../Usac/Prosac.h"
 #include "../Usac/Sampler/NapsacSampler.h"
-#include "../Usac/Evsac.h"
 #include "../Detector/ReadPoints.h"
+#include "../Usac/Sampler/ProsacSampler.h"
+#include "../Usac/Sampler/EvsacSampler.h"
+
 
 void testRansac(cv::InputArray points);
 void testNapsac(cv::InputArray points);
 void testProsac(cv::InputArray points);
 void testEvsac(cv::InputArray points);
 
-Sampler *sampler;
 Estimator *estimator2d;
 Quality quality;
 Drawing drawing;
 
 void init () {
-    sampler = new UniformSampler;
     estimator2d = new Line2DEstimator;
+}
+
+bool myQualitySort(const cv::Point_<float>& a, const cv::Point_<float>& b) {
+    if( a.x < b.x) return true;
+    if( a.x > b.x) return false;
+    if( a.y < b.y) return true;
+    if( a.y > b.y) return false;
+    return false;
 }
 
 void Tests::testLineFitting() {
@@ -36,13 +43,20 @@ void Tests::testLineFitting() {
     init();
 
 //    testRansac(points);
+
 //    testNapsac(points);
-//    testProsac(points);
+
+//    std::vector<cv::Point_<float>> sortes_points (points);
+//    std::sort(sortes_points.begin(), sortes_points.end(), myQualitySort);
+//    testProsac(sortes_points);
+
     testEvsac(points);
 }
 
 
 void testRansac (cv::InputArray points) {
+    Sampler *sampler = new UniformSampler;
+
     Model model(10, 2, 0.99, "ransac");
     TerminationCriteria termination_criteria (model);
 
@@ -63,38 +77,46 @@ void testNapsac (cv::InputArray points) {
     Model model(10, 2, 0.99, "napsac");
     TerminationCriteria termination_criteria (model);
 
-    Ransac napsac (points, model, *napsac_sampler, termination_criteria, quality);
-    napsac.run(points, estimator2d);
-    drawing.draw(napsac.most_inliers, napsac.best_model, napsac.non_minimal_model, points);
+    Ransac ransac (points, model, *napsac_sampler, termination_criteria, quality);
+    ransac.run(points, estimator2d);
+    drawing.draw(ransac.most_inliers, ransac.best_model, ransac.non_minimal_model, points);
 
-    std::cout << "Napsac time: " << napsac.getQuality().getComputationTime() << "mcs\n";
-    std::cout << "Napsac iterations: " << napsac.getQuality().getIterations() << "\n";
-    std::cout << "Napsac points under threshold: " << napsac.getQuality().getNumberOfPointsUnderThreshold() << "\n";
+    std::cout << "Napsac time: " << ransac.getQuality().getComputationTime() << "mcs\n";
+    std::cout << "Napsac iterations: " << ransac.getQuality().getIterations() << "\n";
+    std::cout << "Napsac points under threshold: " << ransac.getQuality().getNumberOfPointsUnderThreshold() << "\n";
     std::cout << "-----------------------------------------------------------------------------------------\n";
 }
 
 void testEvsac (cv::InputArray points) {
-    Model model(10, 2, 0.95, "prosac");
+    Model model(10, 2, 0.99, "napsac");
+    int knn = 10;
+    Sampler *evsac_sampler = new EvsacSampler(points, knn);
+
     TerminationCriteria termination_criteria (model);
 
-    cv::Mat points1, points2;
-    read_points (points1, points2);
-
-    Evsac evsac (points, model, *sampler, termination_criteria, quality);
-    evsac.run(points1, points2, estimator2d);
+    Ransac ransac (points, model, *evsac_sampler, termination_criteria, quality);
+//    ransac.run(points, estimator2d);
+//    drawing.draw(ransac.most_inliers, ransac.best_model, ransac.non_minimal_model, points);
+//
+//    std::cout << "Evsac time: " << ransac.getQuality().getComputationTime() << "mcs\n";
+//    std::cout << "Evsac iterations: " << ransac.getQuality().getIterations() << "\n";
+//    std::cout << "Evsac points under threshold: " << ransac.getQuality().getNumberOfPointsUnderThreshold() << "\n";
+//    std::cout << "-----------------------------------------------------------------------------------------\n";
 }
 
 
 void testProsac (cv::InputArray points) {
-    Model model(10, 2, 0.95, "prosac");
+    Model model(10, 2, 0.99, "napsac");
+    Sampler *prosac_sampler = new ProsacSampler();
+
     TerminationCriteria termination_criteria (model);
 
-    Prosac prosac (points, model, *sampler, termination_criteria, quality);
-    prosac.run(points, estimator2d);
-    drawing.draw(prosac.most_inliers, prosac.best_model, prosac.non_minimal_model, points);
+    Ransac ransac (points, model, *prosac_sampler, termination_criteria, quality);
+    ransac.run(points, estimator2d);
+    drawing.draw(ransac.most_inliers, ransac.best_model, ransac.non_minimal_model, points);
 
-    std::cout << "Prosac time: " << prosac.getQuality().getComputationTime() << "mcs\n";
-    std::cout << "Prosac iterations: " << prosac.getQuality().getIterations() << "\n";
-    std::cout << "Prosac points under threshold: " << prosac.getQuality().getNumberOfPointsUnderThreshold() << "\n";
+    std::cout << "Prosac time: " << ransac.getQuality().getComputationTime() << "mcs\n";
+    std::cout << "Prosac iterations: " << ransac.getQuality().getIterations() << "\n";
+    std::cout << "Prosac points under threshold: " << ransac.getQuality().getNumberOfPointsUnderThreshold() << "\n";
     std::cout << "-----------------------------------------------------------------------------------------\n";
 }

@@ -258,33 +258,6 @@ Tests/testLineFitting.cpp.s:
 	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.s
 .PHONY : Tests/testLineFitting.cpp.s
 
-Usac/Evsac.o: Usac/Evsac.cpp.o
-
-.PHONY : Usac/Evsac.o
-
-# target to build an object file
-Usac/Evsac.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Evsac.cpp.o
-.PHONY : Usac/Evsac.cpp.o
-
-Usac/Evsac.i: Usac/Evsac.cpp.i
-
-.PHONY : Usac/Evsac.i
-
-# target to preprocess a source file
-Usac/Evsac.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Evsac.cpp.i
-.PHONY : Usac/Evsac.cpp.i
-
-Usac/Evsac.s: Usac/Evsac.cpp.s
-
-.PHONY : Usac/Evsac.s
-
-# target to generate assembly for a file
-Usac/Evsac.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Evsac.cpp.s
-.PHONY : Usac/Evsac.cpp.s
-
 Usac/Homographies/DLT.o: Usac/Homographies/DLT.cpp.o
 
 .PHONY : Usac/Homographies/DLT.o
@@ -366,33 +339,6 @@ Usac/Homographies/NormalizedDLT.cpp.s:
 	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.s
 .PHONY : Usac/Homographies/NormalizedDLT.cpp.s
 
-Usac/Prosac.o: Usac/Prosac.cpp.o
-
-.PHONY : Usac/Prosac.o
-
-# target to build an object file
-Usac/Prosac.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Prosac.cpp.o
-.PHONY : Usac/Prosac.cpp.o
-
-Usac/Prosac.i: Usac/Prosac.cpp.i
-
-.PHONY : Usac/Prosac.i
-
-# target to preprocess a source file
-Usac/Prosac.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Prosac.cpp.i
-.PHONY : Usac/Prosac.cpp.i
-
-Usac/Prosac.s: Usac/Prosac.cpp.s
-
-.PHONY : Usac/Prosac.s
-
-# target to generate assembly for a file
-Usac/Prosac.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Prosac.cpp.s
-.PHONY : Usac/Prosac.cpp.s
-
 Usac/Ransac/Ransac.o: Usac/Ransac/Ransac.cpp.o
 
 .PHONY : Usac/Ransac/Ransac.o
@@ -471,9 +417,6 @@ help:
 	@echo "... Tests/testLineFitting.o"
 	@echo "... Tests/testLineFitting.i"
 	@echo "... Tests/testLineFitting.s"
-	@echo "... Usac/Evsac.o"
-	@echo "... Usac/Evsac.i"
-	@echo "... Usac/Evsac.s"
 	@echo "... Usac/Homographies/DLT.o"
 	@echo "... Usac/Homographies/DLT.i"
 	@echo "... Usac/Homographies/DLT.s"
@@ -483,9 +426,6 @@ help:
 	@echo "... Usac/Homographies/NormalizedDLT.o"
 	@echo "... Usac/Homographies/NormalizedDLT.i"
 	@echo "... Usac/Homographies/NormalizedDLT.s"
-	@echo "... Usac/Prosac.o"
-	@echo "... Usac/Prosac.i"
-	@echo "... Usac/Prosac.s"
 	@echo "... Usac/Ransac/Ransac.o"
 	@echo "... Usac/Ransac/Ransac.i"
 	@echo "... Usac/Ransac/Ransac.s"

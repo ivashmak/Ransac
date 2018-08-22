@@ -34,8 +34,6 @@ public:
         flannIndex.knnSearch(query, indicies, dists, knn);
 
 
-
-
         // drawing knn. Can be deleted
         std::vector<int> v_inds;
         for (int i = 0; i < knn; i++) {

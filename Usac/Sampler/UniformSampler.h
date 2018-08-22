@@ -20,14 +20,18 @@ public:
     void getSample (int *sample, int npoints, int total_points) {
         distribution = std::uniform_int_distribution<int>(0, total_points-1);
 
+        std::vector<int> random_numbers;
         for (int i = 0; i < npoints; i++) {
-            sample[i] = distribution(generator);
-            for (int j = i-1; j >=0 ; j--) {
-                if (sample[j] == sample[i]) {
-                    i--;
-                    break;
-                }
+            int rand_number;
+            // Generate a random number that has not already been used.
+            while (std::find(random_numbers.begin(),
+                             random_numbers.end(),
+                             (rand_number = distribution(generator))) !=
+                   random_numbers.end()) {
             }
+
+            random_numbers.push_back(rand_number);
+            sample[i] = rand_number;
         }
     }
 
