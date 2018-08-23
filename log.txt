@@ -30,3 +30,7 @@ Continued working on Evsac.
 
 22.08.2018
 Installed theia framework. Finished Prosac Sampler. Continued Evsac implementation inspired by theia's libraries.
+
+23.08.2018
+Testing Evsac. 
+

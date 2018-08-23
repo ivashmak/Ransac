@@ -89,8 +89,12 @@ void testNapsac (cv::InputArray points) {
 
 void testEvsac (cv::InputArray points) {
     Model model(10, 2, 0.99, "napsac");
-    int knn = 10;
-    Sampler *evsac_sampler = new EvsacSampler(points, knn);
+    int knn = 50;
+
+    cv::Mat points1, points2;
+    read_points (points1, points2);
+
+    Sampler *evsac_sampler = new EvsacSampler(points1, points2, knn);
 
     TerminationCriteria termination_criteria (model);
 
