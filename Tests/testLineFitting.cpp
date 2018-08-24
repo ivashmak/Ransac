@@ -89,23 +89,21 @@ void testNapsac (cv::InputArray points) {
 
 void testEvsac (cv::InputArray points) {
     Model model(10, 2, 0.99, "napsac");
-    int knn = 50;
+    int knn = 7;
+    int num_q = points.size().width;
 
-    cv::Mat points1, points2;
-    read_points (points1, points2);
-
-    Sampler *evsac_sampler = new EvsacSampler(points1, points2, knn);
+    Sampler *evsac_sampler = new EvsacSampler(points, num_q, knn);
 
     TerminationCriteria termination_criteria (model);
 
     Ransac ransac (points, model, *evsac_sampler, termination_criteria, quality);
-//    ransac.run(points, estimator2d);
-//    drawing.draw(ransac.most_inliers, ransac.best_model, ransac.non_minimal_model, points);
-//
-//    std::cout << "Evsac time: " << ransac.getQuality().getComputationTime() << "mcs\n";
-//    std::cout << "Evsac iterations: " << ransac.getQuality().getIterations() << "\n";
-//    std::cout << "Evsac points under threshold: " << ransac.getQuality().getNumberOfPointsUnderThreshold() << "\n";
-//    std::cout << "-----------------------------------------------------------------------------------------\n";
+    ransac.run(points, estimator2d);
+    drawing.draw(ransac.most_inliers, ransac.best_model, ransac.non_minimal_model, points);
+
+    std::cout << "Evsac time: " << ransac.getQuality().getComputationTime() << "mcs\n";
+    std::cout << "Evsac iterations: " << ransac.getQuality().getIterations() << "\n";
+    std::cout << "Evsac points under threshold: " << ransac.getQuality().getNumberOfPointsUnderThreshold() << "\n";
+    std::cout << "-----------------------------------------------------------------------------------------\n";
 }
 
 
