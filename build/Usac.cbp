@@ -155,6 +155,9 @@
 		<Unit filename="/home/ivashmak/Ransac/Tests/testLineFitting.cpp">
 			<Option target="ransac"/>
 		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/EssentialMatrixEstimation.h">
+			<Option target="ransac"/>
+		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Usac/Estimator/Estimator.h">
 			<Option target="ransac"/>
 		</Unit>
@@ -162,6 +165,9 @@
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Usac/Estimator/Line2DEstimator.h">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/FundamentalMatrixEstimation.h">
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Usac/Helper/Drawing.h">

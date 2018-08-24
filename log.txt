@@ -35,7 +35,8 @@ Installed theia framework. Finished Prosac Sampler. Continued Evsac implementati
 Testing Evsac. 
 
 24.08.2018
-Finished Evsac sampler.
+Finished Evsac sampler. Read about Nister Essential matrix estimation. Started 5-point algorithm implementation.
+
 
 
 

@@ -385,11 +385,13 @@ CMakeFiles/ransac.dir/Generator/generator.cpp.o: /usr/local/include/opencv2/xfea
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Detector/ReadPoints.h
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Tests/Tests.h
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Tests/testHomographyFitting.cpp
+CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/EssentialMatrixEstimation.h
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/Estimator/Estimator.h
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/Estimator/HomographyEstimator.h
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/Homographies/HomographyMethods.h
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/Model.h
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/Sampler/Sampler.h
+CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/Sampler/UniformSampler.h
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/TerminationCriteria.h
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: /usr/local/include/opencv/cxcore.h
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: /usr/local/include/opencv2/calib3d.hpp

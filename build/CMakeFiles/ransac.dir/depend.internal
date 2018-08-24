@@ -386,11 +386,13 @@ CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o
  /home/ivashmak/Ransac/Detector/ReadPoints.h
  /home/ivashmak/Ransac/Tests/Tests.h
  /home/ivashmak/Ransac/Tests/testHomographyFitting.cpp
+ /home/ivashmak/Ransac/Usac/EssentialMatrixEstimation.h
  /home/ivashmak/Ransac/Usac/Estimator/Estimator.h
  /home/ivashmak/Ransac/Usac/Estimator/HomographyEstimator.h
  /home/ivashmak/Ransac/Usac/Homographies/HomographyMethods.h
  /home/ivashmak/Ransac/Usac/Model.h
  /home/ivashmak/Ransac/Usac/Sampler/Sampler.h
+ /home/ivashmak/Ransac/Usac/Sampler/UniformSampler.h
  /home/ivashmak/Ransac/Usac/TerminationCriteria.h
  /usr/local/include/opencv/cxcore.h
  /usr/local/include/opencv2/calib3d.hpp

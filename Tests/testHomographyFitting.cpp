@@ -10,34 +10,63 @@
 #include "../Usac/Estimator/Estimator.h"
 #include "../Usac/Estimator/HomographyEstimator.h"
 #include "../Usac/Homographies/HomographyMethods.h"
+#include "../Usac/EssentialMatrixEstimation.h"
 
+void testEssentialMatrixEstimation (cv::InputArray points1, cv::InputArray points2);
+void testDLT (cv::InputArray points1, cv::InputArray points2);
+void testGetNormalizingTransformation (cv::InputArray points);
+void testNormalizedDLT (cv::InputArray points1, cv::InputArray points2);
 
 void Tests::testHomographyFitting() {
     cv::Mat points1, points2;
     read_points (points1, points2);
 
-    Estimator *estimator = new HomographyEstimator;
-    HomographyMethods *methods = new HomographyMethods;
+    testEssentialMatrixEstimation(points1, points2);
+
+//    testDLT(points1, points2);
+//    testGetNormalizingTransformation(points1);
+//    testGetNormalizingTransformation(points2);
+//    testNormalizedDLT(points1, points2);
+}
+
+
+void testEssentialMatrixEstimation (cv::InputArray points1, cv::InputArray points2) {
+    EssentialMatrixEstimation * ess_mat_est = new EssentialMatrixEstimation;
+    cv::Mat ess_mat;
+    ess_mat_est->fivePointsAlg(points1, points2, ess_mat);
+
+    std::cout << "Essential Matrix =\n " << ess_mat << "\n\n";
+}
+
+void testDLT (cv::InputArray points1, cv::InputArray points2) {
+    HomographyMethods methods;
 
     std::cout << "---------------- DLT ------------------------\n";
 
     cv::Mat H_DLT;
-    methods->DLT (points1, points2, H_DLT);
+    methods.DLT (points1, points2, H_DLT);
     std::cout << "H_DLT = \n" << H_DLT << "\n\n";
 
+}
+
+void testGetNormalizingTransformation (cv::InputArray points) {
     std::cout << "---------------- GetNormalizingTransformation ------------------------\n";
+    HomographyMethods methods;
 
     float s, s1, s2;
     cv::Mat T, offset;
-    methods->GetNormalizingTransformation(points1, T, offset, &s, &s1, &s2);
+    methods.GetNormalizingTransformation(points, T, offset, &s, &s1, &s2);
     std::cout << "offset =\n " << offset << "\n\n";
     std::cout << "T =\n " << T << "\n\n";
     std::cout << "s = " << s << "; s1 = " << s1 << "; s2 = " << s2 << '\n';
 
+}
+
+void testNormalizedDLT (cv::InputArray points1, cv::InputArray points2) {
     std::cout << "---------------- NormalizedDLT ------------------------\n";
+    HomographyMethods methods;
 
     cv::Mat H_NDLT;
-    methods->NormalizedDLT(points1, points2, H_NDLT);
+    methods.NormalizedDLT(points1, points2, H_NDLT);
     std::cout << "H_NDLT = \n" << H_NDLT << "\n\n";
-
 }

@@ -71,6 +71,8 @@ opencv2/core/types.hpp
 /home/ivashmak/Ransac/Usac/Estimator/HomographyEstimator.h
 ../Usac/Homographies/HomographyMethods.h
 /home/ivashmak/Ransac/Usac/Homographies/HomographyMethods.h
+../Usac/EssentialMatrixEstimation.h
+/home/ivashmak/Ransac/Usac/EssentialMatrixEstimation.h
 
 /home/ivashmak/Ransac/Tests/testLineFitting.cpp
 cstdlib
@@ -97,6 +99,16 @@ Tests.h
 /home/ivashmak/Ransac/Usac/Sampler/ProsacSampler.h
 ../Usac/Sampler/EvsacSampler.h
 /home/ivashmak/Ransac/Usac/Sampler/EvsacSampler.h
+
+/home/ivashmak/Ransac/Usac/EssentialMatrixEstimation.h
+iostream
+-
+opencv2/core/mat.hpp
+-
+opencv2/core.hpp
+-
+Sampler/UniformSampler.h
+/home/ivashmak/Ransac/Usac/Sampler/UniformSampler.h
 
 /home/ivashmak/Ransac/Usac/Estimator/Estimator.h
 iostream

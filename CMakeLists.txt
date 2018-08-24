@@ -37,6 +37,9 @@ add_executable(
 
         Usac/Ransac/Ransac.cpp Usac/Ransac/Ransac.h
 
+        Usac/FundamentalMatrixEstimation.h
+        Usac/EssentialMatrixEstimation.h
+
         Tests/Tests.h
         Tests/testHomographyFitting.cpp
         Tests/testLineFitting.cpp
