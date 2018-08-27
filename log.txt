@@ -37,6 +37,8 @@ Testing Evsac.
 24.08.2018
 Finished Evsac sampler. Read about Nister Essential matrix estimation. Started 5-point algorithm implementation.
 
+27.08.2018
+Continued working on 5 point algorithm.
 
 
 

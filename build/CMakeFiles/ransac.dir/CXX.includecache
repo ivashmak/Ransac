@@ -107,6 +107,8 @@ opencv2/core/mat.hpp
 -
 opencv2/core.hpp
 -
+theia/theia.h
+-
 Sampler/UniformSampler.h
 /home/ivashmak/Ransac/Usac/Sampler/UniformSampler.h
 

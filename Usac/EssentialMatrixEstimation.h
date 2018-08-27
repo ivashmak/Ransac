@@ -6,10 +6,17 @@
 // David Nistér
 // http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.86.8769&rep=rep1&type=pdf
 
+
+#include <theia/theia.h>
+#include <Eigen>
 #include <iostream>
 #include <opencv2/core/mat.hpp>
 #include <opencv2/core.hpp>
+#include <Eigen/src/Core/Matrix.h>
 #include "Sampler/UniformSampler.h"
+
+typedef Eigen::Matrix<double, 5, 3> Matrix5x3;
+typedef Eigen::Matrix<double, 5, 5> Matrix5x5;
 
 class EssentialMatrixEstimation {
 protected:
@@ -47,19 +54,46 @@ public:
         cv::Mat camera_matrix;
         camera_matrix = (cv::Mat_<float>(3,3) << focal, 0, pp.x, 0, focal, pp.y, 0, 0, 1);
 
-        //  In this case, we can always assume that the image points q and
-        //q have been premultiplied by K1^−1 and K2^-1, respectively
+        // In this case, we can always assume that the image points q and
+        // q' have been premultiplied by K1^-1 and K2^-1, respectively
 
-        q1 = camera_matrix.inv()*q1;
-        q2 = camera_matrix.inv()*q2;
+        q1 = camera_matrix.inv()*q1; // q
+        q2 = camera_matrix.inv()*q2; // q'
 
 
         std::cout << "q1 = \n" << q1 << "\n\n";
         std::cout << "q2 = \n" << q2 << "\n\n";
 
         cv::Mat_<float> q (npoints, 9);
-        cv::Mat_<float> qc1;
+        std::vector<cv::Mat_<float>> qcolumns (9);
 
+        // q (estimation)  = [q1q1'  q2q1'  q3q1'  q1q2'  q2q2'  q3q2'  q1q3'  q2q3'  q3q3']^T
+
+        qcolumns[0] = q1.row(0).mul(q2.row(0));
+        qcolumns[1] = q1.row(1).mul(q2.row(0));
+        qcolumns[2] = q1.row(2).mul(q2.row(0));
+        qcolumns[3] = q1.row(0).mul(q2.row(1));
+        qcolumns[4] = q1.row(1).mul(q2.row(1));
+        qcolumns[5] = q1.row(2).mul(q2.row(1));
+        qcolumns[6] = q1.row(0).mul(q2.row(2));
+        qcolumns[7] = q1.row(1).mul(q2.row(2));
+        qcolumns[8] = q1.row(2).mul(q2.row(2));
+
+        for (int i = 0; i < 9; i++) {
+            cv::transpose(qcolumns[i], qcolumns[i]);
+            qcolumns[i].copyTo(q.col(i));
+        }
+
+        std::cout << q << "\n\n";
+
+        Eigen::Matrix3f Q (5, 9);
+        for (int i = 0; i < 5; i++) {
+
+        }
+
+//        Eigen::FullPivLU<Eigen::Matrix3f> lu_decomp (Q);
+//        Eigen::MatrixXd A_null_space = lu_decomp.kernel();
+//
     }
 };
 
