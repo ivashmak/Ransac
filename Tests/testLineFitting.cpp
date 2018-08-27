@@ -27,10 +27,10 @@ void init () {
 }
 
 bool dummyQualitySort(const cv::Point_<float>& a, const cv::Point_<float>& b) {
-    if( a.x < b.x) return true;
-    if( a.x > b.x) return false;
-    if( a.y < b.y) return true;
-    if( a.y > b.y) return false;
+    if (a.x < b.x) return true;
+    if (a.x > b.x) return false;
+    if (a.y < b.y) return true;
+    if (a.y > b.y) return false;
     return false;
 }
 
@@ -42,15 +42,15 @@ void Tests::testLineFitting() {
 
     init();
 
-//    testRansac(points);
+   testRansac(points);
 
-//    testNapsac(points);
+   testNapsac(points);
 
-//    std::vector<cv::Point_<float>> sortes_points (points);
-//    std::sort(sortes_points.begin(), sortes_points.end(), dummyQualitySort);
-//    testProsac(sortes_points);
+   std::vector<cv::Point_<float>> sortes_points (points);
+   std::sort(sortes_points.begin(), sortes_points.end(), dummyQualitySort);
+   testProsac(sortes_points);
 
-//    testEvsac(points);
+   testEvsac(points);
 }
 
 
