@@ -5,15 +5,11 @@
 
 class Line2DEstimator : public Estimator {
 public:
-        void EstimateModel(cv::InputArray input_points, int *sample, Model &model) {
+        void EstimateModel(cv::InputArray input_points, int *sample, Model &model) override {
             const int idx1 = sample[0];
             const int idx2 = sample[1];
 
             cv::Point_<float> *points = (cv::Point_<float> *) input_points.getMat().data;
-
-//            std::cout << points[idx1].x << " " << points[idx1].y << '\n';
-//            std::cout << points[idx2].x << " " << points[idx2].y << '\n';
-
 
             // Estimate the model parameters from the sample
             float tangent_x = points[idx2].x - points[idx1].x;
@@ -32,7 +28,7 @@ public:
             model.setDescriptor(descriptor);
         }
 
-        void EstimateModelNonMinimalSample(cv::InputArray input_points, int *sample, int sample_size, Model &model) {
+        void EstimateModelNonMinimalSample(cv::InputArray input_points, int *sample, int sample_size, Model &model) override {
             cv::Mat points = cv::Mat(sample_size, 2, CV_32FC1);
 
             cv::Point_<float> *points_arr = (cv::Point_<float> *) input_points.getMat().data;
@@ -56,7 +52,7 @@ public:
             model.setDescriptor(descriptor);
         }
 
-        float GetError(cv::InputArray input_points, int pidx, Model * model) {
+        float GetError(cv::InputArray input_points, int pidx, Model * model) override {
             cv::Point_<float> * points = (cv::Point_<float> *) input_points.getMat().data;
             cv::Mat descriptor;
 
@@ -66,7 +62,7 @@ public:
             return abs((int)(params[0] * points[pidx].x + params[1] * points[pidx].y + params[2]));
         }
         
-        int SampleNumber() {
+        int SampleNumber() override {
         	return 2;
         }
 };

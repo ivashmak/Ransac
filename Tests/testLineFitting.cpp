@@ -11,6 +11,10 @@
 #include "../Detector/ReadPoints.h"
 #include "../Usac/Sampler/ProsacSampler.h"
 #include "../Usac/Sampler/EvsacSampler.h"
+#include "../Usac/RandomGenerator/ArrayRandomGenerator.h"
+#include "../Usac/RandomGenerator/XorRandomGenerator.h"
+#include "../Usac/RandomGenerator/PrimeNumberRandomGenerator.h"
+#include "../Usac/Utils.h"
 
 
 void testRansac(cv::InputArray points);
@@ -22,42 +26,55 @@ Estimator *estimator2d;
 Quality quality;
 Drawing drawing;
 
+int knn = 2;
+cv::Mat indicies, dists1, dists2;
+cv::flann::Index *flannIndex;
+
 void init () {
     estimator2d = new Line2DEstimator;
 }
 
-bool dummyQualitySort(const cv::Point_<float>& a, const cv::Point_<float>& b) {
-    if (a.x < b.x) return true;
-    if (a.x > b.x) return false;
-    if (a.y < b.y) return true;
-    if (a.y > b.y) return false;
-    return false;
+// sort by nearest neighbors
+bool qualitySort (const cv::Point_<float>& a, const cv::Point_<float>& b) {
+    flannIndex->knnSearch(cv::Mat_<float>(a), indicies, dists1, knn);
+    flannIndex->knnSearch(cv::Mat_<float>(b), indicies, dists2, knn);
+    return dists1.at<float>(1) < dists2.at<float>(1);
 }
 
 void Tests::testLineFitting() {
 
     std::vector<cv::Point_<float>> points;
     generate(points);
+
     std::cout << "generated points\n";
 
     init();
 
-   testRansac(points);
+//    Utils utils;
+//    utils.getNullSpace();
 
-   testNapsac(points);
+//   testRansac(points);
 
-   std::vector<cv::Point_<float>> sortes_points (points);
-   std::sort(sortes_points.begin(), sortes_points.end(), dummyQualitySort);
-   testProsac(sortes_points);
+//   testNapsac(points);
 
-   testEvsac(points);
+//    cv::Mat mat_points, p (points);
+//    mat_points = cv::Mat(points.size(), 2, CV_32F, p.data);
+//    cv::flann::LinearIndexParams flannIndexParams;
+//    flannIndex = new cv::flann::Index (cv::Mat(mat_points).reshape(1), flannIndexParams);
+//    std::vector<cv::Point_<float>> sorted_points (points);
+//
+//    std::sort(sorted_points.begin(), sorted_points.end(), qualitySort);
+//    testProsac(sorted_points);
+
+//   testEvsac(points);
 }
 
 
 void testRansac (cv::InputArray points) {
-    Sampler *sampler = new UniformSampler;
-
     Model model(10, 2, 0.99, "ransac");
+
+    Sampler *sampler = new UniformSampler (model.sample_number, points.size().width);
+
     TerminationCriteria termination_criteria (model);
 
     Ransac ransac (points, model, *sampler, termination_criteria, quality);
@@ -72,9 +89,9 @@ void testRansac (cv::InputArray points) {
 
 void testNapsac (cv::InputArray points) {
     int knn = 10;
-    Sampler *napsac_sampler = new NapsacSampler(points, knn);
-
     Model model(10, 2, 0.99, "napsac");
+    Sampler *napsac_sampler = new NapsacSampler(points, knn, model.sample_number, points.size().width);
+
     TerminationCriteria termination_criteria (model);
 
     Ransac ransac (points, model, *napsac_sampler, termination_criteria, quality);
@@ -92,7 +109,7 @@ void testEvsac (cv::InputArray points) {
     int knn = 7;
     int num_q = points.size().width;
 
-    Sampler *evsac_sampler = new EvsacSampler(points, num_q, knn);
+    Sampler *evsac_sampler = new EvsacSampler(points, num_q, knn, model.sample_number, points.size().width);
 
     TerminationCriteria termination_criteria (model);
 
@@ -109,7 +126,7 @@ void testEvsac (cv::InputArray points) {
 
 void testProsac (cv::InputArray points) {
     Model model(10, 2, 0.99, "prosac");
-    Sampler *prosac_sampler = new ProsacSampler();
+    Sampler *prosac_sampler = new ProsacSampler(model.sample_number, points.size().width);
 
     TerminationCriteria termination_criteria (model);
 

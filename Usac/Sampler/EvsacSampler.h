@@ -26,9 +26,14 @@ public:
     //  The idea of EVSAC is to model the statistics of the minimum distances
     // computed when using the Nearest-Neighbor feature matcher.
     // find knn and their sorted distances.
-    EvsacSampler (cv::InputArray input_points, int num_q, int knn) {
+    EvsacSampler (cv::InputArray input_points, int num_q, int knn, int sample_size, int N_points, bool reset_time = true) {
         // init random generator
-        srand (time(NULL));
+        if (reset_time) resetTime();
+
+        this->N_points = N_points;
+        this->sample_size = sample_size;
+
+
         std::random_device rand_dev;
         rng_.seed(rand_dev());
 
@@ -47,9 +52,9 @@ public:
         theia::EvsacSampler<Eigen::Vector2d>::MixtureModelParams mixture_model_params;
 
         Eigen::MatrixXd sorted_distances_(num_q, knn-1);
-        Sampler *uniform_sampler = new UniformSampler;
+        Sampler *uniform_sampler = new UniformSampler (num_q, total_points);
         int *r_samples = new int[num_q];
-        uniform_sampler->getSample(r_samples, num_q, total_points);
+        uniform_sampler->getSample(r_samples);
 
         cv::Mat sorted_dists, query, indicies, points = cv::Mat(total_points, 2, CV_32F, input_points.getMat().data);
         cv::flann::LinearIndexParams flannIndexParams;
@@ -110,9 +115,9 @@ public:
     }
 
 
-    void getSample (int *sample, int npoints, int total_points) {
+    void getSample (int *sample) {
         std::vector<int> random_numbers;
-        for (int i = 0; i < npoints; i++) {
+        for (int i = 0; i < sample_size; i++) {
             int rand_number;
             // Generate a random number that has not already been used.
             while (std::find(random_numbers.begin(),

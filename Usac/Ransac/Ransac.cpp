@@ -17,7 +17,7 @@ void Ransac::run(cv::InputArray input_points, Estimator *estimator2d) {
 
 
     while (iters < max_iters) {
-        sampler->getSample(sample, estimator2d->SampleNumber(), total_points);
+        sampler->getSample(sample);
 
         estimator2d->EstimateModel(input_points, sample, *model);
 

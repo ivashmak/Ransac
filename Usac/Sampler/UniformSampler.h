@@ -12,16 +12,20 @@ protected:
     std::uniform_int_distribution<int> distribution;
 
 public:
-    UniformSampler () {
-        srand (time(NULL));
+    UniformSampler (int sample_size, const int N_points, const bool reset_time=true) {
+        if (reset_time) resetTime();
+
+        this->sample_size = sample_size;
+        this->N_points = N_points;
+
         generator = std::mt19937(rand_dev());
     }
 
-    void getSample (int *sample, int npoints, int total_points) {
-        distribution = std::uniform_int_distribution<int>(0, total_points-1);
+    void getSample (int *sample) {
+        distribution = std::uniform_int_distribution<int>(0, N_points-1);
 
         std::vector<int> random_numbers;
-        for (int i = 0; i < npoints; i++) {
+        for (int i = 0; i < sample_size; i++) {
             int rand_number;
             // Generate a random number that has not already been used.
             while (std::find(random_numbers.begin(),

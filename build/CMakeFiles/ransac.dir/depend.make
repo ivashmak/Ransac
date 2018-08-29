@@ -1102,6 +1102,10 @@ CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Estimator/Line2DEstim
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Helper/Drawing.h
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Model.h
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Quality.h
+CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/RandomGenerator/ArrayRandomGenerator.h
+CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/RandomGenerator/PrimeNumberRandomGenerator.h
+CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/RandomGenerator/RandomGenerator.h
+CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/RandomGenerator/XorRandomGenerator.h
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Ransac/Ransac.h
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Sampler/EvsacSampler.h
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Sampler/NapsacSampler.h
@@ -1109,6 +1113,7 @@ CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Sampler/ProsacSampler
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Sampler/Sampler.h
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Sampler/UniformSampler.h
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/TerminationCriteria.h
+CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Utils.h
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: /usr/include/eigen3/Eigen/Cholesky
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: /usr/include/eigen3/Eigen/Core
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: /usr/include/eigen3/Eigen/Dense

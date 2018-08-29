@@ -43,6 +43,14 @@ add_executable(
         Tests/Tests.h
         Tests/testHomographyFitting.cpp
         Tests/testLineFitting.cpp
+
+        Usac/RandomGenerator/RandomGenerator.h
+        Usac/RandomGenerator/ArrayRandomGenerator.h
+        Usac/RandomGenerator/PrimeNumberRandomGenerator.h
+        Usac/RandomGenerator/XorRandomGenerator.h
+        Usac/RandomGenerator/UniformRandomGenerator.h
+
+        Usac/Utils.h
 )
 
 # set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -pthread -fopenmp -Wextra" )

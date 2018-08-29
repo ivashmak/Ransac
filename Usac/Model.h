@@ -8,6 +8,7 @@ public:
 	float desired_prob;
 	float max_iterations = 10000;
 	std::string model_name;
+	int k_nearest_neighbors;
 
 protected:
     cv::Mat descriptor;
@@ -48,6 +49,10 @@ public:
 
 	void setModelName (std::string model_name) {
 		this->model_name = model_name;
+	}
+
+	void setKNearestNeighbors (int k_nearest_neighbors) {
+	    this->k_nearest_neighbors = k_nearest_neighbors;
 	}
 };
 

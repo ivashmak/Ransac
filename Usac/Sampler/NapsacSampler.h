@@ -15,10 +15,14 @@ protected:
     std::uniform_int_distribution<int> distribution;
 public:
 
-    NapsacSampler (cv::InputArray points, int knn) {
+    NapsacSampler (cv::InputArray points, int knn, int sample_size, int N_points, bool reset_time = true) {
         this->knn = knn;
 
-        srand (time(NULL));
+        if (reset_time) resetTime();
+
+        this->sample_size = sample_size;
+        this->N_points = N_points;
+
         generator = std::mt19937(rand_dev());
 
         int total_points = points.size().width;
@@ -35,23 +39,23 @@ public:
 
 
         // drawing knn. Can be deleted
-        std::vector<int> v_inds;
-        for (int i = 0; i < knn; i++) {
-            v_inds.push_back(this->indicies.at<int>(i));
-        }
-        Drawing draw;
-        cv::Mat image = cv::imread("../images/image1.jpg");
-        draw.showInliers(points, v_inds, image);
-        circle(image, initial_point, 3, cv::Scalar(255, 0, 0), -1);
-        imshow("Inliers", image);
-        cv::waitKey (0);
+//        std::vector<int> v_inds;
+//        for (int i = 0; i < knn; i++) {
+//            v_inds.push_back(this->indicies.at<int>(i));
+//        }
+//        Drawing draw;
+//        cv::Mat image = cv::imread("../images/image1.jpg");
+//        draw.showInliers(points, v_inds, image);
+//        circle(image, initial_point, 3, cv::Scalar(255, 0, 0), -1);
+//        imshow("Inliers", image);
+//        cv::waitKey (0);
         // end
     }
 
-    void getSample (int *sample, int npoints, int total_points) {
+    void getSample (int *sample) {
         distribution = std::uniform_int_distribution<int>(0, knn-1);
 
-        for (int i = 0; i < npoints; i++) {
+        for (int i = 0; i < sample_size; i++) {
             sample[i] = indicies.at<int>(distribution(generator));
             for (int j = i-1; j >=0 ; j--) {
                 if (sample[j] == sample[i]) {

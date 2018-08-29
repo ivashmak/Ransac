@@ -99,15 +99,23 @@ Tests.h
 /home/ivashmak/Ransac/Usac/Sampler/ProsacSampler.h
 ../Usac/Sampler/EvsacSampler.h
 /home/ivashmak/Ransac/Usac/Sampler/EvsacSampler.h
+../Usac/RandomGenerator/ArrayRandomGenerator.h
+/home/ivashmak/Ransac/Usac/RandomGenerator/ArrayRandomGenerator.h
+../Usac/RandomGenerator/XorRandomGenerator.h
+/home/ivashmak/Ransac/Usac/RandomGenerator/XorRandomGenerator.h
+../Usac/RandomGenerator/PrimeNumberRandomGenerator.h
+/home/ivashmak/Ransac/Usac/RandomGenerator/PrimeNumberRandomGenerator.h
+../Usac/Utils.h
+/home/ivashmak/Ransac/Usac/Utils.h
 
 /home/ivashmak/Ransac/Usac/EssentialMatrixEstimation.h
+theia/theia.h
+-
 iostream
 -
 opencv2/core/mat.hpp
 -
 opencv2/core.hpp
--
-theia/theia.h
 -
 Sampler/UniformSampler.h
 /home/ivashmak/Ransac/Usac/Sampler/UniformSampler.h
@@ -194,6 +202,22 @@ Estimator/Estimator.h
 Model.h
 /home/ivashmak/Ransac/Usac/Model.h
 
+/home/ivashmak/Ransac/Usac/RandomGenerator/ArrayRandomGenerator.h
+RandomGenerator.h
+/home/ivashmak/Ransac/Usac/RandomGenerator/RandomGenerator.h
+
+/home/ivashmak/Ransac/Usac/RandomGenerator/PrimeNumberRandomGenerator.h
+RandomGenerator.h
+/home/ivashmak/Ransac/Usac/RandomGenerator/RandomGenerator.h
+unordered_set
+-
+
+/home/ivashmak/Ransac/Usac/RandomGenerator/RandomGenerator.h
+
+/home/ivashmak/Ransac/Usac/RandomGenerator/XorRandomGenerator.h
+RandomGenerator.h
+/home/ivashmak/Ransac/Usac/RandomGenerator/RandomGenerator.h
+
 /home/ivashmak/Ransac/Usac/Ransac/Ransac.cpp
 Ransac.h
 /home/ivashmak/Ransac/Usac/Ransac/Ransac.h
@@ -253,6 +277,10 @@ Sampler.h
 /home/ivashmak/Ransac/Usac/Estimator/Estimator.h
 
 /home/ivashmak/Ransac/Usac/TerminationCriteria.h
+
+/home/ivashmak/Ransac/Usac/Utils.h
+theia/theia.h
+-
 
 /home/ivashmak/Ransac/main.cpp
 ctime

@@ -8,15 +8,10 @@
 
 
 #include <theia/theia.h>
-#include <Eigen>
 #include <iostream>
 #include <opencv2/core/mat.hpp>
 #include <opencv2/core.hpp>
-#include <Eigen/src/Core/Matrix.h>
 #include "Sampler/UniformSampler.h"
-
-typedef Eigen::Matrix<double, 5, 3> Matrix5x3;
-typedef Eigen::Matrix<double, 5, 5> Matrix5x5;
 
 class EssentialMatrixEstimation {
 protected:
@@ -35,9 +30,9 @@ public:
         cv::Mat points1 = cv::Mat(total_points, 2, CV_32F, input_points1.getMat().data);
         cv::Mat points2 = cv::Mat(total_points, 2, CV_32F, input_points2.getMat().data);
 
-        Sampler *sampler = new UniformSampler;
+        Sampler *sampler = new UniformSampler (npoints, total_points);
         int * samples = new int[npoints];
-        sampler->getSample(samples, npoints, total_points);
+        sampler->getSample(samples);
 
         cv::Mat_<float> q1(3, npoints), q2 (3, npoints);
         for (int i = 0; i < npoints; i++) {
@@ -86,14 +81,35 @@ public:
 
         std::cout << q << "\n\n";
 
-        Eigen::Matrix3f Q (5, 9);
+        Eigen::MatrixXd Q (5, 9);
         for (int i = 0; i < 5; i++) {
-
+            for (int j = 0; j < 9; j++) {
+                Q(i, j) = q.at<float>(i,j);
+            }
         }
 
-//        Eigen::FullPivLU<Eigen::Matrix3f> lu_decomp (Q);
-//        Eigen::MatrixXd A_null_space = lu_decomp.kernel();
-//
+        // Four vectors X, Y, Z, W that span the right nullspace of this matrix are now computed.
+
+        Eigen::FullPivLU<Eigen::MatrixXd> lu_decomp (Q);
+        Eigen::MatrixXd null_space = lu_decomp.kernel();
+        std::cout << null_space << "\n\n";
+
+        // The four vectors correspond directly to four 3×3 matrices X, Y, Z, W
+        //and the essential matrix must be of the form E = xX + yY + zZ + wW, w = 1;
+
+        cv::Mat_<float> X(3, 3), Y (3, 3), Z (3, 3), W (3, 3);
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                X.at<float> (i, j) = (float) null_space(i*3+j, 0);
+                Y.at<float> (i, j) = (float) null_space(i*3+j, 1);
+                Z.at<float> (i, j) = (float) null_space(i*3+j, 2);
+                W.at<float> (i, j) = (float) null_space(i*3+j, 3);
+            }
+        }
+
+        std::cout << X << "\n\n" << Y << "\n\n" << Z << "\n\n" << W << "\n\n";
+
+
     }
 };
 

@@ -191,6 +191,21 @@
 		<Unit filename="/home/ivashmak/Ransac/Usac/Quality.h">
 			<Option target="ransac"/>
 		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/RandomGenerator/ArrayRandomGenerator.h">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/RandomGenerator/PrimeNumberRandomGenerator.h">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/RandomGenerator/RandomGenerator.h">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/RandomGenerator/UniformRandomGenerator.h">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/RandomGenerator/XorRandomGenerator.h">
+			<Option target="ransac"/>
+		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Usac/Ransac/Ransac.cpp">
 			<Option target="ransac"/>
 		</Unit>
@@ -213,6 +228,9 @@
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Usac/TerminationCriteria.h">
+			<Option target="ransac"/>
+		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/Utils.h">
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/main.cpp">
