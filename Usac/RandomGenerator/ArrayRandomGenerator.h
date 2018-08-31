@@ -12,6 +12,8 @@ public:
     ArrayRandomGenerator (unsigned int sample_size, unsigned int N_points) {
         max = N_points;
         this->N_points = N_points;
+        this->sample_size = sample_size;
+
         array = new unsigned int[N_points];
         for (unsigned int i = 0; i < N_points; i++) {
             array[i] = i;
@@ -32,8 +34,15 @@ public:
         return temp;
     }
 
+    void reallocSample () {
+        array = (unsigned int *) realloc(array, sizeof (unsigned int) * N_points);
+        for (unsigned int i = 0; i < N_points; i++) {
+            array[i] = i;
+        }
+    }
+
     void generateRandomSample (int * sample) override {
-        for (uint i = 0; i < sample_size; i++) {
+        for (int i = 0; i < sample_size; i++) {
             sample[i] = getRandomNumber();
         }
     }

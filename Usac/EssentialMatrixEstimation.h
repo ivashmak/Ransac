@@ -32,7 +32,7 @@ public:
 
         Sampler *sampler = new UniformSampler (npoints, total_points);
         int * samples = new int[npoints];
-        sampler->getSample(samples);
+        sampler->generateSample(samples);
 
         cv::Mat_<float> q1(3, npoints), q2 (3, npoints);
         for (int i = 0; i < npoints; i++) {

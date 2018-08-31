@@ -33,7 +33,6 @@ public:
         this->N_points = N_points;
         this->sample_size = sample_size;
 
-
         std::random_device rand_dev;
         rng_.seed(rand_dev());
 
@@ -54,7 +53,7 @@ public:
         Eigen::MatrixXd sorted_distances_(num_q, knn-1);
         Sampler *uniform_sampler = new UniformSampler (num_q, total_points);
         int *r_samples = new int[num_q];
-        uniform_sampler->getSample(r_samples);
+        uniform_sampler->generateSample(r_samples);
 
         cv::Mat sorted_dists, query, indicies, points = cv::Mat(total_points, 2, CV_32F, input_points.getMat().data);
         cv::flann::LinearIndexParams flannIndexParams;
@@ -115,7 +114,7 @@ public:
     }
 
 
-    void getSample (int *sample) {
+    void generateSample (int *sample) override {
         std::vector<int> random_numbers;
         for (int i = 0; i < sample_size; i++) {
             int rand_number;

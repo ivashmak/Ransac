@@ -105,8 +105,8 @@ Tests.h
 /home/ivashmak/Ransac/Usac/RandomGenerator/XorRandomGenerator.h
 ../Usac/RandomGenerator/PrimeNumberRandomGenerator.h
 /home/ivashmak/Ransac/Usac/RandomGenerator/PrimeNumberRandomGenerator.h
-../Usac/Utils.h
-/home/ivashmak/Ransac/Usac/Utils.h
+../Usac/Helper/Logging.h
+/home/ivashmak/Ransac/Usac/Helper/Logging.h
 
 /home/ivashmak/Ransac/Usac/EssentialMatrixEstimation.h
 theia/theia.h
@@ -162,6 +162,14 @@ Estimator.h
 ../Ransac/Ransac.h
 /home/ivashmak/Ransac/Usac/Ransac/Ransac.h
 
+/home/ivashmak/Ransac/Usac/Helper/Logging.h
+../Model.h
+/home/ivashmak/Ransac/Usac/Model.h
+../Quality.h
+/home/ivashmak/Ransac/Usac/Quality.h
+fstream
+-
+
 /home/ivashmak/Ransac/Usac/Homographies/DLT.cpp
 opencv2/opencv.hpp
 -
@@ -197,6 +205,8 @@ HomographyMethods.h
 /home/ivashmak/Ransac/Usac/Model.h
 
 /home/ivashmak/Ransac/Usac/Quality.h
+omp.h
+-
 Estimator/Estimator.h
 /home/ivashmak/Ransac/Usac/Estimator/Estimator.h
 Model.h
@@ -275,12 +285,10 @@ Sampler.h
 /home/ivashmak/Ransac/Usac/Sampler/UniformSampler.h
 ../Estimator/Estimator.h
 /home/ivashmak/Ransac/Usac/Estimator/Estimator.h
+../RandomGenerator/ArrayRandomGenerator.h
+/home/ivashmak/Ransac/Usac/RandomGenerator/ArrayRandomGenerator.h
 
 /home/ivashmak/Ransac/Usac/TerminationCriteria.h
-
-/home/ivashmak/Ransac/Usac/Utils.h
-theia/theia.h
--
 
 /home/ivashmak/Ransac/main.cpp
 ctime

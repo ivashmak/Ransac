@@ -391,6 +391,8 @@ CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o
  /home/ivashmak/Ransac/Usac/Estimator/HomographyEstimator.h
  /home/ivashmak/Ransac/Usac/Homographies/HomographyMethods.h
  /home/ivashmak/Ransac/Usac/Model.h
+ /home/ivashmak/Ransac/Usac/RandomGenerator/ArrayRandomGenerator.h
+ /home/ivashmak/Ransac/Usac/RandomGenerator/RandomGenerator.h
  /home/ivashmak/Ransac/Usac/Sampler/Sampler.h
  /home/ivashmak/Ransac/Usac/Sampler/UniformSampler.h
  /home/ivashmak/Ransac/Usac/TerminationCriteria.h
@@ -1101,6 +1103,7 @@ CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o
  /home/ivashmak/Ransac/Usac/Estimator/Estimator.h
  /home/ivashmak/Ransac/Usac/Estimator/Line2DEstimator.h
  /home/ivashmak/Ransac/Usac/Helper/Drawing.h
+ /home/ivashmak/Ransac/Usac/Helper/Logging.h
  /home/ivashmak/Ransac/Usac/Model.h
  /home/ivashmak/Ransac/Usac/Quality.h
  /home/ivashmak/Ransac/Usac/RandomGenerator/ArrayRandomGenerator.h
@@ -1114,7 +1117,6 @@ CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o
  /home/ivashmak/Ransac/Usac/Sampler/Sampler.h
  /home/ivashmak/Ransac/Usac/Sampler/UniformSampler.h
  /home/ivashmak/Ransac/Usac/TerminationCriteria.h
- /home/ivashmak/Ransac/Usac/Utils.h
  /usr/include/eigen3/Eigen/Cholesky
  /usr/include/eigen3/Eigen/Core
  /usr/include/eigen3/Eigen/Dense
@@ -2200,6 +2202,8 @@ CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.o
  /home/ivashmak/Ransac/Usac/Estimator/Line2DEstimator.h
  /home/ivashmak/Ransac/Usac/Model.h
  /home/ivashmak/Ransac/Usac/Quality.h
+ /home/ivashmak/Ransac/Usac/RandomGenerator/ArrayRandomGenerator.h
+ /home/ivashmak/Ransac/Usac/RandomGenerator/RandomGenerator.h
  /home/ivashmak/Ransac/Usac/Ransac/Ransac.cpp
  /home/ivashmak/Ransac/Usac/Ransac/Ransac.h
  /home/ivashmak/Ransac/Usac/Sampler/Sampler.h

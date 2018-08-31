@@ -27,12 +27,12 @@ public:
 
         int total_points = points.size().width;
 
-        cv::Mat dists, mat_points = cv::Mat(total_points, 2, CV_32F, points.getMat().data);
+        cv::Mat dists;
         cv::flann::LinearIndexParams flannIndexParams;
-        cv::flann::Index flannIndex (cv::Mat(mat_points).reshape(1), flannIndexParams);
+        cv::flann::Index flannIndex (cv::Mat(total_points, 2, CV_32F, points.getMat().data).reshape(1), flannIndexParams);
 
         distribution = std::uniform_int_distribution<int>(0, total_points-1);
-        cv::Point_<float> initial_point = mat_points.at<cv::Point_<float>>(distribution(generator));
+        cv::Point_<float> initial_point = points.getMat().at<cv::Point_<float>>(distribution(generator));
         cv::Mat query(1, 2, CV_32F, &initial_point);
 
         flannIndex.knnSearch(query, indicies, dists, knn);
@@ -52,7 +52,7 @@ public:
         // end
     }
 
-    void getSample (int *sample) {
+    void generateSample (int *sample) override {
         distribution = std::uniform_int_distribution<int>(0, knn-1);
 
         for (int i = 0; i < sample_size; i++) {

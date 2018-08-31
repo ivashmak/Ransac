@@ -173,6 +173,9 @@
 		<Unit filename="/home/ivashmak/Ransac/Usac/Helper/Drawing.h">
 			<Option target="ransac"/>
 		</Unit>
+		<Unit filename="/home/ivashmak/Ransac/Usac/Helper/Logging.h">
+			<Option target="ransac"/>
+		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Usac/Homographies/DLT.cpp">
 			<Option target="ransac"/>
 		</Unit>
@@ -228,9 +231,6 @@
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Usac/TerminationCriteria.h">
-			<Option target="ransac"/>
-		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/Utils.h">
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/main.cpp">

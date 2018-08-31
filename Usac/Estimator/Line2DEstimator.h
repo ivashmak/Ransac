@@ -52,14 +52,28 @@ public:
             model.setDescriptor(descriptor);
         }
 
-        float GetError(cv::InputArray input_points, int pidx, Model * model) override {
-            cv::Point_<float> * points = (cv::Point_<float> *) input_points.getMat().data;
-            cv::Mat descriptor;
 
-            model->getDescriptor(descriptor);
-            auto * params = reinterpret_cast<float *>(descriptor.data);
+        float GetError(cv::InputArray input_points, int pidx, Model * const model) override {
+            // ------------------  1 the fastest --------------
+            cv::Point_<float> * points = (cv::Point_<float> *) input_points.getMat().data;
+//            cv::Mat descriptor;
+//
+//            model->getDescriptor(descriptor);
+//            auto * params = reinterpret_cast<float *>(descriptor.data);
 
             return abs((int)(params[0] * points[pidx].x + params[1] * points[pidx].y + params[2]));
+
+            // ------------------ 1.5 times slower then fisrt ----------------
+//            auto * params = (float *) model->returnDescriptor().data;
+//
+//            return abs((int)(params[0] * input_points.getMat().at<cv::Point_<float>>(pidx).x +
+//                             params[1] * input_points.getMat().at<cv::Point_<float>>(pidx).y + params[2]));
+
+            // ------------------ 3 times slower then first ------------------
+//            return abs((int)( model->returnDescriptor().at<float>(0) * input_points.getMat().at<cv::Point_<float>>(pidx).x +
+//                              model->returnDescriptor().at<float>(1) * input_points.getMat().at<cv::Point_<float>>(pidx).y +
+//                              model->returnDescriptor().at<float>(2)));
+
         }
         
         int SampleNumber() override {

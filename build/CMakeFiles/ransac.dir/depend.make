@@ -390,6 +390,8 @@ CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/Estimator/Estim
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/Estimator/HomographyEstimator.h
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/Homographies/HomographyMethods.h
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/Model.h
+CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/RandomGenerator/ArrayRandomGenerator.h
+CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/RandomGenerator/RandomGenerator.h
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/Sampler/Sampler.h
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/Sampler/UniformSampler.h
 CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o: ../Usac/TerminationCriteria.h
@@ -1100,6 +1102,7 @@ CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Tests/testLineFitting.cpp
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Estimator/Estimator.h
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Estimator/Line2DEstimator.h
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Helper/Drawing.h
+CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Helper/Logging.h
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Model.h
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Quality.h
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/RandomGenerator/ArrayRandomGenerator.h
@@ -1113,7 +1116,6 @@ CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Sampler/ProsacSampler
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Sampler/Sampler.h
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Sampler/UniformSampler.h
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/TerminationCriteria.h
-CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: ../Usac/Utils.h
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: /usr/include/eigen3/Eigen/Cholesky
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: /usr/include/eigen3/Eigen/Core
 CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o: /usr/include/eigen3/Eigen/Dense
@@ -2199,6 +2201,8 @@ CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.o: ../Usac/Estimator/Estimator.h
 CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.o: ../Usac/Estimator/Line2DEstimator.h
 CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.o: ../Usac/Model.h
 CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.o: ../Usac/Quality.h
+CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.o: ../Usac/RandomGenerator/ArrayRandomGenerator.h
+CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.o: ../Usac/RandomGenerator/RandomGenerator.h
 CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.o: ../Usac/Ransac/Ransac.cpp
 CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.o: ../Usac/Ransac/Ransac.h
 CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.o: ../Usac/Sampler/Sampler.h

@@ -52,3 +52,14 @@ Y_ = (K2') \ Ymat / K1;
 Z_ = (K2') \ Zmat / K1;
 W_ = (K2') \ Wmat / K1;
 
+
+
+syms x y z w e E EQU ; 
+E = x*Xmat +y*Ymat +z*Zmat + Wmat;
+
+equ(1) = det(E);
+EQU =  simplify(2*E*transpose(E)*E - trace(E*transpose(E))*E);
+equ(2:10) = EQU ;
+equ = transpose(equ);
+
+keyboard

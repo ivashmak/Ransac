@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <vector>
 #include <random>
+#include <algorithm>
 #include "RandomGenerator.h"
 
 class UniformRandomGenerator : public RandomGenerator {
@@ -26,8 +27,22 @@ public:
     }
 
     void generateRandomSample (int * sample) override {
-
+//        unsigned int count=0;
+//        unsigned int index;
+//        std::vector<unsigned int>::iterator pos;
+//        pos = sample->begin();
+//        do {
+//            index = rand() % N_points;
+//            if (std::find(sample->begin(), pos, index) == pos)
+//            {
+//                (*sample)[count] = index;
+//                ++count;
+//                ++pos;
+//            }
+//        } while (count < sample_size);
+//
     }
+
 };
 
 #endif //USAC_UNIFORMRANDOMGENERATOR_H

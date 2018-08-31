@@ -3,22 +3,19 @@
 
 class Model {
 public:
-	float threshold;
-	int sample_number;
-	float desired_prob;
+	float threshold = 10.0;
+	int sample_number = 2;
+	float desired_prob = 0.95;
 	float max_iterations = 10000;
-	std::string model_name;
-	int k_nearest_neighbors;
+	std::string model_name = "ransac";
+	int k_nearest_neighbors = 2;
+    int N_points = 0;
 
 protected:
     cv::Mat descriptor;
 	
 public:
-	Model () {
-		threshold = 10.0;
-		sample_number = 2;
-		desired_prob = 0.99;
-	}
+    Model () {}
 
 	Model (float threshold, int sample_number, float desired_prob, std::string model_name) {
 		this->threshold = threshold;
@@ -34,6 +31,10 @@ public:
     void getDescriptor(cv::Mat &_desc) { 
     	_desc = descriptor;
     }    
+
+    cv::Mat returnDescriptor () {
+        return descriptor;
+    }
 
 	void setThreshold (float threshold) {
 		this->threshold = threshold;

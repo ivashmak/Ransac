@@ -18,7 +18,9 @@ add_executable(
         Usac/Quality.h
         Usac/Model.h
         Usac/TerminationCriteria.h
+
         Usac/Helper/Drawing.h
+        Usac/Helper/Logging.h
 
         Usac/Estimator/Estimator.h
         Usac/Estimator/Line2DEstimator.h
@@ -50,10 +52,11 @@ add_executable(
         Usac/RandomGenerator/XorRandomGenerator.h
         Usac/RandomGenerator/UniformRandomGenerator.h
 
-        Usac/Utils.h
 )
-
-# set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -pthread -fopenmp -Wextra" )
+# parallel
+set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp" )
+# warnings
+#set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -pthread -Wextra" )
 
 target_link_libraries (ransac ${OpenCV_LIBS} )
 target_link_libraries (ransac ${THEIA_LIBRARIES})

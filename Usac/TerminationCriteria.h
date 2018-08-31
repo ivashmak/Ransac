@@ -3,15 +3,14 @@
 
 class TerminationCriteria {
 public:
-//	const Model * const model; // const pointer to const Model
     const Model * model;
 public:
-	TerminationCriteria(Model& model)  {
+	TerminationCriteria(const Model * const model)  {
+        this->model = model;
+	}
 
-//	    Model mm(10, 2, 0.99, "ransac");
-//        const Model *const m = &mm;
-
-        this->model = &model;
+	void setNewModel (const Model * const model) {
+		this->model = model;
 	}
 
 	float getUpBoundIterations (float inlier_points, float total_points) {

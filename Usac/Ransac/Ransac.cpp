@@ -17,9 +17,10 @@ void Ransac::run(cv::InputArray input_points, Estimator *estimator2d) {
 
 
     while (iters < max_iters) {
-        sampler->getSample(sample);
+        sampler->generateSample(sample);
 
         estimator2d->EstimateModel(input_points, sample, *model);
+        estimator2d->setModelParametres(model);
 
         current_score->score = 0;
         current_score->inlier_number = 0;
