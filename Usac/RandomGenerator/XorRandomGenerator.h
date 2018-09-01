@@ -12,7 +12,7 @@ public:
         this->N_points = N_points;
     }
 
-    unsigned int getRandomNumber () override {
+    int getRandomNumber () override {
         static uint32_t x = time(0);
         static uint32_t y = time(0)/2;
         static uint32_t z = time(0)/3;
@@ -25,9 +25,14 @@ public:
 
     }
 
-    void generateRandomSample (int * sample) override {
+    void generateUniqueRandomSample (int * sample) override {
 
     }
+
+    void resetGenerator (int min_range, int max_range) override {
+
+    }
+
 };
 
 #endif //USAC_XORRANDOMGENERATOR_H

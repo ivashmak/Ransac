@@ -61,19 +61,19 @@ void Tests::testLineFitting() {
 //    Model *ransac_model = new Model (10, 2, 0.99, "ransac");
 //    Sampler *uniform_sampler = new UniformSampler (ransac_model->sample_number, points.size());
 //
-//    Model *napsac_model = new Model (10, 2, 0.99, "napsac");
-//    Sampler *napsac_sampler = new NapsacSampler(points, 10, napsac_model->sample_number, points.size());
+    Model *napsac_model = new Model (10, 2, 0.99, "napsac");
+    Sampler *napsac_sampler = new NapsacSampler(points, 6, napsac_model->sample_number, points.size());
 
 //    Model *evsac_model = new Model (10, 2, 0.99, "evsac");
 //    Sampler *evsac_sampler = new EvsacSampler(points, points.size(), 7, evsac_model->sample_number, points.size());
 
-    Model *prosac_model = new Model (10, 2, 0.99, "prosac");
-    Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
+//    Model *prosac_model = new Model (10, 2, 0.99, "prosac");
+//    Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
 
 //    test (points, uniform_sampler, ransac_model);
-//    test (points, napsac_sampler, napsac_model);
+    test (points, napsac_sampler, napsac_model);
 //    test (points, evsac_sampler, evsac_model);
-    test (sorted_points, prosac_sampler, prosac_model);
+//    test (sorted_points, prosac_sampler, prosac_model);
 
 }
 

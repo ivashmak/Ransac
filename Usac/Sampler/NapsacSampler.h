@@ -6,17 +6,26 @@
 #include "Sampler.h"
 #include "../Helper/Drawing.h"
 
+int factorial (int n) { return n == 0 ? 1 : n*factorial (n-1); }
+
+
 class NapsacSampler : public Sampler {
 protected:
-    cv::Mat indicies;
+    cv::Mat k_nearest_neighbors_indices;
     int knn;
     std::random_device rand_dev;
     std::mt19937 generator;
     std::uniform_int_distribution<int> distribution;
+    cv::flann::Index * flannIndex;
+    cv::Mat points;
+    int k_iter = 0;
+    int taking_sample_size_from_knn;
+    UniformSampler * uniformSampler;
 public:
 
     NapsacSampler (cv::InputArray points, int knn, int sample_size, int N_points, bool reset_time = true) {
         this->knn = knn;
+        this->points = points.getMat();
 
         if (reset_time) resetTime();
 
@@ -25,38 +34,37 @@ public:
 
         generator = std::mt19937(rand_dev());
 
-        int total_points = points.size().width;
 
-        cv::Mat dists;
         cv::flann::LinearIndexParams flannIndexParams;
-        cv::flann::Index flannIndex (cv::Mat(total_points, 2, CV_32F, points.getMat().data).reshape(1), flannIndexParams);
+        flannIndex = new cv::flann::Index (cv::Mat(N_points, 2, CV_32F, points.getMat().data).reshape(1), flannIndexParams);
 
-        distribution = std::uniform_int_distribution<int>(0, total_points-1);
-        cv::Point_<float> initial_point = points.getMat().at<cv::Point_<float>>(distribution(generator));
-        cv::Mat query(1, 2, CV_32F, &initial_point);
+        getKNearestNeighorsIndices();
 
-        flannIndex.knnSearch(query, indicies, dists, knn);
-
-
-        // drawing knn. Can be deleted
-//        std::vector<int> v_inds;
-//        for (int i = 0; i < knn; i++) {
-//            v_inds.push_back(this->indicies.at<int>(i));
-//        }
-//        Drawing draw;
-//        cv::Mat image = cv::imread("../images/image1.jpg");
-//        draw.showInliers(points, v_inds, image);
-//        circle(image, initial_point, 3, cv::Scalar(255, 0, 0), -1);
-//        imshow("Inliers", image);
-//        cv::waitKey (0);
-        // end
+        taking_sample_size_from_knn = factorial(knn)/(factorial(sample_size)*factorial(knn-sample_size));
+        uniformSampler = new UniformSampler (sample_size, N_points);
     }
 
+    void getKNearestNeighorsIndices () {
+        cv::Mat dists;
+        distribution = std::uniform_int_distribution<int>(0, N_points-1);
+        cv::Point_<float> initial_point = points.at<cv::Point_<float>>(distribution(generator));
+        cv::Mat query(1, 2, CV_32F, &initial_point);
+
+        flannIndex->knnSearch(query, k_nearest_neighbors_indices, dists, knn);
+    }
+
+
+
     void generateSample (int *sample) override {
+        if (k_iter > taking_sample_size_from_knn) {
+            getKNearestNeighorsIndices();
+            k_iter = 0;
+        }
+
         distribution = std::uniform_int_distribution<int>(0, knn-1);
 
         for (int i = 0; i < sample_size; i++) {
-            sample[i] = indicies.at<int>(distribution(generator));
+            sample[i] = k_nearest_neighbors_indices.at<int>(distribution(generator));
             for (int j = i-1; j >=0 ; j--) {
                 if (sample[j] == sample[i]) {
                     i--;
@@ -64,6 +72,9 @@ public:
                 }
             }
         }
+
+        k_iter++;
+        k_iterations++;
     }
 };
 

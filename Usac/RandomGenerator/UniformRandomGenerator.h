@@ -9,38 +9,36 @@
 
 class UniformRandomGenerator : public RandomGenerator {
 protected:
-    std::random_device rand_dev;
     std::mt19937 generator;
-    std::uniform_int_distribution<unsigned int> generate;
-    unsigned int N_points;
+    std::uniform_int_distribution<int> generate;
 
 public:
-    UniformRandomGenerator (unsigned int N_points) {
-        this->N_points = N_points;
-
+    UniformRandomGenerator () {
+        std::random_device rand_dev;
         generator = std::mt19937(rand_dev());
-        generate = std::uniform_int_distribution<unsigned int>(0, N_points-1);
     }
 
-    unsigned int getRandomNumber () override {
+    int getRandomNumber () override {
         return generate (generator);
     }
 
-    void generateRandomSample (int * sample) override {
-//        unsigned int count=0;
-//        unsigned int index;
-//        std::vector<unsigned int>::iterator pos;
-//        pos = sample->begin();
-//        do {
-//            index = rand() % N_points;
-//            if (std::find(sample->begin(), pos, index) == pos)
-//            {
-//                (*sample)[count] = index;
-//                ++count;
-//                ++pos;
-//            }
-//        } while (count < sample_size);
-//
+    void resetGenerator (int min_range, int max_range) override {
+        generate = std::uniform_int_distribution<int>(min_range, max_range);
+    }
+
+    void generateUniqueRandomSample (int * sample) override {
+        std::vector<int> random_numbers;
+        for (int i = 0; i < sample_size; i++) {
+            int rand_number;
+            // Generate a random number that has not already been used.
+            while (std::find(random_numbers.begin(),
+                             random_numbers.end(),
+                             (rand_number = generate (generator))) !=
+                   random_numbers.end()) {
+            }
+
+            random_numbers.push_back(rand_number);
+            sample[i] = rand_number;
     }
 
 };

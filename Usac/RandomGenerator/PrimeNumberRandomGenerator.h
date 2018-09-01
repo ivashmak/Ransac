@@ -28,11 +28,15 @@ public:
         this->N_points = N_points;
     }
 
-    unsigned int getRandomNumber () override {
+    int getRandomNumber () override {
         return permuteQPR((permuteQPR(m_index++) + m_intermediateOffset) ^ 0x5bf03635);
     }
 
-    void generateRandomSample (int * sample) override {
+    void resetGenerator (int min_range, int max_range) override {
+
+    }
+
+    void generateUniqueRandomSample (int * sample) override {
 
     }
 

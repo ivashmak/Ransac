@@ -8,19 +8,25 @@ protected:
     unsigned int *array;
     unsigned int max;
     unsigned int N_points;
+    unsigned int sample_size;
 public:
-    ArrayRandomGenerator (unsigned int sample_size, unsigned int N_points) {
-        max = N_points;
-        this->N_points = N_points;
-        this->sample_size = sample_size;
 
-        array = new unsigned int[N_points];
-        for (unsigned int i = 0; i < N_points; i++) {
-            array[i] = i;
+    void resetGenerator (int min_range, int max_range) override {
+        this->N_points = (uint) max_range - min_range;
+
+        if (!array) {
+            array = new unsigned int[N_points];
+
+            for (unsigned int i = 0; i < N_points; i++) {
+                array[i] = i;
+            }
+        } else {
+            reallocArray ();
         }
+
     }
 
-    unsigned int getRandomNumber () override {
+    int getRandomNumber () override {
         max = max == 0 ? N_points : max;
 
         unsigned int random_number = rand () % max;
@@ -34,14 +40,14 @@ public:
         return temp;
     }
 
-    void reallocSample () {
+    void reallocArray () {
         array = (unsigned int *) realloc(array, sizeof (unsigned int) * N_points);
         for (unsigned int i = 0; i < N_points; i++) {
             array[i] = i;
         }
     }
 
-    void generateRandomSample (int * sample) override {
+    void generateUniqueRandomSample (int * sample) override {
         for (int i = 0; i < sample_size; i++) {
             sample[i] = getRandomNumber();
         }
