@@ -25,7 +25,7 @@ public:
     }
 
     void resetGenerator (int maxSize) {
-        generate = std::uniform_int_distribution<int>(0, maxSize-1);
+        generate = std::uniform_int_distribution<int>(0, maxSize);
     }
 
     void generateSample (int *sample) override {

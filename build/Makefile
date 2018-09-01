@@ -258,87 +258,6 @@ Tests/testLineFitting.cpp.s:
 	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.s
 .PHONY : Tests/testLineFitting.cpp.s
 
-Usac/Homographies/DLT.o: Usac/Homographies/DLT.cpp.o
-
-.PHONY : Usac/Homographies/DLT.o
-
-# target to build an object file
-Usac/Homographies/DLT.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o
-.PHONY : Usac/Homographies/DLT.cpp.o
-
-Usac/Homographies/DLT.i: Usac/Homographies/DLT.cpp.i
-
-.PHONY : Usac/Homographies/DLT.i
-
-# target to preprocess a source file
-Usac/Homographies/DLT.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.i
-.PHONY : Usac/Homographies/DLT.cpp.i
-
-Usac/Homographies/DLT.s: Usac/Homographies/DLT.cpp.s
-
-.PHONY : Usac/Homographies/DLT.s
-
-# target to generate assembly for a file
-Usac/Homographies/DLT.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.s
-.PHONY : Usac/Homographies/DLT.cpp.s
-
-Usac/Homographies/GetNormalizingTransformation.o: Usac/Homographies/GetNormalizingTransformation.cpp.o
-
-.PHONY : Usac/Homographies/GetNormalizingTransformation.o
-
-# target to build an object file
-Usac/Homographies/GetNormalizingTransformation.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o
-.PHONY : Usac/Homographies/GetNormalizingTransformation.cpp.o
-
-Usac/Homographies/GetNormalizingTransformation.i: Usac/Homographies/GetNormalizingTransformation.cpp.i
-
-.PHONY : Usac/Homographies/GetNormalizingTransformation.i
-
-# target to preprocess a source file
-Usac/Homographies/GetNormalizingTransformation.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.i
-.PHONY : Usac/Homographies/GetNormalizingTransformation.cpp.i
-
-Usac/Homographies/GetNormalizingTransformation.s: Usac/Homographies/GetNormalizingTransformation.cpp.s
-
-.PHONY : Usac/Homographies/GetNormalizingTransformation.s
-
-# target to generate assembly for a file
-Usac/Homographies/GetNormalizingTransformation.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.s
-.PHONY : Usac/Homographies/GetNormalizingTransformation.cpp.s
-
-Usac/Homographies/NormalizedDLT.o: Usac/Homographies/NormalizedDLT.cpp.o
-
-.PHONY : Usac/Homographies/NormalizedDLT.o
-
-# target to build an object file
-Usac/Homographies/NormalizedDLT.cpp.o:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o
-.PHONY : Usac/Homographies/NormalizedDLT.cpp.o
-
-Usac/Homographies/NormalizedDLT.i: Usac/Homographies/NormalizedDLT.cpp.i
-
-.PHONY : Usac/Homographies/NormalizedDLT.i
-
-# target to preprocess a source file
-Usac/Homographies/NormalizedDLT.cpp.i:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.i
-.PHONY : Usac/Homographies/NormalizedDLT.cpp.i
-
-Usac/Homographies/NormalizedDLT.s: Usac/Homographies/NormalizedDLT.cpp.s
-
-.PHONY : Usac/Homographies/NormalizedDLT.s
-
-# target to generate assembly for a file
-Usac/Homographies/NormalizedDLT.cpp.s:
-	$(MAKE) -f CMakeFiles/ransac.dir/build.make CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.s
-.PHONY : Usac/Homographies/NormalizedDLT.cpp.s
-
 Usac/Ransac/Ransac.o: Usac/Ransac/Ransac.cpp.o
 
 .PHONY : Usac/Ransac/Ransac.o
@@ -417,15 +336,6 @@ help:
 	@echo "... Tests/testLineFitting.o"
 	@echo "... Tests/testLineFitting.i"
 	@echo "... Tests/testLineFitting.s"
-	@echo "... Usac/Homographies/DLT.o"
-	@echo "... Usac/Homographies/DLT.i"
-	@echo "... Usac/Homographies/DLT.s"
-	@echo "... Usac/Homographies/GetNormalizingTransformation.o"
-	@echo "... Usac/Homographies/GetNormalizingTransformation.i"
-	@echo "... Usac/Homographies/GetNormalizingTransformation.s"
-	@echo "... Usac/Homographies/NormalizedDLT.o"
-	@echo "... Usac/Homographies/NormalizedDLT.i"
-	@echo "... Usac/Homographies/NormalizedDLT.s"
 	@echo "... Usac/Ransac/Ransac.o"
 	@echo "... Usac/Ransac/Ransac.i"
 	@echo "... Usac/Ransac/Ransac.s"

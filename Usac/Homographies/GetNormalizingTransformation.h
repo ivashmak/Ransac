@@ -1,9 +1,8 @@
 #include <cmath>
 #include <opencv2/core.hpp>
 #include <iostream>
-#include "HomographyMethods.h"
 
-void HomographyMethods::GetNormalizingTransformation (cv::InputArray pts, cv::Mat &T, cv::Mat &offset, float * s, float *s1, float * s2) {
+void GetNormalizingTransformation (cv::InputArray pts, cv::Mat &T, cv::Mat &offset, float * s, float *s1, float * s2) {
     CV_Assert(!pts.empty());
 
     cv::Mat points = pts.getMat();
@@ -15,7 +14,7 @@ void HomographyMethods::GetNormalizingTransformation (cv::InputArray pts, cv::Ma
     cv::Scalar mean2 = cv::mean(points.col(1));
 
     offset = (cv::Mat_<float> (1,2) << mean1.val[0], mean2.val[0]);
-    cv::Mat ones = cv::Mat::ones(NUMP, 1, CV_32FC1);
+    cv::Mat ones = cv::Mat_<float>::ones(NUMP, 1);
     cv::Mat ptsOffseted = points - ones * offset;
 
     float summa1 = 0, summa2 = 0;
@@ -30,8 +29,8 @@ void HomographyMethods::GetNormalizingTransformation (cv::InputArray pts, cv::Ma
     *s = (float) (sqrt((summa1 + summa2) / NUMP) / sqrt(2));
 
 
-    cv::Mat T1 = cv::Mat::eye(3, 3, CV_32FC1);
-    cv::Mat T2 = cv::Mat::eye(3, 3, CV_32FC1);
+    cv::Mat T1 = cv::Mat_<float>::eye(3, 3);
+    cv::Mat T2 = cv::Mat_<float>::eye(3, 3);
     T1.at<float>(0,2) = (float) -mean1.val[0];
     T1.at<float>(1,2) = (float) -mean2.val[0];
     T2.at<float>(0,0) = 1/(*s);

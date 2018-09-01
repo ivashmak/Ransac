@@ -1,7 +1,6 @@
 #include <opencv2/core.hpp>
-#include "HomographyMethods.h"
 
-void HomographyMethods::NormalizedDLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
+void NormalizedDLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
     CV_Assert(!pts1.empty());
     CV_Assert(!pts2.empty());
 
@@ -16,7 +15,7 @@ void HomographyMethods::NormalizedDLT (cv::InputArray pts1, cv::InputArray pts2,
     GetNormalizingTransformation(pts1, T1, offset1, &s1, &s1_1, &s1_2);
     GetNormalizingTransformation(pts2, T2, offset2, &s2, &s2_1, &s2_2);
 
-    cv::Mat ones = cv::Mat::ones(1, NUMP, CV_32FC1), tmp1, tmp2;
+    cv::Mat ones = cv::Mat_<float>::ones(1, NUMP), tmp1, tmp2;
 
     cv::transpose (points1, points1);
     cv::transpose (points2, points2);

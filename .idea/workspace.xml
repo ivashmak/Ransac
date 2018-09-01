@@ -15,44 +15,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2349f0c5-205e-48e6-8262-3d8b481d3476" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/Usac/Helper/Logging.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Generator/generator.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Generator/generator.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tests/testHomographyFitting.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Tests/testHomographyFitting.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Tests/testLineFitting.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Tests/testLineFitting.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Usac/EssentialMatrixEstimation.h" beforeDir="false" afterPath="$PROJECT_DIR$/Usac/EssentialMatrixEstimation.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Usac/Estimator/Estimator.h" beforeDir="false" afterPath="$PROJECT_DIR$/Usac/Estimator/Estimator.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Usac/Estimator/HomographyEstimator.h" beforeDir="false" afterPath="$PROJECT_DIR$/Usac/Estimator/HomographyEstimator.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Usac/Estimator/Line2DEstimator.h" beforeDir="false" afterPath="$PROJECT_DIR$/Usac/Estimator/Line2DEstimator.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Usac/Model.h" beforeDir="false" afterPath="$PROJECT_DIR$/Usac/Model.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Usac/Quality.h" beforeDir="false" afterPath="$PROJECT_DIR$/Usac/Quality.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Usac/RandomGenerator/ArrayRandomGenerator.h" beforeDir="false" afterPath="$PROJECT_DIR$/Usac/RandomGenerator/ArrayRandomGenerator.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Usac/RandomGenerator/UniformRandomGenerator.h" beforeDir="false" afterPath="$PROJECT_DIR$/Usac/RandomGenerator/UniformRandomGenerator.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Usac/Ransac/Ransac.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Usac/Ransac/Ransac.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Usac/Sampler/EvsacSampler.h" beforeDir="false" afterPath="$PROJECT_DIR$/Usac/Sampler/EvsacSampler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Usac/Sampler/NapsacSampler.h" beforeDir="false" afterPath="$PROJECT_DIR$/Usac/Sampler/NapsacSampler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Usac/Homographies/DLT.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Usac/Homographies/GetNormalizingTransformation.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Usac/Homographies/HomographyMethods.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Usac/Homographies/NormalizedDLT.cpp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Usac/Sampler/ProsacSampler.h" beforeDir="false" afterPath="$PROJECT_DIR$/Usac/Sampler/ProsacSampler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Usac/Sampler/Sampler.h" beforeDir="false" afterPath="$PROJECT_DIR$/Usac/Sampler/Sampler.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Usac/Sampler/UniformSampler.h" beforeDir="false" afterPath="$PROJECT_DIR$/Usac/Sampler/UniformSampler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Usac/TerminationCriteria.h" beforeDir="false" afterPath="$PROJECT_DIR$/Usac/TerminationCriteria.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Usac/Utils.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/Makefile2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/progress.marks" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/progress.marks" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/CXX.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Generator/generator.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Generator/generator.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/DependInfo.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/cmake_clean.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/cmake_clean.cmake" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/depend.internal" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/depend.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/main.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/link.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/ransac.dir/progress.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/build/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/Usac.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/build/Usac.cbp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/ransac" beforeDir="false" afterPath="$PROJECT_DIR$/build/ransac" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/image1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images/image1.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matlab/essentialMatEst.m" beforeDir="false" afterPath="$PROJECT_DIR$/matlab/essentialMatEst.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/evsac.txt" beforeDir="false" afterPath="$PROJECT_DIR$/res/evsac.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/res/linefitting_evsac.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/res/linefitting_evsac.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/res/linefitting_napsac.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/res/linefitting_napsac.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/res/linefitting_prosac.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/res/linefitting_prosac.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/res/linefitting_ransac.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/res/linefitting_ransac.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/napsac.txt" beforeDir="false" afterPath="$PROJECT_DIR$/res/napsac.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/prosac.txt" beforeDir="false" afterPath="$PROJECT_DIR$/res/prosac.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/res/ransac.txt" beforeDir="false" afterPath="$PROJECT_DIR$/res/ransac.txt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/CMakeFiles/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -66,11 +66,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Default" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="testLineFitting.cpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="testLineFitting.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Tests/testLineFitting.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="461">
-              <caret line="77" selection-start-line="77" selection-end-line="77" />
+            <state relative-caret-position="236">
+              <caret line="58" lean-forward="true" selection-start-line="58" selection-end-line="58" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -78,19 +78,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Ransac.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Usac/Ransac/Ransac.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="67">
-              <caret line="19" column="31" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="31" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="EssentialMatrixEstimation.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Usac/EssentialMatrixEstimation.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
+            <state relative-caret-position="510">
               <caret line="34" selection-start-line="34" selection-end-line="34" />
               <folding>
                 <element signature="e#274#298#0" expanded="true" />
@@ -99,56 +90,62 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ProsacSampler.h" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Usac/Sampler/ProsacSampler.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="97">
-              <caret line="48" column="23" selection-start-line="48" selection-start-column="23" selection-end-line="48" selection-end-column="23" />
-              <folding>
-                <element signature="e#59#75#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Sampler.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Usac/Sampler/Sampler.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="112">
-              <caret line="16" selection-start-line="16" selection-end-line="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UniformSampler.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Usac/Sampler/UniformSampler.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="35" column="22" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
-              <folding>
-                <element signature="e#65#100#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UniformRandomGenerator.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Usac/RandomGenerator/UniformRandomGenerator.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="157">
-              <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
-              <folding>
-                <element signature="e#77#95#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ArrayRandomGenerator.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Usac/RandomGenerator/ArrayRandomGenerator.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="44" column="28" lean-forward="true" selection-start-line="44" selection-start-column="28" selection-end-line="44" selection-end-column="28" />
+            <state relative-caret-position="377">
+              <caret line="44" column="28" selection-start-line="44" selection-start-column="28" selection-end-line="44" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TerminationCriteria.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Usac/TerminationCriteria.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="375">
+              <caret line="25" column="23" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Quality.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Usac/Quality.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-548">
+              <caret line="36" column="45" selection-start-line="36" selection-start-column="45" selection-end-line="36" selection-end-column="45" />
+              <folding>
+                <element signature="e#51#67#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Line2DEstimator.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Usac/Estimator/Line2DEstimator.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="475">
+              <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+              <folding>
+                <element signature="e#0#16#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FundamentalMatrixEstimation.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Usac/FundamentalMatrixEstimation.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="22" column="59" selection-start-line="22" selection-start-column="59" selection-end-line="22" selection-end-column="59" />
             </state>
           </provider>
         </entry>
@@ -156,8 +153,8 @@
       <file leaf-file-name="NapsacSampler.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Usac/Sampler/NapsacSampler.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="615">
-              <caret line="54" column="46" selection-start-line="54" selection-start-column="46" selection-end-line="54" selection-end-column="46" />
+            <state relative-caret-position="422">
+              <caret line="39" selection-start-line="39" selection-end-line="39" />
               <folding>
                 <element signature="e#59#90#0" expanded="true" />
               </folding>
@@ -168,8 +165,8 @@
       <file leaf-file-name="EvsacSampler.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Usac/Sampler/EvsacSampler.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="52">
-              <caret line="55" column="40" selection-start-line="55" selection-start-column="40" selection-end-line="55" selection-end-column="40" />
+            <state relative-caret-position="735">
+              <caret line="123" column="69" selection-start-line="123" selection-start-column="46" selection-end-line="123" selection-end-column="69" />
               <folding>
                 <element signature="e#57#74#0" expanded="true" />
               </folding>
@@ -193,6 +190,7 @@
       <find>Random</find>
       <find>endl</find>
       <find>distribution</find>
+      <find>prosac_min_stop_length_</find>
     </findStrings>
     <replaceStrings>
       <replace>points</replace>
@@ -213,11 +211,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Ransac/NormalizedDLT.cpp" />
-        <option value="$PROJECT_DIR$/Ransac/HomographyMethods.h" />
-        <option value="$PROJECT_DIR$/Ransac/UniformSampler.h" />
-        <option value="$PROJECT_DIR$/Ransac/Line2DEstimator.h" />
-        <option value="$PROJECT_DIR$/Ransac/HomographyEstimator.h" />
         <option value="$PROJECT_DIR$/Ransac/GetNormalizingTransformation.cpp" />
         <option value="$PROJECT_DIR$/Ransac/Drawing.h" />
         <option value="$PROJECT_DIR$/tests/testHomographyFitting.cpp" />
@@ -229,7 +222,6 @@
         <option value="$PROJECT_DIR$/Usac/Drawing.h" />
         <option value="$PROJECT_DIR$/tests/testLineFitting.cpp" />
         <option value="$PROJECT_DIR$/Usac/Ransac.h" />
-        <option value="$PROJECT_DIR$/Usac/Homographies/DLT.cpp" />
         <option value="$PROJECT_DIR$/Usac/Helper/Drawing.h" />
         <option value="$PROJECT_DIR$/Usac/Prosac.h" />
         <option value="$PROJECT_DIR$/Usac/Evsac.h" />
@@ -237,33 +229,39 @@
         <option value="$PROJECT_DIR$/Usac/Prosac.cpp" />
         <option value="$PROJECT_DIR$/Usac/FundamentalMatrixEstimation.cpp" />
         <option value="$PROJECT_DIR$/Usac/EssentialMatrixEstimation.cpp" />
-        <option value="$PROJECT_DIR$/Usac/FundamentalMatrixEstimation.h" />
-        <option value="$PROJECT_DIR$/Tests/testHomographyFitting.cpp" />
         <option value="$PROJECT_DIR$/Usac/RandomGenerator/RandomGenerator.h" />
         <option value="$PROJECT_DIR$/Usac/RandomGenerator/SeedRandomGenerator.h" />
         <option value="$PROJECT_DIR$/Usac/RandomGenerator/XorRandomGenerator.h" />
         <option value="$PROJECT_DIR$/Usac/RandomGenerator/PrimeNumberRandomGenerator.h" />
         <option value="$PROJECT_DIR$/Usac/Utils.h" />
-        <option value="$PROJECT_DIR$/main.cpp" />
         <option value="$PROJECT_DIR$/Usac/Helper/Logging.h" />
         <option value="$PROJECT_DIR$/Usac/TerminationCriteria.h" />
         <option value="$PROJECT_DIR$/Usac/Model.h" />
         <option value="$PROJECT_DIR$/Generator/generator.cpp" />
         <option value="$PROJECT_DIR$/Usac/Estimator/HomographyEstimator.h" />
-        <option value="$PROJECT_DIR$/Usac/Estimator/Line2DEstimator.h" />
         <option value="$PROJECT_DIR$/Usac/Estimator/Estimator.h" />
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/Usac/Quality.h" />
         <option value="$PROJECT_DIR$/Usac/RandomGenerator/ArrayRandomGenerator.h" />
-        <option value="$PROJECT_DIR$/Tests/testLineFitting.cpp" />
         <option value="$PROJECT_DIR$/Usac/Sampler/NapsacSampler.h" />
         <option value="$PROJECT_DIR$/Usac/Ransac/Ransac.cpp" />
         <option value="$PROJECT_DIR$/Usac/Sampler/Sampler.h" />
         <option value="$PROJECT_DIR$/Usac/Sampler/EvsacSampler.h" />
         <option value="$PROJECT_DIR$/Usac/EssentialMatrixEstimation.h" />
-        <option value="$PROJECT_DIR$/Usac/Sampler/UniformSampler.h" />
         <option value="$PROJECT_DIR$/Usac/RandomGenerator/UniformRandomGenerator.h" />
+        <option value="$PROJECT_DIR$/Usac/Sampler/UniformSampler.h" />
         <option value="$PROJECT_DIR$/Usac/Sampler/ProsacSampler.h" />
+        <option value="$PROJECT_DIR$/Usac/Homographies/DLT.cpp" />
+        <option value="$PROJECT_DIR$/Usac/Homographies/GetNormalizingTransformation.cpp" />
+        <option value="$PROJECT_DIR$/Usac/Homographies/NormalizedDLT.cpp" />
+        <option value="$PROJECT_DIR$/Usac/Homographies/NormalizedDLT.h" />
+        <option value="$PROJECT_DIR$/Usac/Homographies/GetNormalizingTransformation.h" />
+        <option value="$PROJECT_DIR$/Usac/Homographies/DLT.h" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/Tests/testHomographyFitting.cpp" />
+        <option value="$PROJECT_DIR$/Usac/FundamentalMatrixEstimation.h" />
+        <option value="$PROJECT_DIR$/Usac/Estimator/Line2DEstimator.h" />
+        <option value="$PROJECT_DIR$/main.cpp" />
+        <option value="$PROJECT_DIR$/Tests/testLineFitting.cpp" />
       </list>
     </option>
   </component>
@@ -288,6 +286,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -298,41 +297,12 @@
             <path>
               <item name="Usac" type="b2602c69:ProjectViewProjectNode" />
               <item name="Ransac" type="462c0819:PsiDirectoryNode" />
-              <item name="Generator" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Usac" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Ransac" type="462c0819:PsiDirectoryNode" />
               <item name="Tests" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Usac" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Ransac" type="462c0819:PsiDirectoryNode" />
-              <item name="Usac" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Usac" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Ransac" type="462c0819:PsiDirectoryNode" />
-              <item name="Usac" type="462c0819:PsiDirectoryNode" />
-              <item name="RandomGenerator" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Usac" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Ransac" type="462c0819:PsiDirectoryNode" />
-              <item name="Usac" type="462c0819:PsiDirectoryNode" />
-              <item name="Ransac" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Usac" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Ransac" type="462c0819:PsiDirectoryNode" />
-              <item name="Usac" type="462c0819:PsiDirectoryNode" />
-              <item name="Sampler" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -401,22 +371,24 @@
       <workItem from="1535445122205" duration="4828000" />
       <workItem from="1535537263822" duration="20446000" />
       <workItem from="1535710102517" duration="19793000" />
+      <workItem from="1535799418297" duration="8353000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="202952000" />
+    <option name="totallyTimeSpent" value="211305000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1217" height="1036" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20329218" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20329218" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Messages" order="7" weight="0.32934782" />
       <window_info anchor="bottom" id="CMake" order="11" weight="0.32934782" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5012346" side_tool="true" weight="0.32934782" />
       <window_info anchor="bottom" id="Version Control" order="10" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49876544" weight="0.32934782" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49876544" visible="true" weight="0.32934782" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32934782" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -438,12 +410,10 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="5" />
+      <option name="time" value="6" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Ransac/Generator/generator.cpp" />
-    <entry file="file://$PROJECT_DIR$/Homographies/GetNormalizingTransformation.cpp" />
     <entry file="file://$PROJECT_DIR$/Homographies/NormalizedDLT.cpp" />
     <entry file="file://$PROJECT_DIR$/Ransac/Detector/detector.h" />
     <entry file="file://$PROJECT_DIR$/Homographies/ReadPoints/ReadPoints.cpp" />
@@ -458,13 +428,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Usac/Napsac.cpp" />
     <entry file="file://$PROJECT_DIR$/Usac/Napsac.h" />
-    <entry file="file://$PROJECT_DIR$/Usac/Homographies/HomographyMethods.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/cv/opencv-3.3.0/modules/core/src/copy.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -490,28 +453,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Usac/Homographies/DLT.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CMakeCache.txt" />
-    <entry file="file://$PROJECT_DIR$/Usac/Homographies/NormalizedDLT.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="20" column="18" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Usac/Homographies/GetNormalizingTransformation.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="363">
-          <caret line="33" column="25" selection-start-line="33" selection-start-column="25" selection-end-line="33" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Usac/RandomGenerator/XorRandomGenerator.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
@@ -519,30 +461,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Usac/Utils.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="46" selection-start-line="6" selection-start-column="46" selection-end-line="6" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tests/testHomographyFitting.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="33" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Usac/FundamentalMatrixEstimation.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" selection-start-line="31" selection-end-line="31" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Usac/Utils.h" />
     <entry file="file://$PROJECT_DIR$/Usac/Helper/Drawing.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="407">
@@ -560,41 +479,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Usac/Ransac/Ransac.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="28" selection-start-line="28" selection-end-line="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Generator/generator.h">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/Generator/generator.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="10" column="25" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Usac/Model.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="35" column="26" selection-start-line="35" selection-start-column="26" selection-end-line="35" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Usac/TerminationCriteria.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="23" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="59" selection-start-line="59" selection-end-line="59" />
         </state>
       </provider>
     </entry>
@@ -605,39 +493,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="9" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="9" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Usac/Estimator/Estimator.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="247">
           <caret line="21" column="8" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="8" />
           <folding>
             <element signature="e#55#74#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Usac/Estimator/Line2DEstimator.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="57" column="90" lean-forward="true" selection-start-line="57" selection-start-column="12" selection-end-line="57" selection-end-column="90" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Usac/Quality.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="36" column="45" lean-forward="true" selection-start-line="36" selection-start-column="45" selection-end-line="36" selection-end-column="45" />
-          <folding>
-            <element signature="e#51#67#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -659,34 +520,150 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Usac/RandomGenerator/ArrayRandomGenerator.h">
+    <entry file="file://$PROJECT_DIR$/Usac/RandomGenerator/UniformRandomGenerator.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="44" column="28" lean-forward="true" selection-start-line="44" selection-start-column="28" selection-end-line="44" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tests/testLineFitting.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="461">
-          <caret line="77" selection-start-line="77" selection-end-line="77" />
+        <state relative-caret-position="345">
+          <caret line="23" selection-start-line="23" selection-end-line="23" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#77#95#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Usac/Ransac/Ransac.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="67">
-          <caret line="19" column="31" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="31" />
+        <state relative-caret-position="405">
+          <caret line="45" column="5" selection-start-line="45" selection-start-column="5" selection-end-line="45" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Usac/Model.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="517">
+          <caret line="35" column="26" selection-start-line="35" selection-start-column="26" selection-end-line="35" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Usac/Homographies/DLT.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="54" column="24" lean-forward="true" selection-start-line="54" selection-start-column="24" selection-end-line="54" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Usac/Homographies/GetNormalizingTransformation.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="23" column="46" selection-start-line="23" selection-start-column="46" selection-end-line="23" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Usac/Homographies/HomographyMethods.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Usac/Homographies/NormalizedDLT.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7">
+          <caret line="3" column="71" lean-forward="true" selection-start-line="3" selection-start-column="71" selection-end-line="3" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Usac/Homographies/NormalizedDLT.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="36" column="56" selection-start-line="36" selection-start-column="56" selection-end-line="36" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tests/testHomographyFitting.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Usac/Homographies/DLT.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-353">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Usac/Homographies/GetNormalizingTransformation.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-83">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Usac/Sampler/UniformSampler.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="27" column="64" selection-start-line="27" selection-start-column="64" selection-end-line="27" selection-end-column="64" />
+          <folding>
+            <element signature="e#65#100#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Usac/Sampler/Sampler.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Usac/Sampler/ProsacSampler.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="550">
+          <caret line="55" selection-start-line="55" selection-end-line="55" />
+          <folding>
+            <element signature="e#59#75#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Usac/Ransac/Ransac.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-53">
+          <caret line="21" column="10" selection-start-line="21" selection-start-column="10" selection-end-line="21" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Usac/Sampler/NapsacSampler.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="422">
+          <caret line="39" selection-start-line="39" selection-end-line="39" />
+          <folding>
+            <element signature="e#59#90#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Usac/Sampler/EvsacSampler.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="52">
-          <caret line="55" column="40" selection-start-line="55" selection-start-column="40" selection-end-line="55" selection-end-column="40" />
+        <state relative-caret-position="735">
+          <caret line="123" column="69" selection-start-line="123" selection-start-column="46" selection-end-line="123" selection-end-column="69" />
           <folding>
             <element signature="e#57#74#0" expanded="true" />
           </folding>
@@ -695,7 +672,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Usac/EssentialMatrixEstimation.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
+        <state relative-caret-position="510">
           <caret line="34" selection-start-line="34" selection-end-line="34" />
           <folding>
             <element signature="e#274#298#0" expanded="true" />
@@ -703,49 +680,60 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Usac/Sampler/Sampler.h">
+    <entry file="file://$PROJECT_DIR$/Usac/FundamentalMatrixEstimation.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        <state relative-caret-position="330">
+          <caret line="22" column="59" selection-start-line="22" selection-start-column="59" selection-end-line="22" selection-end-column="59" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Usac/Sampler/UniformSampler.h">
+    <entry file="file://$PROJECT_DIR$/Usac/RandomGenerator/ArrayRandomGenerator.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="35" column="22" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
+        <state relative-caret-position="377">
+          <caret line="44" column="28" selection-start-line="44" selection-start-column="28" selection-end-line="44" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Usac/TerminationCriteria.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="23" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Usac/Quality.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-548">
+          <caret line="36" column="45" selection-start-line="36" selection-start-column="45" selection-end-line="36" selection-end-column="45" />
           <folding>
-            <element signature="e#65#100#0" expanded="true" />
+            <element signature="e#51#67#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Usac/Sampler/NapsacSampler.h">
+    <entry file="file://$PROJECT_DIR$/Usac/Estimator/Line2DEstimator.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="54" column="46" selection-start-line="54" selection-start-column="46" selection-end-line="54" selection-end-column="46" />
+        <state relative-caret-position="475">
+          <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
           <folding>
-            <element signature="e#59#90#0" expanded="true" />
+            <element signature="e#0#16#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Usac/RandomGenerator/UniformRandomGenerator.h">
+    <entry file="file://$PROJECT_DIR$/Tests/testLineFitting.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+        <state relative-caret-position="236">
+          <caret line="58" lean-forward="true" selection-start-line="58" selection-end-line="58" />
           <folding>
-            <element signature="e#77#95#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Usac/Sampler/ProsacSampler.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="97">
-          <caret line="48" column="23" selection-start-line="48" selection-start-column="23" selection-end-line="48" selection-end-column="23" />
-          <folding>
-            <element signature="e#59#75#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

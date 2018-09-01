@@ -3,10 +3,8 @@
 #include <opencv2/features2d.hpp>
 #include <opencv2/xfeatures2d.hpp>
 
-#include "HomographyMethods.h"
-
 // Direct Linear Transformation
-void HomographyMethods::DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
+void DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
     CV_Assert(!pts1.empty());
     CV_Assert(!pts2.empty());
 
@@ -19,7 +17,7 @@ void HomographyMethods::DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &
 
     std::cout << "NUMP = "<< points1.size << "\n";
 
-    cv::Mat A = cv::Mat(2*NUMP, 9, CV_32FC1), tmp1, tmp2, vt;
+    cv::Mat_<float> A (2*NUMP, 9), tmp1, tmp2, vt;
 
     for (int i = 1; i <= NUMP; i++) {
         x1 = points1.at<float>(i-1,0);
@@ -52,12 +50,11 @@ void HomographyMethods::DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &
     cv::SVD::compute(A, tmp1, tmp2, vt);
     cv::transpose(vt, vt);
 
-    cv::Mat h;
-    vt.col(8).copyTo(h);
+    vt.col(8).copyTo(H);
 
     H = (cv::Mat_<float>(3,3) <<
-            h.at<float>(0), h.at<float>(1), h.at<float>(2),
-            h.at<float>(3), h.at<float>(4), h.at<float>(5),
-            h.at<float>(6), h.at<float>(7), h.at<float>(8));
+            H.at<float>(0), H.at<float>(1), H.at<float>(2),
+            H.at<float>(3), H.at<float>(4), H.at<float>(5),
+            H.at<float>(6), H.at<float>(7), H.at<float>(8));
 
 }

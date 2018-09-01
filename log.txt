@@ -41,7 +41,7 @@ Finished Evsac sampler. Read about Nister Essential matrix estimation. Started 5
 Continued working on 5 point algorithm.
 
 29.08.2018
-
+Created several random generators, created quality function for Prosac, continued impl of computation essential matrix.
 
 31.08.2018
 Simplified line fitting tests, created Logging class for comparing quality of ransac. Updated samplers. Added parallel quality calculation. 

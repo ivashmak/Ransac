@@ -61,7 +61,7 @@ public:
 //            model->getDescriptor(descriptor);
 //            auto * params = reinterpret_cast<float *>(descriptor.data);
 
-            return abs((int)(params[0] * points[pidx].x + params[1] * points[pidx].y + params[2]));
+            return fabsf(params[0] * points[pidx].x + params[1] * points[pidx].y + params[2]);
 
             // ------------------ 1.5 times slower then fisrt ----------------
 //            auto * params = (float *) model->returnDescriptor().data;

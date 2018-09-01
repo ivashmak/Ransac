@@ -176,16 +176,13 @@
 		<Unit filename="/home/ivashmak/Ransac/Usac/Helper/Logging.h">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/Homographies/DLT.cpp">
+		<Unit filename="/home/ivashmak/Ransac/Usac/Homographies/DLT.h">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/Homographies/GetNormalizingTransformation.cpp">
+		<Unit filename="/home/ivashmak/Ransac/Usac/Homographies/GetNormalizingTransformation.h">
 			<Option target="ransac"/>
 		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/Homographies/HomographyMethods.h">
-			<Option target="ransac"/>
-		</Unit>
-		<Unit filename="/home/ivashmak/Ransac/Usac/Homographies/NormalizedDLT.cpp">
+		<Unit filename="/home/ivashmak/Ransac/Usac/Homographies/NormalizedDLT.h">
 			<Option target="ransac"/>
 		</Unit>
 		<Unit filename="/home/ivashmak/Ransac/Usac/Model.h">

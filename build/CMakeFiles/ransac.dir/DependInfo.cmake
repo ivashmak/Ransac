@@ -9,9 +9,6 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/ivashmak/Ransac/Generator/generator.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Generator/generator.cpp.o"
   "/home/ivashmak/Ransac/Tests/testHomographyFitting.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Tests/testHomographyFitting.cpp.o"
   "/home/ivashmak/Ransac/Tests/testLineFitting.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Tests/testLineFitting.cpp.o"
-  "/home/ivashmak/Ransac/Usac/Homographies/DLT.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Homographies/DLT.cpp.o"
-  "/home/ivashmak/Ransac/Usac/Homographies/GetNormalizingTransformation.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Homographies/GetNormalizingTransformation.cpp.o"
-  "/home/ivashmak/Ransac/Usac/Homographies/NormalizedDLT.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Homographies/NormalizedDLT.cpp.o"
   "/home/ivashmak/Ransac/Usac/Ransac/Ransac.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/Usac/Ransac/Ransac.cpp.o"
   "/home/ivashmak/Ransac/main.cpp" "/home/ivashmak/Ransac/build/CMakeFiles/ransac.dir/main.cpp.o"
   )

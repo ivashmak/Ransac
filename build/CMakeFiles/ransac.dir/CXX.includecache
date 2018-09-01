@@ -69,10 +69,14 @@ opencv2/core/types.hpp
 /home/ivashmak/Ransac/Usac/Estimator/Estimator.h
 ../Usac/Estimator/HomographyEstimator.h
 /home/ivashmak/Ransac/Usac/Estimator/HomographyEstimator.h
-../Usac/Homographies/HomographyMethods.h
-/home/ivashmak/Ransac/Usac/Homographies/HomographyMethods.h
 ../Usac/EssentialMatrixEstimation.h
 /home/ivashmak/Ransac/Usac/EssentialMatrixEstimation.h
+../Usac/Homographies/DLT.h
+/home/ivashmak/Ransac/Usac/Homographies/DLT.h
+../Usac/Homographies/GetNormalizingTransformation.h
+/home/ivashmak/Ransac/Usac/Homographies/GetNormalizingTransformation.h
+../Usac/Homographies/NormalizedDLT.h
+/home/ivashmak/Ransac/Usac/Homographies/NormalizedDLT.h
 
 /home/ivashmak/Ransac/Tests/testLineFitting.cpp
 cstdlib
@@ -170,7 +174,7 @@ Estimator.h
 fstream
 -
 
-/home/ivashmak/Ransac/Usac/Homographies/DLT.cpp
+/home/ivashmak/Ransac/Usac/Homographies/DLT.h
 opencv2/opencv.hpp
 -
 opencv2/core.hpp
@@ -179,28 +183,18 @@ opencv2/features2d.hpp
 -
 opencv2/xfeatures2d.hpp
 -
-HomographyMethods.h
-/home/ivashmak/Ransac/Usac/Homographies/HomographyMethods.h
 
-/home/ivashmak/Ransac/Usac/Homographies/GetNormalizingTransformation.cpp
+/home/ivashmak/Ransac/Usac/Homographies/GetNormalizingTransformation.h
 cmath
 -
 opencv2/core.hpp
 -
 iostream
 -
-HomographyMethods.h
-/home/ivashmak/Ransac/Usac/Homographies/HomographyMethods.h
 
-/home/ivashmak/Ransac/Usac/Homographies/HomographyMethods.h
-opencv2/core/mat.hpp
--
-
-/home/ivashmak/Ransac/Usac/Homographies/NormalizedDLT.cpp
+/home/ivashmak/Ransac/Usac/Homographies/NormalizedDLT.h
 opencv2/core.hpp
 -
-HomographyMethods.h
-/home/ivashmak/Ransac/Usac/Homographies/HomographyMethods.h
 
 /home/ivashmak/Ransac/Usac/Model.h
 
@@ -274,6 +268,8 @@ Sampler.h
 cmath
 -
 vector
+-
+iostream
 -
 Sampler.h
 /home/ivashmak/Ransac/Usac/Sampler/Sampler.h

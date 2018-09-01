@@ -50,10 +50,9 @@ void Tests::testLineFitting() {
     init();
 
 
-    cv::Mat mat_points, p (points);
-    mat_points = cv::Mat(points.size(), 2, CV_32F, p.data);
+    cv::Mat p (points);
     cv::flann::LinearIndexParams flannIndexParams;
-    flannIndex = new cv::flann::Index (cv::Mat(mat_points).reshape(1), flannIndexParams);
+    flannIndex = new cv::flann::Index (p.reshape(1), flannIndexParams);
     std::vector<cv::Point_<float>> sorted_points (points);
 
     std::sort(sorted_points.begin(), sorted_points.end(), qualitySort);
@@ -61,13 +60,13 @@ void Tests::testLineFitting() {
 
 //    Model *ransac_model = new Model (10, 2, 0.99, "ransac");
 //    Sampler *uniform_sampler = new UniformSampler (ransac_model->sample_number, points.size());
-
+//
 //    Model *napsac_model = new Model (10, 2, 0.99, "napsac");
 //    Sampler *napsac_sampler = new NapsacSampler(points, 10, napsac_model->sample_number, points.size());
-//
+
 //    Model *evsac_model = new Model (10, 2, 0.99, "evsac");
 //    Sampler *evsac_sampler = new EvsacSampler(points, points.size(), 7, evsac_model->sample_number, points.size());
-//
+
     Model *prosac_model = new Model (10, 2, 0.99, "prosac");
     Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
 

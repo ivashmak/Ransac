@@ -32,10 +32,9 @@ add_executable(
         Usac/Sampler/EvsacSampler.h
         Usac/Sampler/ProsacSampler.h
 
-        Usac/Homographies/DLT.cpp
-        Usac/Homographies/NormalizedDLT.cpp
-        Usac/Homographies/GetNormalizingTransformation.cpp
-        Usac/Homographies/HomographyMethods.h
+        Usac/Homographies/DLT.h
+        Usac/Homographies/NormalizedDLT.h
+        Usac/Homographies/GetNormalizingTransformation.h
 
         Usac/Ransac/Ransac.cpp Usac/Ransac/Ransac.h
 
