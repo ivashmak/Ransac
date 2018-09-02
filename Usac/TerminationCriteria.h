@@ -9,7 +9,7 @@ public:
         this->model = model;
 	}
 
-	void setNewModel (const Model * const model) {
+	void setModel (const Model * const model) {
 		this->model = model;
 	}
 

@@ -6,6 +6,7 @@
 #include <iostream>
 #include "Sampler.h"
 #include "../Model.h"
+#include "../RandomGenerator/UniformRandomGenerator.h"
 
 // theia implementation
 // Copyright (C) 2014 The Regents of the University of California (Regents).
@@ -13,20 +14,19 @@
 class ProsacSampler : public Sampler {
 protected:
     int kth_sample_number_;
-    UniformSampler * uniform_sampler;
     double t_n = 10000;
     int t = 1;
     int n;
     double t_n_prime = 1.0;
-
+    unsigned int N_points;
 public:
     ProsacSampler (int sample_size, int N_points, bool reset_time = true) {
-        if (reset_time) resetTime();
+        if (reset_time) randomGenerator->resetTime();
 
         this->sample_size = sample_size;
         this->N_points = N_points;
 
-        uniform_sampler = new UniformSampler(sample_size, N_points);
+        randomGenerator = new UniformRandomGenerator;
 
         n = sample_size;
         // From Equations leading up to Eq 3 in Chum et al.
@@ -47,16 +47,15 @@ public:
 
         if (t_n_prime < kth_sample_number_) {
             // Randomly sample m data points from the top n data points.
-            uniform_sampler->setSampleSize(sample_size);
-            uniform_sampler->resetGenerator(n-1);
-            uniform_sampler->generateSample(sample);
+            randomGenerator->resetGenerator(0, n-1);
+            randomGenerator->generateUniqueRandomSample(sample, sample_size);
 
         } else {
             // Randomly sample m-1 data points from the top n-1 data points.
 
-            uniform_sampler->setSampleSize(sample_size-1);
-            uniform_sampler->resetGenerator(n-2);
-            uniform_sampler->generateSample(sample);
+            randomGenerator->resetGenerator(0, n-2);
+            randomGenerator->generateUniqueRandomSample(sample, sample_size-1);
+
 
             // Make the last point from the nth position.
             sample[sample_size-1] = n;

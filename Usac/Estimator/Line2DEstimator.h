@@ -29,7 +29,7 @@ public:
         }
 
         void EstimateModelNonMinimalSample(cv::InputArray input_points, int *sample, int sample_size, Model &model) override {
-            cv::Mat points = cv::Mat(sample_size, 2, CV_32FC1);
+            cv::Mat_<float> points (sample_size, 2);
 
             cv::Point_<float> *points_arr = (cv::Point_<float> *) input_points.getMat().data;
 
@@ -43,8 +43,8 @@ public:
             cv::eigen (covar, eigenvals, eigenvecs);
 
             float a, b, c;
-            a = (float) eigenvecs.at<double>(1,0);
-            b = (float) eigenvecs.at<double>(1,1);
+            a = (float) -eigenvecs.at<double>(1,0);
+            b = (float) -eigenvecs.at<double>(1,1);
             c = (float) (-a*means.at<double>(0) - b*means.at<double>(1));
 
             cv::Mat descriptor;
@@ -53,7 +53,7 @@ public:
         }
 
 
-        float GetError(cv::InputArray input_points, int pidx, Model * const model) override {
+        inline float GetError(cv::InputArray input_points, int pidx, Model * const model) override {
             // ------------------  1 the fastest --------------
             cv::Point_<float> * points = (cv::Point_<float> *) input_points.getMat().data;
 //            cv::Mat descriptor;

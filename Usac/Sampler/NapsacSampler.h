@@ -18,19 +18,18 @@ protected:
     std::uniform_int_distribution<int> distribution;
     cv::flann::Index * flannIndex;
     cv::Mat points;
-    int k_iter = 0;
     int taking_sample_size_from_knn;
-    UniformSampler * uniformSampler;
+    unsigned int N_points;
 public:
 
-    NapsacSampler (cv::InputArray points, int knn, int sample_size, int N_points, bool reset_time = true) {
+    NapsacSampler (cv::InputArray points, int knn, unsigned int sample_size, bool reset_time = true) {
         this->knn = knn;
         this->points = points.getMat();
 
-        if (reset_time) resetTime();
+        if (reset_time) randomGenerator->resetTime();
 
         this->sample_size = sample_size;
-        this->N_points = N_points;
+        this->N_points = points.size().width;
 
         generator = std::mt19937(rand_dev());
 
@@ -41,7 +40,8 @@ public:
         getKNearestNeighorsIndices();
 
         taking_sample_size_from_knn = factorial(knn)/(factorial(sample_size)*factorial(knn-sample_size));
-        uniformSampler = new UniformSampler (sample_size, N_points);
+        randomGenerator = new UniformRandomGenerator;
+        randomGenerator->resetGenerator(0, N_points-1);
     }
 
     void getKNearestNeighorsIndices () {
@@ -56,9 +56,8 @@ public:
 
 
     void generateSample (int *sample) override {
-        if (k_iter > taking_sample_size_from_knn) {
+        if (k_iterations % taking_sample_size_from_knn) {
             getKNearestNeighorsIndices();
-            k_iter = 0;
         }
 
         distribution = std::uniform_int_distribution<int>(0, knn-1);
@@ -73,7 +72,6 @@ public:
             }
         }
 
-        k_iter++;
         k_iterations++;
     }
 };

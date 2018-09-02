@@ -8,7 +8,6 @@ protected:
     unsigned int *array;
     unsigned int max;
     unsigned int N_points;
-    unsigned int sample_size;
 public:
 
     void resetGenerator (int min_range, int max_range) override {
@@ -33,9 +32,9 @@ public:
 
 
         unsigned int temp = array[random_number];
-        array[random_number] = array[max-1];
-        array[max-1] = temp;
         max--;
+        array[random_number] = array[max];
+        array[max] = temp;
 
         return temp;
     }
@@ -47,7 +46,7 @@ public:
         }
     }
 
-    void generateUniqueRandomSample (int * sample) override {
+    void generateUniqueRandomSample (int * sample, unsigned int sample_size) override {
         for (int i = 0; i < sample_size; i++) {
             sample[i] = getRandomNumber();
         }

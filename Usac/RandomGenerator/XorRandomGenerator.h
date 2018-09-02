@@ -1,5 +1,5 @@
 #ifndef USAC_XORRANDOMGENERATOR_H
-#define USAC_XORDRANDOMGENERATOR_H
+#define USAC_XORRANDOMGENERATOR_H
 
 #include "RandomGenerator.h"
 
@@ -25,12 +25,12 @@ public:
 
     }
 
-    void generateUniqueRandomSample (int * sample) override {
+    void generateUniqueRandomSample (int * sample, unsigned int sample_size) override {
 
     }
 
     void resetGenerator (int min_range, int max_range) override {
-
+        this->N_points = max_range - min_range;
     }
 
 };

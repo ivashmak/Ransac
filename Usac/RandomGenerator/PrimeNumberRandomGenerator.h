@@ -20,12 +20,10 @@ private:
         return (x <= prime / 2) ? residue : prime - residue;
     }
 
-    unsigned int N_points;
 public:
     PrimeNumberRandomGenerator(unsigned int seedBase, unsigned int seedOffset, unsigned int N_points)  {
         m_index = permuteQPR(permuteQPR(seedBase) + 0x682f0161);
         m_intermediateOffset = permuteQPR(permuteQPR(seedOffset) + 0x46790905);
-        this->N_points = N_points;
     }
 
     int getRandomNumber () override {
@@ -36,7 +34,7 @@ public:
 
     }
 
-    void generateUniqueRandomSample (int * sample) override {
+    void generateUniqueRandomSample (int * sample, unsigned int sample_size) override {
 
     }
 

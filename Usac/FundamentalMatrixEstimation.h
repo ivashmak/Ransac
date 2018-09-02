@@ -12,7 +12,9 @@ class FundamentalMatrixEstimation {
 protected:
 
 public:
-    void eightPointsAlg (cv::InputArray input_points1, cv::InputArray input_points2, double focal=1.0, cv::Point2d pp=cv::Point2d(0, 0)) {
+    void eightPointsAlg(cv::InputArray input_points1, cv::InputArray input_points2, double focal = 1.0,
+                        cv::Point2d pp = cv::Point2d(0, 0)) {
+
         int total_points;
         if (input_points1.isMat()) {
             total_points = input_points1.getMat().rows;
@@ -25,7 +27,12 @@ public:
 
 
     }
-};
 
+    void sevenPointsAlg(cv::InputArray input_points1, cv::InputArray input_points2, double focal = 1.0,
+                        cv::Point2d pp = cv::Point2d(0, 0)) {
+
+    }
+
+};
 
 #endif //USAC_FUNDAMENTALMATRIXESTIMATION_H

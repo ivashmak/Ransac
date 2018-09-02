@@ -2,22 +2,23 @@
 #include "Tests.h"
 
 #include "../Generator/generator.h"
-#include "../Detector/detector.h"
 #include "../Usac/Estimator/Line2DEstimator.h"
 #include "../Usac/Ransac/Ransac.h"
-#include "../Usac/Sampler/UniformSampler.h"
+
 #include "../Usac/Helper/Drawing.h"
-#include "../Usac/Sampler/NapsacSampler.h"
-#include "../Detector/ReadPoints.h"
-#include "../Usac/Sampler/ProsacSampler.h"
-#include "../Usac/Sampler/EvsacSampler.h"
-#include "../Usac/RandomGenerator/ArrayRandomGenerator.h"
-#include "../Usac/RandomGenerator/XorRandomGenerator.h"
-#include "../Usac/RandomGenerator/PrimeNumberRandomGenerator.h"
 #include "../Usac/Helper/Logging.h"
+
+#include "../Detector/ReadPoints.h"
+
+#include "../Usac/Sampler/Sampler.h"
+#include "../Usac/Sampler/ProsacSampler.h"
+#include "../Usac/Sampler/NapsacSampler.h"
+#include "../Usac/Sampler/EvsacSampler.h"
+#include "../Usac/Sampler/UniformSampler.h"
 
 
 void test (cv::InputArray points, Sampler * sampler, Model * model);
+void runNTimes (cv::InputArray points, Sampler * sampler, Model * model, int N);
 
 Estimator *estimator2d;
 Quality *quality;
@@ -58,30 +59,33 @@ void Tests::testLineFitting() {
     std::sort(sorted_points.begin(), sorted_points.end(), qualitySort);
 
 
-//    Model *ransac_model = new Model (10, 2, 0.99, "ransac");
-//    Sampler *uniform_sampler = new UniformSampler (ransac_model->sample_number, points.size());
-//
-    Model *napsac_model = new Model (10, 2, 0.99, "napsac");
-    Sampler *napsac_sampler = new NapsacSampler(points, 6, napsac_model->sample_number, points.size());
+    Model *ransac_model = new Model (10, 2, 0.99, 0, "ransac");
+    Sampler *uniform_sampler = new UniformSampler;
+    uniform_sampler->setSampleSize(ransac_model->sample_number);
+    uniform_sampler->setRange(0, points.size()-1);
 
-//    Model *evsac_model = new Model (10, 2, 0.99, "evsac");
-//    Sampler *evsac_sampler = new EvsacSampler(points, points.size(), 7, evsac_model->sample_number, points.size());
+    Model *napsac_model = new Model (10, 2, 0.99, 6, "napsac");
+    Sampler *napsac_sampler = new NapsacSampler(points, napsac_model->k_nearest_neighbors, napsac_model->sample_number);
 
-//    Model *prosac_model = new Model (10, 2, 0.99, "prosac");
-//    Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
+    Model *evsac_model = new Model (10, 2, 0.99, 7, "evsac");
+    Sampler *evsac_sampler = new EvsacSampler(points, points.size(), evsac_model->k_nearest_neighbors, evsac_model->sample_number);
+
+    Model *prosac_model = new Model (10, 2, 0.99, 0, "prosac");
+    Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
 
 //    test (points, uniform_sampler, ransac_model);
-    test (points, napsac_sampler, napsac_model);
+//    test (points, napsac_sampler, napsac_model);
 //    test (points, evsac_sampler, evsac_model);
 //    test (sorted_points, prosac_sampler, prosac_model);
 
+    runNTimes(points, uniform_sampler, ransac_model, 500);
 }
 
 
 void test (cv::InputArray points, Sampler * sampler, Model * model) {
     TerminationCriteria termination_criteria (model);
 
-    Ransac ransac (points, *model, *sampler, termination_criteria, *quality);
+    Ransac ransac (*model, *sampler, termination_criteria, *quality);
     ransac.run(points, estimator2d);
     drawing.draw(ransac.most_inliers, ransac.best_model, ransac.non_minimal_model, points);
 
@@ -93,4 +97,16 @@ void test (cv::InputArray points, Sampler * sampler, Model * model) {
     logResult.saveResult(model, quality);
     std::cout << "-----------------------------------------------------------------------------------------\n";
 
+}
+
+void runNTimes (cv::InputArray points, Sampler * sampler, Model * model, int N) {
+    TerminationCriteria termination_criteria (model);
+    Ransac ransac (*model, *sampler, termination_criteria, *quality);
+    double time = 0;
+    for (int i = 0; i < N; i++) {
+        ransac.run(points, estimator2d);
+        time += ransac.getQuality().getComputationTime();
+    }
+    std::cout << "average time of "<< N <<" runs is " << (time/N) << "mcs using " << model->model_name
+              << " points size is " << points.size().width << "\n";
 }

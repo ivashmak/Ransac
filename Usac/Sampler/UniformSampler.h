@@ -2,7 +2,6 @@
 #define RANSAC_UNIFORMSAMPLER_H
 
 #include "../Estimator/Estimator.h"
-#include "../RandomGenerator/ArrayRandomGenerator.h"
 #include "../RandomGenerator/UniformRandomGenerator.h"
 
 // https://stackoverflow.com/questions/288739/generate-random-numbers-uniformly-over-an-entire-range
@@ -17,7 +16,7 @@ public:
     }
 
     void generateSample (int *sample) override {
-        randomGenerator->generateRandomSample(sample);
+        randomGenerator->generateUniqueRandomSample(sample, sample_size);
     }
 
 };

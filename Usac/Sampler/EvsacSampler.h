@@ -1,6 +1,8 @@
 #ifndef USAC_EVSACSAMPLER_H
 #define USAC_EVSACSAMPLER_H
 
+#include "../RandomGenerator/UniformRandomGenerator.h"
+
 #include <vector>
 #include <algorithm>
 #include <iostream>
@@ -26,18 +28,16 @@ public:
     //  The idea of EVSAC is to model the statistics of the minimum distances
     // computed when using the Nearest-Neighbor feature matcher.
     // find knn and their sorted distances.
-    EvsacSampler (cv::InputArray input_points, int num_q, int knn, int sample_size, int N_points, bool reset_time = true) {
+    EvsacSampler (cv::InputArray input_points, int num_q, int knn, int sample_size, bool reset_time = true) {
         // init random generator
-        if (reset_time) resetTime();
+        if (reset_time) randomGenerator->resetTime();
 
-        this->N_points = N_points;
         this->sample_size = sample_size;
 
         std::random_device rand_dev;
         rng_.seed(rand_dev());
 
         int total_points = input_points.size().width;
-        std::cout << "total_points = " << total_points << '\n';
 
         // fitting_method:  The fitting method MLE or QUANTILE_NLS (see statx doc).
         //   The recommended fitting method is the MLE estimation.
@@ -51,9 +51,11 @@ public:
         theia::EvsacSampler<Eigen::Vector2d>::MixtureModelParams mixture_model_params;
 
         Eigen::MatrixXd sorted_distances_(num_q, knn-1);
-        Sampler *uniform_sampler = new UniformSampler (num_q, total_points);
+
         int *r_samples = new int[num_q];
-        uniform_sampler->generateSample(r_samples);
+        randomGenerator = new UniformRandomGenerator ;
+        randomGenerator->resetGenerator(0, total_points-1);
+        randomGenerator->generateUniqueRandomSample(r_samples, num_q);
 
         cv::Mat sorted_dists, query, indicies, points = cv::Mat(total_points, 2, CV_32F, input_points.getMat().data);
         cv::flann::LinearIndexParams flannIndexParams;
@@ -69,8 +71,6 @@ public:
                 sorted_distances_(i, j) = sorted_dists.at<float>(j+1);
             }
         }
-
-//        std::cout << sorted_distances_ << "\n\n";
 
         std::vector<float> probabilities;
         std::vector<float> sampling_weights;
@@ -94,6 +94,10 @@ public:
 
     // Initialize correspondence sampler.
     void initializeSampler (std::vector<float> sampling_weights) {
+        //std::discrete_distribution produces random integers on the interval [0, n), where the
+        // probability of each individual integer i is defined as w(i)/S
+        // that is the weight of the ith integer divided by the sum of all n weights.
+
         // MSVC has one of the constructors missing. See
         // http://stackoverflow.com/questions/21959404/initialising-stddiscrete-distribution-in-vs2013
 
@@ -128,6 +132,7 @@ public:
             random_numbers.push_back(rand_number);
             sample[i] = rand_number;
         }
+
     }
 };
 

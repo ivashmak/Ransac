@@ -4,7 +4,7 @@
 #include "../Estimator/Estimator.h"
 #include "../Estimator/Line2DEstimator.h"
 #include "../Quality.h"
-#include "../Sampler/UniformSampler.h"
+#include "../Sampler/Sampler.h"
 
 class Ransac {
 protected:
@@ -14,24 +14,15 @@ protected:
     TerminationCriteria *termination_criteria;
 
 public:
-    cv::Point_<float> *points;
-    int total_points;
-
     std::vector<int> most_inliers;
 
     Model best_model;
     Model non_minimal_model;
 
-    Ransac (cv::InputArray points,
-            Model& model,
+    Ransac (Model &model,
             Sampler& sampler,
             TerminationCriteria& termination_criteria,
             Quality& quality) {
-
-        CV_Assert(!points.empty());
-
-        this->points = (cv::Point_<float> *) points.getMat().data;
-        this->total_points = points.size().width;
 
         this->model = &model;
         this->sampler = &sampler;

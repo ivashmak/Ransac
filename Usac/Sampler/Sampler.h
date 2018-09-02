@@ -7,12 +7,13 @@ class Sampler {
 protected:
     RandomGenerator *randomGenerator;
     int k_iterations = 0;
+    unsigned int sample_size;
 public:
 
     virtual void generateSample (int *points) = 0;
 
     void setSampleSize (unsigned int sample_size) {
-        randomGenerator->setSampleSize(sample_size);
+        this->sample_size = sample_size;
     }
 
     void setRange (int min_range, int max_range) {

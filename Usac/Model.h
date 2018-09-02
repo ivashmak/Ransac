@@ -17,10 +17,11 @@ protected:
 public:
     Model () {}
 
-	Model (float threshold, int sample_number, float desired_prob, std::string model_name) {
+	Model (float threshold, int sample_number, float desired_prob, int knn, std::string model_name) {
 		this->threshold = threshold;
 		this->sample_number = sample_number;
 		this->desired_prob = desired_prob;
+		this->k_nearest_neighbors = knn;
 		this->model_name = model_name;
 	}
 
