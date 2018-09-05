@@ -30,11 +30,16 @@ public:
         cv::Mat points1 = cv::Mat(total_points, 2, CV_32F, input_points1.getMat().data);
         cv::Mat points2 = cv::Mat(total_points, 2, CV_32F, input_points2.getMat().data);
 
-        Sampler *sampler = new UniformSampler ;
+        Sampler *sampler = new UniformSampler;
         sampler->setRange(0, total_points-1);
         sampler->setSampleSize(npoints); 
         int * samples = new int[npoints];
         sampler->generateSample(samples);
+        samples[0] = 10;
+        samples[1] = 14;
+        samples[2] = 25;
+        samples[3] = 49;
+        samples[4] = 89;
 
         cv::Mat_<float> q1(3, npoints), q2 (3, npoints);
         for (int i = 0; i < npoints; i++) {

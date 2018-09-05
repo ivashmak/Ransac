@@ -24,7 +24,7 @@ void Tests::testHomographyFitting() {
     cv::Mat points1, points2;
     read_points (points1, points2);
 
-//    testEssentialMatrixEstimation(points1, points2);
+    testEssentialMatrixEstimation(points1, points2);
 
 //    testDLT(points1, points2);
 //    testGetNormalizingTransformation(points1);

@@ -11,6 +11,7 @@ public:
     UniformSampler (const bool reset_time=true) {
         randomGenerator = new UniformRandomGenerator;
         if (reset_time) {
+//            std::cout << "reset!\n";
             randomGenerator->resetTime();
         }
     }
