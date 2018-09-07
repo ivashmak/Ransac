@@ -35,22 +35,30 @@ public:
         sampler->setSampleSize(npoints); 
         int * samples = new int[npoints];
         sampler->generateSample(samples);
-        samples[0] = 10;
-        samples[1] = 14;
-        samples[2] = 25;
-        samples[3] = 49;
-        samples[4] = 89;
+        samples[0] = 6;
+        samples[1] = 32;
+        samples[2] = 34;
+        samples[3] = 43;
+        samples[4] = 45;
 
-        cv::Mat_<float> q1(3, npoints), q2 (3, npoints);
+        cv::Mat_<float> q1(2, npoints), q2 (2, npoints);
         for (int i = 0; i < npoints; i++) {
             q1(0, i) = points1.at<float>(samples[i], 0);
             q1(1, i) = points1.at<float>(samples[i], 1);
-            q1(2, i) = 1;
+//            q1(2, i) = 1;
 
             q2(0, i) = points2.at<float>(samples[i], 0);
             q2(1, i) = points2.at<float>(samples[i], 1);
-            q2(2, i) = 1;
+//            q2(2, i) = 1;
         }
+
+        cv::transpose(q1, q1); cv::transpose(q2, q2);
+        cv::Mat E = cv::findEssentialMat(q1, q2);
+
+        for (int i = 0; i < E.rows; i+=3) {
+            std::cout << "E"<<((i/3)+1) <<" = \n" <<E.rowRange(i, i+3) << "\n\n";
+        }
+        exit (0);
 
         // camera Matrix
         cv::Mat camera_matrix;

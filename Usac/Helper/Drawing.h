@@ -44,7 +44,7 @@ public:
     }
 
     void draw (cv::InputArray inliers, Model best_model, Model non_minimal_model, cv::InputArray points) {
-        cv::Mat image = cv::imread("../images/image1.jpg");
+        cv::Mat image  = cv::imread("../images/image1.jpg");
         showInliers(points, inliers, image);
         draw_model(best_model, std::max (image.cols, image.rows), cv::Scalar(255, 0, 0), image, false);
         draw_model(non_minimal_model, std::max (image.cols, image.rows), cv::Scalar(0, 255, 0), image, false);
