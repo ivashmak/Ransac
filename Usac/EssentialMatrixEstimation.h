@@ -58,7 +58,10 @@ public:
         for (int i = 0; i < E.rows; i+=3) {
             std::cout << "E"<<((i/3)+1) <<" = \n" <<E.rowRange(i, i+3) << "\n\n";
         }
-        exit (0);
+
+        E.rowRange(0, 3).copyTo(ess_mat);
+
+        return;
 
         // camera Matrix
         cv::Mat camera_matrix;

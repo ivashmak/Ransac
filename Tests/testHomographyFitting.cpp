@@ -26,8 +26,8 @@ void Tests::testHomographyFitting() {
     cv::Mat points1, points2;
     read_points (points1, points2);
 
-//    testEssentialMatrixEstimation(points1, points2);
-    testFundamentalMatrixEstimation(points1, points2);
+    testEssentialMatrixEstimation(points1, points2);
+//    testFundamentalMatrixEstimation(points1, points2);
 
 //    testDLT(points1, points2);
 //    testGetNormalizingTransformation(points1);
@@ -38,10 +38,15 @@ void Tests::testHomographyFitting() {
 
 void testEssentialMatrixEstimation (cv::InputArray points1, cv::InputArray points2) {
     EssentialMatrixEstimation * ess_mat_est = new EssentialMatrixEstimation;
-    cv::Mat ess_mat;
-    ess_mat_est->fivePointsAlg(points1, points2, ess_mat);
+    cv::Mat E;
+    ess_mat_est->fivePointsAlg(points1, points2, E);
 
-    std::cout << "Essential Matrix =\n " << ess_mat << "\n\n";
+    std::cout << "Essential Matrix =\n " << E << "\n\n";
+
+    cv::Mat R1, R2, T;
+    cv::decomposeEssentialMat(E, R1, R2, T);
+
+    std::cout << "R1 = \n" << R1 << "\n\nR2 = \n" << R2 << "\n\nT = \n" << T << "\n\n";
 }
 
 void testFundamentalMatrixEstimation (cv::InputArray points1, cv::InputArray points2) {
@@ -54,8 +59,6 @@ void testFundamentalMatrixEstimation (cv::InputArray points1, cv::InputArray poi
     std::cout << "Fundamental Matrix =\n " << F << "\n\n";
     std::cout << "Fundamental Matrix OpenCV =\n " << F_opencv << "\n\n";
 
-    F = cv::Mat_<float> (F);
-
     cv::Mat img1 = cv::imread("../images/img1.png"), img2 = cv::imread("../images/img2.png");
 
     cv::Mat pts1 = points1.getMat(), pts2 = points2.getMat();
@@ -65,7 +68,6 @@ void testFundamentalMatrixEstimation (cv::InputArray points1, cv::InputArray poi
     cv::Mat lines1, lines2;
     cv::computeCorrespondEpilines(pts1, 1, F, lines1);
     cv::computeCorrespondEpilines(pts2, 2, F, lines2);
-
 
     int c = img1.cols, r = img1.rows;
     float x0, y0_img1, x1, y1_img1, r0_img1, r1_img1, r2_img1;
@@ -86,20 +88,12 @@ void testFundamentalMatrixEstimation (cv::InputArray points1, cv::InputArray poi
         y1_img1 = -(r2_img1 + r0_img1*c)/r1_img1;
         y1_img2 = -(r2_img2 + r0_img2*c)/r1_img2;
 
-//        cv::Point_<float> pt1 = cv::Point_<float> (x0, y0);
-//        cv::Point_<float> pt2 = cv::Point_<float> (x1, y1);
-
         cv::Scalar color = cv::Scalar(rand()%255, rand ()%255, rand()%255);
         cv::line(img1, cv::Point_<float> (x0, y0_img1), cv::Point_<float> (x1, y1_img1), color);
         cv::line(img2, cv::Point_<float> (x0, y0_img2), cv::Point_<float> (x1, y1_img2), color);
         circle (img1, cv::Point_<float> (pts1.at<float>(i, 0), pts1.at<float>(i,1)), 3, color, -1);
         circle (img2, cv::Point_<float> (pts2.at<float>(i, 0), pts2.at<float>(i,1)), 3, color, -1);
     }
-
-//    cv::Mat_<float> corr_points;
-//    corr_points = p1*F;
-//    std::cout << corr_points << "\n\n";
-
 
     imshow("Epipolar lines using Fundamental matrix 1", img1);
     imshow("Epipolar lines using Fundamental matrix 2", img2);
