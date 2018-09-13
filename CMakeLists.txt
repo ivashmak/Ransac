@@ -44,6 +44,9 @@ add_executable(
         Tests/Tests.h
         Tests/testHomographyFitting.cpp
         Tests/testLineFitting.cpp
+        Tests/testEssentialFitting.cpp
+        Tests/testFundamentalFitting.cpp
+
 
         Usac/RandomGenerator/RandomGenerator.h
         Usac/RandomGenerator/ArrayRandomGenerator.h
@@ -53,9 +56,11 @@ add_executable(
 
 )
 # parallel
-set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp" )
+set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -pthread" )
 # warnings
 #set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -pthread -Wextra" )
+# optimalization
+#set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -O3" )
 
 target_link_libraries (ransac ${OpenCV_LIBS} )
 target_link_libraries (ransac ${THEIA_LIBRARIES})

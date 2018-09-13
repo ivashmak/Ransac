@@ -2,6 +2,7 @@
 #define RANSAC_QUALITY_H
 
 #include <omp.h>
+#include <thread>
 #include "Estimator/Estimator.h"
 #include "Model.h"
 
@@ -10,11 +11,13 @@ struct Score {
     float score;
 };
 
+
 class Quality {
 public:
     int total_iterations = 0;
 	std::chrono::microseconds total_time;
 	int points_under_threshold = 0;
+
 public:
 	long getComputationTime () {
 		return total_time.count();
@@ -28,7 +31,8 @@ public:
 		return points_under_threshold;
 	}
 
-    void GetModelScore(Estimator * const estimator,
+
+    inline void GetModelScore(Estimator * const estimator,
                        Model * const model,
                        cv::InputArray input_points,
                        bool get_inliers,
@@ -43,6 +47,7 @@ public:
         float dist;
 
         if (parallel) {
+//            std::cout << "PARALLEL MODE\n";
 
             int num_threads = omp_get_max_threads();
             int block_size = total_points/num_threads;
@@ -52,7 +57,7 @@ public:
             for (int thread = 0; thread < num_threads; thread++) {
                 for (int point = thread*block_size; point < (thread+1)*block_size; point++) {
 
-                    dist = estimator->GetError(input_points, point, model);
+                    dist = estimator->GetError(point);
 
                     if (dist < model->threshold) {
                         score_inlier_number++;
@@ -69,7 +74,7 @@ public:
             // 2 parallel version, critical is quite expensive for big number of inliers
 //            #pragma omp parallel for reduction (+:score_inlier_number)
 //            for (int point = 0; point < total_points; point++) {
-//                dist = estimator->GetError(input_points, point, model);
+//                dist = estimator->GetError(point);
 //
 //                if (dist < model->threshold) {
 //                    score_inlier_number++;
@@ -83,7 +88,7 @@ public:
 
         } else {
             for (int point = 0; point < total_points; point++) {
-                dist = estimator->GetError(input_points, point, model);
+                dist = estimator->GetError(point);
 
                 if (dist < model->threshold) {
                     score_inlier_number++;
@@ -99,6 +104,7 @@ public:
     bool IsBetter(const Score * const s1, const Score * const s2) {
         return s1->score < s2->score;
     }
+
 };
 
 

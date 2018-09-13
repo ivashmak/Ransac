@@ -30,7 +30,7 @@ public:
         this->quality = &quality;
     }
 
-    void run (cv::InputArray input_points, Estimator *estimator2d);
+    void run (cv::InputArray input_points, Estimator * const estimator2d);
 
     void setSampler (Sampler &sampler) {
         this->sampler = &sampler;

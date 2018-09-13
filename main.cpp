@@ -5,8 +5,10 @@
 int main (int args, char ** argv) {
     Tests tests;
 
-//    tests.testLineFitting();
-     tests.testHomographyFitting();
+    tests.testLineFitting();
+//     tests.testHomographyFitting();
+//     tests.testEssentialFitting();
+//     tests.testFundamentalFitting();
 
 	return 0;
 }

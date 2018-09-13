@@ -20,16 +20,17 @@
 class Estimator {
 protected:
     float * params;
-
+    float a,b,c;
 public:
-    virtual void EstimateModel(cv::InputArray input_points, int *sample, Model &model) = 0;
-    virtual void EstimateModelNonMinimalSample(cv::InputArray input_points, int *sample, int sample_size, Model &model) = 0;
-    virtual float GetError(cv::InputArray input_points, int pidx, Model * const model) = 0;
+    virtual void EstimateModel(const int * const sample, Model &model) = 0;
+    virtual void EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) = 0;
+    virtual float GetError(int pidx) = 0;
     virtual int SampleNumber()  = 0;
 
     // speedups 1.5 times
     void setModelParametres (Model * const model) {
         params = (float *) model->returnDescriptor().data;
+        a = params[0]; b = params[1]; c = params[2];
     }
 
 };

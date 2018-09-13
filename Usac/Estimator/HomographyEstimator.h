@@ -6,7 +6,7 @@
 
 class HomographyEstimator : public Estimator{
 public:
-    void EstimateModel(cv::InputArray input_points, int *sample, Model &model) override {
+    void EstimateModel(cv::InputArray input_points, const int * const sample, Model &model) override {
         const int idx1 = sample[0];
         const int idx2 = sample[1];
         const int idx3 = sample[2];
@@ -31,7 +31,7 @@ public:
         model.setDescriptor(descriptor);
     }
 
-    void EstimateModelNonMinimalSample(cv::InputArray input_points, int *sample, int sample_size, Model &model) override {
+    void EstimateModelNonMinimalSample(cv::InputArray input_points, const int * const sample, int sample_size, Model &model) override {
         cv::Mat points = cv::Mat(sample_size, 2, CV_32FC1);
 
         cv::Point_<float> *points_arr = (cv::Point_<float> *) input_points.getMat().data;
@@ -55,14 +55,15 @@ public:
         model.setDescriptor(descriptor);
     }
 
-    float GetError(cv::InputArray input_points, int pidx, Model * model) override {
-        cv::Mat descriptor;
-
-        model->getDescriptor(descriptor);
-        auto * params = reinterpret_cast<float *>(descriptor.data);
-
-        return abs((int)(params[0] * input_points.getMat().at<float>(pidx,0) +
-                         params[1] * input_points.getMat().at<float>(pidx,1) + params[2]));
+    float GetError(int pidx) override {
+        return 0;
+//        cv::Mat descriptor;
+//
+//        model->getDescriptor(descriptor);
+//        auto * params = reinterpret_cast<float *>(descriptor.data);
+//
+//        return abs((int)(params[0] * input_points.getMat().at<float>(pidx,0) +
+//                         params[1] * input_points.getMat().at<float>(pidx,1) + params[2]));
     }
 
     int SampleNumber() override {

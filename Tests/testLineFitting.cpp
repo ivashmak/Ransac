@@ -30,7 +30,6 @@ cv::Mat indicies, dists1, dists2;
 cv::flann::Index *flannIndex;
 
 void init () {
-    estimator2d = new Line2DEstimator;
     quality = new Quality;
 }
 
@@ -46,10 +45,11 @@ void Tests::testLineFitting() {
     std::vector<cv::Point_<float>> points;
     generate(points);
 
+    estimator2d = new Line2DEstimator (points);
+
     std::cout << "generated points\n";
 
     init();
-
 
     cv::Mat p (points);
     cv::flann::LinearIndexParams flannIndexParams;
@@ -78,7 +78,7 @@ void Tests::testLineFitting() {
 //    test (points, evsac_sampler, evsac_model);
 //    test (sorted_points, prosac_sampler, prosac_model);
 
-    runNTimes(points, uniform_sampler, ransac_model, 500);
+//    runNTimes(points, uniform_sampler, ransac_model, 1000);
 }
 
 
