@@ -24,16 +24,16 @@ Estimator *estimator2d;
 Quality *quality;
 Drawing drawing;
 Logging logResult;
+TerminationCriteria termination_criteria;
 
 int knn = 2;
 cv::Mat indicies, dists1, dists2;
 cv::flann::Index *flannIndex;
 
-void init () {
-    quality = new Quality;
-}
-
-// sort by nearest neighbors
+/*
+ * Prosac quality sort.
+ * Sorting by distance of first nearest neighbor.
+ */
 bool qualitySort (const cv::Point_<float>& a, const cv::Point_<float>& b) {
     flannIndex->knnSearch(cv::Mat_<float>(a), indicies, dists1, knn);
     flannIndex->knnSearch(cv::Mat_<float>(b), indicies, dists2, knn);
@@ -43,20 +43,22 @@ bool qualitySort (const cv::Point_<float>& a, const cv::Point_<float>& b) {
 void Tests::testLineFitting() {
 
     std::vector<cv::Point_<float>> points;
-    generate(points);
 
-    estimator2d = new Line2DEstimator (points);
-
+    // change false to true to reset time for random points generator
+    generate(points, false);
     std::cout << "generated points\n";
 
-    init();
+    quality = new Quality;
+    estimator2d = new Line2DEstimator;
 
+    // sort points for Prosac
     cv::Mat p (points);
     cv::flann::LinearIndexParams flannIndexParams;
     flannIndex = new cv::flann::Index (p.reshape(1), flannIndexParams);
     std::vector<cv::Point_<float>> sorted_points (points);
 
     std::sort(sorted_points.begin(), sorted_points.end(), qualitySort);
+    //---
 
 
     Model *ransac_model = new Model (10, 2, 0.99, 0, "ransac");
@@ -73,34 +75,32 @@ void Tests::testLineFitting() {
     Model *prosac_model = new Model (10, 2, 0.99, 0, "prosac");
     Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
 
-    test (points, uniform_sampler, ransac_model);
+//    test (points, uniform_sampler, ransac_model);
 //    test (points, napsac_sampler, napsac_model);
 //    test (points, evsac_sampler, evsac_model);
 //    test (sorted_points, prosac_sampler, prosac_model);
 
-//    runNTimes(points, uniform_sampler, ransac_model, 1000);
+    runNTimes(points, uniform_sampler, ransac_model, 1000);
 }
 
 
-void test (cv::InputArray points, Sampler * sampler, Model * model) {
-    TerminationCriteria termination_criteria (model);
+void test (cv::InputArray points, Sampler * const sampler, Model * const model) {
 
     Ransac ransac (*model, *sampler, termination_criteria, *quality);
     ransac.run(points, estimator2d);
-    drawing.draw(ransac.most_inliers, ransac.best_model, ransac.non_minimal_model, points);
-
+    drawing.draw(ransac.most_inliers, &ransac.best_model, &ransac.non_minimal_model, points);
 
     std::cout << model->model_name << " time: " << ransac.getQuality().getComputationTime() << "mcs\n";
     std::cout << model->model_name << " iterations: " << ransac.getQuality().getIterations() << "\n";
     std::cout << model->model_name << " points under threshold: " << ransac.getQuality().getNumberOfPointsUnderThreshold() << "\n";
+
+    // save result and compare with last run
     logResult.compare(model, quality);
     logResult.saveResult(model, quality);
     std::cout << "-----------------------------------------------------------------------------------------\n";
-
 }
 
-void runNTimes (cv::InputArray points, Sampler * sampler, Model * model, int N) {
-    TerminationCriteria termination_criteria (model);
+void runNTimes (cv::InputArray points, Sampler * const sampler, Model * const model, int N) {
     Ransac ransac (*model, *sampler, termination_criteria, *quality);
     double time = 0;
     for (int i = 0; i < N; i++) {

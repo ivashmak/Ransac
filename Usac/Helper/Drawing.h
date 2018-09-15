@@ -26,9 +26,9 @@ public:
         cv::line (img, cv::Point(corner_x1, corner_y1), cv::Point(corner_x2, corner_y2), color,  2, 8);
     }
 
-    void draw_model (Model model, float max_dimen, cv::Scalar color, cv::Mat img, bool threshold) {
+    void draw_model (Model * const model, float max_dimen, cv::Scalar color, cv::Mat img, bool threshold) {
         cv::Mat desc;
-        model.getDescriptor(desc);
+        model->getDescriptor(desc);
         auto * params = reinterpret_cast<float *>(desc.data);
         std::cout <<"model: a = "<< params[0] << " b = " << params[1] << " c = " <<params[2] << '\n';
         float b = -params[2]/params[0];
@@ -37,25 +37,34 @@ public:
         draw_line(k, b, color, img);
 
         if (threshold) {
-            draw_line (k, b+sqrt(pow(model.threshold,2)*pow(k,2)+pow(model.threshold,2)), cv::Scalar(0,0,255), img);
-            draw_line (k, b-sqrt(pow(model.threshold,2)*pow(k,2)+pow(model.threshold,2)), cv::Scalar(0,0,255), img);
+            draw_line (k, b+sqrt(pow(model->threshold,2)*pow(k,2)+pow(model->threshold,2)), cv::Scalar(0,0,255), img);
+            draw_line (k, b-sqrt(pow(model->threshold,2)*pow(k,2)+pow(model->threshold,2)), cv::Scalar(0,0,255), img);
         }
 
     }
 
-    void draw (cv::InputArray inliers, Model best_model, Model non_minimal_model, cv::InputArray points) {
+    /*
+     * Read image.
+     * Show inliers of best ransac model.
+     * Show inliers of non minimal best model.
+     * To show threshold lines change false to true.
+     */
+    void draw (cv::InputArray inliers, Model * const best_model, Model * const non_minimal_model, cv::InputArray points) {
         cv::Mat image  = cv::imread("../images/image1.jpg");
         showInliers(points, inliers, image);
         draw_model(best_model, std::max (image.cols, image.rows), cv::Scalar(255, 0, 0), image, false);
         draw_model(non_minimal_model, std::max (image.cols, image.rows), cv::Scalar(0, 255, 0), image, false);
         imshow("Inliers", image);
-        std::string filename = "../res/linefitting_"+best_model.model_name+".jpg";
+        std::string filename = "../res/linefitting_"+best_model->model_name+".jpg";
         cv::imwrite(filename, image);
         cv::waitKey (0);
     }
 
     // Homographies
 
+    /*
+     * Draw epipolar lines by Fundamental Matrix
+     */
     void drawEpipolarLines (cv::InputArray points1, cv::InputArray points2, const cv::Mat& F) {
 
         cv::Mat img1 = cv::imread("../images/img1.png"), img2 = cv::imread("../images/img2.png");

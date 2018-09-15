@@ -8,6 +8,10 @@
 
 class Logging {
 public:
+
+    /*
+     * Save results to file
+     */
     void saveResult (Model * const model, Quality * const quality) {
         std::ofstream write_log;
         std::string filename = "../res/" + model->model_name +".txt";
@@ -18,6 +22,9 @@ public:
         write_log.close();
     }
 
+    /*
+     * Read results from saved file and compare with current results.
+     */
     void compare (Model * const model, Quality * const quality) {
         std::ifstream read_log;
         std::string filename = "../res/" + model->model_name +".txt";
@@ -29,20 +36,8 @@ public:
         read_log >> points_under_treshold;
 
         std::cout << "speedup: " << time/quality->getComputationTime() << "\n";
-
-        if (iters > quality->getIterations()) {
-            std::cout << "iterations less on " << (iters - quality->getIterations()) << "\n";
-        } else {
-            std::cout << "iterations more on " << (-iters + quality->getIterations()) << "\n";
-        }
-
-        if (points_under_treshold > quality->getNumberOfPointsUnderThreshold()) {
-            std::cout << "points under threshold less on " << (points_under_treshold - quality->getNumberOfPointsUnderThreshold()) << "\n";
-        } else {
-            std::cout << "points under threshold more on " << (-points_under_treshold + quality->getNumberOfPointsUnderThreshold()) << "\n";
-        }
-
-
+        std::cout << "iterations more on " << (quality->getIterations() - iters) << "\n";
+        std::cout << "points under threshold more on " << (quality->getNumberOfPointsUnderThreshold() - points_under_treshold) << "\n";
     }
 };
 

@@ -1,6 +1,8 @@
 #ifndef USAC_XORRANDOMGENERATOR_H
 #define USAC_XORRANDOMGENERATOR_H
 
+#include <cstdint>
+#include <ctime>
 #include "RandomGenerator.h"
 
 class XorRandomGenerator : public RandomGenerator {
@@ -25,7 +27,7 @@ public:
 
     }
 
-    void generateUniqueRandomSample (int * sample, unsigned int sample_size) override {
+    void generateUniqueRandomSet (int * sample, unsigned int sample_size) override {
 
     }
 

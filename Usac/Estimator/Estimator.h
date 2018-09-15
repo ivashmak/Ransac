@@ -18,20 +18,17 @@
 #include "../TerminationCriteria.h"
 
 class Estimator {
-protected:
-    float * params;
-    float a,b,c;
 public:
+    // Pure virtuals functions
     virtual void EstimateModel(const int * const sample, Model &model) = 0;
     virtual void EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) = 0;
     virtual float GetError(int pidx) = 0;
     virtual int SampleNumber()  = 0;
 
-    // speedups 1.5 times
-    void setModelParametres (Model * const model) {
-        params = (float *) model->returnDescriptor().data;
-        a = params[0]; b = params[1]; c = params[2];
-    }
+    // Setters of points set and model's parameters sufficiently sped up code
+    // functions are virtual, they can be overwritten but not necessarily.
+    virtual void setPoints (cv::InputArray input_points) {}
+    virtual void setModelParametres (Model * const model) {}
 
 };
 

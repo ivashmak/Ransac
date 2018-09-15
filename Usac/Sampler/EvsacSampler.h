@@ -55,7 +55,7 @@ public:
         int *r_samples = new int[num_q];
         randomGenerator = new UniformRandomGenerator ;
         randomGenerator->resetGenerator(0, total_points-1);
-        randomGenerator->generateUniqueRandomSample(r_samples, num_q);
+        randomGenerator->generateUniqueRandomSet(r_samples, num_q);
 
         cv::Mat sorted_dists, query, indicies, points = cv::Mat(total_points, 2, CV_32F, input_points.getMat().data);
         cv::flann::LinearIndexParams flannIndexParams;

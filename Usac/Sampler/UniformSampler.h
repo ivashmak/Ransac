@@ -17,7 +17,7 @@ public:
     }
 
     void generateSample (int *sample) override {
-        randomGenerator->generateUniqueRandomSample(sample, sample_size);
+        randomGenerator->generateUniqueRandomSet(sample, sample_size);
     }
 
 };

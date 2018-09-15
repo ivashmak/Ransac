@@ -48,13 +48,13 @@ public:
         if (t_n_prime < kth_sample_number_) {
             // Randomly sample m data points from the top n data points.
             randomGenerator->resetGenerator(0, n-1);
-            randomGenerator->generateUniqueRandomSample(sample, sample_size);
+            randomGenerator->generateUniqueRandomSet(sample, sample_size);
 
         } else {
             // Randomly sample m-1 data points from the top n-1 data points.
 
             randomGenerator->resetGenerator(0, n-2);
-            randomGenerator->generateUniqueRandomSample(sample, sample_size-1);
+            randomGenerator->generateUniqueRandomSet(sample, sample_size-1);
 
 
             // Make the last point from the nth position.

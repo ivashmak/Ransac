@@ -3,7 +3,9 @@
 void Generate2DLinePoints(float noise, int inlier_number, int outlier_number,
                              int border_x, int border_y, std::vector<cv::Point2f> &points);
 
-void generate (std::vector<cv::Point2f> &points_out) {
+void generate (std::vector<cv::Point2f> &points_out, bool reset_time) {
+    if (reset_time) srand (time(NULL));
+
     int width = 600; // Width of the image
     int height = 600; // Height of the image
     float noise = 3.0f; // Noise sigma

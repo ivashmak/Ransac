@@ -6,7 +6,7 @@ public:
 	float threshold = 10.0;
 	int sample_number = 2;
 	float desired_prob = 0.95;
-	float max_iterations = 10000;
+	int max_iterations = 10000;
 	std::string model_name = "ransac";
 	int k_nearest_neighbors = 2;
     int N_points = 0;
@@ -15,8 +15,7 @@ protected:
     cv::Mat descriptor;
 	
 public:
-    Model () {}
-
+	Model () {}
 	Model (float threshold, int sample_number, float desired_prob, int knn, std::string model_name) {
 		this->threshold = threshold;
 		this->sample_number = sample_number;

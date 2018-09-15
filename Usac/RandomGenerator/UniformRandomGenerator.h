@@ -77,7 +77,7 @@ public:
 //        }
 //    }
 
-    void generateUniqueRandomSample (int * sample, unsigned int sample_size) override {
+    void generateUniqueRandomSet (int * sample, unsigned int sample_size) override {
         for (unsigned int i = 0; i < sample_size; i++) {
             sample[i] = generate (generator);
             for (int j = i - 1; j >= 0; j--) {
