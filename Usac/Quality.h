@@ -139,7 +139,7 @@ public:
         estimator->setModelParametres(model);
 
         // allocate max size to avoid reallocation of vector
-        std::vector<int> inliers_(points_size);
+        std::vector<int> inliers_(2000);
 
 	    int num_inliers = 0;
 	    for (int point = 0; point < points_size; point++) {

@@ -7,38 +7,6 @@
 #include <algorithm>
 #include "RandomGenerator.h"
 
-
-class Tree  {
-public:
-    int num = -1;
-    Tree *left;
-    Tree *right;
-};
-
-static void sampleInsert (Tree *tree, int val) {
-    if (tree->num == -1) {
-        tree->left = new Tree;
-        tree->right = new Tree;
-        tree->num = val;
-    } else {
-        if (val < tree->num) {
-            sampleInsert(tree->left, val);
-        } else {
-            sampleInsert(tree->right, val);
-        }
-    }
-}
-
-static bool sampleExist (Tree *tree, int val) {
-    if (tree->num == -1) return false;
-    if (tree->num == val) return true;
-    if (val < tree->num) {
-        return sampleExist(tree->left, val);
-    } else {
-        return sampleExist(tree->right, val);
-    }
-}
-
 class UniformRandomGenerator : public RandomGenerator {
 protected:
     std::mt19937 generator;
@@ -58,25 +26,6 @@ public:
         generate = std::uniform_int_distribution<int>(min_range, max_range);
     }
 
-
-    // std::find for unsorted array has linear complexity
-
-//    void generateUniqueRandomSample (int * sample, unsigned int sample_size) override {
-//        std::vector<int> random_numbers;
-//        for (int i = 0; i < sample_size; i++) {
-//            int rand_number;
-//            // Generate a random number that has not already been used.
-//            while (std::find(random_numbers.begin(),
-//                             random_numbers.end(),
-//                             (rand_number = generate (generator))) !=
-//                   random_numbers.end()) {
-//            }
-//
-//            random_numbers.push_back(rand_number);
-//            sample[i] = rand_number;
-//        }
-//    }
-
     void generateUniqueRandomSet (int * sample, unsigned int sample_size) override {
         for (unsigned int i = 0; i < sample_size; i++) {
             sample[i] = generate (generator);
@@ -90,28 +39,9 @@ public:
     }
 
 
-
-//    void generateUniqueRandomSample (int * sample, unsigned int sample_size) override {
+//    void generateUniqueRandomSet (int * sample, unsigned int sample_size) override {
 //        sample[0] = generate (generator);
 //        while (sample[0] == (sample[1] = generate (generator)));
-//    }
-
-
-
-//    void generateUniqueRandomSample (int * sample, unsigned int sample_size) override {
-//        Tree *tree = new Tree;
-//
-//        for (unsigned int i = 0; i < sample_size; i++) {
-//            sample[i] = generate (generator);
-//
-//            Tree * root = tree;
-//            if (sampleExist(root, sample[i])) {
-//                i--;
-//            }
-//            root = tree;
-//            sampleInsert(root, sample[i]);
-//
-//        }
 //    }
 
 };

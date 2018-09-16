@@ -44,6 +44,7 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
         iters++;
     }
 
+//    most_inliers = std::vector<int> (best_score->inlier_number);
     quality->getInliers(estimator, total_points, &best_model, most_inliers);
 
     estimator->EstimateModelNonMinimalSample(&most_inliers[0], best_score->inlier_number, non_minimal_model);

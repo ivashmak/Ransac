@@ -51,9 +51,11 @@ add_executable(
         Usac/RandomGenerator/RandomGenerator.h
         Usac/RandomGenerator/ArrayRandomGenerator.h
         Usac/RandomGenerator/PrimeNumberRandomGenerator.h
-        Usac/RandomGenerator/XorRandomGenerator.h
         Usac/RandomGenerator/UniformRandomGenerator.h
+        Usac/RandomGenerator/SimpleRandomGenerator.h
+        Usac/RandomGenerator/ShuffleRandomGenerator.h
 
+        Usac/RandomGenerator/EvaluateRandomGenerators.h
 )
 # parallel
 set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -pthread" )
