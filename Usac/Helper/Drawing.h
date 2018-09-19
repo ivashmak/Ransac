@@ -6,6 +6,7 @@
 
 class Drawing {
 public:
+
     void showInliers (cv::InputArray input_points, cv::InputArray input_inliers_idxes, cv::Mat image) {
         int *inliers_idxes = (int *) input_inliers_idxes.getMat().data;
         cv::Point_<float> *points = (cv::Point_<float> *) input_points.getMat().data;

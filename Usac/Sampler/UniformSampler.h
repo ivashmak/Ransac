@@ -2,18 +2,24 @@
 #define RANSAC_UNIFORMSAMPLER_H
 
 #include "../Estimator/Estimator.h"
-#include "../RandomGenerator/UniformRandomGenerator.h"
+#include "../../RandomGenerator/UniformRandomGenerator.h"
+#include "../../RandomGenerator/ArrayRandomGenerator.h"
 
 // https://stackoverflow.com/questions/288739/generate-random-numbers-uniformly-over-an-entire-range
 
 class UniformSampler : public Sampler {
+private:
+    UniformRandomGenerator * randomGenerator;
 public:
-    UniformSampler (const bool reset_time=true) {
+    UniformSampler (bool reset_time=true) {
         randomGenerator = new UniformRandomGenerator;
         if (reset_time) {
-//            std::cout << "reset!\n";
             randomGenerator->resetTime();
         }
+    }
+
+    void initRandomGenerator () override {
+        randomGenerator->resetGenerator(0, points_size-1);
     }
 
     void generateSample (int *sample) override {

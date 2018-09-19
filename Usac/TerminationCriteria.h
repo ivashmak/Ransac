@@ -47,12 +47,20 @@ public:
     /*
      * Faster way than calculation with pow
      */
-    inline float getUpBoundIterations2Points (float inlier_points, float total_points) {
+    inline unsigned int getUpBoundIterations2Points (float inlier_points, float total_points) {
 		return log_1_p/log(1 - ((inlier_points*inlier_points)/(total_points*total_points)));
 	}
 
-    inline float getUpBoundIterations (float inlier_points, float total_points) {
+	/*
+	 * Get upper bound iterations for any sample number
+	 * Can be used ceil.
+	 */
+    inline unsigned int getUpBoundIterations (float inlier_points, float total_points) {
         return log_1_p/log(1 - my_pow((inlier_points/total_points), sample_number));
+    }
+
+    inline unsigned int getUpBoundIterations (float inlier_points, float total_points, unsigned int sample_number, float desir_prob) {
+        return log(1-desir_prob)/log(1 - my_pow((inlier_points/total_points), sample_number));
     }
 
 };

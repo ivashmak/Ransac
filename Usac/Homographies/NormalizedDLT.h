@@ -23,12 +23,19 @@ void NormalizedDLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
     cv::vconcat(points1, ones, tmp1);
     cv::vconcat(points2, ones, tmp2);
 
+
     cv::Mat pts1Tr = T1 * tmp1; cv::transpose(pts1Tr, pts1Tr);
     cv::Mat pts2Tr = T2 * tmp2; cv::transpose(pts2Tr, pts2Tr);
+
 
     pts1Tr.colRange(0,2).copyTo(pts1Tr);
     pts2Tr.colRange(0,2).copyTo(pts2Tr);
 
+    std::cout << "here\n" ;
+
     DLT(pts1Tr, pts2Tr, H);
+
+    std::cout << "here\n" ;
+
     H = T2.inv()*H*T1;
 }

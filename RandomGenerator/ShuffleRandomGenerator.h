@@ -13,7 +13,7 @@ protected:
     std::default_random_engine rng = std::default_random_engine {};
 public:
     void resetGenerator (int min_range, int max_range) override {
-        size = (unsigned int) max_range - min_range;
+        size = (unsigned int) max_range - min_range + 1;
         array = std::vector<int> (size);
         curr_idx = 0;
         std::iota (std::begin(array), std::end(array), 0);

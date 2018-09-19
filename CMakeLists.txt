@@ -18,6 +18,7 @@ add_executable(
         Usac/Quality.h
         Usac/Model.h
         Usac/TerminationCriteria.h
+        Usac/ProsacTerminationCriteria.h
 
         Usac/Helper/Drawing.h
         Usac/Helper/Logging.h
@@ -31,6 +32,7 @@ add_executable(
         Usac/Sampler/NapsacSampler.h
         Usac/Sampler/EvsacSampler.h
         Usac/Sampler/ProsacSampler.h
+        Usac/Sampler/ProsacSampler2.h
 
         Usac/Homographies/DLT.h
         Usac/Homographies/NormalizedDLT.h
@@ -48,14 +50,14 @@ add_executable(
         Tests/testFundamentalFitting.cpp
 
 
-        Usac/RandomGenerator/RandomGenerator.h
-        Usac/RandomGenerator/ArrayRandomGenerator.h
-        Usac/RandomGenerator/PrimeNumberRandomGenerator.h
-        Usac/RandomGenerator/UniformRandomGenerator.h
-        Usac/RandomGenerator/SimpleRandomGenerator.h
-        Usac/RandomGenerator/ShuffleRandomGenerator.h
+        RandomGenerator/RandomGenerator.h
+        RandomGenerator/ArrayRandomGenerator.h
+        RandomGenerator/PrimeNumberRandomGenerator.h
+        RandomGenerator/UniformRandomGenerator.h
+        RandomGenerator/SimpleRandomGenerator.h
+        RandomGenerator/ShuffleRandomGenerator.h
 
-        Usac/RandomGenerator/EvaluateRandomGenerators.h
+        RandomGenerator/EvaluateRandomGenerators.h
 )
 # parallel
 set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -pthread" )

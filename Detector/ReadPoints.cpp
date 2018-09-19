@@ -6,7 +6,7 @@ void read_points (cv::Mat &pts1, cv::Mat &pts2) {
     std::fstream myfile("../points/graf_pts.txt", std::ios_base::in);
 
     float x1, y1, z1, x2, y2, z2, t;
-    cv::Mat tmp = cv::Mat(1, 2, CV_32FC1);
+    cv::Mat tmp = cv::Mat_<float>(1, 2);
     while (myfile >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> t) {
         tmp.at<float>(0) = x1;
         tmp.at<float>(1) = y1;

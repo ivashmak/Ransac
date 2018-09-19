@@ -1,7 +1,7 @@
 #ifndef USAC_EVSACSAMPLER_H
 #define USAC_EVSACSAMPLER_H
 
-#include "../RandomGenerator/UniformRandomGenerator.h"
+#include "../../RandomGenerator/UniformRandomGenerator.h"
 
 #include <vector>
 #include <algorithm>
@@ -28,8 +28,11 @@ public:
     //  The idea of EVSAC is to model the statistics of the minimum distances
     // computed when using the Nearest-Neighbor feature matcher.
     // find knn and their sorted distances.
-    EvsacSampler (cv::InputArray input_points, int num_q, int knn, int sample_size, bool reset_time = true) {
+    EvsacSampler (cv::InputArray input_points, unsigned int num_queries, unsigned int knn, unsigned int sample_size, bool reset_time = true) {
+        assert (!input_points.empty());
+
         // init random generator
+        RandomGenerator * randomGenerator = new UniformRandomGenerator;
         if (reset_time) randomGenerator->resetTime();
 
         this->sample_size = sample_size;
@@ -37,7 +40,7 @@ public:
         std::random_device rand_dev;
         rng_.seed(rand_dev());
 
-        int total_points = input_points.size().width;
+        int points_size = input_points.size().width;
 
         // fitting_method:  The fitting method MLE or QUANTILE_NLS (see statx doc).
         //   The recommended fitting method is the MLE estimation.
@@ -50,31 +53,31 @@ public:
         // Parameters of the mixture of distributions (Gamma + GEV).
         theia::EvsacSampler<Eigen::Vector2d>::MixtureModelParams mixture_model_params;
 
-        Eigen::MatrixXd sorted_distances_(num_q, knn-1);
 
-        int *r_samples = new int[num_q];
-        randomGenerator = new UniformRandomGenerator ;
-        randomGenerator->resetGenerator(0, total_points-1);
-        randomGenerator->generateUniqueRandomSet(r_samples, num_q);
+        /*
+         * Create matrix that for each num_queries points has k nearest neughbors sorted distances
+         */
+        Eigen::MatrixXd sorted_distances_(num_queries, knn-1);
 
-        cv::Mat sorted_dists, query, indicies, points = cv::Mat(total_points, 2, CV_32F, input_points.getMat().data);
+        int *random_samples = new int[num_queries];
+        randomGenerator->generateUniqueRandomSet(random_samples, num_queries, 0, points_size-1);
+
+        cv::Mat sorted_dists, indicies, points = cv::Mat(points_size, 2, CV_32F, input_points.getMat().data);
         cv::flann::LinearIndexParams flannIndexParams;
         cv::flann::Index flannIndex (cv::Mat(points).reshape(1), flannIndexParams);
 
-        cv::Point_<float> r_point;
-        for (int i = 0; i < num_q; i++) {
-            r_point = points.at<cv::Point_<float>>(r_samples[i]);
-            query = cv::Mat(1, 2, CV_32F, &r_point);
-            flannIndex.knnSearch(query, indicies, sorted_dists, knn);
+        for (int i = 0; i < num_queries; i++) {
+            flannIndex.knnSearch(cv::Mat(1, 2, CV_32F, &points.at<cv::Point_<float>>(random_samples[i])),
+                                 indicies, sorted_dists, knn);
 
             for (int j = 0; j < knn-1; j++) {
                 sorted_distances_(i, j) = sorted_dists.at<float>(j+1);
             }
         }
 
-        std::vector<float> probabilities;
-        std::vector<float> sampling_weights;
+        std::vector<float> probabilities, sampling_weights;
 
+        // calculates weight for each query point
         if (!theia::EvsacSampler<Eigen::Vector2d>::CalculateMixtureModel(
                 sorted_distances_,
                 predictor_threshold,
@@ -86,7 +89,6 @@ public:
             std::cout << "Calculation of Mixture Model failed" << '\n';
             exit (0);
         }
-
 
         initializeSampler(sampling_weights);
     }
@@ -119,18 +121,13 @@ public:
 
 
     void generateSample (int *sample) override {
-        std::vector<int> random_numbers;
         for (int i = 0; i < sample_size; i++) {
-            int rand_number;
-            // Generate a random number that has not already been used.
-            while (std::find(random_numbers.begin(),
-                             random_numbers.end(),
-                             (rand_number = (*correspondence_sampler_)(rng_))) !=
-                   random_numbers.end()) {
+            sample[i] = (*correspondence_sampler_)(rng_);
+            for (int j = i - 1; j >= 0; j--) {
+                if (sample[i] == sample[j]) {
+                    i--;
+                }
             }
-
-            random_numbers.push_back(rand_number);
-            sample[i] = rand_number;
         }
 
     }

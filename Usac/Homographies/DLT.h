@@ -5,8 +5,8 @@
 
 // Direct Linear Transformation
 void DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
-    CV_Assert(!pts1.empty());
-    CV_Assert(!pts2.empty());
+    assert(!pts1.empty());
+    assert(!pts2.empty());
 
     cv::Mat points1 = pts1.getMat();
     cv::Mat points2 = pts2.getMat();
@@ -47,14 +47,26 @@ void DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
         A.at<float>(2*i-1, 8) = y2;
     }
 
+
     cv::SVD::compute(A, tmp1, tmp2, vt);
+
+
     cv::transpose(vt, vt);
 
+    std::cout << "here\n";
+
+    std::cout << vt << "\n\n";
+    std::cout << vt.col (8) << "\n\n";
+
     vt.col(8).copyTo(H);
+
+    std::cout << H << '\n';
 
     H = (cv::Mat_<float>(3,3) <<
             H.at<float>(0), H.at<float>(1), H.at<float>(2),
             H.at<float>(3), H.at<float>(4), H.at<float>(5),
             H.at<float>(6), H.at<float>(7), H.at<float>(8));
+
+    std::cout << "here\n";
 
 }

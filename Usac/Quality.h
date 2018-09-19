@@ -65,8 +65,8 @@ public:
             score.inlier_number = score_inlier_number;
 
         } else {
+            // calculate coefficient of determination r^2
 //            cv::Point_<float> * points = (cv::Point_<float> * ) input_points.getMat().data;
-//
 //            std::vector <float> truth (points_size);
 //            cv::Mat desc;
 //            model->getDescriptor(desc);
@@ -135,22 +135,16 @@ public:
      * non minimal model. As result faster way will be implement separate function for getting
      * inliers. Works same as getModelScore, however save inlier's indexes.
      */
-    void getInliers (Estimator * const estimator, int points_size, Model * const  model, cv::OutputArray inliers, bool parallel=false) {
+    void getInliers (Estimator * const estimator, int points_size, Model * const  model, std::vector<int>& inliers, bool parallel=false) {
         estimator->setModelParametres(model);
-
-        // allocate max size to avoid reallocation of vector
-        std::vector<int> inliers_(2000);
 
 	    int num_inliers = 0;
 	    for (int point = 0; point < points_size; point++) {
             if (estimator->GetError(point) < model->threshold) {
-                inliers_[num_inliers] = point;
+                inliers[num_inliers] = point;
                 num_inliers++;
             }
         }
-
-	    cv::InputArray inlers__ (inliers_);
-	    inlers__.copyTo(inliers);
     }
 
     /*
@@ -159,7 +153,6 @@ public:
     inline bool IsBetter(const Score * const s1, const Score * const s2) {
         return s1->score < s2->score;
     }
-
 };
 
 

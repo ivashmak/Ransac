@@ -11,10 +11,10 @@
 #include "../Detector/ReadPoints.h"
 
 #include "../Usac/Sampler/Sampler.h"
-#include "../Usac/Sampler/ProsacSampler.h"
 #include "../Usac/Sampler/NapsacSampler.h"
 #include "../Usac/Sampler/EvsacSampler.h"
 #include "../Usac/Sampler/UniformSampler.h"
+#include "../Usac/Sampler/ProsacSampler.h"
 
 
 void test (cv::InputArray points, Sampler * sampler, Model * model);
@@ -26,19 +26,6 @@ Drawing drawing;
 Logging logResult;
 TerminationCriteria termination_criteria;
 
-int knn = 2;
-cv::Mat indicies, dists1, dists2;
-cv::flann::Index *flannIndex;
-
-/*
- * Prosac quality sort.
- * Sorting by distance of first nearest neighbor.
- */
-bool qualitySort (const cv::Point_<float>& a, const cv::Point_<float>& b) {
-    flannIndex->knnSearch(cv::Mat_<float>(a), indicies, dists1, knn);
-    flannIndex->knnSearch(cv::Mat_<float>(b), indicies, dists2, knn);
-    return dists1.at<float>(1) < dists2.at<float>(1);
-}
 
 void Tests::testLineFitting() {
 
@@ -52,21 +39,29 @@ void Tests::testLineFitting() {
     estimator2d = new Line2DEstimator;
 
     // sort points for Prosac
-    cv::Mat p (points);
+    cv::Mat indicies, dists1, dists2, p (points);
+    int knn = 2;
     cv::flann::LinearIndexParams flannIndexParams;
-    flannIndex = new cv::flann::Index (p.reshape(1), flannIndexParams);
+    cv::flann::Index * flannIndex = new cv::flann::Index (p.reshape(1), flannIndexParams);
     std::vector<cv::Point_<float>> sorted_points (points);
 
-    std::sort(sorted_points.begin(), sorted_points.end(), qualitySort);
+    /*
+     * Prosac quality sort.
+     * Sorting by distance of first nearest neighbor.
+     */
+    std::sort(sorted_points.begin(), sorted_points.end(), [&] (const cv::Point_<float>& a, const cv::Point_<float>& b) {
+        flannIndex->knnSearch(cv::Mat_<float>(a), indicies, dists1, knn);
+        flannIndex->knnSearch(cv::Mat_<float>(b), indicies, dists2, knn);
+        return dists1.at<float>(1) < dists2.at<float>(1);
+    });
     //---
-
 
     Model *ransac_model = new Model (10, 2, 0.99, 0, "ransac");
     Sampler *uniform_sampler = new UniformSampler;
     uniform_sampler->setSampleSize(ransac_model->sample_number);
-    uniform_sampler->setRange(0, points.size()-1);
+    uniform_sampler->setPointsSize(points.size());
 
-    Model *napsac_model = new Model (10, 2, 0.99, 6, "napsac");
+    Model *napsac_model = new Model (10, 2, 0.99, 20, "napsac");
     Sampler *napsac_sampler = new NapsacSampler(points, napsac_model->k_nearest_neighbors, napsac_model->sample_number);
 
     Model *evsac_model = new Model (10, 2, 0.99, 7, "evsac");
@@ -76,9 +71,9 @@ void Tests::testLineFitting() {
     Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
 
     test (points, uniform_sampler, ransac_model);
-//    test (points, napsac_sampler, napsac_model);
-//    test (points, evsac_sampler, evsac_model);
-//    test (sorted_points, prosac_sampler, prosac_model);
+    test (points, napsac_sampler, napsac_model);
+    test (points, evsac_sampler, evsac_model);
+    test (sorted_points, prosac_sampler, prosac_model);
 
     runNTimes(points, uniform_sampler, ransac_model, 1000);
 }

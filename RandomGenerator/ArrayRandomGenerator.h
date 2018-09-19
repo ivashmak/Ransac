@@ -17,14 +17,19 @@ protected:
     unsigned int array_size;
 public:
 
+    /*
+     * if min = 0 and max = 5
+     * Array will be [0,1,2,3,4,5]
+     * Size is max-min+1
+     */
     void resetGenerator (int min_range, int max_range) override {
-        array_size = (unsigned int) max_range - min_range;
+        array_size = (unsigned int) max_range - min_range + 1;
         max = array_size;
 
         array = new int[array_size];
 
         int k = 0;
-        for (int i = min_range; i < max_range; i++) {
+        for (int i = min_range; i <= max_range; i++) {
             array[k] = i;
             k++;
         }
@@ -34,8 +39,6 @@ public:
         if (max == 0) max = array_size;
 
         unsigned int random_number = (unsigned int) random () % max;
-
-//        std::cout << random_number << '\n';
 
         int temp = array[random_number];
         max--;

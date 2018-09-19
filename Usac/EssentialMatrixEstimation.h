@@ -31,10 +31,8 @@ public:
         cv::Mat points2 = cv::Mat(total_points, 2, CV_32F, input_points2.getMat().data);
 
         Sampler *sampler = new UniformSampler;
-        sampler->setRange(0, total_points-1);
-        sampler->setSampleSize(npoints); 
         int * samples = new int[npoints];
-        sampler->generateSample(samples);
+        sampler->generateSample(samples, npoints, total_points-1);
         samples[0] = 6;
         samples[1] = 32;
         samples[2] = 34;
