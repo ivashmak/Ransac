@@ -7,6 +7,10 @@ class Line2DEstimator : public Estimator {
 protected:
     float a,b,c;
     cv::Point_<float> *input_points;
+
+    // new
+//    cv::Mat points;
+//    cv::Mat mdl;
 public:
 
     void EstimateModel(const int * const sample, Model &model) override {
@@ -64,11 +68,26 @@ public:
     void setModelParametres (Model * const model) override {
         auto *params = (float *) model->returnDescriptor().data;
         a = params[0]; b = params[1]; c = params[2];
+
+//        mdl = (cv::Mat_<float> (2,1) << a,b);
     }
 
     void setPoints (cv::InputArray input_pts) override {
         input_points = (cv::Point_<float> *) input_pts.getMat().data;
+
+//        points = cv::Mat (input_pts.size().width, 2, CV_32FC1, input_pts.getMat().data);
     }
+
+    /*int getNumberOfInliers (const Model * const model) override {
+
+        cv::Mat pts_ = abs(points * mdl + c) - model->threshold;
+        int inl_num = 0;
+        for (int i = 0; i < pts_.rows; i++) {
+            if (pts_.at<float>(i) < 0) inl_num++;
+        }
+
+        return inl_num;
+    }*/
 
 };
 

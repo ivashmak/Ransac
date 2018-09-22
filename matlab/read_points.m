@@ -1,6 +1,6 @@
 close all;
 
-fileID = fopen('../points/graf_pts.txt','r');
+fileID = fopen('../images/homography/graf_pts.txt','r');
 formatSpec = '%f';
 sizeA = [7 Inf];
 A = fscanf(fileID, formatSpec, sizeA);
@@ -32,13 +32,13 @@ end
 % hold off
 % 
 
-F  = sevenpoint (pts1, pts2, 800)
+% F  = sevenpoint (pts1, pts2, 800)
 
 % keyboard
 % H_DLT = DLT(pts1, pts2);
 % [T_1, offset_1, s_1, s1_1, s2_1] = GetNormalizingTransformation(pts1);
 % [T_2, offset_2, s_2, s1_2, s2_2] = GetNormalizingTransformation(pts2);
-% H_NormalizedDLT = NormalizedDLT(pts1, pts2);
+H_NormalizedDLT = NormalizedDLT(pts1, pts2);
 % 
 % tform1 = projective2d(T_1');
 % tform2 = projective2d(T_2');

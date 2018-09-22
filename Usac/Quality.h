@@ -74,18 +74,19 @@ public:
 //            float a = params[0], b = params[1], c = params[2];
 //            float mean = 0;
 
+
             for (int point = 0; point < points_size; point++) {
                 if (estimator->GetError(point) < model->threshold) {
                     score.inlier_number++;
 //                    truth[score.inlier_number-1] = points[point].y;
 //                    mean += truth[score.inlier_number-1];
-
-                    // The sum of squares of residuals
+//
+//                    // The sum of squares of residuals
 //                    SS_res += (truth[score.inlier_number-1] - (-c - a*points[point].x)/b) *
 //                            (truth[score.inlier_number-1] - (-c - a*points[point].x)/b);
                 }
             }
-
+//            std::cout << r << " " << score.inlier_number << '\n';
 //            mean = mean / score.inlier_number;
 
             // The total sum of squares

@@ -3,6 +3,7 @@
 
 #include "../Estimator/Estimator.h"
 #include "../Ransac/Ransac.h"
+#include "../../Detector/ReadPoints.h"
 
 class Drawing {
 public:
@@ -61,7 +62,7 @@ public:
         cv::waitKey (0);
     }
 
-    // Homographies
+    // DLT
 
     /*
      * Draw epipolar lines by Fundamental Matrix
@@ -107,6 +108,103 @@ public:
         imshow("Epipolar lines using Fundamental matrix 1", img1);
         imshow("Epipolar lines using Fundamental matrix 2", img2);
         cv::waitKey (0);
+    }
+
+
+    void drawHomographies (std::vector<std::string> images_filename, const std::string &points_filename, cv::InputArray in_inliers,
+                           const cv::Mat &H) {
+        int * inliers =  (int *) in_inliers.getMat().data;
+        int inliers_size = in_inliers.size().width;
+
+        std::vector<int> gt_inliers;
+        cv::Mat points1, points2;
+        read_points(points1, points2, points_filename);
+        getInliers(points_filename, gt_inliers);
+
+        std::cout << "gt inliers " << gt_inliers.size() << '\n';
+        std::cout << "inliers_size " << inliers_size << '\n';
+
+        cv::Mat img1 = cv::imread(images_filename[0]);
+        cv::Mat img2 = cv::imread(images_filename[1]);
+
+        std::vector< cv::DMatch > good_matches, gt_good_matches;
+        std::vector<cv::KeyPoint> keypoints1, keypoints2;
+        for (int i = 0; i < points1.rows; i++) {
+            cv::KeyPoint kp1(points1.at<float>(i,0), points1.at<float>(i,1), 1);
+            keypoints1.push_back(kp1);
+            cv::KeyPoint kp2(points2.at<float>(i,0), points2.at<float>(i,1), 1);
+            keypoints2.push_back(kp2);
+
+        }
+
+        for (int i = 0; i < inliers_size; i++) {
+            cv::DMatch match (inliers[i], inliers[i], 0);
+            good_matches.push_back(match);
+        }
+        for (int i = 0; i < gt_inliers.size(); i++) {
+            cv::DMatch match (gt_inliers[i], gt_inliers[i], 0);
+            gt_good_matches.push_back(match);
+        }
+
+        cv::Mat img_matches, gt_img_matches;
+        cv::drawMatches (img1, keypoints1, img2, keypoints2,
+                         good_matches, img_matches, cv::Scalar::all(-1), cv::Scalar::all(-1),
+                         std::vector<char>(), cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS );
+        cv::drawMatches (img1, keypoints1, img2, keypoints2,
+                         gt_good_matches, gt_img_matches, cv::Scalar::all(-1), cv::Scalar::all(-1),
+                         std::vector<char>(), cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS );
+
+        cv::Mat imgs;
+
+        cv::vconcat(img_matches, gt_img_matches, imgs);
+
+        cv::Mat H_gt;
+        getH (points_filename.substr(0, points_filename.find('_'))+"_model.txt", H_gt);
+
+        cv::Mat panorama_gt, panorama;
+
+        cv::warpPerspective(img2, panorama_gt, H_gt, cv::Size(2*img2.cols, img2.rows));
+        cv::warpPerspective(img2, panorama, H, cv::Size(2*img2.cols, img2.rows));
+
+        cv::Mat warp_img1, warp_img2, gt_warp_img1, gt_warp_img2;
+
+        cv::warpPerspective(img1, warp_img1, H, cv::Size(img1.cols, img1.rows));
+        cv::warpPerspective(img2, warp_img2, H, cv::Size(img2.cols, img2.rows));
+
+        cv::warpPerspective(img1, gt_warp_img1, H_gt, cv::Size(img1.cols, img1.rows));
+        cv::warpPerspective(img2, gt_warp_img2, H_gt, cv::Size(img2.cols, img2.rows));
+
+        cv::Mat warp_imgs;
+        cv::hconcat(warp_img1, warp_img2, warp_img1);
+        cv::hconcat(gt_warp_img1, gt_warp_img2, gt_warp_img1);
+        cv::vconcat(warp_img1, gt_warp_img1, warp_imgs);
+
+//        cv::imshow ("gt perp img 1", gt_warp_img1);
+//        cv::imshow ("gt perp img 2", gt_warp_img2);
+//        cv::imshow ("perp img 1", warp_img1);
+//        cv::imshow ("perp img 2", warp_img2);
+
+
+        cv::Mat half_gt(panorama_gt, cv::Rect(0,0,img1.cols,img1.rows));
+        cv::Mat half(panorama, cv::Rect(0,0,img1.cols,img1.rows));
+
+        img1.copyTo(half_gt);
+        img1.copyTo(half);
+
+        cv::resize(panorama_gt, panorama_gt, cv::Size (0.5 * imgs.cols, 0.5 * imgs.rows));
+        cv::resize(panorama, panorama, cv::Size (0.5 * imgs.cols, 0.5 * imgs.rows));
+
+//        cv::imshow( "Grand Truth panorama", panorama_gt);
+//        cv::imshow( "panorama", panorama);
+
+        cv::resize(imgs, imgs, cv::Size (0.7 * imgs.cols, 0.7 * imgs.rows));
+        cv::resize(warp_imgs, warp_imgs, cv::Size (0.7 * imgs.cols, 0.7 * imgs.rows));
+
+        imshow("imgs ", imgs);
+        imshow("warp imgs ", warp_imgs);
+
+        cv::waitKey(0);
+
     }
 };
 

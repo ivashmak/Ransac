@@ -13,7 +13,7 @@ void testEssentialMatrixEstimation (cv::InputArray points1, cv::InputArray point
 
 void Tests::testEssentialFitting() {
     cv::Mat points1, points2;
-    read_points (points1, points2);
+    read_points (points1, points2, "../images/homograpy/graf_pts.txt");
 
     testEssentialMatrixEstimation(points1, points2);
 }

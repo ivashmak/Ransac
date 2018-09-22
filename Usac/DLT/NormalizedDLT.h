@@ -1,8 +1,13 @@
+#ifndef RANSAC_NDLT_H
+#define RANSAC_NDLT_H
+
 #include <opencv2/core.hpp>
+#include "GetNormalizingTransformation.h"
+#include "DLT.h"
 
 void NormalizedDLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
-    CV_Assert(!pts1.empty());
-    CV_Assert(!pts2.empty());
+    assert(!pts1.empty());
+    assert(!pts2.empty());
 
     cv::Mat points1 = pts1.getMat();
     cv::Mat points2 = pts2.getMat();
@@ -31,11 +36,11 @@ void NormalizedDLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
     pts1Tr.colRange(0,2).copyTo(pts1Tr);
     pts2Tr.colRange(0,2).copyTo(pts2Tr);
 
-    std::cout << "here\n" ;
-
     DLT(pts1Tr, pts2Tr, H);
 
-    std::cout << "here\n" ;
+//    std::cout << "H = \n" << H << "\n\n";
 
     H = T2.inv()*H*T1;
 }
+
+#endif // RANSAC_NDLT_H

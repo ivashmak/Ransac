@@ -34,9 +34,9 @@ add_executable(
         Usac/Sampler/ProsacSampler.h
         Usac/Sampler/ProsacSampler2.h
 
-        Usac/Homographies/DLT.h
-        Usac/Homographies/NormalizedDLT.h
-        Usac/Homographies/GetNormalizingTransformation.h
+        Usac/DLT/DLT.h
+        Usac/DLT/NormalizedDLT.h
+        Usac/DLT/GetNormalizingTransformation.h
 
         Usac/Ransac/Ransac.cpp Usac/Ransac/Ransac.h
 
@@ -60,7 +60,7 @@ add_executable(
         RandomGenerator/EvaluateRandomGenerators.h
 )
 # parallel
-set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -pthread" )
+set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -pthread -ggdb" )
 # warnings
 #set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -pthread -Wextra" )
 # optimalization

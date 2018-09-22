@@ -1,3 +1,6 @@
+#ifndef RANSAC_GETNORM_TRAN_H
+#define RANSAC_GETNORM_TRAN_H
+
 #include <cmath>
 #include <opencv2/core.hpp>
 #include <iostream>
@@ -8,9 +11,7 @@ void GetNormalizingTransformation (cv::InputArray pts, cv::Mat &T, cv::Mat &offs
     cv::Mat points = pts.getMat();
     int NUMP = points.rows;
 
-    std::cout << "NUMP = " << points.size << '\n';
-
-//    std::cout << "here\n";
+//    std::cout << "NUMP = " << points.size << '\n';
 
     cv::Scalar mean1 = cv::mean(points.col(0));
     cv::Scalar mean2 = cv::mean(points.col(1));
@@ -42,3 +43,5 @@ void GetNormalizingTransformation (cv::InputArray pts, cv::Mat &T, cv::Mat &offs
     T = T2*T1;
     cv::transpose (offset, offset);
 }
+
+#endif // RANSAC_GETNORM_TRAN_H

@@ -30,6 +30,8 @@ public:
     virtual void setPoints (cv::InputArray input_points) {}
     virtual void setModelParametres (Model * const model) {}
 
+    virtual int getNumberOfInliers (const Model * const model) {return 0;}
+
 };
 
 #endif //RANSAC_ESTIMATOR_H

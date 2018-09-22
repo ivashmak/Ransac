@@ -9,7 +9,7 @@ static Drawing drawing;
 
 void Tests::testFundamentalFitting() {
     cv::Mat points1, points2;
-    read_points (points1, points2);
+    read_points (points1, points2, "../images/homograpy/graf_pts.txt");
 
     testFundamentalMatrixEstimation(points1, points2);
 }
