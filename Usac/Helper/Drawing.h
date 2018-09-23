@@ -98,11 +98,11 @@ public:
             y1_img1 = -(r2_img1 + r0_img1*c)/r1_img1;
             y1_img2 = -(r2_img2 + r0_img2*c)/r1_img2;
 
-            cv::Scalar color = cv::Scalar(rand()%255, rand ()%255, rand()%255);
+            cv::Scalar color = cv::Scalar(random()%255, random ()%255, random ()%255);
             cv::line(img1, cv::Point_<float> (x0, y0_img1), cv::Point_<float> (x1, y1_img1), color);
             cv::line(img2, cv::Point_<float> (x0, y0_img2), cv::Point_<float> (x1, y1_img2), color);
-            circle (img1, cv::Point_<float> (pts1.at<float>(i, 0), pts1.at<float>(i,1)), 3, color, -1);
-            circle (img2, cv::Point_<float> (pts2.at<float>(i, 0), pts2.at<float>(i,1)), 3, color, -1);
+            cv::circle (img1, cv::Point_<float> (pts1.at<float>(i, 0), pts1.at<float>(i,1)), 3, color, -1);
+            cv::circle (img2, cv::Point_<float> (pts2.at<float>(i, 0), pts2.at<float>(i,1)), 3, color, -1);
         }
 
         imshow("Epipolar lines using Fundamental matrix 1", img1);
@@ -119,6 +119,13 @@ public:
         std::vector<int> gt_inliers;
         cv::Mat points1, points2;
         read_points(points1, points2, points_filename);
+
+        if (points1.cols == 2) {
+            cv::Mat ones = cv::Mat_<float>::ones(points1.rows, 1);
+            cv::hconcat(points1, ones, points1);
+            cv::hconcat(points2, ones, points2);
+        }
+
         getInliers(points_filename, gt_inliers);
 
         std::cout << "gt inliers " << gt_inliers.size() << '\n';
@@ -158,54 +165,109 @@ public:
 
         cv::vconcat(img_matches, gt_img_matches, imgs);
 
+        cv::Mat H_opencv = cv::Mat_<float>(cv::findHomography(points1, points2));
         cv::Mat H_gt;
         getH (points_filename.substr(0, points_filename.find('_'))+"_model.txt", H_gt);
 
-        cv::Mat panorama_gt, panorama;
+        cv::Mat points1_t, points2_t;
+        cv::transpose(points1, points1_t);
+        cv::transpose(points2, points2_t);
 
-        cv::warpPerspective(img2, panorama_gt, H_gt, cv::Size(2*img2.cols, img2.rows));
-        cv::warpPerspective(img2, panorama, H, cv::Size(2*img2.cols, img2.rows));
+        cv::Mat est_pts_on_corr2 = H * points1_t;
+        cv::Mat gt_est_pts_on_corr2 = H_gt.inv() * points1_t;
+        cv::Mat opencv_est_pts_on_corr2 = H_opencv * points1_t;
 
-        cv::Mat warp_img1, warp_img2, gt_warp_img1, gt_warp_img2;
+        cv::Mat est_pts_on_corr1 = H.inv() * points2_t;
+        cv::Mat gt_est_pts_on_corr1 = H_gt * points2_t;
+        cv::Mat opencv_est_pts_on_corr1 = H_opencv.inv() * points2_t;
 
-        cv::warpPerspective(img1, warp_img1, H, cv::Size(img1.cols, img1.rows));
-        cv::warpPerspective(img2, warp_img2, H, cv::Size(img2.cols, img2.rows));
+        cv::Mat img2_inl = cv::imread (images_filename[1]);
+        cv::Mat gt_img2_inl = cv::imread (images_filename[1]);
+        cv::Mat opencv_img2_inl = cv::imread (images_filename[1]);
 
-        cv::warpPerspective(img1, gt_warp_img1, H_gt, cv::Size(img1.cols, img1.rows));
-        cv::warpPerspective(img2, gt_warp_img2, H_gt, cv::Size(img2.cols, img2.rows));
+        cv::Mat img1_inl = cv::imread (images_filename[0]);
+        cv::Mat gt_img1_inl = cv::imread (images_filename[0]);
+        cv::Mat opencv_img1_inl = cv::imread (images_filename[0]);
 
-        cv::Mat warp_imgs;
-        cv::hconcat(warp_img1, warp_img2, warp_img1);
-        cv::hconcat(gt_warp_img1, gt_warp_img2, gt_warp_img1);
-        cv::vconcat(warp_img1, gt_warp_img1, warp_imgs);
+        for (int i = 0; i < points1.rows; i++) {
+            cv::Mat pt_corr1 = cv::Mat_<float>(points1.row(i));
+            cv::Mat pt_corr2 = cv::Mat_<float>(points2.row(i));
 
-//        cv::imshow ("gt perp img 1", gt_warp_img1);
-//        cv::imshow ("gt perp img 2", gt_warp_img2);
-//        cv::imshow ("perp img 1", warp_img1);
-//        cv::imshow ("perp img 2", warp_img2);
+            cv::Mat est_pt_on_corr2 = est_pts_on_corr2.col(i) / est_pts_on_corr2.col(i).at<float>(2);
+            cv::Mat gt_est_pt_on_corr2 = gt_est_pts_on_corr2.col(i) / gt_est_pts_on_corr2.col(i).at<float>(2);
+            cv::Mat opencv_est_pt_on_corr2 = opencv_est_pts_on_corr2.col(i) / opencv_est_pts_on_corr2.col(i).at<float>(2);
+
+            cv::Mat est_pt_on_corr1 = est_pts_on_corr1.col(i) / est_pts_on_corr1.col(i).at<float>(2);
+            cv::Mat gt_est_pt_on_corr1 = gt_est_pts_on_corr1.col(i) / gt_est_pts_on_corr1.col(i).at<float>(2);
+            cv::Mat opencv_est_pt_on_corr1 = opencv_est_pts_on_corr1.col(i) / opencv_est_pts_on_corr1.col(i).at<float>(2);
+
+            cv::Scalar color = cv::Scalar(random()%255, random ()%255, random()%255);
+
+            cv::line(img2_inl, cv::Point_<float> (pt_corr2.at<float>(0), pt_corr2.at<float>(1)),
+                               cv::Point_<float> (est_pt_on_corr2.at<float>(0), est_pt_on_corr2.at<float>(1)), color, 2);
+
+            cv::line(gt_img2_inl, cv::Point_<float> (pt_corr2.at<float>(0), pt_corr2.at<float>(1)),
+                                  cv::Point_<float> (gt_est_pt_on_corr2.at<float>(0), gt_est_pt_on_corr2.at<float>(1)), color, 2);
+
+            cv::line(opencv_img2_inl, cv::Point_<float> (pt_corr2.at<float>(0), pt_corr2.at<float>(1)),
+                     cv::Point_<float> (opencv_est_pt_on_corr2.at<float>(0), opencv_est_pt_on_corr2.at<float>(1)), color, 2);
+
+            cv::line(img1_inl, cv::Point_<float> (pt_corr1.at<float>(0), pt_corr1.at<float>(1)),
+                     cv::Point_<float> (est_pt_on_corr1.at<float>(0), est_pt_on_corr1.at<float>(1)), color, 2);
+
+            cv::line(gt_img1_inl, cv::Point_<float> (pt_corr1.at<float>(0), pt_corr1.at<float>(1)),
+                     cv::Point_<float> (gt_est_pt_on_corr1.at<float>(0), gt_est_pt_on_corr1.at<float>(1)), color, 2);
+
+            cv::line(opencv_img1_inl, cv::Point_<float> (pt_corr1.at<float>(0), pt_corr1.at<float>(1)),
+                     cv::Point_<float> (opencv_est_pt_on_corr1.at<float>(0), opencv_est_pt_on_corr1.at<float>(1)), color, 2);
 
 
-        cv::Mat half_gt(panorama_gt, cv::Rect(0,0,img1.cols,img1.rows));
-        cv::Mat half(panorama, cv::Rect(0,0,img1.cols,img1.rows));
+            cv::circle (img1_inl, cv::Point_<float>(pt_corr1.at<float>(0), pt_corr1.at<float>(1)), 3, cv::Scalar(255, 255, 0), -1);
+            cv::circle (gt_img1_inl, cv::Point_<float>(pt_corr1.at<float>(0), pt_corr1.at<float>(1)), 3, cv::Scalar(255, 255, 0), -1);
+            cv::circle (opencv_img1_inl, cv::Point_<float>(pt_corr1.at<float>(0), pt_corr1.at<float>(1)), 3, cv::Scalar(255, 255, 0), -1);
+            cv::circle (img2_inl, cv::Point_<float>(pt_corr2.at<float>(0), pt_corr2.at<float>(1)), 3, cv::Scalar(255, 255, 0), -1);
+            cv::circle (gt_img2_inl, cv::Point_<float>(pt_corr2.at<float>(0), pt_corr2.at<float>(1)), 3, cv::Scalar(255, 255, 0), -1);
+            cv::circle (opencv_img2_inl, cv::Point_<float>(pt_corr2.at<float>(0), pt_corr2.at<float>(1)), 3, cv::Scalar(255, 255, 0), -1);
 
-        img1.copyTo(half_gt);
-        img1.copyTo(half);
+            cv::circle (img1_inl, cv::Point_<float>(est_pt_on_corr1.at<float>(0), est_pt_on_corr1.at<float>(1)), 3, cv::Scalar(255, 0, 0), -1);
+            cv::circle (gt_img1_inl, cv::Point_<float>(gt_est_pt_on_corr1.at<float>(0), gt_est_pt_on_corr1.at<float>(1)), 3, cv::Scalar(255, 0, 0), -1);
+            cv::circle (opencv_img1_inl, cv::Point_<float>(opencv_est_pt_on_corr1.at<float>(0), opencv_est_pt_on_corr1.at<float>(1)), 3, cv::Scalar(255, 0, 0), -1);
+            cv::circle (img2_inl, cv::Point_<float>(est_pt_on_corr2.at<float>(0), est_pt_on_corr2.at<float>(1)), 3, cv::Scalar(255, 0, 0), -1);
+            cv::circle (gt_img2_inl, cv::Point_<float>(gt_est_pt_on_corr2.at<float>(0), gt_est_pt_on_corr2.at<float>(1)), 3, cv::Scalar(255, 0, 0), -1);
+            cv::circle (opencv_img2_inl, cv::Point_<float>(opencv_est_pt_on_corr2.at<float>(0), opencv_est_pt_on_corr2.at<float>(1)), 3, cv::Scalar(255, 0, 0), -1);
+        }
 
-        cv::resize(panorama_gt, panorama_gt, cv::Size (0.5 * imgs.cols, 0.5 * imgs.rows));
-        cv::resize(panorama, panorama, cv::Size (0.5 * imgs.cols, 0.5 * imgs.rows));
+        cv::vconcat(img2_inl, gt_img2_inl, img2_inl);
+        cv::vconcat(img2_inl, opencv_img2_inl, img2_inl);
 
-//        cv::imshow( "Grand Truth panorama", panorama_gt);
-//        cv::imshow( "panorama", panorama);
+        cv::vconcat(img1_inl, gt_img1_inl, img1_inl);
+        cv::vconcat(img1_inl, opencv_img1_inl, img1_inl);
+
+        cv::hconcat(img1_inl, img2_inl, img2_inl);
+
+        cv::resize(img2_inl, img2_inl, cv::Size (0.75 * img2_inl.cols, 0.5 * img2_inl.rows));
+        cv::imshow ("estimated points on correspondence images vs grand truth estimated points vs opencv", img2_inl);
+
+        cv::Mat panorama_opencv, panorama_gt, panorama;
+        std::vector<cv::Mat> images;
+        images.push_back(img1); images.push_back(img2);
+        drawPanorama(images, panorama, H.inv());
+        drawPanorama(images, panorama_gt, H_gt);
+        drawPanorama(images, panorama_opencv, H_opencv.inv());
 
         cv::resize(imgs, imgs, cv::Size (0.7 * imgs.cols, 0.7 * imgs.rows));
-        cv::resize(warp_imgs, warp_imgs, cv::Size (0.7 * imgs.cols, 0.7 * imgs.rows));
 
-        imshow("imgs ", imgs);
-        imshow("warp imgs ", warp_imgs);
+        cv::vconcat(panorama, panorama_gt, panorama);
+        cv::vconcat(panorama, panorama_opencv, panorama);
+
+        cv::resize(panorama, panorama, cv::Size ( imgs.cols, 0.8 * imgs.rows));
+        cv::imshow("panorama", panorama);
+        cv::imshow("imgs ", imgs);
 
         cv::waitKey(0);
-
     }
+
+    void drawPanorama (const std::vector<cv::Mat>& imgs, cv::Mat& panorama, const cv::Mat& H);
 };
 
 

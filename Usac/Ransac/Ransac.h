@@ -21,13 +21,13 @@ public:
 
     Ransac (Model &model,
             Sampler& sampler,
-            TerminationCriteria& termination_criteria,
-            Quality& quality) {
+            TerminationCriteria& termination_criteria) {
+
 
         this->model = &model;
         this->sampler = &sampler;
         this->termination_criteria = &termination_criteria;
-        this->quality = &quality;
+        this->quality = new Quality;
     }
 
     void run (cv::InputArray input_points, Estimator * const estimator2d);
@@ -60,8 +60,8 @@ public:
         this->quality = &quality;
     }
 
-    Quality getQuality () {
-        return *quality;
+    Quality* getQuality () {
+        return quality;
     }
 };
 

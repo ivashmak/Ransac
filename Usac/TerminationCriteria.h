@@ -44,13 +44,6 @@ public:
     bool isModelInitialized () { return initialized; }
 
 
-    /*
-     * Faster way than calculation with pow, only for sample number = 2
-     */
-    inline unsigned int getUpBoundIterations2Points (float inlier_points, float total_points) {
-		return log_1_p/log(1 - ((inlier_points*inlier_points)/(total_points*total_points)));
-	}
-
 	/*
 	 * Get upper bound iterations for any sample number
 	 * Can be used ceil.

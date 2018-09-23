@@ -11,11 +11,13 @@ void read_points (cv::Mat &pts1, cv::Mat &pts2, const std::string &filename) {
     while (file >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> inl) {
         tmp.at<float>(0) = x1;
         tmp.at<float>(1) = y1;
+//        tmp.at<float>(2) = z1;
 
         pts1.push_back(tmp);
 
         tmp.at<float>(0) = x2;
         tmp.at<float>(1) = y2;
+//        tmp.at<float>(2) = z2;
 
         pts2.push_back(tmp);
     }

@@ -16,8 +16,7 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
     int points_size = input_points.getMat(0).rows;
 //    int points_size = input_points.size().width;
 
-
-    std::cout << "Points size " << points_size << '\n';
+//    std::cout << "Points size " << points_size << '\n';
 
     // initialize estimator and termination criteria
     estimator->setPoints(input_points);
@@ -51,7 +50,6 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
             best_model = *model;
 
             max_iters = termination_criteria->getUpBoundIterations(best_score->inlier_number, points_size);
-            std::cout << "max iters " << max_iters << '\n';
         }
 
         iters++;

@@ -8,8 +8,8 @@
 
 // Direct Linear Transformation
 void DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
-    assert(!pts1.empty());
-    assert(!pts2.empty());
+//    assert(!pts1.empty());
+//    assert(!pts2.empty());
 
     cv::Mat points1 = pts1.getMat();
     cv::Mat points2 = pts2.getMat();
@@ -20,7 +20,7 @@ void DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
 
 //    std::cout << "NUMP = "<< points1.size << "\n";
 
-    cv::Mat_<float> A (2*NUMP, 9), tmp1, tmp2, vt;
+    cv::Mat_<float> A (2*NUMP, 9), w, u, vt;
 
     // cvmSet
     for (int i = 1; i <= NUMP; i++) {
@@ -51,19 +51,18 @@ void DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
         A.at<float>(2*i-1, 8) = y2;
     }
 
+    /*
+     * src	decomposed matrix
+     * w 	calculated singular values
+     * u	calculated left singular vectors
+     * vt	transposed matrix of right singular values
+     */
 
-    cv::SVD::compute(A, tmp1, tmp2, vt);
+    cv::SVD::compute(A, w, u, vt);
 
-    cv::transpose(vt, vt);
+    H = cv::Mat_<float>(vt.row(vt.rows-1).reshape (3,3));
 
-    vt.col(vt.cols-1).copyTo(H);
-
-    H = cv::Mat_<float>(H.reshape (3,3));
-
-//    H = (cv::Mat_<float>(3,3) <<
-//            H.at<float>(0), H.at<float>(1), H.at<float>(2),
-//            H.at<float>(3), H.at<float>(4), H.at<float>(5),
-//            H.at<float>(6), H.at<float>(7), H.at<float>(8));
+//     /* or */ cv::transpose(vt, vt); H = cv::Mat_<float>(vt.col(vt.cols-1).reshape (3,3));
 
 }
 

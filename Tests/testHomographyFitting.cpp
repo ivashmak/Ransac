@@ -30,17 +30,11 @@ void Tests::testHomographyFitting() {
     cv::Mat points1, points2;
     read_points (points1, points2, points_filename);
 
-    cv::Mat Hh;
-    NormalizedDLT(points1, points2, Hh);
-    std::cout << Hh << "\n\n";
-
     std::vector<cv::Mat> points;
     points.push_back(points1);
     points.push_back(points2);
 
-    float sigma = 70;
-    float threshold = sqrt(5.99) * sigma;
-    Model *homography_model = new Model (threshold, 4, 0.99, 0, "homography");
+    Model *homography_model = new Model (40, 4, 0.99, 0, "homography");
     Sampler *uniform_sampler = new UniformSampler;
     uniform_sampler->setSampleSize(homography_model->sample_number);
     uniform_sampler->setPointsSize(points1.rows);
@@ -50,23 +44,21 @@ void Tests::testHomographyFitting() {
 
 void test (cv::InputArray points, Model * const model, Sampler * const sampler, std::vector<std::string> images_filename, std::string points_filename) {
     Estimator * homograpy_estimator = new HomographyEstimator;;
-    Quality *quality = new Quality;
     Drawing drawing;
     Logging logResult;
     TerminationCriteria termination_criteria;
 
-    Ransac ransac (*model, *sampler, termination_criteria, *quality);
+    Ransac ransac (*model, *sampler, termination_criteria);
     ransac.run(points, homograpy_estimator);
 
-    std::cout << model->model_name << " time: " << ransac.getQuality().getComputationTime() << "mcs\n";
-    std::cout << model->model_name << " iterations: " << ransac.getQuality().getIterations() << "\n";
-    std::cout << model->model_name << " points under threshold: " << ransac.getQuality().getNumberOfPointsUnderThreshold() << "\n";
+    std::cout << model->model_name << " time: " << ransac.getQuality()->getComputationTime() << "mcs\n";
+    std::cout << model->model_name << " iterations: " << ransac.getQuality()->getIterations() << "\n";
+    std::cout << model->model_name << " points under threshold: " << ransac.getQuality()->getNumberOfPointsUnderThreshold() << "\n";
 
     // save result and compare with last run
-    logResult.compare(model, quality);
-    logResult.saveResult(model, quality);
+    logResult.compare(model, ransac.getQuality());
+    logResult.saveResult(model, ransac.getQuality());
     std::cout << "-----------------------------------------------------------------------------------------\n";
 
     drawing.drawHomographies(images_filename, points_filename, ransac.most_inliers, ransac.best_model.returnDescriptor());
-
 }

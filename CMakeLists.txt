@@ -22,6 +22,7 @@ add_executable(
 
         Usac/Helper/Drawing.h
         Usac/Helper/Logging.h
+        Usac/Helper/DrawPanorama.cpp
 
         Usac/Estimator/Estimator.h
         Usac/Estimator/Line2DEstimator.h

@@ -21,7 +21,6 @@ void test (cv::InputArray points, Sampler * sampler, Model * model);
 void runNTimes (cv::InputArray points, Sampler * sampler, Model * model, int N);
 
 Estimator *estimator2d;
-Quality *quality;
 Drawing drawing;
 Logging logResult;
 TerminationCriteria termination_criteria;
@@ -35,7 +34,6 @@ void Tests::testLineFitting() {
     generate(points, false);
     std::cout << "generated points\n";
 
-    quality = new Quality;
     estimator2d = new Line2DEstimator;
 
     // sort points for Prosac
@@ -75,32 +73,32 @@ void Tests::testLineFitting() {
 //    test (points, evsac_sampler, evsac_model);
 //    test (sorted_points, prosac_sampler, prosac_model);
 
-//    runNTimes(points, uniform_sampler, ransac_model, 1000);
+    runNTimes(points, uniform_sampler, ransac_model, 1000);
 }
 
 
 void test (cv::InputArray points, Sampler * const sampler, Model * const model) {
 
-    Ransac ransac (*model, *sampler, termination_criteria, *quality);
+    Ransac ransac (*model, *sampler, termination_criteria);
     ransac.run(points, estimator2d);
     drawing.draw(ransac.most_inliers, &ransac.best_model, &ransac.non_minimal_model, points);
 
-    std::cout << model->model_name << " time: " << ransac.getQuality().getComputationTime() << "mcs\n";
-    std::cout << model->model_name << " iterations: " << ransac.getQuality().getIterations() << "\n";
-    std::cout << model->model_name << " points under threshold: " << ransac.getQuality().getNumberOfPointsUnderThreshold() << "\n";
+    std::cout << model->model_name << " time: " << ransac.getQuality()->getComputationTime() << "mcs\n";
+    std::cout << model->model_name << " iterations: " << ransac.getQuality()->getIterations() << "\n";
+    std::cout << model->model_name << " points under threshold: " << ransac.getQuality()->getNumberOfPointsUnderThreshold() << "\n";
 
     // save result and compare with last run
-    logResult.compare(model, quality);
-    logResult.saveResult(model, quality);
+    logResult.compare(model, ransac.getQuality());
+    logResult.saveResult(model, ransac.getQuality());
     std::cout << "-----------------------------------------------------------------------------------------\n";
 }
 
 void runNTimes (cv::InputArray points, Sampler * const sampler, Model * const model, int N) {
-    Ransac ransac (*model, *sampler, termination_criteria, *quality);
+    Ransac ransac (*model, *sampler, termination_criteria);
     double time = 0;
     for (int i = 0; i < N; i++) {
         ransac.run(points, estimator2d);
-        time += ransac.getQuality().getComputationTime();
+        time += ransac.getQuality()->getComputationTime();
     }
     std::cout << "average time of "<< N <<" runs is " << (time/N) << "mcs using " << model->model_name
               << " points size is " << points.size().width << "\n";

@@ -6,7 +6,7 @@
 #include <iostream>
 
 void GetNormalizingTransformation (cv::InputArray pts, cv::Mat &T, cv::Mat &offset, float * s, float *s1, float * s2) {
-    assert(!pts.empty());
+//    assert(!pts.empty());
 
     cv::Mat points = pts.getMat();
     int NUMP = points.rows;
@@ -15,7 +15,7 @@ void GetNormalizingTransformation (cv::InputArray pts, cv::Mat &T, cv::Mat &offs
 
     cv::Scalar mean1 = cv::mean(points.col(0));
     cv::Scalar mean2 = cv::mean(points.col(1));
-
+//    cv::Scalar mean3 = cv::mean(points.col(2));
 
     offset = (cv::Mat_<float> (1,2) << mean1.val[0], mean2.val[0]);
     cv::Mat ones = cv::Mat_<float>::ones(NUMP, 1);
