@@ -26,6 +26,11 @@ private:
     RandomGenerator * array_randomGenerator; // random generator for k nearest neighbors
 public:
 
+    /*
+     * find K nearest neighbors for one, compute maximum iterations by getting SampleNumber
+     * from KNN using formula knn!/(sample_number!*(knn-sample_number)!
+     * and reset KNN after iterations expired.
+     */
     NapsacSampler (cv::InputArray input_points, int knn, unsigned int sample_size, bool reset_time = true) {
         assert (!input_points.empty());
 
