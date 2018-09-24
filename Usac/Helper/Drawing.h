@@ -260,7 +260,7 @@ public:
         cv::vconcat(panorama, panorama_gt, panorama);
         cv::vconcat(panorama, panorama_opencv, panorama);
 
-        cv::resize(panorama, panorama, cv::Size ( imgs.cols, 0.8 * imgs.rows));
+        cv::resize(panorama, panorama, cv::Size ( imgs.cols, 1 * imgs.rows));
         cv::imshow("panorama", panorama);
         cv::imshow("imgs ", imgs);
 

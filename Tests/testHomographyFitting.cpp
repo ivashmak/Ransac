@@ -19,6 +19,8 @@
 #include "../Usac/Helper/Drawing.h"
 #include "../Usac/Helper/Logging.h"
 
+#include "../Generator/generator.h"
+
 void test (cv::InputArray points, Model * const model, Sampler * const sampler, std::vector<std::string> images_filename, std::string points_filename);
 
 void Tests::testHomographyFitting() {
@@ -34,7 +36,7 @@ void Tests::testHomographyFitting() {
     points.push_back(points1);
     points.push_back(points2);
 
-    Model *homography_model = new Model (40, 4, 0.99, 0, "homography");
+    Model *homography_model = new Model (15, 4, 0.99, 0, "homography");
     Sampler *uniform_sampler = new UniformSampler;
     uniform_sampler->setSampleSize(homography_model->sample_number);
     uniform_sampler->setPointsSize(points1.rows);
@@ -43,6 +45,7 @@ void Tests::testHomographyFitting() {
 }
 
 void test (cv::InputArray points, Model * const model, Sampler * const sampler, std::vector<std::string> images_filename, std::string points_filename) {
+
     Estimator * homograpy_estimator = new HomographyEstimator;;
     Drawing drawing;
     Logging logResult;

@@ -1,22 +1,23 @@
 #include "Ransac.h"
 
 
-//int getPointsSize (cv::InputArray points) {
-////    std::cout << points.getMat(0).total() << '\n';
-//    points.size()
-//    return points.size() == 1 ? points.size().width : points.size(0).width;
-//}
+int getPointsSize (cv::InputArray points) {
+//    std::cout << points.getMat(0).total() << '\n';
+    if (points.isVector()) {
+        return points.size().width;
+    } else {
+        return points.getMat(0).rows;
+    }
+}
 
 void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
     assert(!input_points.empty());
 
     auto begin_time = std::chrono::steady_clock::now();
 
+    int points_size = getPointsSize(input_points);
 
-    int points_size = input_points.getMat(0).rows;
-//    int points_size = input_points.size().width;
-
-//    std::cout << "Points size " << points_size << '\n';
+    std::cout << "Points size " << points_size << '\n';
 
     // initialize estimator and termination criteria
     estimator->setPoints(input_points);

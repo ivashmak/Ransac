@@ -60,11 +60,6 @@ public:
 
         NormalizedDLT(points1, points2, H);
 
-        float norm = sqrt(H.at<float>(0,0)*H.at<float>(0,0) +
-                           H.at<float>(1,0)*H.at<float>(1,0) +
-                           H.at<float>(2,0)*H.at<float>(2,0));
-        H /= norm;
-
         this->H = H;
         this->H_inv = H.inv();
 
