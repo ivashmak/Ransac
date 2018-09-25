@@ -89,6 +89,10 @@ public:
 
         k_iterations++;
     }
+
+    bool isInit () override {
+        return true;
+    }
 };
 
 

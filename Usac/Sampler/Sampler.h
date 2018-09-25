@@ -6,8 +6,8 @@
 class Sampler {
 protected:
     unsigned int k_iterations = 0;
-    unsigned int sample_size;
-    unsigned int points_size;
+    unsigned int sample_size = 0;
+    unsigned int points_size = 0;
 public:
 
     /*
@@ -60,9 +60,18 @@ public:
     virtual void initRandomGenerator () {}
 
 
+    /*
+     * Returns count of Sampler calls
+     */
     unsigned int getNumberOfIterations () {
         return k_iterations;
     }
+
+    /*
+     * Check if sampler is safe to use and everything is initialized
+     * Can be different for child classes
+     */
+    virtual bool isInit ()  { return false; }
 
 };
 

@@ -69,11 +69,11 @@ void Tests::testLineFitting() {
     Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
 
     test (points, uniform_sampler, ransac_model);
-//    test (points, napsac_sampler, napsac_model);
-//    test (points, evsac_sampler, evsac_model);
-//    test (sorted_points, prosac_sampler, prosac_model);
+    test (points, napsac_sampler, napsac_model);
+    test (points, evsac_sampler, evsac_model);
+    test (sorted_points, prosac_sampler, prosac_model);
 
-    runNTimes(points, uniform_sampler, ransac_model, 1000);
+//    runNTimes(points, uniform_sampler, ransac_model, 1000);
 }
 
 
@@ -81,6 +81,7 @@ void test (cv::InputArray points, Sampler * const sampler, Model * const model) 
 
     Ransac ransac (*model, *sampler, termination_criteria);
     ransac.run(points, estimator2d);
+//    drawing.draw(ransac.most_inliers, ransac.getBestModel(), ransac.getNonMinimalModel(), points);
     drawing.draw(ransac.most_inliers, &ransac.best_model, &ransac.non_minimal_model, points);
 
     std::cout << model->model_name << " time: " << ransac.getQuality()->getComputationTime() << "mcs\n";

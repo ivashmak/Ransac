@@ -26,6 +26,9 @@ public:
         randomGenerator->generateUniqueRandomSet(sample, sample_size);
     }
 
+    bool isInit () override {
+        return !(sample_size == 0 || points_size == 0);
+    }
 };
 
 

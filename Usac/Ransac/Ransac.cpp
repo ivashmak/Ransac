@@ -1,8 +1,8 @@
 #include "Ransac.h"
 
-
 int getPointsSize (cv::InputArray points) {
 //    std::cout << points.getMat(0).total() << '\n';
+
     if (points.isVector()) {
         return points.size().width;
     } else {
@@ -12,6 +12,11 @@ int getPointsSize (cv::InputArray points) {
 
 void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
     assert(!input_points.empty());
+    assert(estimator != nullptr);
+    assert(model != nullptr);
+    assert(quality != NULL);
+    assert(sampler != nullptr);
+    assert(termination_criteria != nullptr);
 
     auto begin_time = std::chrono::steady_clock::now();
 
@@ -22,6 +27,14 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
     // initialize estimator and termination criteria
     estimator->setPoints(input_points);
     termination_criteria->init(model);
+
+    /*
+     * Check if all components are initialized and safe to run
+     * todo: add more criteria
+     */
+    if (!sampler->isInit()) {
+        std::cerr << "Sampler is not initialized\n";
+    }
 
     int iters = 0;
     int max_iters = model->max_iterations;

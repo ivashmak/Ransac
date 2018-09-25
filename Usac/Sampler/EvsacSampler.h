@@ -129,7 +129,10 @@ public:
                 }
             }
         }
+    }
 
+    bool isInit () override {
+        return true;
     }
 };
 

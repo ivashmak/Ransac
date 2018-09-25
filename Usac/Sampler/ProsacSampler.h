@@ -68,6 +68,10 @@ public:
 
         kth_sample_number_++;
     }
+
+    bool isInit () override {
+        return true;
+    }
 };
 
 #endif //USAC_PROSACSAMPLER_H

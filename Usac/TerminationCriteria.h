@@ -11,11 +11,13 @@ private:
 
     /*
      * Declare my_pow function as pow is very slow
+     * https://stackoverflow.com/questions/41072787/why-is-powint-int-so-slow/41072811
      * pow(x,y) = e^(y log(x))
+     * Assume that my pow is called for power at least 2.
      */
     float my_pow (float n, int k) {
-        float res = n;
-        while (k > 1) {
+        float res = n * n;
+        while (k > 2) {
             res *= n; k--;
         }
         return res;

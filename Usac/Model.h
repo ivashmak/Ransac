@@ -9,7 +9,6 @@ public:
 	int max_iterations = 10000;
 	std::string model_name = "ransac";
 	int k_nearest_neighbors = 2;
-    int N_points = 0;
 
 protected:
     cv::Mat descriptor;

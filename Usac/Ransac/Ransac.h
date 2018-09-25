@@ -8,16 +8,19 @@
 
 class Ransac {
 protected:
-    Model *model;
-    Quality *quality;
-    Sampler *sampler;
-    TerminationCriteria *termination_criteria;
-
+    /*
+     * Initialize them to 0 to check if they are null
+     */
+    Model *model = 0;
+    Quality *quality = 0;
+    Sampler *sampler = 0;
+    TerminationCriteria *termination_criteria = 0;
 public:
-    std::vector<int> most_inliers;
 
     Model best_model;
     Model non_minimal_model;
+
+    std::vector<int> most_inliers;
 
     Ransac (Model &model,
             Sampler& sampler,
@@ -63,7 +66,16 @@ public:
     Quality* getQuality () {
         return quality;
     }
+
+//    Model* getBestModel () {
+//        return &best_model;
+//    }
+//
+//    Model* getNonMinimalModel () {
+//        return &non_minimal_model;
+//    }
 };
+
 
 
 #endif //RANSAC_RANSAC_H
