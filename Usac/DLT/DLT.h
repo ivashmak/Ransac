@@ -32,30 +32,21 @@ void DLT (cv::InputArray pts, const int * const sample, int sample_number, cv::M
 
     float * const points = (float *) pts.getMat().data;
 
-    float *points1 = new float[2*sample_number], *points2 = new float[2*sample_number];
-
-    for (int i = 0; i < sample_number; i++) {
-        points1[2*i] = points[4*sample[i]];
-        points1[2*i+1] = points[4*sample[i]+1];
-        points2[2*i] = points[4*sample[i]+2];
-        points2[2*i+1] = points[4*sample[i]+3];
-    }
-    
     int NUMP = sample_number; //pts1.getMat().rows;
 
     float x1, y1, x2, y2;
 
-//    std::cout << "NUMP = "<< points1.size << "\n";
-
     cv::Mat_<float> A (2*NUMP, 9), w, u, vt;
     float * A_ptr = (float *) A.data;
 
-    for (int i = 1; i <= NUMP; i++) {
-        x1 = points1[2*(i-1)];
-        y1 = points1[2*i-1];
+    for (int i = 0; i < NUMP; i++) {
+        x1 = points[4*sample[i]];
+        y1 = points[4*sample[i]+1];
 
-        x2 = points2[2*(i-1)];
-        y2 = points2[2*i-1];
+        x2 = points[4*sample[i]+2];
+        y2 = points[4*sample[i]+3];
+
+//        std::cout << x1 << " " << y1 << " " << x2 << " " << y2 << '\n';
 
         (*A_ptr++) = -x1;
         (*A_ptr++) = -y1;

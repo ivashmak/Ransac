@@ -42,9 +42,9 @@ void Tests::testHomographyFitting() {
     uniform_sampler->setSampleSize(homography_model->sample_number);
     uniform_sampler->setPointsSize(points1.rows);
 
-//    test (points, homography_model, uniform_sampler, images_filename, points_filename);
+    test (points, homography_model, uniform_sampler, images_filename, points_filename);
 
-    runNTimesHomography(points, homography_model, uniform_sampler, 1000);
+//    runNTimesHomography(points, homography_model, uniform_sampler, 1000);
 }
 
 void test (cv::InputArray points, Model * const model, Sampler * const sampler, std::vector<std::string> images_filename, std::string points_filename) {

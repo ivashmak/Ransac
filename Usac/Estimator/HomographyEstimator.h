@@ -52,6 +52,8 @@ public:
 
         DLT (pts, sample, 4, H);
 
+//        std::cout << "H = \n" << H << "\n\n--------------------------\n";
+
         this->H = H;
         this->H_inv = H.inv();
 
@@ -110,7 +112,6 @@ public:
         error += sqrt ((x2 - est_x2) * (x2 - est_x2) + (y2 - est_y2) * (y2 - est_y2));
         error += sqrt ((x1 - est_x1) * (x1 - est_x1) + (y1 - est_y1) * (y1 - est_y1));
 
-//        std::cout << error << " " << error2 << '\n';
         return error/2;
     }
 

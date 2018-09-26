@@ -49,13 +49,24 @@ public:
 	/*
 	 * Get upper bound iterations for any sample number
 	 * Can be used ceil.
+	 * If (inls/total_pts) almost 0, so under logarithm is almost 1, so denominator is almost 0
+	 * In this case just return 10000 (magic number) iterations.
 	 */
     inline unsigned int getUpBoundIterations (float inlier_points, float total_points) {
-        return log_1_p/log(1 - my_pow((inlier_points/total_points), sample_number));
+        float inl_prob = (inlier_points/total_points) * (inlier_points/total_points);
+        int k = sample_number;
+        while (k > 2) {
+            inl_prob *= (inlier_points/total_points);
+            k--;
+        }
+        if (inl_prob < 0.00001) return 10000;
+        return log_1_p/log(1 - inl_prob);
     }
 
     inline unsigned int getUpBoundIterations (float inlier_points, float total_points, unsigned int sample_number, float desir_prob) {
-        return log(1-desir_prob)/log(1 - my_pow((inlier_points/total_points), sample_number));
+        this->sample_number = sample_number;
+        log_1_p = log(1-desir_prob);
+        return getUpBoundIterations(inlier_points, total_points);
     }
 
 };

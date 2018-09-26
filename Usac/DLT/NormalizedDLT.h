@@ -50,7 +50,18 @@ void NormalizedDLT (cv::InputArray pts, const int * const sample, int sample_num
 
 //    DLT(points1.rowRange(0,2), points2.rowRange(0,2), H);
 
-    DLT(pts, sample, sample_number, H);
+    int * newsample = new int [sample_number];
+    for (int i = 0; i < sample_number; i++) {
+        newsample[i] = i;
+    }
+    cv::Mat newpts;
+    cv::vconcat(points1.rowRange(0,2), points2.rowRange(0,2), newpts);
+
+    cv::transpose(newpts, newpts);
+
+//    std::cout << newpts << "\n\n";
+
+    DLT(newpts, newsample, sample_number, H);
 
     H = T2.inv()*H*T1;
 }
