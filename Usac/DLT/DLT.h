@@ -7,39 +7,13 @@
 #include <opencv2/xfeatures2d.hpp>
 
 // Direct Linear Transformation
-//void DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
-void DLT (cv::InputArray pts, const int * const sample, int sample_number, cv::Mat &H) {
-
-    /*
-     * mat array N x 2
-     * x1 y1
-     * x2 y2
-     * ...
-     * xN yN
-     *
-     * float array 2N x 1
-     * x1
-     * y1
-     * x2
-     * y2
-     * ...
-     * xN
-     * yN
-     */
-
-//    float * points1 = (float *) pts1.getMat().data;
-//    float * points2 = (float *) pts2.getMat().data;
-
-    float * const points = (float *) pts.getMat().data;
-
-    int NUMP = sample_number; //pts1.getMat().rows;
-
+void DLT (const float * const points, const int * const sample, int sample_number, cv::Mat &H) {
     float x1, y1, x2, y2;
 
-    cv::Mat_<float> A (2*NUMP, 9), w, u, vt;
+    cv::Mat_<float> A (2*sample_number, 9), w, u, vt;
     float * A_ptr = (float *) A.data;
 
-    for (int i = 0; i < NUMP; i++) {
+    for (int i = 0; i < sample_number; i++) {
         x1 = points[4*sample[i]];
         y1 = points[4*sample[i]+1];
 
