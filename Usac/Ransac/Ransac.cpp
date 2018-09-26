@@ -11,12 +11,17 @@ int getPointsSize (cv::InputArray points) {
 }
 
 void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
+    /*
+     * Check if all components are initialized and safe to run
+     * todo: add more criteria
+     */
     assert(!input_points.empty());
     assert(estimator != nullptr);
     assert(model != nullptr);
     assert(quality != NULL);
     assert(sampler != nullptr);
     assert(termination_criteria != nullptr);
+    assert(sampler->isInit());
 
     auto begin_time = std::chrono::steady_clock::now();
 
@@ -27,14 +32,6 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
     // initialize estimator and termination criteria
     estimator->setPoints(input_points);
     termination_criteria->init(model);
-
-    /*
-     * Check if all components are initialized and safe to run
-     * todo: add more criteria
-     */
-    if (!sampler->isInit()) {
-        std::cerr << "Sampler is not initialized\n";
-    }
 
     int iters = 0;
     int max_iters = model->max_iterations;
@@ -58,7 +55,9 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
         quality->GetModelScore(estimator, model, input_points, points_size, *current_score);
 
         if (quality->IsBetter(best_score, current_score)) {
-            best_score = new Score (*current_score);
+            // copy current score to best score
+            best_score->inlier_number = current_score->inlier_number;
+            best_score->score = current_score->score;
 
             // remember best model
             best_model = *model;
@@ -74,8 +73,6 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
 
     estimator->EstimateModelNonMinimalSample(&most_inliers[0], best_score->inlier_number, non_minimal_model);
 
-    delete sample;
-
     auto end_time = std::chrono::steady_clock::now();
     std::chrono::duration<float> fs = end_time - begin_time;
 
@@ -83,4 +80,7 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
     quality->total_iterations = iters;
     quality->points_under_threshold = best_score->inlier_number;
     quality->total_time = std::chrono::duration_cast<std::chrono::microseconds>(fs);
+
+    delete sample, current_score, best_score;
+
 }

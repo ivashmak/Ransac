@@ -15,7 +15,6 @@ void GetNormalizingTransformation (cv::InputArray pts, cv::Mat &T, cv::Mat &offs
 
     cv::Scalar mean1 = cv::mean(points.col(0));
     cv::Scalar mean2 = cv::mean(points.col(1));
-//    cv::Scalar mean3 = cv::mean(points.col(2));
 
     offset = (cv::Mat_<float> (1,2) << mean1.val[0], mean2.val[0]);
     cv::Mat ones = cv::Mat_<float>::ones(NUMP, 1);
@@ -23,15 +22,16 @@ void GetNormalizingTransformation (cv::InputArray pts, cv::Mat &T, cv::Mat &offs
 
     float summa1 = 0, summa2 = 0;
 
+    float * ptsOffseted_ptr = (float *) ptsOffseted.data;
+
     for (int i = 0; i < NUMP; i++) {
-        summa1 += pow(ptsOffseted.at<float>(i, 0), 2);
-        summa2 += pow(ptsOffseted.at<float>(i, 1), 2);
+        summa1 += ptsOffseted_ptr[i] * ptsOffseted_ptr[i]; // xi * xi
+        summa2 += ptsOffseted_ptr[i+1] * ptsOffseted_ptr[i+1]; // yi * yi
     }
 
     *s1 = (float) sqrt(summa1 / NUMP);
     *s2 = (float) sqrt(summa2 / NUMP);
     *s = (float) (sqrt((summa1 + summa2) / NUMP) / sqrt(2));
-
 
     cv::Mat T1 = cv::Mat_<float>::eye(3, 3);
     cv::Mat T2 = cv::Mat_<float>::eye(3, 3);

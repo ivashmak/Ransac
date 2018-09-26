@@ -6,10 +6,10 @@
 6. Samplers.
 
 
-1. Create Makefiles in each folder?
-2. Prosac, shoud have extra termination criteria (maximality and non random inliers)?
+1. Create Makefiles in each folder? No
+2. Prosac, shoud have extra termination criteria (maximality and non random inliers)? Skip
 3. Evsac, is enough to use Theia implementation (including all Theia libraries which has big
-dependencies and slow down compilation)?
+dependencies and slow down compilation)? Skip
 4. Napsac Find K Nearest Neighbors for one initial point or for all points. My idea is to
 find K nearest neighbors for one, compute maximum iterations by getting SampleNumber from KNN
 using formula knn!/(sample_number!*(knn-sample_number)!  and reset KNN after iterations expired.
@@ -18,6 +18,6 @@ the fastest GetRandomNumber() and numbers are uniques. Should we use them instea
 6. HomographyEstimator: We can implement getInliersCount inside Homography estimator.
 GetError function requires multiply point by H, but we can multiply all points at once and calling
 GetInlierCount only one time. But for Line2DEstimator it did not speed up the code, by contrast made it twice slower.
-7. Verbose mode?
-8. Preference to pointer class or to object class?
+7. Verbose mode? Yes
+8. Preference to pointer class or to object class? Pointer
 9. Something maybe wrong in Homography Fitting.

@@ -12,12 +12,6 @@ struct Score {
     float score;
 };
 
-static int f()
-{
-    static int i = 0;
-    return i++;
-}
-
 class Quality {
 public:
     int total_iterations = 0;

@@ -22,6 +22,7 @@
 #include "../Generator/generator.h"
 
 void test (cv::InputArray points, Model * const model, Sampler * const sampler, std::vector<std::string> images_filename, std::string points_filename);
+void runNtimes (cv::InputArray points, Model * const model, Sampler * const sampler, int N);
 
 void Tests::testHomographyFitting() {
     std::string points_filename = "../images/homography/graf_pts.txt";
@@ -36,12 +37,15 @@ void Tests::testHomographyFitting() {
     points.push_back(points1);
     points.push_back(points2);
 
-    Model *homography_model = new Model (15, 4, 0.99, 0, "homography");
+    Model *homography_model = new Model (10, 4, 0.99, 0, "homography");
     Sampler *uniform_sampler = new UniformSampler;
     uniform_sampler->setSampleSize(homography_model->sample_number);
     uniform_sampler->setPointsSize(points1.rows);
 
     test (points, homography_model, uniform_sampler, images_filename, points_filename);
+
+//    runNtimes(points, homography_model, uniform_sampler, 1000);
+
 }
 
 void test (cv::InputArray points, Model * const model, Sampler * const sampler, std::vector<std::string> images_filename, std::string points_filename) {
@@ -64,4 +68,21 @@ void test (cv::InputArray points, Model * const model, Sampler * const sampler, 
     std::cout << "-----------------------------------------------------------------------------------------\n";
 
     drawing.drawHomographies(images_filename, points_filename, ransac.most_inliers, ransac.best_model.returnDescriptor());
+}
+
+void runNTimes (cv::InputArray points, Model * const model, Sampler * const sampler, int N) {
+    Estimator * homograpy_estimator = new HomographyEstimator;;
+    Drawing drawing;
+    Logging logResult;
+    TerminationCriteria termination_criteria;
+
+    Ransac ransac (*model, *sampler, termination_criteria);
+    float time = 0;
+    for (int i = 0; i < N; i++) {
+        ransac.run(points, homograpy_estimator);
+        time += ransac.getQuality()->getComputationTime();
+    }
+    std::cout << "average time of "<< N <<" runs is " << (time/N) << "mcs using " << model->model_name
+              << " points size is " << points.size().width << "\n";
+
 }

@@ -20,23 +20,21 @@ void NormalizedDLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
     GetNormalizingTransformation(pts1, T1, offset1, &s1, &s1_1, &s1_2);
     GetNormalizingTransformation(pts2, T2, offset2, &s2, &s2_1, &s2_2);
 
-    cv::Mat ones = cv::Mat_<float>::ones(1, NUMP), tmp1, tmp2;
+    cv::Mat ones = cv::Mat_<float>::ones(1, NUMP), points1_3d, points2_3d;
 
     cv::transpose (points1, points1);
     cv::transpose (points2, points2);
 
-    cv::vconcat(points1, ones, tmp1);
-    cv::vconcat(points2, ones, tmp2);
+    cv::vconcat(points1, ones, points1_3d);
+    cv::vconcat(points2, ones, points2_3d);
 
-    cv::Mat pts1Tr = T1 * tmp1; cv::transpose(pts1Tr, pts1Tr);
-    cv::Mat pts2Tr = T2 * tmp2; cv::transpose(pts2Tr, pts2Tr);
+    cv::Mat pts1Tr = T1 * points1_3d;
+    cv::Mat pts2Tr = T2 * points2_3d;
 
-    pts1Tr.colRange(0,2).copyTo(pts1Tr);
-    pts2Tr.colRange(0,2).copyTo(pts2Tr);
+    pts1Tr.rowRange(0,2).copyTo(pts1Tr);
+    pts2Tr.rowRange(0,2).copyTo(pts2Tr);
 
     DLT(pts1Tr, pts2Tr, H);
-
-//    std::cout << "H = \n" << H << "\n\n";
 
     H = T2.inv()*H*T1;
 }

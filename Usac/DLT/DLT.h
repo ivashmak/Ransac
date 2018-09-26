@@ -8,47 +8,61 @@
 
 // Direct Linear Transformation
 void DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
-//    assert(!pts1.empty());
-//    assert(!pts2.empty());
 
-    cv::Mat points1 = pts1.getMat();
-    cv::Mat points2 = pts2.getMat();
+    /*
+     * mat array N x 2
+     * x1 y1
+     * x2 y2
+     * ...
+     * xN yN
+     *
+     * float array 2N x 1
+     * x1
+     * y1
+     * x2
+     * y2
+     * ...
+     * xN
+     * yN
+     */
+    float * points1 = (float *) pts1.getMat().data;
+    float * points2 = (float *) pts2.getMat().data;
 
-    int NUMP = points1.rows;
+    int NUMP = pts1.getMat().rows;
 
     float x1, y1, x2, y2;
 
 //    std::cout << "NUMP = "<< points1.size << "\n";
 
     cv::Mat_<float> A (2*NUMP, 9), w, u, vt;
+    float * A_ptr = (float *) A.data;
 
-    // cvmSet
     for (int i = 1; i <= NUMP; i++) {
-        x1 = points1.at<float>(i-1,0);
-        y1 = points1.at<float>(i-1,1);
+        x1 = points1[2*(i-1)];
+        y1 = points1[2*i-1];
 
-        x2 = points2.at<float>(i-1,0);
-        y2 = points2.at<float>(i-1,1);
+        x2 = points2[2*(i-1)];
+        y2 = points2[2*i-1];
 
-        A.at<float>(2*i-2, 0) = -x1;
-        A.at<float>(2*i-2, 1) = -y1;
-        A.at<float>(2*i-2, 2) = -1;
-        A.at<float>(2*i-2, 3) = 0;
-        A.at<float>(2*i-2, 4) = 0;
-        A.at<float>(2*i-2, 5) = 0;
-        A.at<float>(2*i-2, 6) = x2*x1;
-        A.at<float>(2*i-2, 7) = x2*y1;
-        A.at<float>(2*i-2, 8) = x2;
+        (*A_ptr++) = -x1;
+        (*A_ptr++) = -y1;
+        (*A_ptr++) = -1;
+        (*A_ptr++) = 0;
+        (*A_ptr++) = 0;
+        (*A_ptr++) = 0;
+        (*A_ptr++) = x2*x1;
+        (*A_ptr++) = x2*y1;
+        (*A_ptr++) = x2;
 
-        A.at<float>(2*i-1, 0) = 0;
-        A.at<float>(2*i-1, 1) = 0;
-        A.at<float>(2*i-1, 2) = 0;
-        A.at<float>(2*i-1, 3) = -x1;
-        A.at<float>(2*i-1, 4) = -y1;
-        A.at<float>(2*i-1, 5) = -1;
-        A.at<float>(2*i-1, 6) = y2*x1;
-        A.at<float>(2*i-1, 7) = y2*y1;
-        A.at<float>(2*i-1, 8) = y2;
+        (*A_ptr++) = 0;
+        (*A_ptr++) = 0;
+        (*A_ptr++) = 0;
+        (*A_ptr++) = -x1;
+        (*A_ptr++) = -y1;
+        (*A_ptr++) = -1;
+        (*A_ptr++) = y2*x1;
+        (*A_ptr++) = y2*y1;
+        (*A_ptr++) = y2;
     }
 
     /*
@@ -57,12 +71,9 @@ void DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
      * u	calculated left singular vectors
      * vt	transposed matrix of right singular values
      */
-
     cv::SVD::compute(A, w, u, vt);
 
     H = cv::Mat_<float>(vt.row(vt.rows-1).reshape (3,3));
-
-//     /* or */ cv::transpose(vt, vt); H = cv::Mat_<float>(vt.col(vt.cols-1).reshape (3,3));
 
 }
 
