@@ -7,7 +7,8 @@
 #include <opencv2/xfeatures2d.hpp>
 
 // Direct Linear Transformation
-void DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
+//void DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
+void DLT (cv::InputArray pts, const int * const sample, int sample_number, cv::Mat &H) {
 
     /*
      * mat array N x 2
@@ -25,10 +26,22 @@ void DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
      * xN
      * yN
      */
-    float * points1 = (float *) pts1.getMat().data;
-    float * points2 = (float *) pts2.getMat().data;
 
-    int NUMP = pts1.getMat().rows;
+//    float * points1 = (float *) pts1.getMat().data;
+//    float * points2 = (float *) pts2.getMat().data;
+
+    float * const points = (float *) pts.getMat().data;
+
+    float *points1 = new float[2*sample_number], *points2 = new float[2*sample_number];
+
+    for (int i = 0; i < sample_number; i++) {
+        points1[2*i] = points[4*sample[i]];
+        points1[2*i+1] = points[4*sample[i]+1];
+        points2[2*i] = points[4*sample[i]+2];
+        points2[2*i+1] = points[4*sample[i]+3];
+    }
+    
+    int NUMP = sample_number; //pts1.getMat().rows;
 
     float x1, y1, x2, y2;
 
@@ -74,7 +87,8 @@ void DLT (cv::InputArray pts1, cv::InputArray pts2, cv::Mat &H) {
     cv::SVD::compute(A, w, u, vt);
 
     H = cv::Mat_<float>(vt.row(vt.rows-1).reshape (3,3));
-
 }
+
+
 
 #endif // RANSAC_DLT_H

@@ -6,6 +6,8 @@
 #include "../Quality.h"
 #include "../Sampler/Sampler.h"
 
+#include "../Verbose.h"
+
 class Ransac {
 protected:
     /*

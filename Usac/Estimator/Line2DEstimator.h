@@ -58,6 +58,8 @@ public:
 
 
     inline float GetError(int pidx) override {
+        std::cout << input_points[pidx] << '\n';
+
         return fabsf (a * input_points[pidx].x + b * input_points[pidx].y + c);
     }
 
@@ -65,7 +67,7 @@ public:
         return 2;
     }
 
-    void setModelParametres (Model * const model) override {
+    void setModelParameters (Model * const model) override {
         auto *params = (float *) model->returnDescriptor().data;
         a = params[0]; b = params[1]; c = params[2];
 

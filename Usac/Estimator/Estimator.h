@@ -28,7 +28,7 @@ public:
     // Setters of points set and model's parameters sufficiently sped up code
     // functions are virtual, they can be overwritten but not necessarily.
     virtual void setPoints (cv::InputArray input_points) {}
-    virtual void setModelParametres (Model * const model) {}
+    virtual void setModelParameters (Model * const model) {}
 
     virtual int getNumberOfInliers (const Model * const model) {return 0;}
 

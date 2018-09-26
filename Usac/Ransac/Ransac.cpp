@@ -27,7 +27,7 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
 
     int points_size = getPointsSize(input_points);
 
-    std::cout << "Points size " << points_size << '\n';
+//    std::cout << "Points size " << points_size << '\n';
 
     // initialize estimator and termination criteria
     estimator->setPoints(input_points);
@@ -43,11 +43,10 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
     int *sample = new int[estimator->SampleNumber()];
 
     while (iters < max_iters) {
-
         sampler->generateSample(sample);
 
         estimator->EstimateModel(sample, *model);
-        estimator->setModelParametres(model);
+        estimator->setModelParameters(model);
 
         current_score->score = 0;
         current_score->inlier_number = 0;
@@ -82,5 +81,4 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
     quality->total_time = std::chrono::duration_cast<std::chrono::microseconds>(fs);
 
     delete sample, current_score, best_score;
-
 }

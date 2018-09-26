@@ -59,6 +59,8 @@ add_executable(
         RandomGenerator/ShuffleRandomGenerator.h
 
         RandomGenerator/EvaluateRandomGenerators.h
+
+        Usac/Verbose.h
 )
 # parallel
 set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -pthread -ggdb" )

@@ -10,40 +10,32 @@ private:
     cv::Mat H_inv;
     // K images x (N x 3) points
 //    std::vector<cv::Mat> set_points;
-    float * points;
+    const float * const points;
 //    float *samples1_ptr, *samples2_ptr;
-
+    const cv::Mat pts;
 public:
 
-    void setPoints (cv::InputArray input_points) override {
+    /*
+     * input_points must be:
+     * img1_x1 img1_y1 img2_x1 img2_y1 ... imgK_x1 imgK_y1
+     * img1_x2 img1_y2 img2_x2 img2_y2 ... imgK_x2 imgK_y2
+     * ....
+     * img1_xN img1_yN img2_xN img2_yN ... imgK_xN imgK_yN
+     *
+     * Size N x (2*|imgs|)
+     */
+    HomographyEstimator(cv::InputArray input_points) : points((float *)input_points.getMat().data), pts (input_points.getMat()) {
         assert(!input_points.empty());
-
-        cv::Mat_<float> pts;
-        cv::hconcat(input_points.getMat(0), input_points.getMat(1), pts);
-
-        // Easy way to point Mat to float array does not work properly
-//        points = (float *) pts.data;
-
-//        std::cout << pts << "\n\n";
-
-        points = new float [4*pts.rows];
-        for (int i = 0; i < pts.rows; i++) {
-            points[4*i] = pts.at<float>(i, 0);
-            points[4*i+1] = pts.at<float>(i, 1);
-            points[4*i+2] = pts.at<float>(i, 2);
-            points[4*i+3] = pts.at<float>(i, 3);
-        }
-
     }
 
-    void setModelParametres (Model * const model) override {
+    void setModelParameters (Model * const model) override {
         H = cv::Mat_<float>(model->returnDescriptor());
         H_inv = H.inv();
     }
 
     void EstimateModel(const int * const sample, Model &model) override {
         cv::Mat H;
-        cv::Mat_<float>  samples1(4,2), samples2(4,2);
+/*        cv::Mat_<float>  samples1(4,2), samples2(4,2);
 
         float * samples1_ptr = (float *) samples1.data;
         float * samples2_ptr = (float *) samples2.data;
@@ -56,7 +48,9 @@ public:
             (*samples2_ptr++) = points[4*sample[i]+3];
         }
 
-        DLT(samples1, samples2, H);
+        DLT(samples1, samples2, H);*/
+
+        DLT (pts, sample, 4, H);
 
         this->H = H;
         this->H_inv = H.inv();
@@ -66,7 +60,7 @@ public:
 
     void EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
         cv::Mat H;
-        cv::Mat_<float>  samples1(sample_size,2), samples2(sample_size,2);
+/*        cv::Mat_<float>  samples1(sample_size,2), samples2(sample_size,2);
         float * samples1_ptr = (float *) samples1.data;
         float * samples2_ptr = (float *) samples2.data;
 
@@ -78,7 +72,9 @@ public:
             (*samples2_ptr++) = points[4*sample[i]+3];
         }
 
-        NormalizedDLT(samples1, samples2, H);
+        NormalizedDLT(samples1, samples2, H);*/
+
+        NormalizedDLT(pts, sample, sample_size, H);
 
         this->H = H;
         this->H_inv = H.inv();
@@ -88,28 +84,33 @@ public:
 
     float GetError(int pidx) override {
         float error = 0;
-        cv::Mat_<float> corr1_pt;
-        corr1_pt = (cv::Mat_<float>(3,1) << points[4*pidx], points[4*pidx+1], 1);
-        cv::Mat_<float> corr2_pt;
-        corr2_pt = (cv::Mat_<float>(3,1) << points[4*pidx+2], points[4*pidx+3], 1);
 
-//        std::cout << corr1_pt << '\n';
-//        std::cout << corr2_pt << '\n';
+        float x1 = points[4*pidx];
+        float y1 = points[4*pidx+1];
+        float x2 = points[4*pidx+2];
+        float y2 = points[4*pidx+3];
 
-        // 3x3 * 3x1
-        cv::Mat est_pt_on_corr2 = H * corr1_pt;
-        cv::Mat est_pt_on_corr1 = H_inv * corr2_pt;
+//        std::cout << x1 << " " << y1 << " " << x2 << " " << y2 << '\n';
 
-        est_pt_on_corr1 /= est_pt_on_corr1.at<float>(2);
-        est_pt_on_corr2 /= est_pt_on_corr2.at<float>(2);
+        float est_x2 = H.at<float>(0,0) * x1 + H.at<float>(0,1) * y1 + H.at<float>(0,2);
+        float est_y2 = H.at<float>(1,0) * x1 + H.at<float>(1,1) * y1 + H.at<float>(1,2);
+        float est_z2 = H.at<float>(2,0) * x1 + H.at<float>(2,1) * y1 + H.at<float>(2,2);
+
+        est_x2 /= est_z2;
+        est_y2 /= est_z2;
+
+        float est_x1 = H_inv.at<float>(0,0) * x2 + H_inv.at<float>(0,1) * y2 + H_inv.at<float>(0,2);
+        float est_y1 = H_inv.at<float>(1,0) * x2 + H_inv.at<float>(1,1) * y2 + H_inv.at<float>(1,2);
+        float est_z1 = H_inv.at<float>(2,0) * x2 + H_inv.at<float>(2,1) * y2 + H_inv.at<float>(2,2);
+
+        est_x1 /= est_z1;
+        est_y1 /= est_z1;
 
         // error = d(p(i)H, p'(i)) + d(p(i), p'(i)H^-1)
-        error += sqrt ((corr2_pt.at<float>(0) - est_pt_on_corr2.at<float>(0)) * (corr2_pt.at<float>(0) - est_pt_on_corr2.at<float>(0)) +
-                       (corr2_pt.at<float>(1) - est_pt_on_corr2.at<float>(1)) * (corr2_pt.at<float>(1) - est_pt_on_corr2.at<float>(1)));
+        error += sqrt ((x2 - est_x2) * (x2 - est_x2) + (y2 - est_y2) * (y2 - est_y2));
+        error += sqrt ((x1 - est_x1) * (x1 - est_x1) + (y1 - est_y1) * (y1 - est_y1));
 
-        error += sqrt ((corr1_pt.at<float>(0) - est_pt_on_corr1.at<float>(0)) * (corr1_pt.at<float>(0) - est_pt_on_corr1.at<float>(0)) +
-                       (corr1_pt.at<float>(1) - est_pt_on_corr1.at<float>(1)) * (corr1_pt.at<float>(1) - est_pt_on_corr1.at<float>(1)));
-
+//        std::cout << error << " " << error2 << '\n';
         return error/2;
     }
 

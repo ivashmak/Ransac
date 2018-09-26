@@ -6,10 +6,18 @@
 #include "Estimator/Estimator.h"
 #include "Model.h"
 #include <cmath>
+#include <chrono>
 
 struct Score {
     int inlier_number;
     float score;
+};
+
+struct Time {
+    long minutes;
+    long seconds;
+    long milliseconds;
+    long microseconds;
 };
 
 class Quality {
@@ -20,10 +28,25 @@ public:
 public:
 
 	long getComputationTime () {
-		return total_time.count();
+        return total_time.count();
     }
 
-	int getIterations () {
+    void printTime () {
+	    Time *time = getTime();
+	    std::cout << time->seconds << " secs, " << time->milliseconds << " ms, " << time->microseconds << " mcs\n";
+	}
+
+    Time* getTime () {
+        Time *time = new Time;
+        time->microseconds = total_time.count() % 1000;
+        time->milliseconds = ((total_time.count() - time->microseconds)/1000) % 1000;
+        time->seconds = ((total_time.count() - 1000*time->milliseconds - time->microseconds)/(1000*1000)) % 60;
+        time->minutes = ((total_time.count() - 60*1000*time->seconds - 1000*time->milliseconds - time->microseconds)/(60*1000*1000)) % 60;
+        return time;
+    }
+
+
+    int getIterations () {
 		return total_iterations;
 	}
 
@@ -131,7 +154,7 @@ public:
      * inliers. Works same as getModelScore, however save inlier's indexes.
      */
     void getInliers (Estimator * const estimator, int points_size, Model * const  model, std::vector<int>& inliers, bool parallel=false) {
-        estimator->setModelParametres(model);
+        estimator->setModelParameters(model);
 
 	    int num_inliers = 0;
 	    for (int point = 0; point < points_size; point++) {
