@@ -5,6 +5,7 @@
 5. Fast computation.
 6. Samplers.
 
+7. Run homograhpy fittin fon all dataset.
 
 1. Create Makefiles in each folder? No
 2. Prosac, shoud have extra termination criteria (maximality and non random inliers)? Skip

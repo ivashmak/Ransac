@@ -15,11 +15,13 @@ void GetNormalizingTransformation (const float * const pts, cv::OutputArray norm
 
     float mean_pts1_x = 0, mean_pts1_y = 0, mean_pts2_x = 0, mean_pts2_y = 0;
 
+    int smpl;
     for (int i = 0; i < sample_number; i++) {
-        points1_ptr[2*i] = pts[4*sample[i]];
-        points1_ptr[2*i+1] = pts[4*sample[i]+1];
-        points2_ptr[2*i] = pts[4*sample[i]+2];
-        points2_ptr[2*i+1] = pts[4*sample[i]+3];
+        smpl = 4*sample[i];
+        points1_ptr[2*i] = pts[smpl];
+        points1_ptr[2*i+1] = pts[smpl+1];
+        points2_ptr[2*i] = pts[smpl+2];
+        points2_ptr[2*i+1] = pts[smpl+3];
 
         mean_pts1_x += points1_ptr[2*i];
         mean_pts1_y += points1_ptr[2*i+1];

@@ -1,14 +1,13 @@
-#ifndef RANSAC_HOMOGRAPHYESTIMATOR_H
-#define RANSAC_HOMOGRAPHYESTIMATOR_H
+#ifndef USAC_ESSENTIALESTIMATOR_H
+#define USAC_ESSENTIALESTIMATOR_H
 
 #include "Estimator.h"
-#include "../DLT/NormalizedDLT.h"
 
-class HomographyEstimator : public Estimator{
+class EssentialEstimator : public Estimator {
 private:
     const float * const points;
-    cv::Mat H, H_inv;
-    float *H_ptr, *H_inv_ptr;
+    cv::Mat E, E_inv;
+    float *E_ptr, *E_inv_ptr;
 public:
 
     /*
@@ -37,33 +36,28 @@ public:
      * img2_yN
      */
 
-    HomographyEstimator(cv::InputArray input_points) : points((float *)input_points.getMat().data) {
+    EssentialEstimator(cv::InputArray input_points) : points((float *)input_points.getMat().data) {
         assert(!input_points.empty());
     }
 
     void setModelParameters (Model * const model) override {
-        H = cv::Mat_<float>(model->returnDescriptor());
-        H_inv = H.inv();
+        E = cv::Mat_<float>(model->returnDescriptor());
+        E_inv = E.inv();
 
         /*
          * Attention!
          * To make pointer from Mat class, this Mat class should exists as long as exists pointer
-         * So this->H and this->H_inv must be global in class
+         * So this->E and this->E_inv must be global in class
          */
-        H_ptr = (float *) H.data;
-        H_inv_ptr = (float *) H_inv.data;
+        E_ptr = (float *) E.data;
+        E_inv_ptr = (float *) E_inv.data;
     }
 
     void EstimateModel(const int * const sample, Model &model) override {
-        cv::Mat H;
-        DLT (points, sample, 4, H);
-        model.setDescriptor(H);
     }
 
     void EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
-        cv::Mat H;
-        NormalizedDLT(points, sample, sample_size, H);
-        model.setDescriptor(H);
+
     }
 
     float GetError(int pidx) override {
@@ -74,23 +68,21 @@ public:
         float x2 = points[smpl+2];
         float y2 = points[smpl+3];
 
-//        std::cout << x1 << " " << y1 << " " << x2 << " " << y2 << '\n';
-
-        float est_x2 = H_ptr[0] * x1 + H_ptr[1] * y1 + H_ptr[2];
-        float est_y2 = H_ptr[3] * x1 + H_ptr[4] * y1 + H_ptr[5];
-        float est_z2 = H_ptr[6] * x1 + H_ptr[7] * y1 + H_ptr[8];
+        float est_x2 = E_ptr[0] * x1 + E_ptr[1] * y1 + E_ptr[2];
+        float est_y2 = E_ptr[3] * x1 + E_ptr[4] * y1 + E_ptr[5];
+        float est_z2 = E_ptr[6] * x1 + E_ptr[7] * y1 + E_ptr[8];
 
         est_x2 /= est_z2;
         est_y2 /= est_z2;
 
-        float est_x1 = H_inv_ptr[0] * x2 + H_inv_ptr[1] * y2 + H_inv_ptr[2];
-        float est_y1 = H_inv_ptr[3] * x2 + H_inv_ptr[4] * y2 + H_inv_ptr[5];
-        float est_z1 = H_inv_ptr[6] * x2 + H_inv_ptr[7] * y2 + H_inv_ptr[8];
+        float est_x1 = E_inv_ptr[0] * x2 + E_inv_ptr[1] * y2 + E_inv_ptr[2];
+        float est_y1 = E_inv_ptr[3] * x2 + E_inv_ptr[4] * y2 + E_inv_ptr[5];
+        float est_z1 = E_inv_ptr[6] * x2 + E_inv_ptr[7] * y2 + E_inv_ptr[8];
 
         est_x1 /= est_z1;
         est_y1 /= est_z1;
 
-        // error = d(p(i)H, p'(i)) + d(p(i), p'(i)H^-1)
+        // error = d(p(i)E, p'(i)) + d(p(i), p'(i)E^-1)
         error += sqrt ((x2 - est_x2) * (x2 - est_x2) + (y2 - est_y2) * (y2 - est_y2));
         error += sqrt ((x1 - est_x1) * (x1 - est_x1) + (y1 - est_y1) * (y1 - est_y1));
 
@@ -98,9 +90,8 @@ public:
     }
 
     int SampleNumber() override {
-        return 4;
+        return 5;
     }
 };
 
-
-#endif //RANSAC_HOMOGRAPHYESTIMATOR_H
+#endif //USAC_ESSENTIALESTIMATOR_H

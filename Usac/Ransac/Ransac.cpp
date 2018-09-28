@@ -6,7 +6,7 @@ int getPointsSize (cv::InputArray points) {
     if (points.isVector()) {
         return points.size().width;
     } else {
-        return points.getMat(0).rows;
+        return points.getMat().rows;
     }
 }
 

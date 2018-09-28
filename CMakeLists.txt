@@ -27,6 +27,8 @@ add_executable(
         Usac/Estimator/Estimator.h
         Usac/Estimator/Line2DEstimator.h
         Usac/Estimator/HomographyEstimator.h
+        Usac/Estimator/EssentialEstimator.h
+        Usac/Estimator/FundamentalEstimator.h
 
         Usac/Sampler/Sampler.h
         Usac/Sampler/UniformSampler.h

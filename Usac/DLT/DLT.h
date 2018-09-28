@@ -9,16 +9,18 @@
 // Direct Linear Transformation
 void DLT (const float * const points, const int * const sample, int sample_number, cv::Mat &H) {
     float x1, y1, x2, y2;
+    int smpl;
 
     cv::Mat_<float> A (2*sample_number, 9), w, u, vt;
     float * A_ptr = (float *) A.data;
 
     for (int i = 0; i < sample_number; i++) {
-        x1 = points[4*sample[i]];
-        y1 = points[4*sample[i]+1];
+        smpl = 4*sample[i];
+        x1 = points[smpl];
+        y1 = points[smpl+1];
 
-        x2 = points[4*sample[i]+2];
-        y2 = points[4*sample[i]+3];
+        x2 = points[smpl+2];
+        y2 = points[smpl+3];
 
 //        std::cout << x1 << " " << y1 << " " << x2 << " " << y2 << '\n';
 
