@@ -54,7 +54,7 @@ public:
     }
 
     void EstimateModel(const int * const sample, Model &model) override {
-        
+
     }
 
     void EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {

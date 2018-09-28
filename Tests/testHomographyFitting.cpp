@@ -26,10 +26,11 @@ void runNTimesHomography (cv::InputArray points, Model * const model, Sampler * 
 void storeResults ();
 
 void Tests::testHomographyFitting() {
-    std::string points_filename = "../images/homography/graf_pts.txt";
+    std::string img_name = "graf";
+    std::string points_filename = "../images/homography/"+img_name+"_pts.txt";
     std::vector<std::string> images_filename;
-    images_filename.push_back("../images/homography/grafA.png");
-    images_filename.push_back("../images/homography/grafB.png");
+    images_filename.push_back("../images/homography/"+img_name+"A.png");
+    images_filename.push_back("../images/homography/"+img_name+"B.png");
 
     cv::Mat points, points1, points2;
     read_points (points1, points2, points_filename);
@@ -40,11 +41,11 @@ void Tests::testHomographyFitting() {
     uniform_sampler->setSampleSize(homography_model->sample_number);
     uniform_sampler->setPointsSize(points1.rows);
 
-//    test (points, homography_model, uniform_sampler, images_filename, points_filename);
+    test (points, homography_model, uniform_sampler, images_filename, points_filename);
 
 //    runNTimesHomography(points, homography_model, uniform_sampler, 1000);
 
-    storeResults();
+//    storeResults();
 }
 
 void test (cv::InputArray points, Model * const model, Sampler * const sampler, std::vector<std::string> images_filename, std::string points_filename) {
@@ -69,12 +70,7 @@ void test (cv::InputArray points, Model * const model, Sampler * const sampler, 
 }
 
 void runNTimesHomography (cv::InputArray points, Model * const model, Sampler * const sampler, int N) {
-    cv::Mat pts;
-    cv::hconcat(points.getMat(0), points.getMat(1), pts);
-
-    Estimator * homograpy_estimator = new HomographyEstimator (pts);
-    Drawing drawing;
-    Logging logResult;
+    Estimator * homograpy_estimator = new HomographyEstimator (points);
     TerminationCriteria termination_criteria;
 
     Ransac ransac (*model, *sampler, termination_criteria);
@@ -84,7 +80,7 @@ void runNTimesHomography (cv::InputArray points, Model * const model, Sampler * 
         time += ransac.getQuality()->getComputationTime();
     }
     std::cout << "average time of "<< N <<" runs is " << (time/N) << "mcs using " << model->model_name
-              << " points size is " << points.getMat(0).rows << "\n";
+              << " points size is " << points.getMat().rows << "\n";
 
 }
 

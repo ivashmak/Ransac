@@ -7,101 +7,109 @@
 
 void GetNormalizingTransformation (const float * const pts, cv::OutputArray norm_points, const int * const sample, int sample_number, cv::Mat &T1, cv::Mat &T2) {
 
-    cv::Mat_<float> points1 (sample_number, 2);
-    cv::Mat_<float> points2 (sample_number, 2);
-
-    float *points1_ptr = (float *) points1.data;
-    float *points2_ptr = (float *) points2.data;
-
     float mean_pts1_x = 0, mean_pts1_y = 0, mean_pts2_x = 0, mean_pts2_y = 0;
 
     int smpl;
     for (int i = 0; i < sample_number; i++) {
         smpl = 4*sample[i];
-        points1_ptr[2*i] = pts[smpl];
-        points1_ptr[2*i+1] = pts[smpl+1];
-        points2_ptr[2*i] = pts[smpl+2];
-        points2_ptr[2*i+1] = pts[smpl+3];
-
-        mean_pts1_x += points1_ptr[2*i];
-        mean_pts1_y += points1_ptr[2*i+1];
-
-        mean_pts2_x += points2_ptr[2*i];
-        mean_pts2_y += points2_ptr[2*i+1];
+        mean_pts1_x += pts[smpl];
+        mean_pts1_y += pts[smpl+1];
+        mean_pts2_x += pts[smpl+2];
+        mean_pts2_y += pts[smpl+3];
     }
     mean_pts1_x /= sample_number;
     mean_pts1_y /= sample_number;
     mean_pts2_x /= sample_number;
     mean_pts2_y /= sample_number;
 
-    cv::Mat offset1 = (cv::Mat_<float> (1,2) << mean_pts1_x, mean_pts1_y);
-    cv::Mat offset2 = (cv::Mat_<float> (1,2) << mean_pts2_x, mean_pts2_y);
-
-    cv::Mat ones = cv::Mat_<float>::ones(sample_number, 1);
-
-    cv::Mat pts1_offseted = points1;
-    cv::Mat pts2_offseted = points2;
-
-    pts1_offseted.col(0) -= mean_pts1_x;
-    pts1_offseted.col(1) -= mean_pts1_y;
-
-    pts2_offseted.col(0) -= mean_pts1_x;
-    pts2_offseted.col(1) -= mean_pts1_y;
-
-    float * pts1_offseted_ptr = (float *) pts1_offseted.data;
-    float * pts2_offseted_ptr = (float *) pts2_offseted.data;
-
     float summa_pts1_x = 0, summa_pts1_y = 0, summa_pts2_x = 0, summa_pts2_y = 0;
 
+    float x1i, y1i, x2i, y2i;
     for (int i = 0; i < sample_number; i++) {
-        summa_pts1_x += pts1_offseted_ptr[2*i] * pts1_offseted_ptr[2*i]; // xi * xi
-        summa_pts1_y += pts1_offseted_ptr[2*i+1] * pts1_offseted_ptr[2*i+1]; // yi * yi
+        smpl = 4*sample[i];
+        x1i = pts[smpl] - mean_pts1_x;
+        y1i = pts[smpl+1] - mean_pts1_y;
+        x2i = pts[smpl+2] - mean_pts2_x;
+        y2i = pts[smpl+3] - mean_pts2_y;
 
-        summa_pts2_x += pts2_offseted_ptr[2*i] * pts2_offseted_ptr[2*i]; // xi * xi
-        summa_pts2_y += pts2_offseted_ptr[2*i+1] * pts2_offseted_ptr[2*i+1]; // yi * yi
+        summa_pts1_x += x1i * x1i;
+        summa_pts1_y += y1i * y1i;
+
+        summa_pts2_x += x2i * x2i;
+        summa_pts2_y += y2i * y2i;
     }
 
-    float pts1_s_x = (float) sqrt(summa_pts1_x / sample_number);
-    float pts1_s_y = (float) sqrt(summa_pts1_y / sample_number);
-    float pts1_s = (float) (sqrt((summa_pts1_x + summa_pts1_y) / sample_number) / sqrt(2));
+    /*
+     * s1 = sqrt(summa1/NUMP);
+     * s2 = sqrt(summa2/NUMP);
+     * s=sqrt((summa1+summa2)/NUMP)/sqrt(2);
+     */
 
-    float pts2_s_x = (float) sqrt(summa_pts2_x / sample_number);
-    float pts2_s_y = (float) sqrt(summa_pts2_y / sample_number);
-    float pts2_s = (float) (sqrt((summa_pts2_x + summa_pts2_y) / sample_number) / sqrt(2));
+    float pts1_s = sqrt((summa_pts1_x + summa_pts1_y)/ sample_number) / sqrt(2);
+    float pts2_s = sqrt((summa_pts2_x + summa_pts2_y)/ sample_number) / sqrt(2);
 
+    /*
+     * T1 = eye(3);
+     * T2 = eye(3);
+     * T1(1:2,3) = -offset;
+     * T2(1,1) = 1.0/s;
+     * T2(2,2) = 1.0/s;
+     * T=T2*T1;
+     *
+     * pts1_T1 = [ 1 0 -mean_pts1_x;
+     *             0 1 -mean_pts1_y
+     *             0 0 1]
+     *
+     * pts1_T2 = [ 1/pts1_s  0          0
+     *             0         1/pts1_s   0
+     *             0         0          1]
+     *
+     * T1 = [1/pts1_s  0          -mean_pts1_x/pts1_s
+     *       0         1/pts1_s   -mean_pts1_y/pts1_s
+     *       0         0          1]
+     *
+     */
 
-    cv::Mat pts1_T1 = cv::Mat_<float>::eye(3, 3);
-    cv::Mat pts1_T2 = cv::Mat_<float>::eye(3, 3);
+    T1 = (cv::Mat_<float>(3,3) << 1/pts1_s, 0, -mean_pts1_x/pts1_s, 0, 1/pts1_s, -mean_pts1_y/pts1_s, 0, 0, 1);
+    T2 = (cv::Mat_<float>(3,3) << 1/pts2_s, 0, -mean_pts2_x/pts2_s, 0, 1/pts2_s, -mean_pts2_y/pts2_s, 0, 0, 1);
 
-    cv::Mat pts2_T1 = cv::Mat_<float>::eye(3, 3);
-    cv::Mat pts2_T2 = cv::Mat_<float>::eye(3, 3);
+    float *T1_ptr = (float *)T1.data;
+    float *T2_ptr = (float *)T2.data;
 
-    pts1_T1.at<float>(0,2) = -mean_pts1_x;
-    pts1_T1.at<float>(1,2) = -mean_pts1_y;
-    pts1_T2.at<float>(0,0) = 1/pts1_s;
-    pts1_T2.at<float>(1,1) = 1/pts1_s;
+    cv::Mat normalized_points = cv::Mat_<float> (sample_number, 4);
+    float *normalized_points_ptr = (float *) normalized_points.data;
 
-    pts2_T1.at<float>(0,2) = -mean_pts2_x;
-    pts2_T1.at<float>(1,2) = -mean_pts2_y;
-    pts2_T2.at<float>(0,0) = 1/pts2_s;
-    pts2_T2.at<float>(1,1) = 1/pts2_s;
+    /*
+     * Normalized points
+     * Norm_img1_x1 Norm_img1_y1 Norm_img2_x1 Norm_img2_y1
+     * Norm_img1_x2 Norm_img1_y2 Norm_img2_x2 Norm_img2_y2
+     * ...
+     * Norm_img1_xn Norm_img1_yn Norm_img2_xn Norm_img2_yn
+     *
+     * Npts1 = T1*pts1    3x3 * 3xN
+     * Npts2 = T2*pts2    3x3 * 3xN
+     *
+     * Npts = [Npts1; Npts2]
+     *
+     * Fast T*pts multiplication below
+     * We don't need third coordinate for points and third row for T,
+     * because third column for output points is z(i) = 1
+     *
+     * N_x1 = T(1,1) * x1 + T(1,3)
+     * N_y1 = T(2,2) * y1 + T(2,3)
+     *
+     * We don't need T(1,2) * y1 and T(2,2) * x1 because T(1,2) = T(2,1) = 0
+     */
+    for (int i = 0; i < sample_number; i++) {
+        smpl = 4*i;
+        normalized_points_ptr[smpl]   = T1_ptr[0] * pts[smpl]   + T1_ptr[2]; // Norm_img1_xi
+        normalized_points_ptr[smpl+1] = T1_ptr[4] * pts[smpl+1] + T1_ptr[5]; // Norm_img1_yi
 
-    T1 = pts1_T2*pts1_T1;
-    T2 = pts2_T2*pts2_T1;
+        normalized_points_ptr[smpl+2] = T1_ptr[0] * pts[smpl+2] + T1_ptr[2]; // Norm_img2_xi
+        normalized_points_ptr[smpl+3] = T1_ptr[4] * pts[smpl+3] + T1_ptr[5]; // Norm_img2_yi
+    }
 
-    cv::hconcat(points1, ones, points1);
-    cv::hconcat(points2, ones, points2);
-
-    cv::transpose(points1, points1);
-    cv::transpose(points2, points2);
-
-    points1 = T1*points1;
-    points2 = T2*points2;
-
-    cv::Mat norm;
-    cv::vconcat(points1.rowRange(0,2), points2.rowRange(0,2), norm);
-    cv::transpose(norm, norm);
-    norm.copyTo(norm_points);
+    normalized_points.copyTo(norm_points);
 }
 
 #endif // RANSAC_GETNORM_TRAN_H
