@@ -17,7 +17,7 @@
 #include "../Usac/Sampler/ProsacSampler.h"
 
 
-void test (cv::InputArray points, Sampler * sampler, Model * model);
+void testLine (cv::InputArray points, Sampler * sampler, Model * model);
 void runNTimes (cv::InputArray points, Sampler * sampler, Model * model, int N);
 
 Estimator *estimator2d;
@@ -68,16 +68,16 @@ void Tests::testLineFitting() {
     Model *prosac_model = new Model (10, 2, 0.99, 0, "prosac");
     Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
 
-    test (points, uniform_sampler, ransac_model);
-//    test (points, napsac_sampler, napsac_model);
-//    test (points, evsac_sampler, evsac_model);
-//    test (sorted_points, prosac_sampler, prosac_model);
+    testLine (points, uniform_sampler, ransac_model);
+    testLine (points, napsac_sampler, napsac_model);
+    testLine (points, evsac_sampler, evsac_model);
+    testLine (sorted_points, prosac_sampler, prosac_model);
 
 //    runNTimes(points, uniform_sampler, ransac_model, 1000);
 }
 
 
-void test (cv::InputArray points, Sampler * const sampler, Model * const model) {
+void testLine (cv::InputArray points, Sampler * const sampler, Model * const model) {
 
     Ransac ransac (*model, *sampler, termination_criteria);
     ransac.run(points, estimator2d);

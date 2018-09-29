@@ -21,7 +21,7 @@
 
 #include "../Generator/generator.h"
 
-void test (cv::InputArray points, Model * const model, Sampler * const sampler, std::vector<std::string> images_filename, std::string points_filename);
+void testHomography (cv::InputArray points, Model * const model, Sampler * const sampler, std::vector<std::string> images_filename, std::string points_filename);
 void runNTimesHomography (cv::InputArray points, Model * const model, Sampler * const sampler, int N);
 void storeResults ();
 
@@ -41,14 +41,14 @@ void Tests::testHomographyFitting() {
     uniform_sampler->setSampleSize(homography_model->sample_number);
     uniform_sampler->setPointsSize(points1.rows);
 
-    test (points, homography_model, uniform_sampler, images_filename, points_filename);
+    testHomography (points, homography_model, uniform_sampler, images_filename, points_filename);
 
 //    runNTimesHomography(points, homography_model, uniform_sampler, 1000);
 
 //    storeResults();
 }
 
-void test (cv::InputArray points, Model * const model, Sampler * const sampler, std::vector<std::string> images_filename, std::string points_filename) {
+void testHomography (cv::InputArray points, Model * const model, Sampler * const sampler, std::vector<std::string> images_filename, std::string points_filename) {
     Estimator * homograpy_estimator = new HomographyEstimator (points);
     Drawing drawing;
     Logging logResult;
@@ -115,7 +115,7 @@ void storeResults () {
         cv::Mat H = homography_model->returnDescriptor();
 
         std::ofstream save_model;
-        std::string filename = "../res/homography/" + img_name.substr(0, img_name.find('_')) +"_Rmodel.txt";
+        std::string filename = "../results/homography/" + img_name.substr(0, img_name.find('_')) +"_Rmodel.txt";
         save_model.open(filename);
 
         save_model << H.at<float>(0,0) << " " << H.at<float>(0,1) << " " << H.at<float>(0,2) << '\n'

@@ -58,8 +58,6 @@ public:
 
 
     inline float GetError(int pidx) override {
-        std::cout << input_points[pidx] << '\n';
-
         return fabsf (a * input_points[pidx].x + b * input_points[pidx].y + c);
     }
 

@@ -5,9 +5,7 @@
 #include <opencv2/flann/flann.hpp>
 #include "Sampler.h"
 #include "../Helper/Drawing.h"
-#include "../../RandomGenerator/UniformRandomGenerator.h"
 #include "../../RandomGenerator/ArrayRandomGenerator.h"
-#include "../../RandomGenerator/SimpleRandomGenerator.h"
 
 int factorial (int n) {
     int res = n;
@@ -39,7 +37,7 @@ public:
         this->sample_size = sample_size;
         this->points_size = points.size().width;
 
-        simple_randomGenerator = new SimpleRandomGenerator;
+        simple_randomGenerator = new ArrayRandomGenerator;
         array_randomGenerator = new ArrayRandomGenerator;
 
         simple_randomGenerator->resetGenerator(0, points_size-1);

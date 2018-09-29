@@ -14,7 +14,7 @@ public:
      */
     void saveResult (Model * const model, Quality * const quality) {
         std::ofstream write_log;
-        std::string filename = "../res/" + model->model_name +".txt";
+        std::string filename = "../results/" + model->model_name +".txt";
         write_log.open (filename);
         write_log << quality->getComputationTime() <<"\n";
         write_log << quality->getIterations() <<"\n";
@@ -27,7 +27,7 @@ public:
      */
     void compare (Model * const model, Quality * const quality) {
         std::ifstream read_log;
-        std::string filename = "../res/" + model->model_name +".txt";
+        std::string filename = "../results/" + model->model_name +".txt";
         read_log.open(filename);
         float time;
         int iters, points_under_treshold;

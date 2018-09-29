@@ -68,25 +68,7 @@ public:
         float x2 = points[smpl+2];
         float y2 = points[smpl+3];
 
-        float est_x2 = E_ptr[0] * x1 + E_ptr[1] * y1 + E_ptr[2];
-        float est_y2 = E_ptr[3] * x1 + E_ptr[4] * y1 + E_ptr[5];
-        float est_z2 = E_ptr[6] * x1 + E_ptr[7] * y1 + E_ptr[8];
-
-        est_x2 /= est_z2;
-        est_y2 /= est_z2;
-
-        float est_x1 = E_inv_ptr[0] * x2 + E_inv_ptr[1] * y2 + E_inv_ptr[2];
-        float est_y1 = E_inv_ptr[3] * x2 + E_inv_ptr[4] * y2 + E_inv_ptr[5];
-        float est_z1 = E_inv_ptr[6] * x2 + E_inv_ptr[7] * y2 + E_inv_ptr[8];
-
-        est_x1 /= est_z1;
-        est_y1 /= est_z1;
-
-        // error = d(p(i)E, p'(i)) + d(p(i), p'(i)E^-1)
-        error += sqrt ((x2 - est_x2) * (x2 - est_x2) + (y2 - est_y2) * (y2 - est_y2));
-        error += sqrt ((x1 - est_x1) * (x1 - est_x1) + (y1 - est_y1) * (y1 - est_y1));
-
-        return error/2;
+        return error;
     }
 
     int SampleNumber() override {

@@ -1,10 +1,7 @@
 #ifndef USAC_EVALUATERANDOMGENERATORS_H
 #define USAC_EVALUATERANDOMGENERATORS_H
 
-#include "SimpleRandomGenerator.h"
 #include "ArrayRandomGenerator.h"
-#include "UniformRandomGenerator.h"
-#include "PrimeNumberRandomGenerator.h"
 #include "ShuffleRandomGenerator.h"
 
 void calculateEntropy (RandomGenerator * random_generator, int size, std::string name);
@@ -12,24 +9,12 @@ void getAverageTime (RandomGenerator * random_generator, int size, int unique_se
 
 void evaluateRandomGenerators () {
     RandomGenerator * array_random_generator = new ArrayRandomGenerator;
-    RandomGenerator * simple_random_generator = new SimpleRandomGenerator;
-    RandomGenerator * uniform_random_generator = new UniformRandomGenerator;
-    RandomGenerator * prime_random_generator = new PrimeNumberRandomGenerator;
     RandomGenerator * shuffle_random_generator = new ShuffleRandomGenerator;
 
     int size = 10000;
     int uniques_set_size = 200;
     calculateEntropy (array_random_generator, size, "array");
     getAverageTime (array_random_generator, size, uniques_set_size, "array");
-
-    calculateEntropy (simple_random_generator, size, "simple");
-    getAverageTime (simple_random_generator, size, uniques_set_size, "simple");
-
-    calculateEntropy (uniform_random_generator, size, "uniform");
-    getAverageTime (uniform_random_generator, size, uniques_set_size, "uniform");
-
-    calculateEntropy (prime_random_generator, size, "prime");
-    getAverageTime (prime_random_generator, size, uniques_set_size, "prime");
 
     calculateEntropy (shuffle_random_generator, size, "shuffle");
     getAverageTime (shuffle_random_generator, size, uniques_set_size, "shuffle");

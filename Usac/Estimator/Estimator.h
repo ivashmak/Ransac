@@ -32,6 +32,13 @@ public:
 
     virtual int getNumberOfInliers (const Model * const model) {return 0;}
 
+
+    /*
+     * Especially for Fundamental Estimator
+     */
+    virtual bool isValid (const Model * const model) {
+        return true;
+    }
 };
 
 #endif //RANSAC_ESTIMATOR_H

@@ -64,6 +64,7 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
             max_iters = termination_criteria->getUpBoundIterations(best_score->inlier_number, points_size);
 //            std::cout << "max iters prediction " << max_iters << '\n';
         }
+//        std::cout << "current iteration " << iters << '\n';
 
         iters++;
     }

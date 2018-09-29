@@ -7,32 +7,36 @@
 
 class ShuffleRandomGenerator : public RandomGenerator {
 protected:
-    unsigned int size;
-    std::vector<int> array;
+    unsigned int array_size = 0;
+    int * array;
     unsigned int curr_idx;
     std::default_random_engine rng = std::default_random_engine {};
 public:
     void resetGenerator (int min_range, int max_range) override {
-        size = (unsigned int) max_range - min_range + 1;
-        array = std::vector<int> (size);
+        array_size = (unsigned int) max_range - min_range + 1;
+        array = new int[array_size];
         curr_idx = 0;
-        std::iota (std::begin(array), std::end(array), 0);
-        std::shuffle (array.begin(), array.end(), rng);
+        std::iota (array, array+array_size, 0);
+        std::shuffle (array, array+array_size, rng);
     }
 
     int getRandomNumber () override {
-        if (curr_idx == size) {
+        if (curr_idx == array_size) {
             curr_idx = 0;
-            std::shuffle (array.begin(), array.end(), rng);
+            std::shuffle (array, array+array_size, rng);
         }
 
         return array[curr_idx++];
     }
 
-    void generateUniqueRandomSet (int * sample, unsigned int sample_size) override {
-        for (int i = 0; i < sample_size; i++) {
+    void generateUniqueRandomSet (int * sample) override {
+        for (int i = 0; i < subset_size; i++) {
             sample[i] = getRandomNumber();
         }
+    }
+
+    bool isInit () override {
+        return subset_size != 0 && array_size != 0;
     }
 
 };

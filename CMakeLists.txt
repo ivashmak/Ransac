@@ -41,9 +41,11 @@ add_executable(
         Usac/DLT/NormalizedDLT.h
         Usac/DLT/GetNormalizingTransformation.h
 
-        Usac/Ransac/Ransac.cpp Usac/Ransac/Ransac.h
+        Usac/Ransac/Ransac.cpp
+        Usac/Ransac/Ransac.h
 
-        Usac/FundamentalMatrixEstimation.h
+        Usac/FivePointsAlgorithm.h
+        Usac/SevenPointsAlgorithm.h
         Usac/EssentialMatrixEstimation.h
 
         Tests/Tests.h
@@ -52,14 +54,9 @@ add_executable(
         Tests/testEssentialFitting.cpp
         Tests/testFundamentalFitting.cpp
 
-
         RandomGenerator/RandomGenerator.h
         RandomGenerator/ArrayRandomGenerator.h
-        RandomGenerator/PrimeNumberRandomGenerator.h
-        RandomGenerator/UniformRandomGenerator.h
-        RandomGenerator/SimpleRandomGenerator.h
         RandomGenerator/ShuffleRandomGenerator.h
-
         RandomGenerator/EvaluateRandomGenerators.h
 
         Usac/Verbose.h

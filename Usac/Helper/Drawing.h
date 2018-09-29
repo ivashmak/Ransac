@@ -57,7 +57,7 @@ public:
         draw_model(best_model, std::max (image.cols, image.rows), cv::Scalar(255, 0, 0), image, false);
         draw_model(non_minimal_model, std::max (image.cols, image.rows), cv::Scalar(0, 255, 0), image, false);
         imshow("Inliers", image);
-        std::string filename = "../res/linefitting_"+best_model->model_name+".jpg";
+        std::string filename = "../results/linefitting_"+best_model->model_name+".jpg";
         cv::imwrite(filename, image);
         cv::waitKey (0);
     }
@@ -67,51 +67,62 @@ public:
     /*
      * Draw epipolar lines by Fundamental Matrix
      */
-    void drawEpipolarLines (cv::InputArray points1, cv::InputArray points2, const cv::Mat& F) {
-
-        cv::Mat img1 = cv::imread("../images/img1.png"), img2 = cv::imread("../images/img2.png");
-
+    void drawEpipolarLines (const std::vector<std::string>& images_filename, cv::InputArray points1, cv::InputArray points2, const cv::Mat& F) {
         cv::Mat pts1 = points1.getMat(), pts2 = points2.getMat();
+
         cv::hconcat(pts1, cv::Mat_<float>::ones (pts1.rows, 1), pts1);
         cv::hconcat(pts2, cv::Mat_<float>::ones (pts2.rows, 1), pts2);
 
+        /*
+         * For every point in one of the two images of a stereo pair,
+         * the function finds the equation of the corresponding epipolar
+         * line in the other image.
+         */
         cv::Mat lines1, lines2;
-        cv::computeCorrespondEpilines(pts1, 1, F, lines1);
-        cv::computeCorrespondEpilines(pts2, 2, F, lines2);
+        cv::computeCorrespondEpilines(pts2, 2, F, lines1);
+        cv::computeCorrespondEpilines(pts1, 1, F, lines2);
 
-        int c = img1.cols, r = img1.rows;
-        float x0, y0_img1, x1, y1_img1, r0_img1, r1_img1, r2_img1;
-        float  y0_img2, y1_img2, r0_img2, r1_img2, r2_img2;
-        for (int i = 0; i < points1.rows(); i++) {
-            r0_img1 = lines1.at<float>(i, 0);
-            r1_img1 = lines1.at<float>(i, 1);
-            r2_img1 = lines1.at<float>(i, 2);
+        cv::Mat img1 = cv::imread(images_filename[0]),
+                img2 = cv::imread(images_filename[1]),
+                img3 = cv::imread(images_filename[0]),
+                img4 = cv::imread(images_filename[1]);
 
-            r0_img2 = lines2.at<float>(i, 0);
-            r1_img2 = lines2.at<float>(i, 1);
-            r2_img2 = lines2.at<float>(i, 2);
+        drawEpipolarLines_ (img1, img2, lines1, pts1, pts2);
+        drawEpipolarLines_ (img4, img3, lines2, pts2, pts1);
 
-            x0 = 0;
-            y0_img1 = -r2_img1/r1_img1;
-            y0_img2 = -r2_img2/r1_img2;
-            x1 = c;
-            y1_img1 = -(r2_img1 + r0_img1*c)/r1_img1;
-            y1_img2 = -(r2_img2 + r0_img2*c)/r1_img2;
+        cv::hconcat(img1, img4, img1);
 
-            cv::Scalar color = cv::Scalar(random()%255, random ()%255, random ()%255);
-            cv::line(img1, cv::Point_<float> (x0, y0_img1), cv::Point_<float> (x1, y1_img1), color);
-            cv::line(img2, cv::Point_<float> (x0, y0_img2), cv::Point_<float> (x1, y1_img2), color);
-            cv::circle (img1, cv::Point_<float> (pts1.at<float>(i, 0), pts1.at<float>(i,1)), 3, color, -1);
-            cv::circle (img2, cv::Point_<float> (pts2.at<float>(i, 0), pts2.at<float>(i,1)), 3, color, -1);
-        }
+        cv::resize(img1, img1, cv::Size(0.8*img1.cols, img1.rows));
 
         imshow("Epipolar lines using Fundamental matrix 1", img1);
-        imshow("Epipolar lines using Fundamental matrix 2", img2);
+
         cv::waitKey (0);
     }
 
+    void drawEpipolarLines_ (cv::Mat &img1, cv::Mat& img2, const cv::Mat& lines, const cv::Mat& pts1, const cv::Mat& pts2) {
+        int c = img1.cols, r = img1.rows;
+        float x0, y0, x1, y1;
+        float  r0, r1, r2;
+        for (int i = 0; i < pts1.rows; i++) {
+            r0 = lines.at<float>(i, 0);
+            r1 = lines.at<float>(i, 1);
+            r2 = lines.at<float>(i, 2);
 
-    void drawHomographies (std::vector<std::string> images_filename, const std::string &points_filename, cv::InputArray in_inliers,
+            x0 = 0;
+            x1 = c;
+
+            y0 = -r2/r1;
+            y1 = -(r2 + r0*c)/r1;
+
+            cv::Scalar color = cv::Scalar(random()%255, random ()%255, random ()%255);
+            cv::line(img1, cv::Point_<float> (x0, y0), cv::Point_<float> (x1, y1), color);
+            cv::circle (img1, cv::Point_<float> (pts1.at<float>(i, 0), pts1.at<float>(i,1)), 3, color, -1);
+            cv::circle (img2, cv::Point_<float> (pts2.at<float>(i, 0), pts2.at<float>(i,1)), 3, color, -1);
+        }
+    }
+
+
+    void drawHomographies (const std::vector<std::string>& images_filename, const std::string &points_filename, cv::InputArray in_inliers,
                            const cv::Mat &H) {
         int * inliers =  (int *) in_inliers.getMat().data;
         int inliers_size = in_inliers.size().width;

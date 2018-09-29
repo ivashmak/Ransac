@@ -1,8 +1,6 @@
 #ifndef USAC_EVSACSAMPLER_H
 #define USAC_EVSACSAMPLER_H
 
-#include "../../RandomGenerator/UniformRandomGenerator.h"
-
 #include <vector>
 #include <algorithm>
 #include <iostream>
@@ -32,7 +30,7 @@ public:
         assert (!input_points.empty());
 
         // init random generator
-        RandomGenerator * randomGenerator = new UniformRandomGenerator;
+        RandomGenerator * randomGenerator = new ArrayRandomGenerator;
         if (reset_time) randomGenerator->resetTime();
 
         this->sample_size = sample_size;

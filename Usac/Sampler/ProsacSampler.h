@@ -6,7 +6,6 @@
 #include <iostream>
 #include "Sampler.h"
 #include "../Model.h"
-#include "../../RandomGenerator/UniformRandomGenerator.h"
 #include "../../RandomGenerator/ArrayRandomGenerator.h"
 
 // theia implementation

@@ -36,9 +36,11 @@ public:
 
     /*
      * sample size setter
+     * Call random generator initialization to set subset size
      */
     void setSampleSize (unsigned int sample_size) {
         this->sample_size = sample_size;
+        initRandomGenerator();
     }
 
     /*

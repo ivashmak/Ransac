@@ -6,8 +6,8 @@
 class FundamentalEstimator : public Estimator {
 private:
     const float * const points;
-    cv::Mat F, F_inv;
-    float *F_ptr, *F_inv_ptr;
+    cv::Mat F;
+    float *F_ptr;
 public:
 
     /*
@@ -42,7 +42,6 @@ public:
 
     void setModelParameters (Model * const model) override {
         F = cv::Mat_<float>(model->returnDescriptor());
-        F_inv = F.inv();
 
         /*
          * Attention!
@@ -50,44 +49,55 @@ public:
          * So this->F and this->F_inv must be global in class
          */
         F_ptr = (float *) F.data;
-        F_inv_ptr = (float *) F_inv.data;
     }
 
     void EstimateModel(const int * const sample, Model &model) override {
+        cv::Mat_<float> F;
 
+        int roots = SevenPointsAlgorithm(points, sample, F);
+        if (roots < 1 || roots > 3) {
+            std::cout << "roots < 1 v roots > 3\n";
+        }
+
+        model.setDescriptor(F);
     }
 
     void EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
 
     }
 
+    /*
+     * Sampson error
+     *                               (pt2^t * F * pt1)^2)
+     * Error =  -------------------------------------------------------------------
+     *          (((F⋅pt1)(0))^2 + ((F⋅pt1)(1))^2 + ((F^t⋅pt2)(0))^2+((F^t⋅pt2)(1))^2)
+     *
+     * ( [ x2 y2 1 ] * [ F(1,1)  F(1,2)  F(1,3) ] )   [ x1 ]
+     * (               [ F(2,1)  F(2,2)  F(2,3) ] ) * [ y1 ]
+     * (               [ F(3,1)  F(3,2)  F(3,3) ] )   [ 1  ]
+     *
+     */
     float GetError(int pidx) override {
-        float error = 0;
         unsigned int smpl = 4*pidx;
         float x1 = points[smpl];
         float y1 = points[smpl+1];
         float x2 = points[smpl+2];
         float y2 = points[smpl+3];
-        
-        float est_x2 = F_ptr[0] * x1 + F_ptr[1] * y1 + F_ptr[2];
-        float est_y2 = F_ptr[3] * x1 + F_ptr[4] * y1 + F_ptr[5];
-        float est_z2 = F_ptr[6] * x1 + F_ptr[7] * y1 + F_ptr[8];
 
-        est_x2 /= est_z2;
-        est_y2 /= est_z2;
 
-        float est_x1 = F_inv_ptr[0] * x2 + F_inv_ptr[1] * y2 + F_inv_ptr[2];
-        float est_y1 = F_inv_ptr[3] * x2 + F_inv_ptr[4] * y2 + F_inv_ptr[5];
-        float est_z1 = F_inv_ptr[6] * x2 + F_inv_ptr[7] * y2 + F_inv_ptr[8];
+        float F_pt1_x = F_ptr[0] * x1 + F_ptr[1] * y1 + F_ptr[2];
+        float F_pt1_y = F_ptr[3] * x1 + F_ptr[4] * y1 + F_ptr[5];
 
-        est_x1 /= est_z1;
-        est_y1 /= est_z1;
+        // Here F is transposed
+        float F_pt2_x = F_ptr[0] * x2 + F_ptr[3] * y2 + F_ptr[6];
+        float F_pt2_y = F_ptr[1] * x2 + F_ptr[4] * y2 + F_ptr[7];
 
-        // error = d(p(i)F, p'(i)) + d(p(i), p'(i)F^-1)
-        error += sqrt ((x2 - est_x2) * (x2 - est_x2) + (y2 - est_y2) * (y2 - est_y2));
-        error += sqrt ((x1 - est_x1) * (x1 - est_x1) + (y1 - est_y1) * (y1 - est_y1));
+        float pt2_F_pt1 = x2 * F_pt1_x + y2 * F_pt1_y + F_ptr[6] * x1 +  F_ptr[7] * y1 +  F_ptr[8];
 
-        return error/2;
+        float error = (pt2_F_pt1 * pt2_F_pt1) / (F_pt1_x * F_pt1_x + F_pt1_y * F_pt1_y + F_pt2_x * F_pt2_x + F_pt2_y * F_pt2_y);
+//        std::cout << "error = " << error << '\n';
+
+        return error;
     }
 
     int SampleNumber() override {

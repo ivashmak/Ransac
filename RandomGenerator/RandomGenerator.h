@@ -4,6 +4,8 @@
 #include <chrono>
 
 class RandomGenerator {
+protected:
+    unsigned int subset_size = 0;
 public:
     void resetTime () {
         srand (time(NULL));
@@ -18,15 +20,31 @@ public:
      */
     virtual void resetGenerator (int min_range, int max_range) = 0;
 
-    virtual void generateUniqueRandomSet (int * sample, unsigned int subset_size) = 0;
+    virtual void generateUniqueRandomSet (int * sample) = 0;
 
-    void generateUniqueRandomSet (int * sample, unsigned int subset_size, int size) {
-        resetGenerator(0, size);
-        generateUniqueRandomSet(sample, subset_size);
+    void generateUniqueRandomSet (int * sample, unsigned int subset_sz) {
+        subset_size = subset_sz;
+        generateUniqueRandomSet(sample);
     }
-    void generateUniqueRandomSet (int * sample, unsigned int subset_size, int min, int max) {
+
+    void generateUniqueRandomSet (int * sample, unsigned int subset_sz, int size) {
+        resetGenerator(0, size);
+        subset_size = subset_sz;
+        generateUniqueRandomSet(sample);
+    }
+
+    void generateUniqueRandomSet (int * sample, unsigned int subset_sz, int min, int max) {
         resetGenerator(min, max);
-        generateUniqueRandomSet(sample, subset_size);
+        subset_size = subset_sz;
+        generateUniqueRandomSet(sample);
+    }
+
+    void setSubsetSize (unsigned int subset_sz) {
+        subset_size = subset_sz;
+    }
+
+    virtual bool isInit() {
+        return false;
     }
 
 };
