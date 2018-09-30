@@ -8,9 +8,6 @@
 
 #include "../Detector/ReadPoints.h"
 
-#include "../Usac/DLT/DLT.h"
-#include "../Usac/DLT/GetNormalizingTransformation.h"
-#include "../Usac/DLT/NormalizedDLT.h"
 #include "../Usac/Model.h"
 #include "../Usac/Sampler/Sampler.h"
 #include "../Usac/Ransac/Ransac.h"

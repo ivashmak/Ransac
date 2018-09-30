@@ -2,7 +2,7 @@
 #define RANSAC_HOMOGRAPHYESTIMATOR_H
 
 #include "Estimator.h"
-#include "../DLT/NormalizedDLT.h"
+#include "../Estimator/DLT/NormalizedDLT.h"
 
 class HomographyEstimator : public Estimator{
 private:
@@ -17,9 +17,6 @@ public:
      * img1_x2 img1_y2 img2_x2 img2_y2
      * ....
      * img1_xN img1_yN img2_xN img2_yN
-     *
-     * Size N x (2*|imgs|)
-     *
      *
      * float array 4N x 1
      * img1_x1
@@ -67,6 +64,9 @@ public:
         model.setDescriptor(H);
     }
 
+    /*
+     * Error = distance (pt(i)H, pt'(i)) + distance (pt(i), pt'(i)H^-1)
+     */
     float GetError(int pidx) override {
         float error = 0;
         unsigned int smpl = 4*pidx;
@@ -74,8 +74,6 @@ public:
         float y1 = points[smpl+1];
         float x2 = points[smpl+2];
         float y2 = points[smpl+3];
-
-//        std::cout << x1 << " " << y1 << " " << x2 << " " << y2 << '\n';
 
         float est_x2 = H_ptr[0] * x1 + H_ptr[1] * y1 + H_ptr[2];
         float est_y2 = H_ptr[3] * x1 + H_ptr[4] * y1 + H_ptr[5];
@@ -91,7 +89,6 @@ public:
         est_x1 /= est_z1;
         est_y1 /= est_z1;
 
-        // error = d(p(i)H, p'(i)) + d(p(i), p'(i)H^-1)
         error += sqrt ((x2 - est_x2) * (x2 - est_x2) + (y2 - est_y2) * (y2 - est_y2));
         error += sqrt ((x1 - est_x1) * (x1 - est_x1) + (y1 - est_y1) * (y1 - est_y1));
 

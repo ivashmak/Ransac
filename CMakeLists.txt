@@ -36,10 +36,6 @@ add_executable(
         Usac/Sampler/ProsacSampler.h
         Usac/Sampler/ProsacSampler2.h
 
-        Usac/DLT/DLT.h
-        Usac/DLT/NormalizedDLT.h
-        Usac/DLT/GetNormalizingTransformation.h
-
         Usac/Ransac/Ransac.cpp
         Usac/Ransac/Ransac.h
 
@@ -48,6 +44,10 @@ add_executable(
         Usac/Estimator/HomographyEstimator.h
         Usac/Estimator/EssentialEstimator.h
         Usac/Estimator/FundamentalEstimator.h
+
+        Usac/Estimator/DLT/DLT.h
+        Usac/Estimator/DLT/NormalizedDLT.h
+        Usac/Estimator/DLT/GetNormalizingTransformation.h
 
         Usac/Estimator/NPointsAlgorithms/FivePointsAlgorithm.h
         Usac/Estimator/NPointsAlgorithms/SevenPointsAlgorithm.h
