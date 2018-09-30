@@ -4,7 +4,7 @@
 #include <opencv2/core/mat.hpp>
 #include <opencv2/flann/flann.hpp>
 #include "Sampler.h"
-#include "../Helper/Drawing.h"
+#include "../Helper/Drawing/Drawing.h"
 #include "../../RandomGenerator/ArrayRandomGenerator.h"
 
 int factorial (int n) {

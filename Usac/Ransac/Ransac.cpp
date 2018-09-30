@@ -23,6 +23,8 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
     assert(termination_criteria != nullptr);
     assert(sampler->isInit());
 
+//    std::cout << "asserted\n";
+
     auto begin_time = std::chrono::steady_clock::now();
 
     int points_size = getPointsSize(input_points);
@@ -42,28 +44,39 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator) {
 
     int *sample = new int[estimator->SampleNumber()];
 
+    Model **models = new Model*[1];
+    models[0] = model;
+
+//    std::cout << "begin\n";
+
     while (iters < max_iters) {
         sampler->generateSample(sample);
 
-        estimator->EstimateModel(sample, *model);
-        estimator->setModelParameters(model);
+        int number_of_models = estimator->EstimateModel(sample, models);
 
-        current_score->score = 0;
-        current_score->inlier_number = 0;
+        for (int i = 0; i < number_of_models; i++) {
+//            std::cout << i << "-th model\n";
 
-        quality->GetModelScore(estimator, model, input_points, points_size, *current_score);
+            estimator->setModelParameters(models[i]);
 
-        if (quality->IsBetter(best_score, current_score)) {
-            // copy current score to best score
-            best_score->inlier_number = current_score->inlier_number;
-            best_score->score = current_score->score;
+            current_score->score = 0;
+            current_score->inlier_number = 0;
 
-            // remember best model
-            best_model = *model;
+            quality->GetModelScore(estimator, models[i], input_points, points_size, *current_score);
 
-            max_iters = termination_criteria->getUpBoundIterations(best_score->inlier_number, points_size);
+            if (quality->IsBetter(best_score, current_score)) {
+                // copy current score to best score
+                best_score->inlier_number = current_score->inlier_number;
+                best_score->score = current_score->score;
+
+                // remember best model
+                best_model = *models[i];
+
+                max_iters = termination_criteria->getUpBoundIterations(best_score->inlier_number, points_size);
 //            std::cout << "max iters prediction " << max_iters << '\n';
+            }
         }
+
 //        std::cout << "current iteration " << iters << '\n';
 
         iters++;

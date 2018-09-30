@@ -7,7 +7,7 @@
 #include <opencv2/core/types.hpp>
 
 #include "../Detector/ReadPoints.h"
-#include "../Usac/EssentialMatrixEstimation.h"
+#include "../tmp/EssentialMatrixEstimation.h"
 
 void testEssentialMatrixEstimation (cv::InputArray points1, cv::InputArray points2);
 

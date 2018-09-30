@@ -12,7 +12,7 @@ public:
     /*
      * Save results to file
      */
-    void saveResult (Model * const model, Quality * const quality) {
+    void saveResult (const Model * const model, Quality * const quality) {
         std::ofstream write_log;
         std::string filename = "../results/" + model->model_name +".txt";
         write_log.open (filename);
@@ -25,7 +25,7 @@ public:
     /*
      * Read results from saved file and compare with current results.
      */
-    void compare (Model * const model, Quality * const quality) {
+    void compare (const Model * const model, Quality * const quality) {
         std::ifstream read_log;
         std::string filename = "../results/" + model->model_name +".txt";
         read_log.open(filename);

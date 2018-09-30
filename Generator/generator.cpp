@@ -22,7 +22,7 @@ void generate (std::vector<cv::Point2f> &points_out, bool reset_time) {
         circle(image, points[i], 3, cv::Scalar(0, 0, 0), -1);
     // imshow("Image", image);
     // cv::waitKey(0);
-    imwrite( "../images/image1.jpg", image );
+    imwrite( "../dateset/image1.jpg", image );
 
     points_out.swap(points);
 }

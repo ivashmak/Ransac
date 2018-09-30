@@ -22,3 +22,10 @@ GetInlierCount only one time. But for Line2DEstimator it did not speed up the co
 7. Verbose mode? Yes
 8. Preference to pointer class or to object class? Pointer
 9. Something maybe wrong in Homography Fitting.
+
+
+
+Abstract Draw class
+Abstract Quality class
+Abstract LO class
+Abstract TerminationCriteria class

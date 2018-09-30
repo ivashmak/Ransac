@@ -92,13 +92,12 @@ int SevenPointsAlgorithm (const float * const pts, const int * const sample, cv:
     // solve the cubic equation; there can be 1 to 3 roots ...
     int n = cv::solveCubic (coeffs, roots);
 
-    if (n < 1 || n > 3) return n;
-    n = 1; // todo make n in range
-    cv::Mat F  = cv::Mat_<float>(3,3); // todo add n*3,3
+    if (n < 1) return n;
+    cv::Mat F  = cv::Mat_<float>(n*3,3); // todo add n*3,3
 
     float* F_ptr = (float *) F.data;
 
-    for (int k = 0; k < n; k++ /* F_ptr += 9*/) {
+    for (int k = 0; k < n; k++ , F_ptr += 9) {
         // for each root form the fundamental matrix
         float lambda = r[k], mu = 1;
         float s = f1[8]*r[k] + f2[8];

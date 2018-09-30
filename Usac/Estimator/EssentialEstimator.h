@@ -53,7 +53,8 @@ public:
         E_inv_ptr = (float *) E_inv.data;
     }
 
-    void EstimateModel(const int * const sample, Model &model) override {
+    int EstimateModel(const int * const sample, Model ** models) override {
+        return 1;
     }
 
     void EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {

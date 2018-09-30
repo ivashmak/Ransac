@@ -30,8 +30,7 @@ public:
 
         int k = 0;
         for (int i = min_range; i <= max_range; i++) {
-            array[k] = i;
-            k++;
+            array[k++] = i;
         }
     }
 

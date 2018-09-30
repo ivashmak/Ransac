@@ -60,6 +60,7 @@ void DLT (const float * const points, const int * const sample, int sample_numbe
      * u and vt matrices of sufficiently large size for the further A reconstruction;
      * if, however, FULL_UV flag is specified, u and vt will be full-size square orthogonal matrices.
      */
+    // todo use eigen
     cv::SVD::compute(A, w, u, vt);
 
     H = cv::Mat_<float>(vt.row(vt.rows-1).reshape (3,3));

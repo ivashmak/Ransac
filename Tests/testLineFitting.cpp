@@ -5,7 +5,7 @@
 #include "../Usac/Estimator/Line2DEstimator.h"
 #include "../Usac/Ransac/Ransac.h"
 
-#include "../Usac/Helper/Drawing.h"
+#include "../Usac/Helper/Drawing/Drawing.h"
 #include "../Usac/Helper/Logging.h"
 
 #include "../Detector/ReadPoints.h"
@@ -18,13 +18,6 @@
 
 
 void testLine (cv::InputArray points, Sampler * sampler, Model * model);
-void runNTimes (cv::InputArray points, Sampler * sampler, Model * model, int N);
-
-Estimator *estimator2d;
-Drawing drawing;
-Logging logResult;
-TerminationCriteria termination_criteria;
-
 
 void Tests::testLineFitting() {
 
@@ -34,7 +27,6 @@ void Tests::testLineFitting() {
     generate(points, false);
     std::cout << "generated points\n";
 
-    estimator2d = new Line2DEstimator;
 
     // sort points for Prosac
     cv::Mat indicies, dists1, dists2, p (points);
@@ -69,17 +61,26 @@ void Tests::testLineFitting() {
     Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
 
     testLine (points, uniform_sampler, ransac_model);
-    testLine (points, napsac_sampler, napsac_model);
-    testLine (points, evsac_sampler, evsac_model);
-    testLine (sorted_points, prosac_sampler, prosac_model);
+//    testLine (points, napsac_sampler, napsac_model);
+//    testLine (points, evsac_sampler, evsac_model);
+//    testLine (sorted_points, prosac_sampler, prosac_model);
 
-//    runNTimes(points, uniform_sampler, ransac_model, 1000);
+
+    Estimator *line2destimator = new Line2DEstimator;
+    TerminationCriteria *termination_criteria = new TerminationCriteria;
+    Quality *quality = new Quality;
+    runNTimes(points, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 1000);
 }
 
 
 void testLine (cv::InputArray points, Sampler * const sampler, Model * const model) {
+    Estimator *estimator2d = new Line2DEstimator;
+    Drawing drawing;
+    Logging logResult;
+    TerminationCriteria *termination_criteria = new TerminationCriteria;
+    Quality *quality = new Quality;
 
-    Ransac ransac (*model, *sampler, termination_criteria);
+    Ransac ransac (*model, *sampler, *termination_criteria, *quality);
     ransac.run(points, estimator2d);
 
     std::cout << model->model_name << " time: ";
@@ -94,15 +95,7 @@ void testLine (cv::InputArray points, Sampler * const sampler, Model * const mod
 
     //    drawing.draw(ransac.most_inliers, ransac.getBestModel(), ransac.getNonMinimalModel(), points);
     drawing.draw(ransac.most_inliers, &ransac.best_model, &ransac.non_minimal_model, points);
+
 }
 
-void runNTimes (cv::InputArray points, Sampler * const sampler, Model * const model, int N) {
-    Ransac ransac (*model, *sampler, termination_criteria);
-    double time = 0;
-    for (int i = 0; i < N; i++) {
-        ransac.run(points, estimator2d);
-        time += ransac.getQuality()->getComputationTime();
-    }
-    std::cout << "average time of "<< N <<" runs is " << (time/N) << "mcs using " << model->model_name
-              << " points size is " << points.size().width << "\n";
-}
+

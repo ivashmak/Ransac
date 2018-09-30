@@ -21,18 +21,18 @@ public:
 
     Model best_model;
     Model non_minimal_model;
-
     std::vector<int> most_inliers;
 
     Ransac (Model &model,
-            Sampler& sampler,
-            TerminationCriteria& termination_criteria) {
+            Sampler &sampler,
+            TerminationCriteria &termination_criteria,
+            Quality &quality) {
 
 
         this->model = &model;
         this->sampler = &sampler;
         this->termination_criteria = &termination_criteria;
-        this->quality = new Quality;
+        this->quality = &quality;
     }
 
     void run (cv::InputArray input_points, Estimator * const estimator2d);

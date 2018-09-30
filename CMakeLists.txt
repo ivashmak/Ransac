@@ -10,25 +10,24 @@ include_directories(${THEIA_INCLUDE_DIRS})
 
 add_executable(
         ransac main.cpp
-        Generator/generator.cpp Generator/generator.h
 
-        Detector/ReadPoints.cpp Detector/ReadPoints.h
-        Detector/detector.cpp Detector/detector.h
+        Generator/generator.cpp
+        Generator/generator.h
+
+        Detector/ReadPoints.cpp
+        Detector/ReadPoints.h
+        Detector/detector.cpp
+        Detector/detector.h
 
         Usac/Quality.h
         Usac/Model.h
         Usac/TerminationCriteria.h
         Usac/ProsacTerminationCriteria.h
 
-        Usac/Helper/Drawing.h
         Usac/Helper/Logging.h
-        Usac/Helper/DrawPanorama.cpp
-
-        Usac/Estimator/Estimator.h
-        Usac/Estimator/Line2DEstimator.h
-        Usac/Estimator/HomographyEstimator.h
-        Usac/Estimator/EssentialEstimator.h
-        Usac/Estimator/FundamentalEstimator.h
+        Usac/Helper/Drawing/Drawing.h
+        Usac/Helper/Drawing/DrawPanorama.cpp
+        Usac/Helper/Drawing/DrawEpipolarLines.cpp
 
         Usac/Sampler/Sampler.h
         Usac/Sampler/UniformSampler.h
@@ -44,9 +43,15 @@ add_executable(
         Usac/Ransac/Ransac.cpp
         Usac/Ransac/Ransac.h
 
-        Usac/FivePointsAlgorithm.h
-        Usac/SevenPointsAlgorithm.h
-        Usac/EssentialMatrixEstimation.h
+        Usac/Estimator/Estimator.h
+        Usac/Estimator/Line2DEstimator.h
+        Usac/Estimator/HomographyEstimator.h
+        Usac/Estimator/EssentialEstimator.h
+        Usac/Estimator/FundamentalEstimator.h
+
+        Usac/Estimator/NPointsAlgorithms/FivePointsAlgorithm.h
+        Usac/Estimator/NPointsAlgorithms/SevenPointsAlgorithm.h
+        Usac/Estimator/NPointsAlgorithms/EightPointsAlgorithm.h
 
         Tests/Tests.h
         Tests/testHomographyFitting.cpp

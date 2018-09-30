@@ -13,7 +13,7 @@ protected:
 //    cv::Mat mdl;
 public:
 
-    void EstimateModel(const int * const sample, Model &model) override {
+    int EstimateModel(const int * const sample, Model ** models) override {
         const int idx1 = sample[0];
         const int idx2 = sample[1];
 
@@ -27,7 +27,9 @@ public:
         float c = (input_points[idx2].x * input_points[idx1].y - input_points[idx2].y * input_points[idx1].x)/mag;
 
         // Set the model descriptor
-        model.setDescriptor((cv::Mat_<float>(1,3) <<  a, b, c));
+        models[0]->setDescriptor((cv::Mat_<float>(1,3) <<  a, b, c));
+
+        return 1;
     }
 
     /*

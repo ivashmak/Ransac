@@ -54,10 +54,11 @@ public:
         H_inv_ptr = (float *) H_inv.data;
     }
 
-    void EstimateModel(const int * const sample, Model &model) override {
+    int EstimateModel(const int * const sample, Model ** models) override {
         cv::Mat H;
         DLT (points, sample, 4, H);
-        model.setDescriptor(H);
+        models[0]->setDescriptor(H);
+        return 1;
     }
 
     void EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {

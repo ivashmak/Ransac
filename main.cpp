@@ -1,3 +1,4 @@
+#include <opencv2/core/mat.hpp>
 #include "Tests/Tests.h"
 #include "RandomGenerator/EvaluateRandomGenerators.h"
 

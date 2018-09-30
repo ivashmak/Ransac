@@ -1,6 +1,6 @@
 close all;
 
-fileID = fopen('../images/homography/graf_pts.txt','r');
+fileID = fopen('../dataset/homography/graf_pts.txt','r');
 formatSpec = '%f';
 sizeA = [7 Inf];
 A = fscanf(fileID, formatSpec, sizeA);
@@ -18,8 +18,8 @@ for i = 1:sz
 %     pts2(i, 3) = A(i, 6);
 end
 
-% img1 = imread('../images/img1.png');
-% img2 = imread('../images/img2.png');
+% img1 = imread('../dataset/img1.png');
+% img2 = imread('../dataset/img2.png');
 % 
 % figure; imshow (img2);
 % hold on

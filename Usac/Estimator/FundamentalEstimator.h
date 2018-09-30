@@ -2,6 +2,7 @@
 #define USAC_FUNDAMENTALESTIMATOR_H
 
 #include "Estimator.h"
+#include "NPointsAlgorithms/EightPointsAlgorithm.h"
 
 class FundamentalEstimator : public Estimator {
 private:
@@ -51,19 +52,39 @@ public:
         F_ptr = (float *) F.data;
     }
 
-    void EstimateModel(const int * const sample, Model &model) override {
+    int EstimateModel(const int * const sample, Model ** models) override {
         cv::Mat_<float> F;
 
         int roots = SevenPointsAlgorithm(points, sample, F);
-        if (roots < 1 || roots > 3) {
-            std::cout << "roots < 1 v roots > 3\n";
+        if (roots < 1) {
+            std::cout << "roots less than 1\n";
+            return 0;
         }
 
-        model.setDescriptor(F);
+        models[0]->setDescriptor(F.rowRange(0,3));
+//        std::cout << F << "\n\n";
+
+        if (roots > 1) {
+            models = (Model **) (realloc(models, roots * sizeof(Model *)));
+            for (int i = 1; i < roots; i++) {
+                models[i] = new Model(models[0]->threshold,
+                                      models[0]->sample_number,
+                                      models[0]->desired_prob,
+                                      models[0]->k_nearest_neighbors,
+                                      models[0]->model_name);
+
+                models[i]->setDescriptor(F.rowRange(i * 3, i * 3 + 3));
+            }
+        }
+
+        return roots;
     }
 
     void EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
+        cv::Mat_<float> F;
+        EightPointsAlgorithm(points, sample, sample_size, F);
 
+        model.setDescriptor(F);
     }
 
     /*

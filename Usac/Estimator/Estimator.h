@@ -20,7 +20,8 @@
 class Estimator {
 public:
     // Pure virtuals functions
-    virtual void EstimateModel(const int * const sample, Model &model) = 0;
+    // return number of models
+    virtual int EstimateModel(const int * const sample, Model ** models) = 0;
     virtual void EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) = 0;
     virtual float GetError(int pidx) = 0;
     virtual int SampleNumber()  = 0;

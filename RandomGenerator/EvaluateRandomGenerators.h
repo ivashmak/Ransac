@@ -4,8 +4,8 @@
 #include "ArrayRandomGenerator.h"
 #include "ShuffleRandomGenerator.h"
 
-void calculateEntropy (RandomGenerator * random_generator, int size, std::string name);
-void getAverageTime (RandomGenerator * random_generator, int size, int unique_set_size, std::string name);
+void calculateEntropy (RandomGenerator * random_generator, int size, const std::string& name);
+void getAverageTime (RandomGenerator * random_generator, int size, int unique_set_size, const std::string& name);
 
 void evaluateRandomGenerators () {
     RandomGenerator * array_random_generator = new ArrayRandomGenerator;
@@ -20,7 +20,7 @@ void evaluateRandomGenerators () {
     getAverageTime (shuffle_random_generator, size, uniques_set_size, "shuffle");
 }
 
-void calculateEntropy (RandomGenerator * random_generator, int size, std::string name) {
+void calculateEntropy (RandomGenerator * random_generator, int size, const std::string& name) {
     std::cout << name << " random generator, size =  " << size << "\n";
     random_generator->resetGenerator(0, size);
 
@@ -42,7 +42,7 @@ void calculateEntropy (RandomGenerator * random_generator, int size, std::string
 //    std::cout << "------------------------------------------------------------\n";
 }
 
-void getAverageTime (RandomGenerator * random_generator, int size, int unique_set_size, std::string name) {
+void getAverageTime (RandomGenerator * random_generator, int size, int unique_set_size, const std::string& name) {
 //    std::cout << name << " random generator, size =  " << size << " unique_set_size = " << unique_set_size << "\n";
 
     random_generator->resetGenerator(0, size);
@@ -61,11 +61,17 @@ void getAverageTime (RandomGenerator * random_generator, int size, int unique_se
     std::cout << "getRandomNumber time = " << t.count() << '\n';
 
 
+    random_generator->resetGenerator(0, size);
+
     int * sample = new int [unique_set_size];
 
     begin_time = std::chrono::steady_clock::now();
     for (int i = 0; i < size; i++) {
         random_generator->generateUniqueRandomSet(sample, unique_set_size);
+//        for (int j = 0; j < 10; j++) {
+//            std::cout << sample[j] << " ";
+//        }
+//        std::cout << '\n';
     }
     end_time = std::chrono::steady_clock::now();
     fs = end_time - begin_time;
