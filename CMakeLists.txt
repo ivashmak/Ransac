@@ -53,6 +53,9 @@ add_executable(
         Usac/Estimator/NPointsAlgorithms/SevenPointsAlgorithm.h
         Usac/Estimator/NPointsAlgorithms/EightPointsAlgorithm.h
 
+        Usac/LocalOptimization/LocalOptimization.h
+        Usac/LocalOptimization/RansacLocalOptimization.h
+
         Tests/Tests.h
         Tests/testHomographyFitting.cpp
         Tests/testLineFitting.cpp

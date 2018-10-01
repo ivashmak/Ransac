@@ -49,6 +49,11 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator, bool L
 
 //    std::cout << "begin\n";
 
+    /*
+     * Allocate inliers of points_size, to avoid push_back in getModelScore()
+     */
+    std::vector<int> inliers (points_size);
+
     while (iters < max_iters) {
         sampler->generateSample(sample);
 
@@ -62,28 +67,13 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator, bool L
             current_score->score = 0;
             current_score->inlier_number = 0;
 
-            quality->GetModelScore(estimator, models[i], input_points, points_size, *current_score);
+            // we need inliers only for local optimization
+            quality->GetModelScore(estimator, models[i], input_points, points_size, *current_score, inliers, LO);
 
             if (quality->IsBetter(best_score, current_score)) {
 
                 if (LO) {
 
-                    /*
-                     * In our experiments the size of samples are set to min (Ik/2, 14)
-                     * for epipolar geometry and to min (Ik/2, 12) for the case of homography estimation
-                     */
-                    unsigned int lo_sample_size = (current_score->inlier_number/2+1, 14);
-                    int *lo_sample = new int [lo_sample_size];
-                    sampler->generateSample(lo_sample, lo_sample_size);
-                    Model *lo_model = new Model(model->threshold, model->sample_number, model->desired_prob, model->k_nearest_neighbors, model->model_name);
-                    Score *lo_score = new Score;
-                    estimator->EstimateModelNonMinimalSample(lo_sample, lo_sample_size, *lo_model);
-                    quality->GetModelScore(estimator, lo_model, input_points, points_size, *lo_score);
-                    
-                    if (quality->IsBetter(lo_score, current_score)) {
-                        current_score->inlier_number = lo_score->inlier_number;
-                        current_score->score = lo_score->score;
-                    }
                 }
 
                 // copy current score to best score

@@ -65,6 +65,8 @@ public:
                        cv::InputArray input_points,
                        int points_size,
                        Score &score,
+                       std::vector& inliers,
+                       bool get_inliers,
                        bool parallel=false) {
 
 //        float SS_tot = 0, SS_res = 0;
@@ -95,6 +97,8 @@ public:
             for (int point = 0; point < points_size; point++) {
                 if (estimator->GetError(point) < model->threshold) {
                     score.inlier_number++;
+                    if (get_inliers) inliers.push_back(point);
+
 //                    truth[score.inlier_number-1] = points[point].y;
 //                    mean += truth[score.inlier_number-1];
 //
