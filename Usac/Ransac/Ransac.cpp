@@ -1,4 +1,5 @@
 #include "Ransac.h"
+#include "../LocalOptimization/RansacLocalOptimization.h"
 
 int getPointsSize (cv::InputArray points) {
 //    std::cout << points.getMat(0).total() << '\n';
@@ -53,6 +54,7 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator, bool L
      * Allocate inliers of points_size, to avoid push_back in getModelScore()
      */
     std::vector<int> inliers (points_size);
+    LocalOptimization * lo_optimization = new RansacLocalOptimization;
 
     while (iters < max_iters) {
         sampler->generateSample(sample);
@@ -73,7 +75,14 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator, bool L
             if (quality->IsBetter(best_score, current_score)) {
 
                 if (LO) {
+                    Score *lo_score = new Score;
+                    /* In our experiments the size of samples are set to min (Ik/2, 14)
+                     * for epipolar geometry and to min (Ik/2, 12) for the case of homography estimation
+                     */
+                    unsigned int lo_sample_size = std::min (current_score->inlier_number/2+1, 14);
 
+//                    GetLOModelScore (estimator, model, sampler, quality, input_points, points_size, lo_sample_size,
+//                                     current_score->inlier_number, inliers, lo_score);
                 }
 
                 // copy current score to best score

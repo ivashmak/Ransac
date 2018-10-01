@@ -4,9 +4,13 @@
 #include "LocalOptimization.h"
 
 class RansacLocalOptimization : public LocalOptimization {
+private:
+    Model *lo_model;
+    Quality *quality;
+    TerminationCriteria *termination_criteria;
 public:
     void GetLOModelScore (Estimator * const estimator,
-                          Model * const model,
+                          Model &lo_model,
                           Sampler * const sampler,
                           Quality *const quality,
                           cv::InputArray input_points,
@@ -16,9 +20,6 @@ public:
                           const int * const inliers,
                           Score &lo_score) override {
         /*
-         * In our experiments the size of samples are set to min (Ik/2, 14)
-         * for epipolar geometry and to min (Ik/2, 12) for the case of homography estimation
-         *
          * Generate sample of lo_sample_size from reached best_sample in current iteration
          */
         int *lo_sample = new int [lo_sample_size];
@@ -29,11 +30,10 @@ public:
         /*
          * Estimate new model
          */
-        Model *lo_model = new Model(model->threshold, model->sample_number, model->desired_prob, model->k_nearest_neighbors, model->model_name);
-        estimator->EstimateModelNonMinimalSample(lo_sample, lo_sample_size, *lo_model);
+        estimator->EstimateModelNonMinimalSample(lo_sample, lo_sample_size, lo_model);
 
         /*
-         * Get quality of this model
+         * Get score of this model
          */
         quality->GetModelScore(estimator, lo_model, input_points, points_size, lo_score,
                                (std::vector &) nullptr, false);

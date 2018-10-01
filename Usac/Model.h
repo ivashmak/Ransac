@@ -10,6 +10,11 @@ public:
 	std::string model_name = "ransac";
 	int k_nearest_neighbors = 2;
 
+	unsigned int lo_iterative_iterations = 10;
+    unsigned int lo_max_iterations = 4;
+    float lo_threshold = 10.0;
+    unsigned int lo_threshold_mutliplier = 2;
+
 protected:
     cv::Mat descriptor;
 	
@@ -21,6 +26,13 @@ public:
 		this->desired_prob = desired_prob;
 		this->k_nearest_neighbors = knn;
 		this->model_name = model_name;
+	}
+
+	void setLOParametres (unsigned int lo_iterative_iters, unsigned int lo_max_iters, float lo_thresh, unsigned int lo_thresh_mult) {
+	    lo_iterative_iterations = lo_iterative_iters;
+	    lo_max_iterations = lo_max_iters;
+	    lo_threshold = lo_thresh;
+	    lo_threshold_mutliplier = lo_thresh_mult;
 	}
 
     void setDescriptor(cv::Mat _desc) { 
