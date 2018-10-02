@@ -57,17 +57,20 @@ void testHomography (cv::InputArray points, Model * const model, Sampler * const
 
     Ransac ransac (*model, *sampler, *termination_criteria, *quality);
     ransac.run(points, homograpy_estimator);
+
+    RansacOutput * ransacOutput = ransac.getRansacOutput();
+
     std::cout << model->model_name << " time: ";
-    ransac.getQuality()->printTime();
-    std::cout << model->model_name << " iterations: " << ransac.getQuality()->getIterations() << "\n";
-    std::cout << model->model_name << " points under threshold: " << ransac.getQuality()->getNumberOfPointsUnderThreshold() << "\n";
+    ransacOutput->printTime();
+    std::cout << model->model_name << " iterations: " << ransacOutput->getNumberOfIterations() << "\n";
+    std::cout << model->model_name << " points under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
 
     // save result and compare with last run
-    logResult.compare(model, ransac.getQuality());
-    logResult.saveResult(model, ransac.getQuality());
+    logResult.compare(model, ransacOutput);
+    logResult.saveResult(model, ransacOutput);
     std::cout << "-----------------------------------------------------------------------------------------\n";
 
-    drawing.drawHomographies(images_filename, points_filename, ransac.most_inliers, ransac.best_model.returnDescriptor());
+    drawing.drawHomographies(images_filename, points_filename, ransacOutput->getInliers(), ransacOutput->getModel()->returnDescriptor());
 }
 
 void storeResults () {
@@ -93,9 +96,11 @@ void storeResults () {
         uniform_sampler->setPointsSize(points1.rows);
 
         Ransac ransac (*homography_model, *uniform_sampler, *termination_criteria, *quality);
+        RansacOutput *ransacOutput = ransac.getRansacOutput();
+
         ransac.run(points1, homograpy_estimator);
 
-        cv::Mat H = ransac.best_model.returnDescriptor();
+        cv::Mat H = ransacOutput->getModel()->returnDescriptor();
 
         std::ofstream save_model;
         std::string filename = "../results/homography/" + img_name.substr(0, img_name.find('_')) +"_Rmodel.txt";
@@ -105,9 +110,9 @@ void storeResults () {
                    << H.at<float>(1,0) << " " << H.at<float>(1,1) << " " << H.at<float>(1,2) << '\n'
                    << H.at<float>(2,0) << " " << H.at<float>(2,1) << " " << H.at<float>(2,2) << '\n';
 
-        save_model << ransac.most_inliers.size() << '\n';
-        save_model << ransac.getQuality()->getIterations() << '\n';
-        save_model << ransac.getQuality()->getComputationTime() << '\n';
+        save_model << ransacOutput->getNumberOfInliers() << '\n';
+        save_model << ransacOutput->getNumberOfIterations() << '\n';
+        save_model << ransacOutput->getTimeMicroSeconds() << '\n';
         save_model.close();
     }
 }

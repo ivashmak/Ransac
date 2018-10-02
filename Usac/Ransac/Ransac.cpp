@@ -11,7 +11,7 @@ int getPointsSize (cv::InputArray points) {
     }
 }
 
-void Ransac::run(cv::InputArray input_points, Estimator* const estimator, bool LO=false) {
+void Ransac::run(cv::InputArray input_points, Estimator* const estimator, bool LO) {
     /*
      * Check if all components are initialized and safe to run
      * todo: add more criteria
@@ -46,6 +46,8 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator, bool L
     int *sample = new int[estimator->SampleNumber()];
 
     Model **models = new Model*[1];
+    Model *non_minimal_model = new Model(*model);
+    Model *best_model = new Model (*model);
     models[0] = model;
 
 //    std::cout << "begin\n";
@@ -54,6 +56,7 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator, bool L
      * Allocate inliers of points_size, to avoid push_back in getModelScore()
      */
     std::vector<int> inliers (points_size);
+    std::vector<int> max_inliers;
     LocalOptimization * lo_optimization = new RansacLocalOptimization;
 
     while (iters < max_iters) {
@@ -90,7 +93,7 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator, bool L
                 best_score->score = current_score->score;
 
                 // remember best model
-                best_model = *models[i];
+                best_model->setDescriptor (models[i]->returnDescriptor());
 
                 max_iters = termination_criteria->getUpBoundIterations(best_score->inlier_number, points_size);
 //            std::cout << "max iters prediction " << max_iters << '\n';
@@ -102,18 +105,17 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator, bool L
         iters++;
     }
 
-    most_inliers = std::vector<int> (best_score->inlier_number);
-    quality->getInliers(estimator, points_size, &best_model, most_inliers);
+    max_inliers = std::vector<int> (best_score->inlier_number);
+    quality->getInliers(estimator, points_size, best_model, max_inliers);
 
-    estimator->EstimateModelNonMinimalSample(&most_inliers[0], best_score->inlier_number, non_minimal_model);
+    estimator->EstimateModelNonMinimalSample(&max_inliers[0], best_score->inlier_number, *non_minimal_model);
 
     auto end_time = std::chrono::steady_clock::now();
     std::chrono::duration<float> fs = end_time - begin_time;
 
     // store quality results
-    quality->total_iterations = iters;
-    quality->points_under_threshold = best_score->inlier_number;
-    quality->total_time = std::chrono::duration_cast<std::chrono::microseconds>(fs);
+    ransac_output = new RansacOutput (best_model, non_minimal_model, max_inliers,
+            std::chrono::duration_cast<std::chrono::microseconds>(fs).count(), best_score->inlier_number, iters);
 
-    delete sample, current_score, best_score;
+    delete sample, current_score, best_score; // non_minimal_model, best_model
 }

@@ -29,3 +29,5 @@ Abstract Draw class
 Abstract Quality class
 Abstract LO class
 Abstract TerminationCriteria class
+
+Destructors

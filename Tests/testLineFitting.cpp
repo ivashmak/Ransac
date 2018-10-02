@@ -65,7 +65,6 @@ void Tests::testLineFitting() {
 //    testLine (points, evsac_sampler, evsac_model);
 //    testLine (sorted_points, prosac_sampler, prosac_model);
 
-
     Estimator *line2destimator = new Line2DEstimator;
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
@@ -83,18 +82,20 @@ void testLine (cv::InputArray points, Sampler * const sampler, Model * const mod
     Ransac ransac (*model, *sampler, *termination_criteria, *quality);
     ransac.run(points, estimator2d);
 
+    RansacOutput *ransacOutput = ransac.getRansacOutput();
+
     std::cout << model->model_name << " time: ";
-    ransac.getQuality()->printTime();
-    std::cout << model->model_name << " iterations: " << ransac.getQuality()->getIterations() << "\n";
-    std::cout << model->model_name << " points under threshold: " << ransac.getQuality()->getNumberOfPointsUnderThreshold() << "\n";
+    ransacOutput->printTime();
+    std::cout << model->model_name << " iterations: " << ransacOutput->getNumberOfIterations() << "\n";
+    std::cout << model->model_name << " points under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
 
     // save result and compare with last run
-    logResult.compare(model, ransac.getQuality());
-    logResult.saveResult(model, ransac.getQuality());
+    logResult.compare(model, ransacOutput);
+    logResult.saveResult(model, ransacOutput);
     std::cout << "-----------------------------------------------------------------------------------------\n";
 
     //    drawing.draw(ransac.most_inliers, ransac.getBestModel(), ransac.getNonMinimalModel(), points);
-    drawing.draw(ransac.most_inliers, &ransac.best_model, &ransac.non_minimal_model, points);
+    drawing.draw(ransacOutput->getInliers(), ransacOutput->getModel(), ransacOutput->getNonMinimalModel(), points);
 
 }
 

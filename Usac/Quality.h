@@ -13,47 +13,8 @@ struct Score {
     float score;
 };
 
-struct Time {
-    long minutes;
-    long seconds;
-    long milliseconds;
-    long microseconds;
-};
-
 class Quality {
 public:
-    int total_iterations = 0;
-	std::chrono::microseconds total_time;
-	int points_under_threshold = 0;
-public:
-
-	long getComputationTime () {
-        return total_time.count();
-    }
-
-    void printTime () {
-	    Time *time = getTime();
-	    std::cout << time->seconds << " secs, " << time->milliseconds << " ms, " << time->microseconds << " mcs\n";
-	}
-
-    Time* getTime () {
-        Time *time = new Time;
-        time->microseconds = total_time.count() % 1000;
-        time->milliseconds = ((total_time.count() - time->microseconds)/1000) % 1000;
-        time->seconds = ((total_time.count() - 1000*time->milliseconds - time->microseconds)/(1000*1000)) % 60;
-        time->minutes = ((total_time.count() - 60*1000*time->seconds - 1000*time->milliseconds - time->microseconds)/(60*1000*1000)) % 60;
-        return time;
-    }
-
-
-    int getIterations () {
-		return total_iterations;
-	}
-
-	int getNumberOfPointsUnderThreshold () {
-		return points_under_threshold;
-	}
-
 
 	/*
 	 * Compute Model Score.
@@ -65,7 +26,7 @@ public:
                        cv::InputArray input_points,
                        int points_size,
                        Score &score,
-                       std::vector& inliers,
+                       std::vector<int>& inliers,
                        bool get_inliers,
                        bool parallel=false) {
 

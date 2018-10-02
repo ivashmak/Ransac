@@ -26,7 +26,7 @@ void Tests::testFundamentalFitting() {
     uniform_sampler->setSampleSize(fundamental_model->sample_number);
     uniform_sampler->setPointsSize(points1.rows);
 
-//    testFundamental (points, fundamental_model, uniform_sampler, images_filename, points_filename);
+    testFundamental (points, fundamental_model, uniform_sampler, images_filename, points_filename);
 
     Estimator *fundamental_estimator = new FundamentalEstimator (points);
     TerminationCriteria *termination_criteria = new TerminationCriteria;
@@ -34,7 +34,7 @@ void Tests::testFundamentalFitting() {
 
 //    runNTimes(points, fundamental_estimator, fundamental_model, uniform_sampler, termination_criteria, quality, 1000);
 
-     storeResultsFundamental ();
+//    storeResultsFundamental ();
 }
 
 void testFundamental (cv::InputArray points, Model * const model, Sampler * const sampler, const std::vector<std::string>& images_filename, std::string points_filename) {
@@ -46,14 +46,17 @@ void testFundamental (cv::InputArray points, Model * const model, Sampler * cons
 
     Ransac ransac (*model, *sampler, *termination_criteria, *quality);
     ransac.run(points, fundamental_estimator);
+
+    RansacOutput *ransacOutput = ransac.getRansacOutput();
+
     std::cout << model->model_name << " time: ";
-    ransac.getQuality()->printTime();
-    std::cout << model->model_name << " iterations: " << ransac.getQuality()->getIterations() << "\n";
-    std::cout << model->model_name << " points under threshold: " << ransac.getQuality()->getNumberOfPointsUnderThreshold() << "\n";
+    ransacOutput->printTime();
+    std::cout << model->model_name << " iterations: " << ransacOutput->getNumberOfIterations() << "\n";
+    std::cout << model->model_name << " points under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
 
     // save result and compare with last run
-    logResult.compare(model, ransac.getQuality());
-    logResult.saveResult(model, ransac.getQuality());
+    logResult.compare(model, ransacOutput);
+    logResult.saveResult(model, ransacOutput);
     std::cout << "-----------------------------------------------------------------------------------------\n";
 
     cv::Mat pts = points.getMat();
@@ -87,7 +90,9 @@ void storeResultsFundamental () {
         Ransac ransac(*fundamental_model, *uniform_sampler, *termination_criteria, *quality);
         ransac.run(points1, fundamental_estimator);
 
-        cv::Mat F = ransac.best_model.returnDescriptor();
+        RansacOutput *ransacOutput = ransac.getRansacOutput();
+
+        cv::Mat F = ransacOutput->getModel()->returnDescriptor();
 
         std::ofstream save_model;
         std::string filename = "../results/fundamental/" + img_name.substr(0, img_name.find('.')) + "_Rmodel.txt";
@@ -98,9 +103,9 @@ void storeResultsFundamental () {
                    << F.at<float>(1, 0) << " " << F.at<float>(1, 1) << " " << F.at<float>(1, 2) << '\n'
                    << F.at<float>(2, 0) << " " << F.at<float>(2, 1) << " " << F.at<float>(2, 2) << '\n';
 
-        save_model << ransac.most_inliers.size() << '\n';
-        save_model << ransac.getQuality()->getIterations() << '\n';
-        save_model << ransac.getQuality()->getComputationTime() << '\n';
+        save_model << ransacOutput->getNumberOfInliers() << '\n';
+        save_model << ransacOutput->getNumberOfIterations() << '\n';
+        save_model << ransacOutput->getTimeMicroSeconds() << '\n';
         save_model.close();
     }
 }

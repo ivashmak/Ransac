@@ -35,8 +35,9 @@ public:
         /*
          * Get score of this model
          */
-        quality->GetModelScore(estimator, lo_model, input_points, points_size, lo_score,
-                               (std::vector &) nullptr, false);
+        std::vector<int> null_inliers;
+        quality->GetModelScore(estimator, &lo_model, input_points, points_size, lo_score,
+                               null_inliers, false);
     }
 };
 

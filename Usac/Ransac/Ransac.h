@@ -7,6 +7,7 @@
 #include "../Sampler/Sampler.h"
 
 #include "../Verbose.h"
+#include "RansacOutput.h"
 
 class Ransac {
 protected:
@@ -17,17 +18,13 @@ protected:
     Quality *quality = 0;
     Sampler *sampler = 0;
     TerminationCriteria *termination_criteria = 0;
+    RansacOutput * ransac_output;
 public:
-
-    Model best_model;
-    Model non_minimal_model;
-    std::vector<int> most_inliers;
 
     Ransac (Model &model,
             Sampler &sampler,
             TerminationCriteria &termination_criteria,
             Quality &quality) {
-
 
         this->model = &model;
         this->sampler = &sampler;
@@ -41,41 +38,22 @@ public:
         this->sampler = &sampler;
     }
 
-    Sampler& getUniformSamler () {
-        return *sampler;
-    }
-
     void setModel (Model &model) {
         this->model = &model;
-    }
-
-    Model getModel () {
-        return *model;
     }
 
     void setTerminationCriteria (TerminationCriteria &termination_criteria) {
         this->termination_criteria = &termination_criteria;
     }
 
-    TerminationCriteria getTerminationCriteria () {
-        return *termination_criteria;
-    }
-
     void setQuality (Quality& quality) {
         this->quality = &quality;
     }
 
-    Quality* getQuality () {
-        return quality;
+    RansacOutput* getRansacOutput () {
+        return ransac_output;
     }
 
-//    Model* getBestModel () {
-//        return &best_model;
-//    }
-//
-//    Model* getNonMinimalModel () {
-//        return &non_minimal_model;
-//    }
 };
 
 

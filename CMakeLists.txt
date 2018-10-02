@@ -38,6 +38,7 @@ add_executable(
 
         Usac/Ransac/Ransac.cpp
         Usac/Ransac/Ransac.h
+        Usac/Ransac/RansacOutput.h
 
         Usac/Estimator/Estimator.h
         Usac/Estimator/Line2DEstimator.h

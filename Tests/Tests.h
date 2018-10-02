@@ -22,10 +22,13 @@ public:
                     int N) {
 
         Ransac ransac (*model, *sampler, *termination_criteria, *quality);
+
+
         double time = 0;
         for (int i = 0; i < N; i++) {
             ransac.run(points, estimator);
-            time += ransac.getQuality()->getComputationTime();
+            RansacOutput *ransacOutput = ransac.getRansacOutput();
+            time += ransacOutput->getTimeMicroSeconds();
         }
         std::cout << "average time of "<< N <<" runs is " << (time/N) << "mcs using " << model->model_name
                   << " points size is " << points.size().width << "\n";
