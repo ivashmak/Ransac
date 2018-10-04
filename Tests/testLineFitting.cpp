@@ -79,8 +79,8 @@ void testLine (cv::InputArray points, Sampler * const sampler, Model * const mod
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
 
-    Ransac ransac (*model, *sampler, *termination_criteria, *quality);
-    ransac.run(points, estimator2d);
+    Ransac ransac (*model, *sampler, *termination_criteria, *quality, *estimator2d);
+    ransac.run(points);
 
     RansacOutput *ransacOutput = ransac.getRansacOutput();
 

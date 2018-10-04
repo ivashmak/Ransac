@@ -21,12 +21,12 @@ public:
                     Quality *const quality,
                     int N) {
 
-        Ransac ransac (*model, *sampler, *termination_criteria, *quality);
+        Ransac ransac (*model, *sampler, *termination_criteria, *quality, *estimator);
 
 
         double time = 0;
         for (int i = 0; i < N; i++) {
-            ransac.run(points, estimator);
+            ransac.run(points);
             RansacOutput *ransacOutput = ransac.getRansacOutput();
             time += ransacOutput->getTimeMicroSeconds();
         }

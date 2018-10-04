@@ -31,3 +31,5 @@ Abstract LO class
 Abstract TerminationCriteria class
 
 Destructors
+
+Add Uniform Random Generator (better than array generator in case to allocate new array for different size)

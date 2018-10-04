@@ -11,7 +11,7 @@ int getPointsSize (cv::InputArray points) {
     }
 }
 
-void Ransac::run(cv::InputArray input_points, Estimator* const estimator, bool LO) {
+void Ransac::run(cv::InputArray input_points, bool LO) {
     /*
      * Check if all components are initialized and safe to run
      * todo: add more criteria
@@ -79,11 +79,7 @@ void Ransac::run(cv::InputArray input_points, Estimator* const estimator, bool L
 
                 if (LO) {
                     Score *lo_score = new Score;
-                    /* In our experiments the size of samples are set to min (Ik/2, 14)
-                     * for epipolar geometry and to min (Ik/2, 12) for the case of homography estimation
-                     */
-                    unsigned int lo_sample_size = std::min (current_score->inlier_number/2+1, 14);
-
+                    Model *lo_model = new Model (*model);
 //                    GetLOModelScore (estimator, model, sampler, quality, input_points, points_size, lo_sample_size,
 //                                     current_score->inlier_number, inliers, lo_score);
                 }

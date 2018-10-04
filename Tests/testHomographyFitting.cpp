@@ -55,8 +55,8 @@ void testHomography (cv::InputArray points, Model * const model, Sampler * const
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
 
-    Ransac ransac (*model, *sampler, *termination_criteria, *quality);
-    ransac.run(points, homograpy_estimator);
+    Ransac ransac (*model, *sampler, *termination_criteria, *quality, *homograpy_estimator);
+    ransac.run(points);
 
     RansacOutput * ransacOutput = ransac.getRansacOutput();
 
@@ -95,10 +95,10 @@ void storeResults () {
         uniform_sampler->setSampleSize(homography_model->sample_number);
         uniform_sampler->setPointsSize(points1.rows);
 
-        Ransac ransac (*homography_model, *uniform_sampler, *termination_criteria, *quality);
+        Ransac ransac (*homography_model, *uniform_sampler, *termination_criteria, *quality, *homograpy_estimator);
         RansacOutput *ransacOutput = ransac.getRansacOutput();
 
-        ransac.run(points1, homograpy_estimator);
+        ransac.run(points1);
 
         cv::Mat H = ransacOutput->getModel()->returnDescriptor();
 

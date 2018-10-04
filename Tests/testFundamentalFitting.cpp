@@ -44,8 +44,8 @@ void testFundamental (cv::InputArray points, Model * const model, Sampler * cons
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality * quality = new Quality;
 
-    Ransac ransac (*model, *sampler, *termination_criteria, *quality);
-    ransac.run(points, fundamental_estimator);
+    Ransac ransac (*model, *sampler, *termination_criteria, *quality, *fundamental_estimator);
+    ransac.run(points);
 
     RansacOutput *ransacOutput = ransac.getRansacOutput();
 
@@ -87,8 +87,8 @@ void storeResultsFundamental () {
         uniform_sampler->setSampleSize(fundamental_model->sample_number);
         uniform_sampler->setPointsSize(points1.rows);
 
-        Ransac ransac(*fundamental_model, *uniform_sampler, *termination_criteria, *quality);
-        ransac.run(points1, fundamental_estimator);
+        Ransac ransac(*fundamental_model, *uniform_sampler, *termination_criteria, *quality, *fundamental_estimator);
+        ransac.run(points1);
 
         RansacOutput *ransacOutput = ransac.getRansacOutput();
 

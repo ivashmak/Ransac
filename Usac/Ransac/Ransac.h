@@ -19,20 +19,23 @@ protected:
     Sampler *sampler = 0;
     TerminationCriteria *termination_criteria = 0;
     RansacOutput * ransac_output;
+    Estimator * estimator;
 public:
 
     Ransac (Model &model,
             Sampler &sampler,
             TerminationCriteria &termination_criteria,
-            Quality &quality) {
+            Quality &quality,
+            Estimator &estimator) {
 
         this->model = &model;
         this->sampler = &sampler;
         this->termination_criteria = &termination_criteria;
         this->quality = &quality;
+        this->estimator = &estimator;
     }
 
-    void run (cv::InputArray input_points, Estimator * const estimator2d, bool LO=false);
+    void run (cv::InputArray input_points, bool LO=false);
 
     void setSampler (Sampler &sampler) {
         this->sampler = &sampler;

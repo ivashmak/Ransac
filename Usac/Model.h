@@ -10,10 +10,14 @@ public:
 	std::string model_name = "ransac";
 	int k_nearest_neighbors = 2;
 
+	/*
+	 * Local Optimization parameters
+	 */
+	unsigned int lo_sample_size = 14;
 	unsigned int lo_iterative_iterations = 10;
     unsigned int lo_max_iterations = 4;
     float lo_threshold = 10.0;
-    unsigned int lo_threshold_mutliplier = 2;
+    unsigned int lo_threshold_multiplier = 2;
 
 protected:
     cv::Mat descriptor;
