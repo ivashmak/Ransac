@@ -50,30 +50,31 @@ void Tests::testLineFitting() {
     Sampler *uniform_sampler = new UniformSampler;
     uniform_sampler->setSampleSize(ransac_model->sample_number);
     uniform_sampler->setPointsSize(points.size());
+    uniform_sampler->initRandomGenerator();
 
-    Model *napsac_model = new Model (10, 2, 0.99, 20, "napsac");
-    Sampler *napsac_sampler = new NapsacSampler(points, napsac_model->k_nearest_neighbors, napsac_model->sample_number);
-
-    Model *evsac_model = new Model (10, 2, 0.99, 7, "evsac");
-    Sampler *evsac_sampler = new EvsacSampler(points, points.size(), evsac_model->k_nearest_neighbors, evsac_model->sample_number);
-
-    Model *prosac_model = new Model (10, 2, 0.99, 0, "prosac");
-    Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
+//    Model *napsac_model = new Model (10, 2, 0.99, 20, "napsac");
+//    Sampler *napsac_sampler = new NapsacSampler(points, napsac_model->k_nearest_neighbors, napsac_model->sample_number);
+//
+//    Model *evsac_model = new Model (10, 2, 0.99, 7, "evsac");
+//    Sampler *evsac_sampler = new EvsacSampler(points, points.size(), evsac_model->k_nearest_neighbors, evsac_model->sample_number);
+//
+//    Model *prosac_model = new Model (10, 2, 0.99, 0, "prosac");
+//    Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
 
     testLine (points, uniform_sampler, ransac_model);
 //    testLine (points, napsac_sampler, napsac_model);
 //    testLine (points, evsac_sampler, evsac_model);
 //    testLine (sorted_points, prosac_sampler, prosac_model);
 
-    Estimator *line2destimator = new Line2DEstimator;
+    Estimator *line2destimator = new Line2DEstimator (points);
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
-    runNTimes(points, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 1000);
+//    runNTimes(points, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 1000);
 }
 
 
 void testLine (cv::InputArray points, Sampler * const sampler, Model * const model) {
-    Estimator *estimator2d = new Line2DEstimator;
+    Estimator *estimator2d = new Line2DEstimator (points);
     Drawing drawing;
     Logging logResult;
     TerminationCriteria *termination_criteria = new TerminationCriteria;

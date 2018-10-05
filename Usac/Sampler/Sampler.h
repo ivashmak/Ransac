@@ -40,7 +40,6 @@ public:
      */
     void setSampleSize (unsigned int sample_size) {
         this->sample_size = sample_size;
-        initRandomGenerator();
     }
 
     /*
@@ -49,7 +48,6 @@ public:
      */
     void setPointsSize (unsigned int points_size) {
         this->points_size = points_size;
-        initRandomGenerator();
     }
 
     /*

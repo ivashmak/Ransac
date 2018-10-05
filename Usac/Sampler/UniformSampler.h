@@ -18,8 +18,8 @@ public:
     }
 
     void initRandomGenerator () override {
-        if (points_size != 0) randomGenerator->resetGenerator(0, points_size-1);
-        if (sample_size != 0) randomGenerator->setSubsetSize(sample_size);
+        randomGenerator->resetGenerator(0, points_size-1);
+        randomGenerator->setSubsetSize(sample_size);
     }
 
     void generateSample (int *sample) override {

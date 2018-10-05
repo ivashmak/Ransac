@@ -2,14 +2,14 @@
 #define USAC_EVALUATERANDOMGENERATORS_H
 
 #include "ArrayRandomGenerator.h"
-#include "ShuffleRandomGenerator.h"
+#include "UniformRandomGenerator.h"
 
 void calculateEntropy (RandomGenerator * random_generator, int size, const std::string& name);
 void getAverageTime (RandomGenerator * random_generator, int size, int unique_set_size, const std::string& name);
 
 void evaluateRandomGenerators () {
     RandomGenerator * array_random_generator = new ArrayRandomGenerator;
-    RandomGenerator * shuffle_random_generator = new ShuffleRandomGenerator;
+    RandomGenerator * shuffle_random_generator = new UniformRandomGenerator;
 
     int size = 10000;
     int uniques_set_size = 200;

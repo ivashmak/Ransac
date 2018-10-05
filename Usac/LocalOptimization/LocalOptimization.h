@@ -7,16 +7,12 @@
 
 class LocalOptimization {
 public:
-    virtual void GetLOModelScore (Estimator * const estimator,
-                                  Model &lo_model,
-                                  Sampler * const sampler,
-                                  Quality *const quality,
+    virtual void GetLOModelScore (Model &best_lo_model,
+                                  Score &lo_score,
+                                  Score *kth_ransac_score,
                                   cv::InputArray input_points,
                                   unsigned int points_size,
-                                  unsigned int lo_sample_size,
-                                  unsigned int best_sample_size,
-                                  const int * const inliers,
-                                  Score &lo_score) = 0;
+                                  const int * const inliers) = 0;
 };
 
 

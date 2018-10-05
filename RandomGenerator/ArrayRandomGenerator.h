@@ -12,39 +12,43 @@
  */
 class ArrayRandomGenerator : public RandomGenerator {
 protected:
-    int *array;
-    int max;
     unsigned int array_size = 0;
+    int * array;
+    unsigned int curr_idx;
 public:
-
-    /*
-     * if min = 0 and max = 5
-     * Array will be [0,1,2,3,4,5]
-     * Size is max-min+1
-     */
     void resetGenerator (int min_range, int max_range) override {
         array_size = (unsigned int) max_range - min_range + 1;
-        max = array_size;
-
         array = new int[array_size];
+        curr_idx = 0;
 
         int k = 0;
         for (int i = min_range; i <= max_range; i++) {
             array[k++] = i;
         }
+
+        shuffleArray();
+    }
+
+    void shuffleArray () {
+//        std::cout << "shuffle array\n";
+        int max = array_size;
+        for (int i = 0; i < array_size; i++) {
+            unsigned int random_number = (unsigned int) random () % max;
+
+            int temp = array[random_number];
+            max--;
+            array[random_number] = array[max];
+            array[max] = temp;
+        }
     }
 
     int getRandomNumber () override {
-        if (max == 0) max = array_size;
+        if (curr_idx == array_size) {
+            curr_idx = 0;
+            shuffleArray();
+        }
 
-        unsigned int random_number = (unsigned int) random () % max;
-
-        int temp = array[random_number];
-        max--;
-        array[random_number] = array[max];
-        array[max] = temp;
-
-        return temp;
+        return array[curr_idx++];
     }
 
     void generateUniqueRandomSet (int * sample) override {

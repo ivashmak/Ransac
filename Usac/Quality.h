@@ -26,9 +26,11 @@ public:
                        cv::InputArray input_points,
                        int points_size,
                        Score &score,
-                       std::vector<int>& inliers,
+                       int * inliers,
                        bool get_inliers,
                        bool parallel=false) {
+
+        score.inlier_number = 0;
 
 //        float SS_tot = 0, SS_res = 0;
         if (parallel) {
@@ -46,30 +48,28 @@ public:
 
         } else {
             // calculate coefficient of determination r^2
-//            cv::Point_<float> * points = (cv::Point_<float> * ) input_points.getMat().data;
-//            std::vector <float> truth (points_size);
-//            cv::Mat desc;
-//            model->getDescriptor(desc);
-//            auto * params = (float * ) desc.data;
+//            float * points = (float * ) input_points.getMat().data;
+//            float * truth = new float[points_size];
+//            auto * params = (float * ) model->returnDescriptor().data;
 //            float a = params[0], b = params[1], c = params[2];
 //            float mean = 0;
-
+//            int pt;
 
             for (int point = 0; point < points_size; point++) {
                 if (estimator->GetError(point) < model->threshold) {
-                    score.inlier_number++;
-                    if (get_inliers) inliers.push_back(point);
-
-//                    truth[score.inlier_number-1] = points[point].y;
+//                    pt = 2*point;
+//                    truth[score.inlier_number-1] = points[pt+1];
 //                    mean += truth[score.inlier_number-1];
 //
 //                    // The sum of squares of residuals
-//                    SS_res += (truth[score.inlier_number-1] - (-c - a*points[point].x)/b) *
-//                            (truth[score.inlier_number-1] - (-c - a*points[point].x)/b);
+//                    SS_res += (truth[score.inlier_number] - (-c - a*points[pt])/b) *
+//                            (truth[score.inlier_number] - (-c - a*points[pt])/b);
+
+                    if (get_inliers) inliers[score.inlier_number] = point;
+                    score.inlier_number++;
                 }
             }
-//            std::cout << r << " " << score.inlier_number << '\n';
-//            mean = mean / score.inlier_number;
+//            mean /= score.inlier_number;
 
             // The total sum of squares
 //            for (int i = 0; i < score.inlier_number; i++) {
@@ -83,34 +83,6 @@ public:
 //        score.score = 1 - SS_res/SS_tot;
 
 	}
-
-
-    /*
-     * Fixing the Locally Optimized RANSAC
-	 * http://cmp.felk.cvut.cz/software/LO-RANSAC/Lebeda-2012-Fixing_LORANSAC-BMVC.pdf
-	 * Algorithm 2
-     */
-
-    /*inline void GetLocallyOptimizedModelScore(Estimator * const estimator,
-                              Model * const best_model,
-                              cv::InputArray input_points,
-                              int points_size,
-                              Score &lo_score,
-                               int * inliers, int inliers_size, Sampler * const sampler) {
-	    Model *lo_model = new Model;
-	    estimator->EstimateModelNonMinimalSample(inliers, inliers_size, *lo_model);
-	    GetModelScore(estimator, lo_model, input_points, points_size, lo_score);
-
-        int *samples = new int[2];
-        sampler->setRange(0, lo_score.inlier_number);
-	    sampler->setSampleSize(2);
-	    sampler->generateSample(samples);
-	    int reps = 10;
-	    for (int i = 0; i < reps; i++) {
-
-	    }
-	}*/
-
 
 
     /*
@@ -134,7 +106,7 @@ public:
      * Compare score of model evaluation
      */
     inline bool IsBetter(const Score * const s1, const Score * const s2) {
-        return s1->score < s2->score;
+        return s1->score > s2->score;
     }
 };
 

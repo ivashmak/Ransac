@@ -65,7 +65,7 @@ add_executable(
 
         RandomGenerator/RandomGenerator.h
         RandomGenerator/ArrayRandomGenerator.h
-        RandomGenerator/ShuffleRandomGenerator.h
+        RandomGenerator/UniformRandomGenerator.h
         RandomGenerator/EvaluateRandomGenerators.h
 
         Usac/Verbose.h

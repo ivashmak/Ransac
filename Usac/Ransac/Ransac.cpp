@@ -32,8 +32,7 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 
 //    std::cout << "Points size " << points_size << '\n';
 
-    // initialize estimator and termination criteria
-    estimator->setPoints(input_points);
+    // initialize termination criteria
     termination_criteria->init(model);
 
     int iters = 0;
@@ -53,12 +52,12 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 //    std::cout << "begin\n";
 
     /*
-     * Allocate inliers of points_size, to avoid push_back in getModelScore()
+     * Allocate inliers of points_size, to avoid reallocation in getModelScore()
      */
-    std::vector<int> inliers (points_size);
+    int *inliers = new int[points_size];
     std::vector<int> max_inliers;
-    LocalOptimization * lo_optimization = new RansacLocalOptimization;
-
+    LocalOptimization * lo_ransac = new RansacLocalOptimization (*model, *sampler, *termination_criteria, *quality, *estimator);
+    LO = true;
     while (iters < max_iters) {
         sampler->generateSample(sample);
 
@@ -69,19 +68,19 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 
             estimator->setModelParameters(models[i]);
 
-            current_score->score = 0;
-            current_score->inlier_number = 0;
-
             // we need inliers only for local optimization
             quality->GetModelScore(estimator, models[i], input_points, points_size, *current_score, inliers, LO);
 
-            if (quality->IsBetter(best_score, current_score)) {
+            if (quality->IsBetter(current_score, best_score)) {
 
                 if (LO) {
                     Score *lo_score = new Score;
                     Model *lo_model = new Model (*model);
-//                    GetLOModelScore (estimator, model, sampler, quality, input_points, points_size, lo_sample_size,
-//                                     current_score->inlier_number, inliers, lo_score);
+                    lo_ransac->GetLOModelScore (*lo_model, *lo_score, current_score, input_points, points_size, inliers);
+
+                    std::cout << "lo score " << lo_score->inlier_number << '\n';
+                    std::cout << "curr score " << current_score->inlier_number << '\n';
+
                 }
 
                 // copy current score to best score
@@ -101,8 +100,13 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
         iters++;
     }
 
-    max_inliers = std::vector<int> (best_score->inlier_number);
-    quality->getInliers(estimator, points_size, best_model, max_inliers);
+    /*
+     * if we did not use local optimization, so we did not get any inliers.
+     */
+    if (!LO) {
+        max_inliers = std::vector<int>(best_score->inlier_number);
+        quality->getInliers(estimator, points_size, best_model, max_inliers);
+    }
 
     estimator->EstimateModelNonMinimalSample(&max_inliers[0], best_score->inlier_number, *non_minimal_model);
 

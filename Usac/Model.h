@@ -36,7 +36,7 @@ public:
 	    lo_iterative_iterations = lo_iterative_iters;
 	    lo_max_iterations = lo_max_iters;
 	    lo_threshold = lo_thresh;
-	    lo_threshold_mutliplier = lo_thresh_mult;
+        lo_threshold_multiplier = lo_thresh_mult;
 	}
 
     void setDescriptor(cv::Mat _desc) { 
