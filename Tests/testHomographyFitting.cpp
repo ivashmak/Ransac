@@ -36,8 +36,9 @@ void Tests::testHomographyFitting() {
     Sampler *uniform_sampler = new UniformSampler;
     uniform_sampler->setSampleSize(homography_model->sample_number);
     uniform_sampler->setPointsSize(points1.rows);
+    uniform_sampler->initRandomGenerator();
 
-    testHomography (points, homography_model, uniform_sampler, images_filename, points_filename);
+//    testHomography (points, homography_model, uniform_sampler, images_filename, points_filename);
 
     Estimator * homograpy_estimator = new HomographyEstimator (points);
     TerminationCriteria *termination_criteria = new TerminationCriteria;
@@ -82,6 +83,7 @@ void storeResults () {
                                                 "BruggeTower_pts.txt",   "graf_pts.txt"};
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
+    Model *homography_model = new Model (3, 4, 0.99, 0, "homography");
 
     for (std::string img_name : points_filename) {
         cv::Mat points1, points2;
@@ -90,15 +92,15 @@ void storeResults () {
 
         Estimator * homograpy_estimator = new HomographyEstimator (points1);
         Sampler *uniform_sampler = new UniformSampler;
-        Model *homography_model = new Model (3, 4, 0.99, 0, "homography");
 
         uniform_sampler->setSampleSize(homography_model->sample_number);
         uniform_sampler->setPointsSize(points1.rows);
+        uniform_sampler->initRandomGenerator();
 
         Ransac ransac (*homography_model, *uniform_sampler, *termination_criteria, *quality, *homograpy_estimator);
-        RansacOutput *ransacOutput = ransac.getRansacOutput();
-
         ransac.run(points1);
+
+        RansacOutput *ransacOutput = ransac.getRansacOutput();
 
         cv::Mat H = ransacOutput->getModel()->returnDescriptor();
 

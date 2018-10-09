@@ -11,25 +11,24 @@
 
 class RansacLocalOptimization : public LocalOptimization {
 private:
-    Model *model;
-    Quality *quality;
-    TerminationCriteria *termination_criteria;
+    Model * model;
+    Quality * quality;
+    TerminationCriteria * termination_criteria;
     Sampler *sampler;
-    Estimator *estimator;
+    Estimator * estimator;
     
 public:
 
-    RansacLocalOptimization (Model &model,
-                             Sampler &sampler,
-                             TerminationCriteria &termination_criteria,
-                             Quality &quality,
-                             Estimator &estimator) {
-
-        this->model = &model;
-        this->sampler = &sampler;
-        this->termination_criteria = &termination_criteria;
-        this->quality = &quality;
-        this->estimator = &estimator;
+    RansacLocalOptimization (Model * model_,
+                             Sampler *sampler_,
+                             TerminationCriteria *termination_criteria_,
+                             Quality *quality_,
+                             Estimator *estimator_) {
+        model = model_;
+        sampler = sampler_;
+        estimator = estimator_;
+        termination_criteria = termination_criteria_;
+        quality = quality_;
     }
     
     void GetLOModelScore (Model &best_lo_model,
@@ -53,7 +52,7 @@ public:
         best_lo_score.inlier_number = kth_ransac_score->inlier_number;
         best_lo_score.score = kth_ransac_score->score;
 
-        std::cout << "Run local optimization.\n";
+//        std::cout << "Run local optimization.\n";
 
         /* In our experiments the size of samples are set to min (Ik/2, 14)
          * for epipolar geometry and to min (Ik/2, 12) for the case of homography estimation
@@ -68,7 +67,7 @@ public:
         int *lo_sample = new int[lo_sample_size];
         int * current_inliers = new int[points_size];
 
-        std::cout << "lo sample size " << lo_sample_size << '\n';
+//        std::cout << "lo sample size " << lo_sample_size << '\n';
 
         sampler->setSampleSize(lo_sample_size);
         sampler->setPointsSize(kth_ransac_score->inlier_number);
@@ -79,7 +78,7 @@ public:
                                  / lo_model->lo_iterative_iterations;
 
         /*
-         * Inner LO Ransac
+         * Inner Local Optimization Ransac
          */
         for (int iters = 0; iters < lo_max_iterations; iters++) {
 
@@ -89,18 +88,22 @@ public:
             sampler->generateSample(lo_sample);
             for (int smpl = 0; smpl < lo_sample_size; smpl++) {
                 lo_sample[smpl] = inliers[lo_sample[smpl]];
-//                std::cout << lo_sample[smpl] << " ";
             }
-//            std::cout << '\n';
+
+//            current_inliers = lo_sample;
+//            lo_score->inlier_number = lo_sample_size;
 
             /*
              * Estimate model of best sample from k-th step of Ransac
              */
             estimator->EstimateModelNonMinimalSample(lo_sample, lo_sample_size, *lo_model);
+            estimator->setModelParameters(lo_model);
 //            std::cout << lo_model->returnDescriptor() << '\n';
 
             // Evaluate model and get inliers
             quality->GetModelScore(estimator, lo_model, input_points, points_size, *lo_score, current_inliers, true);
+
+            std::cout << "lo inner score = " << lo_score->score << '\n';
 
             /*
              * reduce multiplier threshold K·θ by this number in each iteration.
@@ -110,38 +113,45 @@ public:
             lo_model->threshold = lo_model->lo_threshold_multiplier * lo_model->lo_threshold;
 
             /*
-             * Iterative Local Optimization Ransac
+             * Iterative LO Ransac
              * Reduce threshold of current model
              * Estimate model parametres
              * Evaluate model
              * Get inliers
              * Repeat until iteration < lo_iterations
              */
+            Model ** lo_models = new Model*[1];
+            lo_models[0] = lo_model;
+
             for (int iterations = 0; iterations < lo_iterative_iterations; iterations++) {
                 lo_model->threshold -= reduce_threshold;
-                std::cout << "begin lo score " << lo_score->inlier_number << '\n';
+//                std::cout << "begin lo score " << lo_score->inlier_number << '\n';
 
                 estimator->EstimateModelNonMinimalSample(current_inliers, lo_score->inlier_number, *lo_model);
+//                estimator->EstimateModel(current_inliers, lo_models);
+                estimator->setModelParameters(lo_model);
 
                 quality->GetModelScore(estimator, lo_model, input_points, points_size, *lo_score, current_inliers, true);
-
-                std::cout << "end lo score " << lo_score->inlier_number << '\n';
+                std::cout << "lo iterative score  = " << lo_score->inlier_number << '\n';
 
                 // if current model is not better then break
-                if (!quality->IsBetter(lo_score, &best_lo_score)) {
+                if (best_lo_score > lo_score) {
                     break;
                 }
             }
 
-            std::cout << lo_score->inlier_number << " fin \n";
+            std::cout << "lo inner score  = " << lo_score->inlier_number << '\n';
 
-            if (quality->IsBetter(lo_score, &best_lo_score)) {
-                std::cout << "SET NEW BEST SCORE\n";
+            if (*lo_score > best_lo_score) {
                 best_lo_model.setDescriptor(lo_model->returnDescriptor());
                 best_lo_score.inlier_number = lo_score->inlier_number;
                 best_lo_score.score = lo_score->score;
             }
         }
+
+        sampler->setSampleSize(model->sample_number);
+        sampler->setPointsSize(points_size);
+        sampler->initRandomGenerator();
 
         /*
          * TODO: add weights?

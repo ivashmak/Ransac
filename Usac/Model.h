@@ -11,6 +11,13 @@ public:
 	int k_nearest_neighbors = 2;
 
 	/*
+	 * |expected number of inliers|
+	 * -----------------------------
+	 *          |points size|
+	 */
+	float estimated_inliers_ratio = 1; // 0.8
+
+	/*
 	 * Local Optimization parameters
 	 */
 	unsigned int lo_sample_size = 14;

@@ -8,10 +8,29 @@
 #include <cmath>
 #include <chrono>
 
-struct Score {
+class Score {
+public:
     int inlier_number;
     float score;
+
+//    inline friend bool operator>(const Score& score1, const Score& score2) {
+//        std::cout << "operator " << score1.score << " " << score2.score << '\n';
+//        return score1.score > score2.score;
+//    }
+
+    inline bool operator>(const Score& score2) {
+        return score > score2.score;
+    }
+
+    /*
+     * Compare score of model evaluation
+     */
+
+    inline bool operator>(const Score *const score2) {
+        return score > score2->score;
+    }
 };
+
 
 class Quality {
 public:
@@ -102,12 +121,6 @@ public:
         }
     }
 
-    /*
-     * Compare score of model evaluation
-     */
-    inline bool IsBetter(const Score * const s1, const Score * const s2) {
-        return s1->score > s2->score;
-    }
 };
 
 

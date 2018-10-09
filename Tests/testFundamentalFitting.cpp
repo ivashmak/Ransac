@@ -25,6 +25,7 @@ void Tests::testFundamentalFitting() {
     Sampler *uniform_sampler = new UniformSampler;
     uniform_sampler->setSampleSize(fundamental_model->sample_number);
     uniform_sampler->setPointsSize(points1.rows);
+    uniform_sampler->initRandomGenerator();
 
     testFundamental (points, fundamental_model, uniform_sampler, images_filename, points_filename);
 
@@ -86,6 +87,7 @@ void storeResultsFundamental () {
 
         uniform_sampler->setSampleSize(fundamental_model->sample_number);
         uniform_sampler->setPointsSize(points1.rows);
+        uniform_sampler->initRandomGenerator();
 
         Ransac ransac(*fundamental_model, *uniform_sampler, *termination_criteria, *quality, *fundamental_estimator);
         ransac.run(points1);

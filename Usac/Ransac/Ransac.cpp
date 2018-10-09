@@ -56,8 +56,10 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
      */
     int *inliers = new int[points_size];
     std::vector<int> max_inliers;
-    LocalOptimization * lo_ransac = new RansacLocalOptimization (*model, *sampler, *termination_criteria, *quality, *estimator);
+    LocalOptimization * lo_ransac = new RansacLocalOptimization (model, sampler, termination_criteria, quality, estimator);
+
     LO = true;
+
     while (iters < max_iters) {
         sampler->generateSample(sample);
 
@@ -71,9 +73,12 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
             // we need inliers only for local optimization
             quality->GetModelScore(estimator, models[i], input_points, points_size, *current_score, inliers, LO);
 
-            if (quality->IsBetter(current_score, best_score)) {
+            if (*current_score > best_score) {
+
+                std::cout << "current score = " << current_score->score << '\n';
 
                 if (LO) {
+
                     Score *lo_score = new Score;
                     Model *lo_model = new Model (*model);
                     lo_ransac->GetLOModelScore (*lo_model, *lo_score, current_score, input_points, points_size, inliers);
@@ -81,32 +86,41 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
                     std::cout << "lo score " << lo_score->inlier_number << '\n';
                     std::cout << "curr score " << current_score->inlier_number << '\n';
 
+                    if (*lo_score > current_score) {
+                        std::cout << "LO score is better than current score\n";
+                        best_score->inlier_number = lo_score->inlier_number;
+                        best_score->score = lo_score->score;
+
+                        best_model->setDescriptor(lo_model->returnDescriptor());
+                    } else{
+                        best_score->inlier_number = current_score->inlier_number;
+                        best_score->score = current_score->score;
+
+                        best_model->setDescriptor(models[i]->returnDescriptor());
+                    }
+                } else {
+
+                    // copy current score to best score
+                    best_score->inlier_number = current_score->inlier_number;
+                    best_score->score = current_score->score;
+
+                    // remember best model
+                    best_model->setDescriptor (models[i]->returnDescriptor());
+
                 }
 
-                // copy current score to best score
-                best_score->inlier_number = current_score->inlier_number;
-                best_score->score = current_score->score;
-
-                // remember best model
-                best_model->setDescriptor (models[i]->returnDescriptor());
-
                 max_iters = termination_criteria->getUpBoundIterations(best_score->inlier_number, points_size);
-//            std::cout << "max iters prediction " << max_iters << '\n';
+//                std::cout << "max iters prediction = " << max_iters << '\n';
             }
         }
 
-//        std::cout << "current iteration " << iters << '\n';
+//        std::cout << "current iteration = " << iters << '\n';
 
         iters++;
     }
 
-    /*
-     * if we did not use local optimization, so we did not get any inliers.
-     */
-    if (!LO) {
-        max_inliers = std::vector<int>(best_score->inlier_number);
-        quality->getInliers(estimator, points_size, best_model, max_inliers);
-    }
+    max_inliers = std::vector<int>(best_score->inlier_number);
+    quality->getInliers(estimator, points_size, best_model, max_inliers);
 
     estimator->EstimateModelNonMinimalSample(&max_inliers[0], best_score->inlier_number, *non_minimal_model);
 
