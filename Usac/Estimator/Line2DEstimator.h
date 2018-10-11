@@ -12,7 +12,7 @@ public:
         assert(!input_array_points.empty());
     }
 
-    int EstimateModel(const int * const sample, Model ** models) override {
+    int EstimateModel(const int * const sample, Model **& models) override {
         const int idx1 = sample[0];
         const int idx2 = sample[1];
 
@@ -41,6 +41,9 @@ public:
         float a, b, c;
 
         for (int i = 0; i < sample_size; i++) {
+            float w = 1/(input_points[2*sample[i]+1] - (-c -a*input_points[2*sample[i]])/b);
+            w *= w;
+            std::cout << "weight " << w << '\n';
             *points_arr++ = input_points[2*sample[i]];
             *points_arr++ = input_points[2*sample[i]+1];
         }

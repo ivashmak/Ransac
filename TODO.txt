@@ -24,6 +24,7 @@ GetInlierCount only one time. But for Line2DEstimator it did not speed up the co
 9. Something maybe wrong in Homography Fitting.
 
 10. Config File?
+11. Inlier ratio?
 
 Abstract Draw class
 Abstract Quality class
@@ -33,3 +34,7 @@ Abstract TerminationCriteria class
 Destructors
 
 Add Uniform Random Generator (better than array generator in case to allocate new array for different size)
+
+Realloc for models
+ArrayGenerator sub intervals;
+Avoid set Model parameters.

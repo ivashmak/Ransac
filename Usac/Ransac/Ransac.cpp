@@ -59,6 +59,8 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
     LocalOptimization * lo_ransac = new RansacLocalOptimization (model, sampler, termination_criteria, quality, estimator);
 
     LO = true;
+    bool best_LO_model = false;
+    unsigned int lo_runs = 0;
 
     while (iters < max_iters) {
         sampler->generateSample(sample);
@@ -88,16 +90,19 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 
                     if (*lo_score > current_score) {
                         std::cout << "LO score is better than current score\n";
-                        best_score->inlier_number = lo_score->inlier_number;
-                        best_score->score = lo_score->score;
+                        best_score->copyFrom(lo_score);
+                        best_LO_model = true;
 
                         best_model->setDescriptor(lo_model->returnDescriptor());
                     } else{
-                        best_score->inlier_number = current_score->inlier_number;
-                        best_score->score = current_score->score;
+                        best_score->copyFrom(current_score);
+                        best_LO_model = false;
 
                         best_model->setDescriptor(models[i]->returnDescriptor());
                     }
+
+                    iters += model->lo_max_iterations + model->lo_max_iterations * model->lo_iterative_iterations;
+                    lo_runs++;
                 } else {
 
                     // copy current score to best score
@@ -115,21 +120,27 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
         }
 
 //        std::cout << "current iteration = " << iters << '\n';
-
         iters++;
     }
 
     max_inliers = std::vector<int>(best_score->inlier_number);
     quality->getInliers(estimator, points_size, best_model, max_inliers);
 
-    estimator->EstimateModelNonMinimalSample(&max_inliers[0], best_score->inlier_number, *non_minimal_model);
+    /*
+     * If best model is LO model, so lo used non minimal model estimation
+     * so we don't need to run it again. And model will be equal to non minimal model.
+     */
+    if (!best_LO_model)
+        estimator->EstimateModelNonMinimalSample(&max_inliers[0], best_score->inlier_number, *non_minimal_model);
+    else
+        non_minimal_model->setDescriptor(model->returnDescriptor());
 
     auto end_time = std::chrono::steady_clock::now();
     std::chrono::duration<float> fs = end_time - begin_time;
 
     // store quality results
     ransac_output = new RansacOutput (best_model, non_minimal_model, max_inliers,
-            std::chrono::duration_cast<std::chrono::microseconds>(fs).count(), best_score->inlier_number, iters);
+            std::chrono::duration_cast<std::chrono::microseconds>(fs).count(), best_score->inlier_number, iters, lo_runs);
 
     delete sample, current_score, best_score; // non_minimal_model, best_model
 }

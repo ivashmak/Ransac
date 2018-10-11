@@ -19,6 +19,8 @@ private:
     long time_mcs;
     unsigned int number_inliers;
     unsigned int number_iterations;
+    unsigned int lo_runs;
+
 public:
 
     ~RansacOutput() {
@@ -30,7 +32,8 @@ public:
                   const std::vector<int>& inliers_,
                   long time_mcs_,
                   unsigned int number_inliers_,
-                  unsigned int number_iterations_) {
+                  unsigned int number_iterations_,
+                  unsigned int lo_runs_) {
 
         /*
          * Let's make a deep copy to avoid changing variables from origin input.
@@ -42,6 +45,7 @@ public:
         time_mcs = time_mcs_;
         number_inliers = number_inliers_;
         number_iterations = number_iterations_;
+        lo_runs = lo_runs_;
 
         time = new Time;
         time->microseconds = time_mcs % 1000;
@@ -68,9 +72,12 @@ public:
     }
 
     unsigned int getNumberOfIterations () {
-        return number_iterations;
+        return number_iterations - model->lo_max_iterations * lo_runs - lo_runs * model->lo_max_iterations * model->lo_iterative_iterations;
     }
 
+    unsigned int getLORuns () {
+        return lo_runs;
+    }
     Time* getTime () {
         return time;
     }

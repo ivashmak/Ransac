@@ -29,6 +29,11 @@ public:
     inline bool operator>(const Score *const score2) {
         return score > score2->score;
     }
+
+    void copyFrom (const Score * const score_to_copy) {
+        score = score_to_copy->score;
+        inlier_number = score_to_copy->inlier_number;
+    }
 };
 
 
@@ -81,8 +86,8 @@ public:
 //                    mean += truth[score.inlier_number-1];
 //
 //                    // The sum of squares of residuals
-//                    SS_res += (truth[score.inlier_number] - (-c - a*points[pt])/b) *
-//                            (truth[score.inlier_number] - (-c - a*points[pt])/b);
+//                    SS_res += (truth[score.inlier_number] + c + a*points[pt])/b) *
+//                            (truth[score.inlier_number] +c + a*points[pt])/b); // y - y' = y - (-c -ax)/b
 
                     if (get_inliers) inliers[score.inlier_number] = point;
                     score.inlier_number++;

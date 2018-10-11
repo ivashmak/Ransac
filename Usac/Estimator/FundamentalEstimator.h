@@ -52,7 +52,7 @@ public:
         F_ptr = (float *) F.data;
     }
 
-    int EstimateModel(const int * const sample, Model ** models) override {
+    int EstimateModel(const int * const sample, Model **& models) override {
         cv::Mat_<float> F;
 
         int roots = SevenPointsAlgorithm(points, sample, F);
@@ -76,7 +76,7 @@ public:
                 models[i]->setDescriptor(F.rowRange(i * 3, i * 3 + 3));
             }
         }
-
+    
         return roots;
     }
 
