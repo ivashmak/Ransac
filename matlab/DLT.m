@@ -16,5 +16,6 @@ function H=DLT(pts1,pts2)
 
     h=V(:,9);
     H=[h(1),h(2),h(3);h(4),h(5),h(6);h(7),h(8),h(9)];
-
+    
+    keyboard
 end

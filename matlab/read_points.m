@@ -35,17 +35,18 @@ end
 % F  = sevenpoint (pts1, pts2, 800)
 
 % keyboard
-% H_DLT = DLT(pts1, pts2);
-[T_1, offset_1, s_1, s1_1, s2_1] = GetNormalizingTransformation(pts1);
-[T_2, offset_2, s_2, s1_2, s2_2] = GetNormalizingTransformation(pts2);
-    
-pts1Tr=(T_1*[pts1';ones(1,sz)])';
-pts2Tr=(T_2*[pts2';ones(1,sz)])';
+H_DLT = DLT(pts1, pts2);
 
-pts1Tr=pts1Tr(:,1:2);
-pts2Tr=pts2Tr(:,1:2);
-    
-Npts = [pts1Tr pts2Tr]
+% [T_1, offset_1, s_1, s1_1, s2_1] = GetNormalizingTransformation(pts1);
+% [T_2, offset_2, s_2, s1_2, s2_2] = GetNormalizingTransformation(pts2);
+%     
+% pts1Tr=(T_1*[pts1';ones(1,sz)])';
+% pts2Tr=(T_2*[pts2';ones(1,sz)])';
+% 
+% pts1Tr=pts1Tr(:,1:2);
+% pts2Tr=pts2Tr(:,1:2);
+%     
+% Npts = [pts1Tr pts2Tr]
 
 %H_NormalizedDLT = NormalizedDLT(pts1, pts2);
 % 

@@ -129,6 +129,7 @@ public:
              */
 
             Drawing drawing;
+            cv::Scalar color = cv::Scalar (random()%256,random()%256,random()%256);
 
             for (int iterations = 0; iterations < lo_iterative_iterations; iterations++) {
                 lo_model->threshold -= reduce_threshold;
@@ -140,12 +141,12 @@ public:
 
                 quality->GetModelScore(estimator, lo_model, input_points, points_size, *lo_score, current_inliers, true);
                 std::cout << "lo iterative score  = " << lo_score->inlier_number << '\n';
-                std::cout << "lo model  = " << lo_model->returnDescriptor() << '\n';
+//                std::cout << "lo model  = " << lo_model->returnDescriptor() << '\n';
 
                 cv::Mat img = cv::imread ("../dataset/image1.jpg");
                 int rows = img.rows;
                 int cols = img.cols;
-                drawing.draw_model(lo_model, std::max(rows, cols), cv::Scalar (255,0,0), img, true);
+                drawing.draw_model(lo_model, std::max(rows, cols), color, img, true);
                 std::vector<int> inl;
                 for (int i = 0; i < lo_score->inlier_number; i++) {
                     inl.push_back(current_inliers[i]);
@@ -156,7 +157,7 @@ public:
 
                 // if current model is not better then break
                 if (best_lo_score > lo_score) {
-                    break;
+//                    break;
                 }
 
             }

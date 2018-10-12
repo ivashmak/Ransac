@@ -40,14 +40,26 @@ public:
         float *points_arr = (float *) points.data;
         float a, b, c;
 
+
         for (int i = 0; i < sample_size; i++) {
-            float w = 1/(input_points[2*sample[i]+1] - (-c -a*input_points[2*sample[i]])/b);
-            w *= w;
-            std::cout << "weight " << w << '\n';
-            *points_arr++ = input_points[2*sample[i]];
-            *points_arr++ = input_points[2*sample[i]+1];
+            float residualy = input_points[2*sample[i]+1] - (- this->a * input_points[2*sample[i]] - this->c)/(this->b+0.001);
+            float residualx = input_points[2*sample[i]] - (- this->b * input_points[2*sample[i]+1] - this->c)/(this->a+0.001);
+
+            float residual = sqrt (residualx * residualx + residualy * residualy);
+
+            float w;
+            if (residual <= 1) w = 1;
+            else w = 1/residual;
+
+//            std::cout << residualx << " " << residualy << '\n';
+            std::cout << w << '\n';
+            *points_arr++ = input_points[2*sample[i]] *w;
+            *points_arr++ = input_points[2*sample[i]+1] *w;
         }
 
+
+
+        return;
 
         cv::Mat covar, eigenvecs, means, eigenvals;
         // Find the covariance matrix

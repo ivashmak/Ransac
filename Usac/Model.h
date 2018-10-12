@@ -21,10 +21,10 @@ public:
 	 * Local Optimization parameters
 	 */
 	unsigned int lo_sample_size = 14;
-	unsigned int lo_iterative_iterations = 2;
-    unsigned int lo_max_iterations = 3;
+	unsigned int lo_iterative_iterations = 4;
+    unsigned int lo_max_iterations = 5;
     float lo_threshold = 10.0;
-    unsigned int lo_threshold_multiplier = 2;
+    unsigned int lo_threshold_multiplier = 6;
 
     cv::Mat descriptor;
 	
