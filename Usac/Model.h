@@ -24,7 +24,7 @@ public:
 	unsigned int lo_iterative_iterations = 4;
     unsigned int lo_max_iterations = 5;
     float lo_threshold = 10.0;
-    unsigned int lo_threshold_multiplier = 6;
+    unsigned int lo_threshold_multiplier = 15;
 
     cv::Mat descriptor;
 	

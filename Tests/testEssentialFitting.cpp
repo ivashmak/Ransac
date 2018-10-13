@@ -7,7 +7,6 @@
 #include <opencv2/core/types.hpp>
 
 #include "../Detector/ReadPoints.h"
-#include "../tmp/EssentialMatrixEstimation.h"
 
 void testEssentialMatrixEstimation (cv::InputArray points1, cv::InputArray points2);
 
@@ -19,14 +18,5 @@ void Tests::testEssentialFitting() {
 }
 
 void testEssentialMatrixEstimation (cv::InputArray points1, cv::InputArray points2) {
-    EssentialMatrixEstimation * ess_mat_est = new EssentialMatrixEstimation;
-    cv::Mat E;
-    ess_mat_est->fivePointsAlg(points1, points2, E);
 
-    std::cout << "Essential Matrix =\n " << E << "\n\n";
-
-    cv::Mat R1, R2, T;
-    cv::decomposeEssentialMat(E, R1, R2, T);
-
-    std::cout << "R1 = \n" << R1 << "\n\nR2 = \n" << R2 << "\n\nT = \n" << T << "\n\n";
 }

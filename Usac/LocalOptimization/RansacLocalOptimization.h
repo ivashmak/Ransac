@@ -32,18 +32,19 @@ public:
         quality = quality_;
     }
     
-    void GetLOModelScore (Model &best_lo_model,
+    bool GetLOModelScore (Model &best_lo_model,
                           Score &best_lo_score,
                           Score *kth_ransac_score,
                           cv::InputArray input_points,
                           unsigned int points_size,
+                          unsigned int kth_step,
                           const int * const inliers) override {
 
         /*
          * Do not do local optimization for small number of inliers
          */
         if (kth_ransac_score->inlier_number < 2 * model->lo_sample_size) {
-            return;
+            return false;
         }
 
         /*
@@ -78,18 +79,29 @@ public:
                                   lo_model->threshold)
                                  / lo_model->lo_iterative_iterations;
 
-        std::cout << "reduce threshold " << reduce_threshold << '\n';
+        bool lo_better_than_kth_ransac = false;
         /*
          * Inner Local Optimization Ransac
          */
+        unsigned int max_iters = kth_step + lo_max_iterations;
+        unsigned int lo_iters = kth_step;
         for (int iters = 0; iters < lo_max_iterations; iters++) {
+            if (lo_iters > max_iters) {
+                return true;
+            }
 
             /*
              * Generate sample of lo_sample_size from reached best_sample in current iteration
              */
             sampler->generateSample(lo_sample);
-            for (int smpl = 0; smpl < lo_sample_size; smpl++) {
-                lo_sample[smpl] = inliers[lo_sample[smpl]];
+            if (lo_better_than_kth_ransac) {
+                for (int smpl = 0; smpl < lo_sample_size; smpl++) {
+                    lo_sample[smpl] = current_inliers[lo_sample[smpl]];
+                }   
+            } else {
+                for (int smpl = 0; smpl < lo_sample_size; smpl++) {
+                    lo_sample[smpl] = inliers[lo_sample[smpl]];
+                }
             }
 
 
@@ -114,8 +126,7 @@ public:
                 best_lo_model.setDescriptor(lo_model->returnDescriptor());
             }
 
-            std::cout << "lo inner score = " << lo_score->score << '\n';
-
+            // std::cout << "lo inner score = " << lo_score->score << '\n';
 
             lo_model->threshold = lo_model->lo_threshold_multiplier * lo_model->lo_threshold;
 
@@ -133,50 +144,59 @@ public:
 
             for (int iterations = 0; iterations < lo_iterative_iterations; iterations++) {
                 lo_model->threshold -= reduce_threshold;
-                std::cout << "lo  threshold " << lo_model->threshold << '\n';
+
+                // std::cout << "lo  threshold " << lo_model->threshold << '\n';
 //                std::cout << "begin lo score " << lo_score->inlier_number << '\n';
 
-                estimator->EstimateModelNonMinimalSample(current_inliers, lo_score->inlier_number, *lo_model);
+                estimator->LeastSquaresFitting(current_inliers, lo_score->inlier_number, *lo_model);
                 estimator->setModelParameters(lo_model);
 
                 quality->GetModelScore(estimator, lo_model, input_points, points_size, *lo_score, current_inliers, true);
-                std::cout << "lo iterative score  = " << lo_score->inlier_number << '\n';
+
+                // std::cout << "lo iterative score  = " << lo_score->inlier_number << '\n';
 //                std::cout << "lo model  = " << lo_model->returnDescriptor() << '\n';
 
-                cv::Mat img = cv::imread ("../dataset/image1.jpg");
-                int rows = img.rows;
-                int cols = img.cols;
-                drawing.draw_model(lo_model, std::max(rows, cols), color, img, true);
-                std::vector<int> inl;
-                for (int i = 0; i < lo_score->inlier_number; i++) {
-                    inl.push_back(current_inliers[i]);
-                }
-                drawing.showInliers(input_points, inl, img);
-                cv::imshow("lsm img", img);
-                cv::waitKey(0);
 
+                // ---------- for debug ----------------------
+                // Drawing drawing;
+                // cv::Mat img = cv::imread ("../dataset/image1.jpg");
+                // int rows = img.rows;
+                // int cols = img.cols;
+                // std::vector<int> inl;
+                // for (int i = 0; i < lo_score->inlier_number; i++) {
+                //     inl.push_back(current_inliers[i]);
+                // }
+                // drawing.showInliers(input_points, inl, img);
+                // drawing.draw_model(lo_model, std::max(rows, cols), color, img, true);
+                // cv::imshow("least img", img);  
+                // cv::waitKey(0);
+                // -------------------------------------------
+
+                lo_iters++;
                 // if current model is not better then break
                 if (best_lo_score > lo_score) {
-//                    break;
+                    break;
                 }
 
             }
 
-            std::cout << "end iterative lo inner score  = " << lo_score->inlier_number << '\n';
+            // std::cout << "end iterative lo inner score  = " << lo_score->inlier_number << '\n';
 
             if (*lo_score > best_lo_score) {
                 best_lo_model.setDescriptor(lo_model->returnDescriptor());
                 best_lo_score.copyFrom (lo_score);
+                lo_better_than_kth_ransac = true;
+
+                max_iters = termination_criteria->getUpBoundIterations(best_lo_score.inlier_number, points_size);
             }
+            lo_iters++;
         }
 
         sampler->setSampleSize(model->sample_number);
         sampler->setPointsSize(points_size);
         sampler->initRandomGenerator();
 
-        /*
-         * TODO: add weights?
-         */
+        return false;
     }
 };
 

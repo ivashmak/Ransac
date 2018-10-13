@@ -7,7 +7,7 @@
 #include <memory>
 
 #include "Sampler.h"
-#include <theia/theia.h>
+//#include <theia/theia.h>
 #include <opencv2/core/mat.hpp>
 #include <opencv2/flann/flann.hpp>
 
@@ -42,20 +42,20 @@ public:
 
         // fitting_method:  The fitting method MLE or QUANTILE_NLS (see statx doc).
         //   The recommended fitting method is the MLE estimation.
-        theia::FittingMethod fitting_method = theia::QUANTILE_NLS;
+//        theia::FittingMethod fitting_method = theia::QUANTILE_NLS;
 
         // The threshold used to decide correct or incorrect
         // matches/correspondences. The recommended value is 0.65.
         double predictor_threshold = 0.65;
 
         // Parameters of the mixture of distributions (Gamma + GEV).
-        theia::EvsacSampler<Eigen::Vector2d>::MixtureModelParams mixture_model_params;
+//        theia::EvsacSampler<Eigen::Vector2d>::MixtureModelParams mixture_model_params;
 
 
         /*
          * Create matrix that for each num_queries points has k nearest neughbors sorted distances
          */
-        Eigen::MatrixXd sorted_distances_(num_queries, knn-1);
+//        Eigen::MatrixXd sorted_distances_(num_queries, knn-1);
 
         int *random_samples = new int[num_queries];
         randomGenerator->generateUniqueRandomSet(random_samples, num_queries, 0, points_size-1);
@@ -69,24 +69,24 @@ public:
                                  indicies, sorted_dists, knn);
 
             for (int j = 0; j < knn-1; j++) {
-                sorted_distances_(i, j) = sorted_dists.at<float>(j+1);
+//                sorted_distances_(i, j) = sorted_dists.at<float>(j+1);
             }
         }
 
         std::vector<float> probabilities, sampling_weights;
 
         // calculates weight for each query point
-        if (!theia::EvsacSampler<Eigen::Vector2d>::CalculateMixtureModel(
-                sorted_distances_,
-                predictor_threshold,
-                fitting_method,
-                &mixture_model_params,
-                &probabilities,
-                &sampling_weights)){
-
-            std::cout << "Calculation of Mixture Model failed" << '\n';
-            exit (0);
-        }
+//        if (!theia::EvsacSampler<Eigen::Vector2d>::CalculateMixtureModel(
+//                sorted_distances_,
+//                predictor_threshold,
+//                fitting_method,
+//                &mixture_model_params,
+//                &probabilities,
+//                &sampling_weights)){
+//
+//            std::cout << "Calculation of Mixture Model failed" << '\n';
+//            exit (0);
+//        }
 
         initializeSampler(sampling_weights);
     }

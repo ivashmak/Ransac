@@ -1,4 +1,3 @@
-#include <opencv/cv.hpp>
 #include "Drawing.h"
 
 void Drawing::drawPanorama (const std::vector<cv::Mat>& imgs, cv::Mat &panorama, const cv::Mat& H) {

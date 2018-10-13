@@ -77,19 +77,20 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 
             if (*current_score > best_score) {
 
-                std::cout << "current score = " << current_score->score << '\n';
+                // std::cout << "current score = " << current_score->score << '\n';
 
                 if (LO) {
 
                     Score *lo_score = new Score;
                     Model *lo_model = new Model (*model);
-                    lo_ransac->GetLOModelScore (*lo_model, *lo_score, current_score, input_points, points_size, inliers);
+                    bool can_finish = lo_ransac->GetLOModelScore (*lo_model, *lo_score, current_score, 
+                                                    input_points, points_size, iters, inliers);
 
-                    std::cout << "lo score " << lo_score->inlier_number << '\n';
-                    std::cout << "curr score " << current_score->inlier_number << '\n';
-
+                    // std::cout << "lo score " << lo_score->inlier_number << '\n';
+                    // std::cout << "curr score " << current_score->inlier_number << '\n';
+                    // std::cout << "lo model best found " << lo_model->returnDescriptor() << '\n';
                     if (*lo_score > current_score) {
-                        std::cout << "LO score is better than current score\n";
+                        // std::cout << "LO score is better than current score\n";
                         best_score->copyFrom(lo_score);
                         best_LO_model = true;
 
@@ -103,6 +104,12 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 
                     iters += model->lo_max_iterations + model->lo_max_iterations * model->lo_iterative_iterations;
                     lo_runs++;
+
+                    if (can_finish) {
+                        iters++;
+                        // std::cout << "CAN FINISH\n";
+                        goto end;
+                    }
                 } else {
 
                     // copy current score to best score
@@ -123,6 +130,8 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
         iters++;
     }
 
+    end:
+
     max_inliers = std::vector<int>(best_score->inlier_number);
     quality->getInliers(estimator, points_size, best_model, max_inliers);
 
@@ -133,14 +142,14 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
     if (!best_LO_model)
         estimator->EstimateModelNonMinimalSample(&max_inliers[0], best_score->inlier_number, *non_minimal_model);
     else
-        non_minimal_model->setDescriptor(model->returnDescriptor());
+        non_minimal_model->setDescriptor(best_model->returnDescriptor());
 
     auto end_time = std::chrono::steady_clock::now();
     std::chrono::duration<float> fs = end_time - begin_time;
 
-    // store quality results
+    // Store results
     ransac_output = new RansacOutput (best_model, non_minimal_model, max_inliers,
             std::chrono::duration_cast<std::chrono::microseconds>(fs).count(), best_score->inlier_number, iters, lo_runs);
 
-    delete sample, current_score, best_score; // non_minimal_model, best_model
+    delete sample, current_score, best_score, non_minimal_model, best_model;
 }

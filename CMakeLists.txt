@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
 set (CMAKE_CXX_STANDARD 11)
 
-project(Usac)
-find_package( OpenCV REQUIRED )
+project (Usac)
+find_package (OpenCV REQUIRED)
 
 # theia
-find_package(Theia REQUIRED)
-include_directories(${THEIA_INCLUDE_DIRS})
+#find_package(Theia REQUIRED)
+#include_directories(${THEIA_INCLUDE_DIRS})
 
 add_executable(
         ransac main.cpp
@@ -78,4 +78,4 @@ set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -pthread -ggdb" )
 #set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -O3" )
 
 target_link_libraries (ransac ${OpenCV_LIBS} )
-target_link_libraries (ransac ${THEIA_LIBRARIES})
+#target_link_libraries (ransac ${THEIA_LIBRARIES})

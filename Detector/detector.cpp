@@ -25,7 +25,7 @@ std::vector<cv::KeyPoint> detect(std::string filename, std::string detector_name
 	} else if (detector_name.compare("corner") == 0) {
 		cv::Mat src_gray;
 		cv::Mat src = cv::imread(filename, 1 );
-  		cv::cvtColor( src, src_gray, CV_BGR2GRAY );
+  		cv::cvtColor( src, src_gray, cv::COLOR_BGR2GRAY);
 	  	cv::Mat dst, dst_norm, dst_norm_scaled;
 	  	dst = cv::Mat::zeros( src.size(), CV_32FC1 );
 		

@@ -10,7 +10,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/core.hpp>
 #include <opencv2/features2d.hpp>
-#include <opencv2/xfeatures2d.hpp>
+//#include <opencv2/xfeatures2D.hpp>
 #include <opencv2/highgui.hpp>
 
 #include "../Sampler/Sampler.h"
@@ -22,7 +22,12 @@ public:
     // Pure virtuals functions
     // return number of models
     virtual int EstimateModel(const int * const sample, Model **& models) = 0;
+    
     virtual void EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) = 0;
+    virtual void LeastSquaresFitting (const int * const sample, int sample_size, Model &model) {
+        EstimateModelNonMinimalSample(sample, sample_size, model);
+    }
+    
     virtual float GetError(int pidx) = 0;
     virtual int SampleNumber()  = 0;
 
@@ -32,7 +37,6 @@ public:
     virtual void setModelParameters (Model * const model) {}
 
     virtual int getNumberOfInliers (const Model * const model) {return 0;}
-
 
     /*
      * Especially for Fundamental Estimator

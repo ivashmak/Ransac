@@ -7,7 +7,6 @@
 // page 279
 
 #include <opencv2/core/mat.hpp>
-#include <opencv/cv.hpp>
 #include <iostream>
 
 int SevenPointsAlgorithm (const float * const pts, const int * const sample, cv::OutputArray F_out) {
