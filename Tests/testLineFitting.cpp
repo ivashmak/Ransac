@@ -90,7 +90,7 @@ void testLine (cv::InputArray points, Sampler * const sampler, Model * const mod
     std::cout << model->model_name << " iterations: " << ransacOutput->getNumberOfIterations() <<
               " + " << ransacOutput->getLORuns() * (model->lo_max_iterations + (model->lo_max_iterations * model->lo_iterative_iterations)) <<
               " ("<< ransacOutput->getLORuns() << " lo inner + iterative runs) \n";
-
+    
     std::cout << model->model_name << " points under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
 
     // save result and compare with last run

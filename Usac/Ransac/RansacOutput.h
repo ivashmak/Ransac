@@ -86,7 +86,7 @@ public:
         return model;
     }
 
-    Model* const getNonMinimalModel () {
+    Model* getNonMinimalModel () {
         return non_minimal_model;
     }
 

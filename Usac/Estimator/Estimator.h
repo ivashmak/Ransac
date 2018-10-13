@@ -23,7 +23,7 @@ public:
     // return number of models
     virtual int EstimateModel(const int * const sample, Model **& models) = 0;
     
-    virtual void EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) = 0;
+    virtual bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) = 0;
     virtual void LeastSquaresFitting (const int * const sample, int sample_size, Model &model) {
         EstimateModelNonMinimalSample(sample, sample_size, model);
     }
@@ -33,6 +33,10 @@ public:
 
     // Setters of points set and model's parameters sufficiently sped up code
     // functions are virtual, they can be overwritten but not necessarily.
+    /*
+     * These function should be avoided in Ransac. Efficiently to use global 
+     * input points and descriptors as private class members.
+     */
     virtual void setPoints (cv::InputArray input_points) {}
     virtual void setModelParameters (Model * const model) {}
 

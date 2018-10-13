@@ -38,7 +38,7 @@ void Tests::testHomographyFitting() {
     uniform_sampler->setPointsSize(points1.rows);
     uniform_sampler->initRandomGenerator();
 
-//    testHomography (points, homography_model, uniform_sampler, images_filename, points_filename);
+   testHomography (points, homography_model, uniform_sampler, images_filename, points_filename);
 
     Estimator * homograpy_estimator = new HomographyEstimator (points);
     TerminationCriteria *termination_criteria = new TerminationCriteria;
@@ -46,7 +46,7 @@ void Tests::testHomographyFitting() {
 
 //    runNTimes(points, homograpy_estimator, homography_model, uniform_sampler, termination_criteria, quality, 1000);
 
-    storeResults();
+    // storeResults();
 }
 
 void testHomography (cv::InputArray points, Model * const model, Sampler * const sampler, std::vector<std::string> images_filename, std::string points_filename) {
@@ -63,7 +63,10 @@ void testHomography (cv::InputArray points, Model * const model, Sampler * const
 
     std::cout << model->model_name << " time: ";
     ransacOutput->printTime();
-    std::cout << model->model_name << " iterations: " << ransacOutput->getNumberOfIterations() << "\n";
+    std::cout << model->model_name << " iterations: " << ransacOutput->getNumberOfIterations() <<
+              " + " << ransacOutput->getLORuns() * (model->lo_max_iterations + (model->lo_max_iterations * model->lo_iterative_iterations)) <<
+              " ("<< ransacOutput->getLORuns() << " lo inner + iterative runs) \n";
+    
     std::cout << model->model_name << " points under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
 
     // save result and compare with last run

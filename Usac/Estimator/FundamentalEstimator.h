@@ -53,7 +53,7 @@ public:
     }
 
     int EstimateModel(const int * const sample, Model **& models) override {
-        cv::Mat_<float> F;
+        cv::Mat_<float> F; // use global
 
         int roots = SevenPointsAlgorithm(points, sample, F);
         if (roots < 1) {
@@ -80,9 +80,11 @@ public:
         return roots;
     }
 
-    void EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
+    bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
         cv::Mat_<float> F;
+
         EightPointsAlgorithm(points, sample, sample_size, F);
+        F_ptr = (float *) F.data;
 
         model.setDescriptor(F);
     }

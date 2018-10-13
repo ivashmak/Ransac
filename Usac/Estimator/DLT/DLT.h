@@ -62,11 +62,11 @@ void DLT (const float * const points, const int * const sample, int sample_numbe
      */
     // todo use eigen
     cv::SVD::compute(A, w, u, vt);
-
+    
     H = cv::Mat_<float>(vt.row(vt.rows-1).reshape (3,3));
 }
 
-void DLT (const float * const points, int sample_number, cv::Mat &H) {
+bool DLT (const float * const points, int sample_number, cv::Mat &H) {
     float x1, y1, x2, y2;
     int smpl;
 
@@ -103,7 +103,16 @@ void DLT (const float * const points, int sample_number, cv::Mat &H) {
     }
 
     cv::SVD::compute(A, w, u, vt);
+
+    // std::cout << "\033[1;32mSVD computed \033[0m \n";
+    if (vt.empty ()) {
+        std::cout << "\033[1;31mDecomposed Matrix Vt is empty\033[0m \n";
+        return false;
+    }
+
     H = cv::Mat_<float>(vt.row(vt.rows-1).reshape (3,3));
+
+    return true;
 }
 
 #endif // RANSAC_DLT_H

@@ -58,10 +58,13 @@ public:
         return 1;
     }
 
-    void EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
+    bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
         cv::Mat H;
-        NormalizedDLT(points, sample, sample_size, H);
+        if (NormalizedDLT(points, sample, sample_size, H)) {
+            return false;
+        }
         model.setDescriptor(H);
+        return true;
     }
 
     /*

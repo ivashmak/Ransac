@@ -57,7 +57,7 @@ public:
         return 1;
     }
 
-    void EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
+    bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
 
     }
 

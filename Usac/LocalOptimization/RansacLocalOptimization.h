@@ -61,11 +61,14 @@ public:
         unsigned int lo_max_iterations = best_lo_model.lo_max_iterations;
         unsigned int lo_iterative_iterations = best_lo_model.lo_iterative_iterations;
 
+        // std::cout << "lo sample_size " << lo_sample_size << '\n';
+            
+
         Model *lo_model = new Model(*model);
         Score *lo_score = new Score;
         
         int *lo_sample = new int[lo_sample_size];
-        int * current_inliers = new int[points_size];
+        int * lo_inliers = new int[points_size];
 
         sampler->setSampleSize(lo_sample_size);
         sampler->setPointsSize(kth_ransac_score->inlier_number);
@@ -96,7 +99,7 @@ public:
             sampler->generateSample(lo_sample);
             if (lo_better_than_kth_ransac) {
                 for (int smpl = 0; smpl < lo_sample_size; smpl++) {
-                    lo_sample[smpl] = current_inliers[lo_sample[smpl]];
+                    lo_sample[smpl] = lo_inliers[lo_sample[smpl]];
                 }   
             } else {
                 for (int smpl = 0; smpl < lo_sample_size; smpl++) {
@@ -108,12 +111,14 @@ public:
             /*
              * Estimate model of best sample from k-th step of Ransac
              */
-            estimator->EstimateModelNonMinimalSample(lo_sample, lo_sample_size, *lo_model);
+            if (!estimator->EstimateModelNonMinimalSample(lo_sample, lo_sample_size, *lo_model))
+                continue;
+            
+
             estimator->setModelParameters(lo_model);
-//            std::cout << lo_model->returnDescriptor() << '\n';
 
             // Evaluate model and get inliers
-            quality->GetModelScore(estimator, lo_model, input_points, points_size, *lo_score, current_inliers, true);
+            quality->GetModelScore(estimator, lo_model, input_points, points_size, *lo_score, lo_inliers, true);
 
             /*
              * If current inner lo score worse than best lo score, so
@@ -126,7 +131,7 @@ public:
                 best_lo_model.setDescriptor(lo_model->returnDescriptor());
             }
 
-            // std::cout << "lo inner score = " << lo_score->score << '\n';
+            std::cout << "lo inner score = " << lo_score->score << '\n';
 
             lo_model->threshold = lo_model->lo_threshold_multiplier * lo_model->lo_threshold;
 
@@ -148,10 +153,10 @@ public:
                 // std::cout << "lo  threshold " << lo_model->threshold << '\n';
 //                std::cout << "begin lo score " << lo_score->inlier_number << '\n';
 
-                estimator->LeastSquaresFitting(current_inliers, lo_score->inlier_number, *lo_model);
+                estimator->LeastSquaresFitting(lo_inliers, lo_score->inlier_number, *lo_model);
                 estimator->setModelParameters(lo_model);
 
-                quality->GetModelScore(estimator, lo_model, input_points, points_size, *lo_score, current_inliers, true);
+                quality->GetModelScore(estimator, lo_model, input_points, points_size, *lo_score, lo_inliers, true);
 
                 // std::cout << "lo iterative score  = " << lo_score->inlier_number << '\n';
 //                std::cout << "lo model  = " << lo_model->returnDescriptor() << '\n';
@@ -164,7 +169,7 @@ public:
                 // int cols = img.cols;
                 // std::vector<int> inl;
                 // for (int i = 0; i < lo_score->inlier_number; i++) {
-                //     inl.push_back(current_inliers[i]);
+                //     inl.push_back(lo_inliers[i]);
                 // }
                 // drawing.showInliers(input_points, inl, img);
                 // drawing.draw_model(lo_model, std::max(rows, cols), color, img, true);
