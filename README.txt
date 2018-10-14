@@ -1,7 +1,11 @@
 USAC: A Universal Framework for Random Sample Consensus
 
-Contains LineFitinng tests.
-Contains Homograpy Fitting tests.
+
+Estimators:
+-- Line 2d 
+-- Homography matrix
+-- Fundamental matrix
+-- Essential matrix
 
 Avaliable Samplers:
 -- Uniform Sampler
@@ -15,9 +19,12 @@ cd build/
 cmake ..
 make -j $(nproc)
 
-
-Run:
+Run (runs tests for each estimators):
 ./ransac 
+
+Datasets:
+-- Extreme View Dataset (EVD): http://cmp.felk.cvut.cz/wbs/#datasets
+-- Karel Lebeda: http://cmp.felk.cvut.cz/data/geometry2view/index.xhtml
 
 
 References:
