@@ -7,7 +7,7 @@ int main (int args, char ** argv) {
     Tests tests;
 
     // evaluating random generators
-//    evaluateRandomGenerators();
+   // evaluateRandomGenerators();
 
     // run tests
     tests.testLineFitting();

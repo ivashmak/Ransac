@@ -21,17 +21,22 @@ public:
                     Quality *const quality,
                     int N) {
 
-        Ransac ransac (*model, *sampler, *termination_criteria, *quality, *estimator);
-
-
+        
+        int bad_models_counter = 0;
         double time = 0;
         for (int i = 0; i < N; i++) {
+            std::cout << i << '\n';
+            Ransac ransac (*model, *sampler, *termination_criteria, *quality, *estimator);
             ransac.run(points);
             RansacOutput *ransacOutput = ransac.getRansacOutput();
             time += ransacOutput->getTimeMicroSeconds();
+            if (ransacOutput->getNumberOfInliers() < 1300)
+                bad_models_counter++;
+
         }
         std::cout << "average time of "<< N <<" runs is " << (time/N) << "mcs using " << model->model_name
-                  << " points size is " << points.size().width << "\n";
+                  << ". Points size is " << points.size().width << "\n";
+        std::cout << "bad models " << bad_models_counter << '\n';
     }
 
     //todo add functions for test () and storeResults ()

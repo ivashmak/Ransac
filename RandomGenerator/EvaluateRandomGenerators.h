@@ -6,18 +6,91 @@
 
 void calculateEntropy (RandomGenerator * random_generator, int size, const std::string& name);
 void getAverageTime (RandomGenerator * random_generator, int size, int unique_set_size, const std::string& name);
+void checkUnique (RandomGenerator * random_generator, int size, const std::string& name);
+void checkReset (RandomGenerator * random_generator, const std::string& name);
 
 void evaluateRandomGenerators () {
     RandomGenerator * array_random_generator = new ArrayRandomGenerator;
-    RandomGenerator * shuffle_random_generator = new UniformRandomGenerator;
+    RandomGenerator * uniform_random_generator = new UniformRandomGenerator;
+
+    checkReset (array_random_generator, "array");
+    checkUnique (array_random_generator, 20, "array");
+    // return;
 
     int size = 10000;
     int uniques_set_size = 200;
     calculateEntropy (array_random_generator, size, "array");
     getAverageTime (array_random_generator, size, uniques_set_size, "array");
 
-    calculateEntropy (shuffle_random_generator, size, "shuffle");
-    getAverageTime (shuffle_random_generator, size, uniques_set_size, "shuffle");
+    calculateEntropy (uniform_random_generator, size, "shuffle");
+    getAverageTime (uniform_random_generator, size, uniques_set_size, "shuffle");
+}
+
+void checkReset (RandomGenerator * random_generator, const std::string& name) {
+    std::cout << name << " random generator\n";
+    
+    int size1 = 10000;
+    int size2 = 100;
+    random_generator->resetGenerator(0, size1);
+    
+    for (int i = 0; i < size1/2; i++) {
+        random_generator->getRandomNumber();
+    }    
+
+
+    random_generator->resetGenerator(0, size2);
+    std::vector<int> histogram(size2+1, 0);
+    for (int i = 0; i < size2+1; i++) {
+        int num = random_generator->getRandomNumber();
+        std::cout << num << ' ';
+        if (num > size2) {
+            std::cout << "WRONG RANGE IN " << name << '\n';
+            return;
+        }
+        histogram[num]++;
+    }    
+    std::cout << '\n';
+    std::cout << "RANGE is OK\n";
+    
+    for (int i = 0; i < size2+1; i++) {
+        // std::cout << histogram[i] << " " ;
+        if (histogram[i] != 1) {
+            std::cout << name << "is NOT UNIQUE!\n";
+            return;
+        }
+    }
+
+    std::cout << name << " is UNIQUE\n";
+
+}
+
+void checkUnique (RandomGenerator * random_generator, int size, const std::string& name) {
+    std::cout << name << " random generator, size =  " << size << "\n";
+    random_generator->resetGenerator(0, size);
+
+
+    for (int shuffle = 0; shuffle < 10; shuffle++) {
+        std::vector<int> histogram (size+1, 0);
+    
+        for (int i = 0; i < size+1; i++) {
+            int num = random_generator->getRandomNumber();
+            std::cout << num << ' ';
+            histogram[num]++;
+        }
+        std::cout << '\n';
+
+        float E = 0;
+        for (int i = 0; i < size+1; i++) {
+            // std::cout << histogram[i] << " " ;
+            if (histogram[i] != 1) {
+                std::cout << name << "is NOT UNIQUE!\n";
+                return;
+            }
+        }
+        // now array generator must have shuffle 
+    }    
+    std::cout << name << " is UNIQUE\n";
+
 }
 
 void calculateEntropy (RandomGenerator * random_generator, int size, const std::string& name) {

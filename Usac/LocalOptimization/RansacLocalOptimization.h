@@ -20,6 +20,10 @@ private:
     
 public:
 
+    virtual ~RansacLocalOptimization () {
+        // std::cout << "cleaning in ransac lo\n";
+    }
+
     RansacLocalOptimization (Model * model_,
                              Sampler *sampler_,
                              TerminationCriteria *termination_criteria_,
@@ -32,19 +36,22 @@ public:
         quality = quality_;
     }
     
-    bool GetLOModelScore (Model &best_lo_model,
+    int GetLOModelScore (Model &best_lo_model,
                           Score &best_lo_score,
                           Score *kth_ransac_score,
                           cv::InputArray input_points,
                           unsigned int points_size,
                           unsigned int kth_step,
-                          const int * const inliers) override {
+                          const int * const inliers,
+                          bool *can_finish) override {
 
+        *can_finish = false;
+            
         /*
          * Do not do local optimization for small number of inliers
          */
         if (kth_ransac_score->inlier_number < 2 * model->lo_sample_size) {
-            return false;
+            return 0;
         }
 
         /*
@@ -62,7 +69,6 @@ public:
         unsigned int lo_iterative_iterations = best_lo_model.lo_iterative_iterations;
 
         // std::cout << "lo sample_size " << lo_sample_size << '\n';
-            
 
         Model *lo_model = new Model(*model);
         Score *lo_score = new Score;
@@ -86,11 +92,13 @@ public:
         /*
          * Inner Local Optimization Ransac
          */
-        unsigned int max_iters = kth_step + lo_max_iterations;
+
+        unsigned int max_iters = termination_criteria->getUpBoundIterations(kth_ransac_score->inlier_number, points_size);        
         unsigned int lo_iters = kth_step;
         for (int iters = 0; iters < lo_max_iterations; iters++) {
             if (lo_iters > max_iters) {
-                return true;
+                *can_finish = true;
+                return lo_iters;
             }
 
             /*
@@ -114,9 +122,6 @@ public:
             if (!estimator->EstimateModelNonMinimalSample(lo_sample, lo_sample_size, *lo_model))
                 continue;
             
-
-            estimator->setModelParameters(lo_model);
-
             // Evaluate model and get inliers
             quality->GetModelScore(estimator, lo_model, input_points, points_size, *lo_score, lo_inliers, true);
 
@@ -131,7 +136,7 @@ public:
                 best_lo_model.setDescriptor(lo_model->returnDescriptor());
             }
 
-            std::cout << "lo inner score = " << lo_score->score << '\n';
+            // std::cout << "lo inner score = " << lo_score->score << '\n';
 
             lo_model->threshold = lo_model->lo_threshold_multiplier * lo_model->lo_threshold;
 
@@ -144,7 +149,6 @@ public:
              * Repeat until iteration < lo_iterations
              */
 
-            Drawing drawing;
             cv::Scalar color = cv::Scalar (random()%256,random()%256,random()%256);
 
             for (int iterations = 0; iterations < lo_iterative_iterations; iterations++) {
@@ -154,7 +158,6 @@ public:
 //                std::cout << "begin lo score " << lo_score->inlier_number << '\n';
 
                 estimator->LeastSquaresFitting(lo_inliers, lo_score->inlier_number, *lo_model);
-                estimator->setModelParameters(lo_model);
 
                 quality->GetModelScore(estimator, lo_model, input_points, points_size, *lo_score, lo_inliers, true);
 
@@ -165,16 +168,13 @@ public:
                 // ---------- for debug ----------------------
                 // Drawing drawing;
                 // cv::Mat img = cv::imread ("../dataset/image1.jpg");
-                // int rows = img.rows;
-                // int cols = img.cols;
                 // std::vector<int> inl;
                 // for (int i = 0; i < lo_score->inlier_number; i++) {
                 //     inl.push_back(lo_inliers[i]);
                 // }
                 // drawing.showInliers(input_points, inl, img);
-                // drawing.draw_model(lo_model, std::max(rows, cols), color, img, true);
-                // cv::imshow("least img", img);  
-                // cv::waitKey(0);
+                // drawing.draw_model(lo_model, color, img, true);
+                // cv::imshow("least img", img); cv::waitKey(0);
                 // -------------------------------------------
 
                 lo_iters++;
@@ -182,8 +182,8 @@ public:
                 if (best_lo_score > lo_score) {
                     break;
                 }
-
             }
+            // lo_iters++;
 
             // std::cout << "end iterative lo inner score  = " << lo_score->inlier_number << '\n';
 
@@ -193,6 +193,7 @@ public:
                 lo_better_than_kth_ransac = true;
 
                 max_iters = termination_criteria->getUpBoundIterations(best_lo_score.inlier_number, points_size);
+                // std::cout << "lo max iters prediction " << max_iters << '\n';
             }
             lo_iters++;
         }
@@ -201,7 +202,7 @@ public:
         sampler->setPointsSize(points_size);
         sampler->initRandomGenerator();
 
-        return false;
+        return lo_iters;
     }
 };
 

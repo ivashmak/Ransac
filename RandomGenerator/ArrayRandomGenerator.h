@@ -15,29 +15,44 @@ protected:
     unsigned int array_size = 0;
     int * array;
     unsigned int curr_idx;
+    int MIN = 1000000, MAX = 0;
 public:
-    void resetGenerator (int min_range, int max_range) override {
-        array_size = (unsigned int) max_range - min_range + 1;
-        array = new int[array_size];
-        curr_idx = 0;
 
+    virtual ~ArrayRandomGenerator () {
+        // if (isInit()) delete array;
+    }
+
+    void resetGenerator (int min_range, int max_range) override {
+        array_size = max_range - min_range + 1;
+            
+        if (MIN > min_range || max_range > MAX) {
+            if (MIN > min_range) {
+                MIN = min_range;
+            }
+            if (MAX < max_range) {
+                MAX = max_range;
+            }
+            array = new int[array_size];
+        }
+
+        curr_idx = 0;
         int k = 0;
         for (int i = min_range; i <= max_range; i++) {
             array[k++] = i;
         }
-
         shuffleArray();
+    
     }
 
     void shuffleArray () {
 //        std::cout << "shuffle array\n";
         int max = array_size;
         for (int i = 0; i < array_size; i++) {
-            unsigned int random_number = (unsigned int) random () % max;
+            unsigned int array_random_index = (unsigned int) random () % max;
 
-            int temp = array[random_number];
+            int temp = array[array_random_index];
             max--;
-            array[random_number] = array[max];
+            array[array_random_index] = array[max];
             array[max] = temp;
         }
     }
@@ -52,6 +67,13 @@ public:
     }
 
     void generateUniqueRandomSet (int * sample) override {
+        // If requested subset size is bigger than array size,
+        // so there will be shuffleArray (). But after shuffleArray
+        // subset can not be Unique. So we should shuffle array before that.
+        if (curr_idx + subset_size > array_size) {
+            shuffleArray ();
+        }
+
         for (int i = 0; i < subset_size; i++) {
             sample[i] = getRandomNumber();
         }

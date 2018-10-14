@@ -58,6 +58,7 @@ public:
         c = (float) (-a*means.at<double>(0) - b*means.at<double>(1));
 
         model.setDescriptor((cv::Mat_<float>(1,3) <<  a, b, c));
+        return true;
     }
 
     /* Least Square Fitting
@@ -69,17 +70,14 @@ public:
      *     3) Robust Least Squre Fitting.
      */
     void LeastSquaresFitting (const int * const sample, int sample_size, Model &model) override {
-        /*
-
-        */
-                
         float a = 0, b = 0, c;
         float x, y, x_mean = 0, y_mean = 0;
         // float xx_mean = 0, yy_mean = 0, varx, vary;
-        
+        unsigned int smpl;
         for (unsigned int i = 0; i < sample_size; i++) {
-            x = input_points[2*sample[i]];
-            y = input_points[2*sample[i]+1];
+            smpl = 2*sample[i];
+            x = input_points[smpl];
+            y = input_points[smpl+1];
             x_mean += x;
             y_mean += y;
             // xx_mean += x*x;
@@ -108,8 +106,9 @@ public:
         // float s = MADy/0.6745;
         
         for (unsigned int i = 0; i < sample_size; i++) {
-            x = input_points[2*sample[i]];
-            y = input_points[2*sample[i]+1];
+            smpl = 2*sample[i];
+            x = input_points[smpl];
+            y = input_points[smpl+1];
             
             // residual_adj_x = residuals_x[i]/sqrt(1-residuals_x[i]/x);
             // residual_adj_y = (y - y_mean)/sqrt(1-(y-y_mean)/y);

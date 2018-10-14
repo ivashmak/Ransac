@@ -21,6 +21,8 @@ protected:
     RansacOutput * ransac_output;
     Estimator * estimator;
 public:
+    
+    ~Ransac () {}
 
     Ransac (Model &model,
             Sampler &sampler,

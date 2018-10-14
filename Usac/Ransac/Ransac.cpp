@@ -45,7 +45,6 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
     int *sample = new int[estimator->SampleNumber()];
 
     Model **models = new Model*[1];
-    Model *non_minimal_model = new Model(*model);
     Model *best_model = new Model (*model);
     models[0] = model;
 
@@ -54,13 +53,17 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
     /*
      * Allocate inliers of points_size, to avoid reallocation in getModelScore()
      */
-    int *inliers = new int[points_size];
-    std::vector<int> max_inliers;
-    LocalOptimization * lo_ransac = new RansacLocalOptimization (model, sampler, termination_criteria, quality, estimator);
+    int * inliers = new int[points_size];
+    int * max_inliers = new int[points_size];
 
-    LO = true;
+    LO = false;
     bool best_LO_model = false;
     unsigned int lo_runs = 0;
+    unsigned int lo_iterations = 0;
+
+    LocalOptimization * lo_ransac;    
+    if (LO) lo_ransac = new RansacLocalOptimization (model, sampler, termination_criteria, quality, estimator);
+
 
     while (iters < max_iters) {
         sampler->generateSample(sample);
@@ -70,10 +73,25 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
         for (int i = 0; i < number_of_models; i++) {
 //            std::cout << i << "-th model\n";
 
-            estimator->setModelParameters(models[i]);
-
             // we need inliers only for local optimization
             quality->GetModelScore(estimator, models[i], input_points, points_size, *current_score, inliers, LO);
+
+
+            // ---------- for debug ----------------------
+            Drawing drawing;
+            cv::Mat img = cv::imread ("../dataset/image1.jpg");
+            // std::vector<int> inl;
+            // for (int i = 0; i < lo_score->inlier_number; i++) {
+            //     inl.push_back(lo_inliers[i]);
+            // }
+            // drawing.showInliers(input_points, inl, img);
+            cv::Point_<float> * pts = (cv::Point_<float> *) input_points.getMat().data;
+            drawing.draw_model(models[0], cv::Scalar(255, 0, 0), img, false);
+            cv::circle (img, pts[sample[0]], 3, cv::Scalar(255, 255, 0), -1);
+            cv::circle (img, pts[sample[1]], 3, cv::Scalar(255, 255, 0), -1);
+            cv::imshow("samples img", img); cv::waitKey(0);
+            cv::imwrite( "../results/"+model->model_name+"_"+std::to_string(iters)+".jpg", img);
+            // -------------------------------------------
 
             if (*current_score > best_score) {
 
@@ -83,9 +101,11 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 
                     Score *lo_score = new Score;
                     Model *lo_model = new Model (*model);
-                    bool can_finish = lo_ransac->GetLOModelScore (*lo_model, *lo_score, current_score, 
-                                                    input_points, points_size, iters, inliers);
+                    bool can_finish;
+                    unsigned int lo_iters = lo_ransac->GetLOModelScore (*lo_model, *lo_score, current_score, 
+                                                    input_points, points_size, iters, inliers, &can_finish);
 
+                    // std::cout << "lo iterations " << lo_iters << '\n';
                     // std::cout << "lo score " << lo_score->inlier_number << '\n';
                     // std::cout << "curr score " << current_score->inlier_number << '\n';
                     // std::cout << "lo model best found " << lo_model->returnDescriptor() << '\n';
@@ -102,7 +122,11 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
                         best_model->setDescriptor(models[i]->returnDescriptor());
                     }
 
-                    iters += model->lo_max_iterations + model->lo_max_iterations * model->lo_iterative_iterations;
+                    // std::cout << "best model descriptor " << best_model->returnDescriptor() << '\n';
+                    // std::cout << "best score " << best_score->inlier_number << '\n';
+
+                    iters += lo_iters;
+                    lo_iterations += lo_iters;
                     lo_runs++;
 
                     if (can_finish) {
@@ -132,24 +156,30 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 
     end:
 
-    max_inliers = std::vector<int>(best_score->inlier_number);
-    quality->getInliers(estimator, points_size, best_model, max_inliers);
-
+    
     /*
      * If best model is LO model, so lo used non minimal model estimation
      * so we don't need to run it again. And model will be equal to non minimal model.
      */
-    if (!best_LO_model)
-        estimator->EstimateModelNonMinimalSample(&max_inliers[0], best_score->inlier_number, *non_minimal_model);
-    else
-        non_minimal_model->setDescriptor(best_model->returnDescriptor());
+    if (!best_LO_model) {
+        // get inliers from best model
+        quality->getInliers(estimator, points_size, best_model, max_inliers);
+        // estimate model with max inliers
+        estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *best_model);
+    }
 
     auto end_time = std::chrono::steady_clock::now();
     std::chrono::duration<float> fs = end_time - begin_time;
+    // here is ending ransac main implementation
+
+    quality->GetModelScore(estimator, best_model, input_points, points_size, *best_score, max_inliers, true);
 
     // Store results
-    ransac_output = new RansacOutput (best_model, non_minimal_model, max_inliers,
-            std::chrono::duration_cast<std::chrono::microseconds>(fs).count(), best_score->inlier_number, iters, lo_runs);
+    ransac_output = new RansacOutput (best_model, max_inliers,
+            std::chrono::duration_cast<std::chrono::microseconds>(fs).count(), best_score->inlier_number, iters, lo_iterations, lo_runs);
 
-    delete sample, current_score, best_score, non_minimal_model, best_model;
+    // if (LO) {
+    //     delete lo_ransac;
+    // }
+    // delete sample, current_score, best_score, inliers, max_inliers, best_model;
 }

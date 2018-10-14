@@ -13,26 +13,26 @@ struct Time {
 class RansacOutput {
 private:
     Model * model;
-    Model * non_minimal_model;
     Time * time;
     std::vector<int> inliers;
     long time_mcs;
     unsigned int number_inliers;
     unsigned int number_iterations;
+    unsigned int number_lo_iterations;
     unsigned int lo_runs;
 
 public:
 
     ~RansacOutput() {
-        delete model, non_minimal_model, time;
+        delete model, time;
     }
 
     RansacOutput (const Model * const model_,
-                  const Model * const non_minimal_model_,
-                  const std::vector<int>& inliers_,
+                  const int * const inliers_,
                   long time_mcs_,
                   unsigned int number_inliers_,
                   unsigned int number_iterations_,
+                  unsigned int number_lo_iterations_,
                   unsigned int lo_runs_) {
 
         /*
@@ -40,11 +40,11 @@ public:
          * And make them changeable for further using.
          */
         model = new Model (*model_);
-        non_minimal_model = new Model (*non_minimal_model_);
-        inliers = inliers_;
+        inliers.assign (inliers_, inliers_ + number_inliers_);
         time_mcs = time_mcs_;
         number_inliers = number_inliers_;
         number_iterations = number_iterations_;
+        number_lo_iterations = number_lo_iterations_;
         lo_runs = lo_runs_;
 
         time = new Time;
@@ -72,9 +72,15 @@ public:
     }
 
     unsigned int getNumberOfIterations () {
-        return number_iterations - model->lo_max_iterations * lo_runs - lo_runs * model->lo_max_iterations * model->lo_iterative_iterations;
+        // number_iterations > number_lo_iterations
+        return number_iterations;
     }
 
+    unsigned int getNumberOfLOIterations () {
+        // number_iterations > number_lo_iterations
+        return number_lo_iterations;
+    }
+    
     unsigned int getLORuns () {
         return lo_runs;
     }
@@ -84,10 +90,6 @@ public:
 
     Model* getModel () {
         return model;
-    }
-
-    Model* getNonMinimalModel () {
-        return non_minimal_model;
     }
 
 };

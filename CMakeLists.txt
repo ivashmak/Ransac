@@ -32,6 +32,7 @@ add_executable(
         Usac/Sampler/Sampler.h
         Usac/Sampler/UniformSampler.h
         Usac/Sampler/NapsacSampler.h
+        Usac/Sampler/NapsacNearSampler.h
         Usac/Sampler/EvsacSampler.h
         Usac/Sampler/ProsacSampler.h
         Usac/Sampler/ProsacSampler2.h

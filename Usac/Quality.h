@@ -54,6 +54,7 @@ public:
                        bool get_inliers,
                        bool parallel=false) {
 
+        estimator->setModelParameters(model);
         score.inlier_number = 0;
 
 //        float SS_tot = 0, SS_res = 0;
@@ -114,7 +115,7 @@ public:
      * non minimal model. As result faster way will be implement separate function for getting
      * inliers. Works same as getModelScore, however save inlier's indexes.
      */
-    void getInliers (Estimator * const estimator, int points_size, Model * const  model, std::vector<int>& inliers, bool parallel=false) {
+    void getInliers (Estimator * const estimator, int points_size, Model * const  model, int * inliers, bool parallel=false) {
         estimator->setModelParameters(model);
 
 	    int num_inliers = 0;

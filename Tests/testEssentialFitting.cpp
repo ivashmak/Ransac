@@ -2,8 +2,6 @@
 
 #include <cstdio>
 #include <iostream>
-#include <chrono>
-#include <vector>
 #include <opencv2/core/types.hpp>
 
 #include "../Detector/ReadPoints.h"

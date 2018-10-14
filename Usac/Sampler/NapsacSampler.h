@@ -15,6 +15,11 @@ int factorial (int n) {
     return res;
 }
 
+/*
+ * https://pdfs.semanticscholar.org/cec1/2adbb307124e0c62efbaaa870836c3846b5f.pdf
+ * http://www.bmva.org/bmvc/2002/papers/164/full_164.pdf
+ *
+ */
 class NapsacSampler : public Sampler {
 private:
     cv::Mat k_nearest_neighbors_indices, points, dists;
@@ -41,7 +46,7 @@ public:
         array_randomGenerator = new ArrayRandomGenerator;
 
         simple_randomGenerator->resetGenerator(0, points_size-1);
-        array_randomGenerator->resetGenerator(0, knn-1);
+        array_randomGenerator->resetGenerator(0, knn);
 
         if (reset_time) { array_randomGenerator->resetTime();
                           simple_randomGenerator->resetTime(); }
@@ -75,14 +80,11 @@ public:
             getKNearestNeighorsIndices();
         }
 
+        int * knn_idxs = (int *) k_nearest_neighbors_indices.data;
+        array_randomGenerator->generateUniqueRandomSet(sample);
+        
         for (int i = 0; i < sample_size; i++) {
-            sample[i] = k_nearest_neighbors_indices.at<int>(array_randomGenerator->getRandomNumber());
-            for (int j = i-1; j >=0 ; j--) {
-                if (sample[j] == sample[i]) {
-                    i--;
-                    break;
-                }
-            }
+            sample[i] = knn_idxs[sample[i]];
         }
 
         k_iterations++;

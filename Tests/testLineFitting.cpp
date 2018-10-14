@@ -12,6 +12,7 @@
 
 #include "../Usac/Sampler/Sampler.h"
 #include "../Usac/Sampler/NapsacSampler.h"
+#include "../Usac/Sampler/NapsacNearSampler.h"
 #include "../Usac/Sampler/EvsacSampler.h"
 #include "../Usac/Sampler/UniformSampler.h"
 #include "../Usac/Sampler/ProsacSampler.h"
@@ -46,30 +47,34 @@ void Tests::testLineFitting() {
     });
     //---
 
-    Model *ransac_model = new Model (10, 2, 0.99, 0, "ransac");
-    Sampler *uniform_sampler = new UniformSampler;
-    uniform_sampler->setSampleSize(ransac_model->sample_number);
-    uniform_sampler->setPointsSize(points.size());
-    uniform_sampler->initRandomGenerator();
+    // Model *ransac_model = new Model (10, 2, 0.99, 0, "ransac");
+    // Sampler *uniform_sampler = new UniformSampler;
+    // uniform_sampler->setSampleSize(ransac_model->sample_number);
+    // uniform_sampler->setPointsSize(points.size());
+    // uniform_sampler->initRandomGenerator();
 
-//    Model *napsac_model = new Model (10, 2, 0.99, 20, "napsac");
-//    Sampler *napsac_sampler = new NapsacSampler(points, napsac_model->k_nearest_neighbors, napsac_model->sample_number);
-//
+    Model *napsac_near_model = new Model (10, 2, 0.99, 20, "napsac_near");
+    Sampler *napsac_near_sampler = new NapsacNearSampler(points, napsac_near_model->sample_number);
+
+   // Model *napsac_model = new Model (10, 2, 0.99, 20, "napsac");
+   // Sampler *napsac_sampler = new NapsacSampler(points, napsac_model->k_nearest_neighbors, napsac_model->sample_number);
+
 //    Model *evsac_model = new Model (10, 2, 0.99, 7, "evsac");
 //    Sampler *evsac_sampler = new EvsacSampler(points, points.size(), evsac_model->k_nearest_neighbors, evsac_model->sample_number);
 //
 //    Model *prosac_model = new Model (10, 2, 0.99, 0, "prosac");
 //    Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
 
-    testLine (points, uniform_sampler, ransac_model);
-//    testLine (points, napsac_sampler, napsac_model);
-//    testLine (points, evsac_sampler, evsac_model);
-//    testLine (sorted_points, prosac_sampler, prosac_model);
+    // testLine (points, uniform_sampler, ransac_model);
+    testLine (points, napsac_near_sampler, napsac_near_model);
+    // testLine (points, napsac_sampler, napsac_model);
+    // testLine (points, evsac_sampler, evsac_model);
+    // testLine (sorted_points, prosac_sampler, prosac_model);
 
     Estimator *line2destimator = new Line2DEstimator (points);
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
-//    runNTimes(points, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 2000);
+    // runNTimes(points, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 2000);
 }
 
 
@@ -88,8 +93,8 @@ void testLine (cv::InputArray points, Sampler * const sampler, Model * const mod
     std::cout << model->model_name << " time: ";
     ransacOutput->printTime();
     std::cout << model->model_name << " iterations: " << ransacOutput->getNumberOfIterations() <<
-              " + " << ransacOutput->getLORuns() * (model->lo_max_iterations + (model->lo_max_iterations * model->lo_iterative_iterations)) <<
-              " ("<< ransacOutput->getLORuns() << " lo inner + iterative runs) \n";
+              " (" << ((int)ransacOutput->getNumberOfIterations () -(int)ransacOutput->getNumberOfLOIterations ()) << 
+              " + " << ransacOutput->getNumberOfLOIterations () << " (" << ransacOutput->getLORuns() << " lo inner + iterative runs)) \n";
     
     std::cout << model->model_name << " points under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
 
@@ -99,7 +104,7 @@ void testLine (cv::InputArray points, Sampler * const sampler, Model * const mod
     std::cout << "-----------------------------------------------------------------------------------------\n";
 
     //    drawing.draw(ransac.most_inliers, ransac.getBestModel(), ransac.getNonMinimalModel(), points);
-    drawing.draw(ransacOutput->getInliers(), ransacOutput->getModel(), ransacOutput->getNonMinimalModel(), points);
+    drawing.draw(ransacOutput->getInliers(), ransacOutput->getModel(), points);
 
 }
 

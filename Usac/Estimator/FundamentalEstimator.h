@@ -87,6 +87,8 @@ public:
         F_ptr = (float *) F.data;
 
         model.setDescriptor(F);
+
+        return true;
     }
 
     /*

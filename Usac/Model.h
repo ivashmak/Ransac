@@ -29,8 +29,9 @@ public:
     cv::Mat descriptor;
 	
 public:
+	~Model () {}
 	Model () {}
-
+	
 	Model (float threshold, int sample_number, float desired_prob, int knn, std::string model_name) {
 		this->threshold = threshold;
 		this->lo_threshold = threshold;

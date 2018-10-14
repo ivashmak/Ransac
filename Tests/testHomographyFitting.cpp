@@ -64,8 +64,8 @@ void testHomography (cv::InputArray points, Model * const model, Sampler * const
     std::cout << model->model_name << " time: ";
     ransacOutput->printTime();
     std::cout << model->model_name << " iterations: " << ransacOutput->getNumberOfIterations() <<
-              " + " << ransacOutput->getLORuns() * (model->lo_max_iterations + (model->lo_max_iterations * model->lo_iterative_iterations)) <<
-              " ("<< ransacOutput->getLORuns() << " lo inner + iterative runs) \n";
+              " (" << ((int)ransacOutput->getNumberOfIterations () -(int)ransacOutput->getNumberOfLOIterations ()) << 
+              " + " << ransacOutput->getNumberOfLOIterations () << " (" << ransacOutput->getLORuns() << " lo inner + iterative runs)) \n";
     
     std::cout << model->model_name << " points under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
 

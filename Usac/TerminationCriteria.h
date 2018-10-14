@@ -50,11 +50,23 @@ public:
 	/*
 	 * Get upper bound iterations for any sample number
 	 * Can be used ceil.
-	 * If (inls/total_pts) almost 0, so under logarithm is almost 1, so denominator is almost 0
+	 * If inlier ratio is almost 0, so under logarithm is almost 1, so denominator is almost 0
 	 * In this case just return max iterations from model parameters or 10000 if model is not defined.
 	 * Otherwise upper bound iterations will not fit unsigned int type and will be (unsigned int) -inf = 0
 	 */
     inline unsigned int getUpBoundIterations (float inlier_points, float total_points) {
+        float inl_ratio = inlier_points/total_points;
+        float inl_prob = inl_ratio * inl_ratio;
+        int k = sample_number;
+        while (k > 2) {
+            inl_prob *= inl_ratio;
+            k--;
+        }
+        if (inl_prob < 0.00001) return max_iterations;
+        return log_1_p/log(1 - inl_prob);
+    }
+    
+    inline unsigned int getUpBoundIterations (float inlier_points, float total_points, unsigned int sample_number) {
         float inl_prob = (inlier_points/total_points) * (inlier_points/total_points);
         int k = sample_number;
         while (k > 2) {
@@ -65,10 +77,16 @@ public:
         return log_1_p/log(1 - inl_prob);
     }
 
-    inline unsigned int getUpBoundIterations (float inlier_points, float total_points, unsigned int sample_number, float desir_prob) {
-        this->sample_number = sample_number;
-        log_1_p = log(1-desir_prob);
-        return getUpBoundIterations(inlier_points, total_points);
+    inline unsigned int getUpBoundIterations (float inlier_points, float total_points, unsigned int sample_number, float desired_prob) {
+        float log_1_p = log (1 - desired_prob);
+        float inl_prob = (inlier_points/total_points) * (inlier_points/total_points);
+        int k = sample_number;
+        while (k > 2) {
+            inl_prob *= (inlier_points/total_points);
+            k--;
+        }
+        if (inl_prob < 0.00001) return max_iterations;
+        return log_1_p/log(1 - inl_prob);
     }
 
 };
