@@ -44,7 +44,7 @@ void Tests::testHomographyFitting() {
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
 
-//    runNTimes(points, homograpy_estimator, homography_model, uniform_sampler, termination_criteria, quality, 1000);
+    runNTimes(points, homograpy_estimator, homography_model, uniform_sampler, termination_criteria, quality, 1000);
 
     // storeResults();
 }

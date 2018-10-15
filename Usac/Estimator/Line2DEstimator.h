@@ -12,7 +12,7 @@ public:
         assert(!input_array_points.empty());
     }
 
-    int EstimateModel(const int * const sample, Model **& models) override {
+    int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         const int idx1 = sample[0];
         const int idx2 = sample[1];
         
@@ -27,9 +27,13 @@ public:
         b /= mag;
         c = (input_points[2*idx2] * input_points[2*idx1+1] - input_points[2*idx2+1] * input_points[2*idx1])/mag;
 
+
+        std::cout << "SET MODEL\n";
+        std::cout << models[0]->model_name << '\n';
         // Set the model descriptor
         models[0]->setDescriptor((cv::Mat_<float>(1,3) <<  a, b, c));
 
+        std::cout << "MODEL WAS SET\n";
         return 1;
     }
 

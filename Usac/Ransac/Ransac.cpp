@@ -44,11 +44,13 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 
     int *sample = new int[estimator->SampleNumber()];
 
-    Model **models = new Model*[1];
-    Model *best_model = new Model (*model);
-    models[0] = model;
 
-//    std::cout << "begin\n";
+    Model *best_model = new Model (*model);
+//    std::vector<Model*> models;
+//    Model *ransac_model = new Model (10, 2, 0.99, 0, "ransac");
+//    models.push_back(ransac_model);
+
+    std::cout << "begin\n";
 
     /*
      * Allocate inliers of points_size, to avoid reallocation in getModelScore()
@@ -61,54 +63,67 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
     unsigned int lo_runs = 0;
     unsigned int lo_iterations = 0;
 
-    LocalOptimization * lo_ransac;    
+    LocalOptimization * lo_ransac;
     if (LO) lo_ransac = new RansacLocalOptimization (model, sampler, termination_criteria, quality, estimator);
 
+    unsigned int number_of_models;
 
     while (iters < max_iters) {
-        sampler->generateSample(sample);
+        std::vector<Model*> models;
+        Model *ransac_model = new Model (10, 2, 0.99, 0, "ransac");
+        models.push_back(ransac_model);
 
-        int number_of_models = estimator->EstimateModel(sample, models);
+        sampler->generateSample(sample);
+        std::cout << "samples are generated\n";
+        std::cout << "threshold " << model->threshold << '\n';
+        std::cout << "threshold " << models[0]->threshold << '\n';
+
+        estimator->EstimateModel(sample, models);
+
+        number_of_models = models.size();
+
+        std::cout << "minimal model estimated\n";
 
         for (int i = 0; i < number_of_models; i++) {
-//            std::cout << i << "-th model\n";
+            std::cout << i << "-th model\n";
 
             // we need inliers only for local optimization
             quality->GetModelScore(estimator, models[i], input_points, points_size, *current_score, inliers, LO);
 
 
             // ---------- for debug ----------------------
-            Drawing drawing;
-            cv::Mat img = cv::imread ("../dataset/image1.jpg");
-            // std::vector<int> inl;
-            // for (int i = 0; i < lo_score->inlier_number; i++) {
-            //     inl.push_back(lo_inliers[i]);
-            // }
-            // drawing.showInliers(input_points, inl, img);
-            cv::Point_<float> * pts = (cv::Point_<float> *) input_points.getMat().data;
-            drawing.draw_model(models[0], cv::Scalar(255, 0, 0), img, false);
-            cv::circle (img, pts[sample[0]], 3, cv::Scalar(255, 255, 0), -1);
-            cv::circle (img, pts[sample[1]], 3, cv::Scalar(255, 255, 0), -1);
-            cv::imshow("samples img", img); cv::waitKey(0);
-            cv::imwrite( "../results/"+model->model_name+"_"+std::to_string(iters)+".jpg", img);
+//            Drawing drawing;
+//            cv::Mat img = cv::imread ("../dataset/image1.jpg");
+//            // std::vector<int> inl;
+//            // for (int i = 0; i < lo_score->inlier_number; i++) {
+//            //     inl.push_back(lo_inliers[i]);
+//            // }
+//            // drawing.showInliers(input_points, inl, img);
+//            cv::Point_<float> * pts = (cv::Point_<float> *) input_points.getMat().data;
+//            drawing.draw_model(models[0], cv::Scalar(255, 0, 0), img, false);
+//            cv::circle (img, pts[sample[0]], 3, cv::Scalar(255, 255, 0), -1);
+//            cv::circle (img, pts[sample[1]], 3, cv::Scalar(255, 255, 0), -1);
+//            cv::imshow("samples img", img); cv::waitKey(0);
+//            cv::imwrite( "../results/"+model->model_name+"_"+std::to_string(iters)+".jpg", img);
             // -------------------------------------------
 
             if (*current_score > best_score) {
 
-                // std::cout << "current score = " << current_score->score << '\n';
+                 std::cout << "current score = " << current_score->score << '\n';
 
                 if (LO) {
 
                     Score *lo_score = new Score;
-                    Model *lo_model = new Model (*model);
+                    Model *lo_model = new Model; lo_model->copyFrom(model);
                     bool can_finish;
+                    std::cout << "get lo model score\n";
                     unsigned int lo_iters = lo_ransac->GetLOModelScore (*lo_model, *lo_score, current_score, 
                                                     input_points, points_size, iters, inliers, &can_finish);
 
-                    // std::cout << "lo iterations " << lo_iters << '\n';
-                    // std::cout << "lo score " << lo_score->inlier_number << '\n';
-                    // std::cout << "curr score " << current_score->inlier_number << '\n';
-                    // std::cout << "lo model best found " << lo_model->returnDescriptor() << '\n';
+                     std::cout << "lo iterations " << lo_iters << '\n';
+                     std::cout << "lo score " << lo_score->inlier_number << '\n';
+                     std::cout << "curr score " << current_score->inlier_number << '\n';
+                     std::cout << "lo model best found " << lo_model->returnDescriptor() << '\n';
                     if (*lo_score > current_score) {
                         // std::cout << "LO score is better than current score\n";
                         best_score->copyFrom(lo_score);

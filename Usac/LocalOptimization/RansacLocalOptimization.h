@@ -15,16 +15,16 @@ private:
     Model * model;
     Quality * quality;
     TerminationCriteria * termination_criteria;
-    Sampler *sampler;
+    Sampler * sampler;
     Estimator * estimator;
     
 public:
 
-    virtual ~RansacLocalOptimization () {
+//    virtual ~RansacLocalOptimization () {
         // std::cout << "cleaning in ransac lo\n";
-    }
+//    }
 
-    RansacLocalOptimization (Model * model_,
+    RansacLocalOptimization (Model *model_,
                              Sampler *sampler_,
                              TerminationCriteria *termination_criteria_,
                              Quality *quality_,

@@ -52,7 +52,7 @@ public:
         F_ptr = (float *) F.data;
     }
 
-    int EstimateModel(const int * const sample, Model **& models) override {
+    int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         cv::Mat_<float> F; // use global
 
         int roots = SevenPointsAlgorithm(points, sample, F);
@@ -64,18 +64,16 @@ public:
         models[0]->setDescriptor(F.rowRange(0,3));
 //        std::cout << F << "\n\n";
 
-        if (roots > 1) {
-            models = (Model **) (realloc(models, roots * sizeof(Model *)));
-            for (int i = 1; i < roots; i++) {
-                models[i] = new Model(models[0]->threshold,
-                                      models[0]->sample_number,
-                                      models[0]->desired_prob,
-                                      models[0]->k_nearest_neighbors,
-                                      models[0]->model_name);
+        for (int i = 1; i < roots; i++) {
+            models.push_back(new Model(models[0]->threshold,
+                                  models[0]->sample_number,
+                                  models[0]->desired_prob,
+                                  models[0]->k_nearest_neighbors,
+                                  models[0]->model_name));
 
-                models[i]->setDescriptor(F.rowRange(i * 3, i * 3 + 3));
-            }
+            models[i]->setDescriptor(F.rowRange(i * 3, i * 3 + 3));
         }
+
     
         return roots;
     }

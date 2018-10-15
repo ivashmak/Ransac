@@ -11,7 +11,7 @@ int main (int args, char ** argv) {
 
     // run tests
     tests.testLineFitting();
-    // tests.testHomographyFitting();
+//     tests.testHomographyFitting();
     // tests.testFundamentalFitting();
 //     tests.testEssentialFitting();
 

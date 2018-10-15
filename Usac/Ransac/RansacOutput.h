@@ -23,9 +23,9 @@ private:
 
 public:
 
-    ~RansacOutput() {
-        delete model, time;
-    }
+//    ~RansacOutput() {
+//        delete model, time;
+//    }
 
     RansacOutput (const Model * const model_,
                   const int * const inliers_,

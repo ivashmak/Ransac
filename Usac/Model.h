@@ -92,7 +92,7 @@ public:
         lo_max_iterations = model->lo_max_iterations;
         lo_threshold = model->lo_threshold;
         lo_threshold_multiplier = model->lo_threshold_multiplier;
-        descriptor = model->descriptor;
+//        descriptor = model->descriptor;
 	}
 };
 

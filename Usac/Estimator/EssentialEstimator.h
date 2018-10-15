@@ -53,7 +53,7 @@ public:
         E_inv_ptr = (float *) E_inv.data;
     }
 
-    int EstimateModel(const int * const sample, Model **& models) override {
+    int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         return 1;
     }
 
