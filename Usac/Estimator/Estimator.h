@@ -21,6 +21,7 @@ class Estimator {
 public:
     // Pure virtuals functions
     // return number of models
+    // or Model **& models
     virtual int EstimateModel(const int * const sample, std::vector<Model*>& models) = 0;
     
     virtual bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) = 0;

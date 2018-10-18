@@ -9,7 +9,7 @@ class LocalOptimization {
 public:
 //	virtual ~LocalOptimization () {}
 
-    virtual int GetLOModelScore (Model &best_lo_model,
+    virtual int GetLOModelScore  (Model &best_lo_model,
                                   Score &lo_score,
                                   Score *kth_ransac_score,
                                   cv::InputArray input_points,

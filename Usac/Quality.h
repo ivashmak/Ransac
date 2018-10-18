@@ -10,8 +10,8 @@
 
 class Score {
 public:
-    int inlier_number;
-    float score;
+    int inlier_number = 0;
+    float score = 0;
 
 //    inline friend bool operator>(const Score& score1, const Score& score2) {
 //        std::cout << "operator " << score1.score << " " << score2.score << '\n';

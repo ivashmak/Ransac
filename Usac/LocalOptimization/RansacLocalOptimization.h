@@ -20,9 +20,9 @@ private:
     
 public:
 
-//    virtual ~RansacLocalOptimization () {
+    virtual ~RansacLocalOptimization () {
         // std::cout << "cleaning in ransac lo\n";
-//    }
+    }
 
     RansacLocalOptimization (Model *model_,
                              Sampler *sampler_,
@@ -36,7 +36,7 @@ public:
         quality = quality_;
     }
     
-    int GetLOModelScore (Model &best_lo_model,
+    int GetLOModelScore   (Model &best_lo_model,
                           Score &best_lo_score,
                           Score *kth_ransac_score,
                           cv::InputArray input_points,
@@ -58,6 +58,7 @@ public:
          * Let's best lo score is at least kth ransac score.
          * Avoid comparing between current lo score with best score and kth score.
          */
+
         best_lo_score.inlier_number = kth_ransac_score->inlier_number;
         best_lo_score.score = kth_ransac_score->score;
 
@@ -70,9 +71,12 @@ public:
 
         // std::cout << "lo sample_size " << lo_sample_size << '\n';
 
-        Model *lo_model = new Model(*model);
+
+        Model *lo_model = new Model;
+        lo_model->copyFrom (model);
         Score *lo_score = new Score;
         
+
         int *lo_sample = new int[lo_sample_size];
         int * lo_inliers = new int[points_size];
 
@@ -98,7 +102,7 @@ public:
         for (int iters = 0; iters < lo_max_iterations; iters++) {
             if (lo_iters > max_iters) {
                 *can_finish = true;
-                return lo_iters;
+                break;
             }
 
             /*
@@ -169,9 +173,7 @@ public:
                 // Drawing drawing;
                 // cv::Mat img = cv::imread ("../dataset/image1.jpg");
                 // std::vector<int> inl;
-                // for (int i = 0; i < lo_score->inlier_number; i++) {
-                //     inl.push_back(lo_inliers[i]);
-                // }
+                // inl.assign (lo_inliers, lo_inliers + lo_score->inlier_number);
                 // drawing.showInliers(input_points, inl, img);
                 // drawing.draw_model(lo_model, color, img, true);
                 // cv::imshow("least img", img); cv::waitKey(0);
@@ -202,6 +204,7 @@ public:
         sampler->setPointsSize(points_size);
         sampler->initRandomGenerator();
 
+        delete lo_score, lo_model, lo_sample, lo_inliers;
         return lo_iters;
     }
 };

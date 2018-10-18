@@ -26,6 +26,7 @@ public:
     float lo_threshold = 10.0;
     unsigned int lo_threshold_multiplier = 15;
 
+private:
     cv::Mat descriptor;
 	
 public:

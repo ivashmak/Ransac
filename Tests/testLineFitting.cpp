@@ -74,7 +74,7 @@ void Tests::testLineFitting() {
     Estimator *line2destimator = new Line2DEstimator (points);
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
-     runNTimes(points, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 2000);
+    runNTimes(points, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 2000);
 }
 
 

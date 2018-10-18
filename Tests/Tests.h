@@ -25,9 +25,6 @@ public:
         int bad_models_counter = 0;
         double time = 0;
         for (int i = 0; i < N; i++) {
-            std::cout << i << '\n';
-            Model *model = new Model (10, 2, 0.99, 0, "ransac");
-
             Ransac ransac (*model, *sampler, *termination_criteria, *quality, *estimator);
             ransac.run(points);
             RansacOutput *ransacOutput = ransac.getRansacOutput();

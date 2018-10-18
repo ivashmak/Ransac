@@ -27,13 +27,8 @@ public:
         b /= mag;
         c = (input_points[2*idx2] * input_points[2*idx1+1] - input_points[2*idx2+1] * input_points[2*idx1])/mag;
 
-
-        std::cout << "SET MODEL\n";
-        std::cout << models[0]->model_name << '\n';
         // Set the model descriptor
         models[0]->setDescriptor((cv::Mat_<float>(1,3) <<  a, b, c));
-
-        std::cout << "MODEL WAS SET\n";
         return 1;
     }
 

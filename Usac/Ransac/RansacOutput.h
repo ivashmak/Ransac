@@ -23,9 +23,9 @@ private:
 
 public:
 
-//    ~RansacOutput() {
-//        delete model, time;
-//    }
+   ~RansacOutput() {
+       delete model, time;
+   }
 
     RansacOutput (const Model * const model_,
                   const int * const inliers_,
@@ -39,7 +39,8 @@ public:
          * Let's make a deep copy to avoid changing variables from origin input.
          * And make them changeable for further using.
          */
-        model = new Model (*model_);
+    
+        model = new Model (*model_);        
         inliers.assign (inliers_, inliers_ + number_inliers_);
         time_mcs = time_mcs_;
         number_inliers = number_inliers_;
