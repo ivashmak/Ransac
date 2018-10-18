@@ -48,8 +48,82 @@ H_DLT = DLT(pts1, pts2);
 %     
 % Npts = [pts1Tr pts2Tr]
 
-%H_NormalizedDLT = NormalizedDLT(pts1, pts2);
-% 
+H_NormalizedDLT = NormalizedDLT(pts1, pts2);
+
+% keyboard
+
+figure; 
+subplot (1,2,1); plot (pts1, '.');
+subplot (1,2,2); plot (pts2, '.');
+
+pts1 = [pts1 ones(sz, 1)]';
+pts2 = [pts2 ones(sz, 1)]';
+
+est_pts2 = H_NormalizedDLT*pts1;
+est_pts2 = est_pts2./est_pts2(3,:);
+
+est_pts1 = H_NormalizedDLT\pts2;
+est_pts1 = est_pts1./est_pts1(3,:);
+
+est_pts1_2d = est_pts1 (1:2, :)';
+est_pts2_2d = est_pts2 (1:2, :)';
+
+figure;
+subplot (1,2,1); plot (est_pts1_2d, '.');
+subplot (1,2,2); plot (est_pts2_2d, '.');
+
+A = pts1';
+b = pts2';
+H = A'*A\A'*b
+
+est_pts2 = H*pts1;
+est_pts2 = est_pts2./est_pts2(3,:);
+
+est_pts1 = H\pts2;
+est_pts1 = est_pts1./est_pts1(3,:);
+
+est_pts1_2d = est_pts1 (1:2, :)';
+est_pts2_2d = est_pts2 (1:2, :)';
+
+figure;
+subplot (1,2,1); plot (est_pts1_2d, '.');
+subplot (1,2,2); plot (est_pts2_2d, '.');
+
+
+syms h11 h12 h13 h21 h22 h23 h31 h32 h33
+syms x1 y1 x2 y2 x_est y_est
+x_est = (h11 * x1 + h12 * y1 + h13)/(h31 * x1 + h32 * y1 + h33);
+y_est = (h21 * x1 + h22 * y1 + h23)/(h31 * x1 + h32 * y1 + h33);
+min_eqn = (x_est - x2)^2 + (y_est - y2)^2;
+d_h11 = diff (min_eqn, h11);
+d_h12 = diff (min_eqn, h12);
+d_h13 = diff (min_eqn, h13);
+d_h21 = diff (min_eqn, h21);
+d_h22 = diff (min_eqn, h22);
+d_h23 = diff (min_eqn, h23);
+d_h31 = diff (min_eqn, h31);
+d_h32 = diff (min_eqn, h32);
+d_h33 = diff (min_eqn, h33);
+
+d_h11_eq_0 = d_h11 == 0;
+d_h12_eq_0 = d_h12 == 0;
+d_h13_eq_0 = d_h13 == 0;
+d_h21_eq_0 = d_h21 == 0;
+d_h22_eq_0 = d_h22 == 0;
+d_h23_eq_0 = d_h23 == 0;
+d_h31_eq_0 = d_h31 == 0;
+d_h32_eq_0 = d_h32 == 0;
+d_h33_eq_0 = d_h33 == 0;
+
+[A,B] = equationsToMatrix( ...
+[d_h11_eq_0, d_h12_eq_0, d_h13_eq_0, ...
+ d_h21_eq_0, d_h22_eq_0, d_h23_eq_0, ...
+ d_h31_eq_0, d_h32_eq_0, d_h33_eq_0], ...
+[h11, h12, h13, h21, h22, h23, h31, h32, h33]);
+
+X = linsolve(A,B);
+
+keyboard 
 % tform1 = projective2d(T_1');
 % tform2 = projective2d(T_2');
 % 
