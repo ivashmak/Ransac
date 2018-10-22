@@ -105,8 +105,8 @@ void GetNormalizingTransformation (const float * const pts, cv::OutputArray norm
         normalized_points_ptr[smpl]   = T1_ptr[0] * pts[smpl]   + T1_ptr[2]; // Norm_img1_xi
         normalized_points_ptr[smpl+1] = T1_ptr[4] * pts[smpl+1] + T1_ptr[5]; // Norm_img1_yi
 
-        normalized_points_ptr[smpl+2] = T1_ptr[0] * pts[smpl+2] + T1_ptr[2]; // Norm_img2_xi
-        normalized_points_ptr[smpl+3] = T1_ptr[4] * pts[smpl+3] + T1_ptr[5]; // Norm_img2_yi
+        normalized_points_ptr[smpl+2] = T2_ptr[0] * pts[smpl+2] + T2_ptr[2]; // Norm_img2_xi
+        normalized_points_ptr[smpl+3] = T2_ptr[4] * pts[smpl+3] + T2_ptr[5]; // Norm_img2_yi
     }
 
     normalized_points.copyTo(norm_points);
