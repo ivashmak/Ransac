@@ -21,6 +21,8 @@ void Tests::testFundamentalFitting() {
     read_points (points1, points2, points_filename);
     cv::hconcat(points1, points2, points);
 
+    bool LO = true;
+
     Model *fundamental_model = new Model (5, 7, 0.99, 0, "fundamental");
     Sampler *uniform_sampler = new UniformSampler;
     uniform_sampler->setSampleSize(fundamental_model->sample_number);
@@ -33,7 +35,7 @@ void Tests::testFundamentalFitting() {
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
 
-//    runNTimes(points, fundamental_estimator, fundamental_model, uniform_sampler, termination_criteria, quality, 1000);
+//    runNTimes(points, fundamental_estimator, fundamental_model, uniform_sampler, termination_criteria, quality, 1000, LO);
 
 //    storeResultsFundamental ();
 }

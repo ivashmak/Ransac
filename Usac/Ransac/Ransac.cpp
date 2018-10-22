@@ -53,7 +53,6 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
     int * max_inliers = new int[points_size];
     int * sample = new int[estimator->SampleNumber()];
 
-    LO = true;
     bool best_LO_model = false;
     unsigned int lo_runs = 0;
     unsigned int lo_iterations = 0;

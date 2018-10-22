@@ -19,14 +19,15 @@ public:
                     Sampler *const sampler,
                     TerminationCriteria * const termination_criteria,
                     Quality *const quality,
-                    int N) {
+                    int N,
+                    bool LO) {
 
         
         int bad_models_counter = 0;
         double time = 0;
         for (int i = 0; i < N; i++) {
             Ransac ransac (*model, *sampler, *termination_criteria, *quality, *estimator);
-            ransac.run(points);
+            ransac.run(points, LO);
             RansacOutput *ransacOutput = ransac.getRansacOutput();
             time += ransacOutput->getTimeMicroSeconds();
             if (ransacOutput->getNumberOfInliers() < 1300)

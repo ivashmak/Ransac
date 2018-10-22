@@ -32,6 +32,8 @@ void Tests::testHomographyFitting() {
     read_points (points1, points2, points_filename);
     cv::hconcat(points1, points2, points);
 
+    bool LO = true;
+
     Model *homography_model = new Model (3, 4, 0.99, 0, "homography");
     Sampler *uniform_sampler = new UniformSampler;
     uniform_sampler->setSampleSize(homography_model->sample_number);
@@ -44,7 +46,7 @@ void Tests::testHomographyFitting() {
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
 
-    runNTimes(points, homograpy_estimator, homography_model, uniform_sampler, termination_criteria, quality, 1000);
+    runNTimes(points, homograpy_estimator, homography_model, uniform_sampler, termination_criteria, quality, 1000, LO);
 
     // storeResults();
 }
