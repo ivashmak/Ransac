@@ -1,0 +1,15 @@
+../dataset/EVD/2/adam.png
+../dataset/EVD/2/cafe.png
+../dataset/EVD/2/cat.png
+../dataset/EVD/2/dum.png
+../dataset/EVD/2/face.png
+../dataset/EVD/2/fox.png
+../dataset/EVD/2/girl.png
+../dataset/EVD/2/graf.png
+../dataset/EVD/2/grand.png
+../dataset/EVD/2/index.png
+../dataset/EVD/2/mag.png
+../dataset/EVD/2/pkk.png
+../dataset/EVD/2/shop.png
+../dataset/EVD/2/there.png
+../dataset/EVD/2/vin.png

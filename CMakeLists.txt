@@ -69,6 +69,8 @@ add_executable(
         RandomGenerator/UniformRandomGenerator.h
         RandomGenerator/EvaluateRandomGenerators.h
 
+        dataset/Dataset.h dataset/Dataset.cpp
+
         Usac/Verbose.h
 )
 # parallel

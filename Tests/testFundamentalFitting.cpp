@@ -6,6 +6,7 @@
 #include "../Usac/Helper/Logging.h"
 #include "../Usac/Estimator/FundamentalEstimator.h"
 #include "../Usac/Sampler/UniformSampler.h"
+#include "../dataset/Dataset.h"
 
 void testFundamental (cv::InputArray points, Model * const model, Sampler * const sampler, const std::vector<std::string>& images_filename, std::string points_filename);
 void storeResultsFundamental ();
@@ -21,7 +22,7 @@ void Tests::testFundamentalFitting() {
     read_points (points1, points2, points_filename);
     cv::hconcat(points1, points2, points);
 
-    bool LO = true;
+    bool LO = false;
 
     Model *fundamental_model = new Model (5, 7, 0.99, 0, "fundamental");
     Sampler *uniform_sampler = new UniformSampler;
@@ -29,7 +30,7 @@ void Tests::testFundamentalFitting() {
     uniform_sampler->setPointsSize(points1.rows);
     uniform_sampler->initRandomGenerator();
 
-    testFundamental (points, fundamental_model, uniform_sampler, images_filename, points_filename);
+//    testFundamental (points, fundamental_model, uniform_sampler, images_filename, points_filename);
 
     Estimator *fundamental_estimator = new FundamentalEstimator (points);
     TerminationCriteria *termination_criteria = new TerminationCriteria;
@@ -37,7 +38,7 @@ void Tests::testFundamentalFitting() {
 
 //    runNTimes(points, fundamental_estimator, fundamental_model, uniform_sampler, termination_criteria, quality, 1000, LO);
 
-//    storeResultsFundamental ();
+    storeResultsFundamental ();
 }
 
 void testFundamental (cv::InputArray points, Model * const model, Sampler * const sampler, const std::vector<std::string>& images_filename, std::string points_filename) {
@@ -70,16 +71,15 @@ void testFundamental (cv::InputArray points, Model * const model, Sampler * cons
 }
 
 void storeResultsFundamental () {
-    std::vector<std::string> points_filename = {"barrsmith_annot.txt", "barrsmith_pts.txt", "bonhall_pts.txt",
-                                                "bonython_pts.txt", "elderhalla_pts.txt", "elderhallb_pts.txt",
-                                                "hartley_pts.txt", "johnssona_pts.txt", "johnssonb_pts.txt",
-                                                "ladysymon_pts.txt", "library_pts.txt", "napiera_pts.txt",
-                                                "napierb_pts.txt", "neem_pts.txt", "unihouse_pts.txt",
-                                                "oldclassicswing_pts.txt", "physics_pts.txt", "sene_pts.txt",
-                                                "unionhouse_pts.txt"};
+    std::vector<std::string> points_filename = getFundamentalDatasetPoints();
 
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
+
+
+    std::ofstream results_total;
+    results_total.open ("../results/fundamental/ALL.csv");
+    results_total << "Filename,Number of Inliers (found / total points),Number of Iterations,Time (mcs)\n,,,,\n";
 
     for (std::string img_name : points_filename) {
         cv::Mat points1, points2;
@@ -102,17 +102,23 @@ void storeResultsFundamental () {
         cv::Mat F = ransacOutput->getModel()->returnDescriptor();
 
         std::ofstream save_model;
-        std::string filename = "../results/fundamental/" + img_name.substr(0, img_name.find('.')) + "_Rmodel.txt";
+        save_model.open("../results/fundamental/" + img_name.substr(0, img_name.find('.')) + ".csv");
 
-        save_model.open(filename);
-
-        save_model << F.at<float>(0, 0) << " " << F.at<float>(0, 1) << " " << F.at<float>(0, 2) << '\n'
-                   << F.at<float>(1, 0) << " " << F.at<float>(1, 1) << " " << F.at<float>(1, 2) << '\n'
-                   << F.at<float>(2, 0) << " " << F.at<float>(2, 1) << " " << F.at<float>(2, 2) << '\n';
+        save_model << F.at<float>(0, 0) << "," << F.at<float>(0, 1) << "," << F.at<float>(0, 2) << ",\n"
+                   << F.at<float>(1, 0) << "," << F.at<float>(1, 1) << "," << F.at<float>(1, 2) << ",\n"
+                   << F.at<float>(2, 0) << "," << F.at<float>(2, 1) << "," << F.at<float>(2, 2) << ",\n";
 
         save_model << ransacOutput->getNumberOfInliers() << '\n';
         save_model << ransacOutput->getNumberOfIterations() << '\n';
         save_model << ransacOutput->getTimeMicroSeconds() << '\n';
+
+        results_total << img_name << ",";
+        results_total << ransacOutput->getNumberOfInliers() << "/" << points1.rows << ",";
+        results_total << ransacOutput->getNumberOfIterations() << ",";
+        results_total << ransacOutput->getTimeMicroSeconds() << "\n";
+
         save_model.close();
     }
+
+    results_total.close();
 }

@@ -70,8 +70,12 @@ void GetNormalizingTransformation (const float * const pts, cv::OutputArray norm
      *
      */
 
-    T1 = (cv::Mat_<float>(3,3) << 1/pts1_s, 0, -mean_pts1_x/pts1_s, 0, 1/pts1_s, -mean_pts1_y/pts1_s, 0, 0, 1);
-    T2 = (cv::Mat_<float>(3,3) << 1/pts2_s, 0, -mean_pts2_x/pts2_s, 0, 1/pts2_s, -mean_pts2_y/pts2_s, 0, 0, 1);
+    T1 = (cv::Mat_<float>(3,3) << 1/pts1_s, 0,        -mean_pts1_x/pts1_s,
+                                  0,        1/pts1_s, -mean_pts1_y/pts1_s,
+                                  0,        0,         1);
+    T2 = (cv::Mat_<float>(3,3) << 1/pts2_s, 0,        -mean_pts2_x/pts2_s,
+                                  0,        1/pts2_s, -mean_pts2_y/pts2_s,
+                                  0,        0,         1);
 
     float *T1_ptr = (float *)T1.data;
     float *T2_ptr = (float *)T2.data;
