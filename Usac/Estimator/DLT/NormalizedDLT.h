@@ -12,10 +12,13 @@ bool NormalizedDLT (const float * const points, const int * const sample, int sa
 
     // std::cout << "GetNormalizingTransformation finished \n";
 
+//    std::cout << T1 << "\n\n" << T2 << "\n\n";
+//    std::cout << norm_points << "\n";
+
     const float * const newpoints = (float *) norm_points.data;
     
     // solution not found
-    if (!DLT(newpoints, sample_number, H)) {
+    if (DLT(newpoints, sample_number, H) == false) {
     	return false;
     }
 

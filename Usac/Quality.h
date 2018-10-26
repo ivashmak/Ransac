@@ -127,6 +127,20 @@ public:
         }
     }
 
+    float getAverageError (Estimator * const estimator,
+                           Model * const model,
+                           cv::InputArray input_points,
+                           int points_size) {
+
+        estimator->setModelParameters(model);
+        float sum_errors = 0;
+
+        for (int point = 0; point < points_size; point++) {
+            sum_errors += estimator->GetError(point);
+        }
+        return sum_errors/points_size;
+    }
+
 };
 
 

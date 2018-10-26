@@ -53,12 +53,17 @@ public:
         time->milliseconds = ((time_mcs - time->microseconds)/1000) % 1000;
         time->seconds = ((time_mcs - 1000*time->milliseconds - time->microseconds)/(1000*1000)) % 60;
         time->minutes = ((time_mcs - 60*1000*time->seconds - 1000*time->milliseconds - time->microseconds)/(60*1000*1000)) % 60;
-
     }
 
     void printTime () {
         std::cout << time->seconds << " secs, " << time->milliseconds << " ms, " << time->microseconds << " mcs\n";
     }
+
+    std::string fullTime () {
+        return std::to_string (time->seconds) + " secs " + std::to_string (time->milliseconds) + " ms " +
+                std::to_string (time->microseconds) + " mcs\n";
+    }
+
 
     std::vector<int> getInliers () {
         return inliers;

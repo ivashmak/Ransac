@@ -18,6 +18,8 @@ for i = 1:sz
 %     pts2(i, 3) = A(i, 6);
 end
 
+
+
 % img1 = imread('../dataset/img1.png');
 % img2 = imread('../dataset/img2.png');
 % 

@@ -2,7 +2,7 @@
 #define USAC_FUNDAMENTALESTIMATOR_H
 
 #include "Estimator.h"
-#include "NPointsAlgorithms/EightPointsAlgorithm.h"
+#include "NPointsAlgorithms/EightPointsFundamentalEstimation.h"
 
 class FundamentalEstimator : public Estimator {
 private:
@@ -62,15 +62,16 @@ public:
         }
 
         models[0]->setDescriptor(F.rowRange(0,3));
-//        std::cout << F << "\n\n";
+//        std::cout << "Roots " << roots << "\n\n";
 
         for (int i = 1; i < roots; i++) {
-            models.push_back(new Model(models[0]->threshold,
-                                  models[0]->sample_number,
-                                  models[0]->desired_prob,
-                                  models[0]->k_nearest_neighbors,
-                                  models[0]->model_name));
-
+            if (models.size() <= i) {
+                models.push_back(new Model(models[0]->threshold,
+                                           models[0]->sample_number,
+                                           models[0]->desired_prob,
+                                           models[0]->k_nearest_neighbors,
+                                           models[0]->model_name));
+            }
             models[i]->setDescriptor(F.rowRange(i * 3, i * 3 + 3));
         }
 
@@ -95,9 +96,9 @@ public:
      * Error =  -------------------------------------------------------------------
      *          (((F⋅pt1)(0))^2 + ((F⋅pt1)(1))^2 + ((F^t⋅pt2)(0))^2 + ((F^t⋅pt2)(1))^2)
      *
-     * ( [ x2 y2 1 ] * [ F(1,1)  F(1,2)  F(1,3) ] )   [ x1 ]
-     * (               [ F(2,1)  F(2,2)  F(2,3) ] ) * [ y1 ]
-     * (               [ F(3,1)  F(3,2)  F(3,3) ] )   [ 1  ]
+     * [ x2 y2 1 ] * [ F(1,1)  F(1,2)  F(1,3) ]   [ x1 ]
+     *               [ F(2,1)  F(2,2)  F(2,3) ] * [ y1 ]
+     *               [ F(3,1)  F(3,2)  F(3,3) ]   [ 1  ]
      *
      */
     float GetError(int pidx) override {

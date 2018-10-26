@@ -43,7 +43,6 @@ public:
         H_inv = H.inv();
 
         /*
-         * Attention!
          * To make pointer from Mat class, this Mat class should exists as long as exists pointer
          * So this->H and this->H_inv must be global in class
          */
@@ -54,6 +53,9 @@ public:
     int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         cv::Mat H;
         DLT (points, sample, 4, H);
+        // normalize H by last h33
+        H = H / H.at<float>(2,2);
+
         models[0]->setDescriptor(H);
 
         return 1;
@@ -61,9 +63,14 @@ public:
 
     bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
         cv::Mat H;
-        if (NormalizedDLT(points, sample, sample_size, H)) {
+        if (NormalizedDLT(points, sample, sample_size, H) == false) {
+            std::cout << "Normalized DLT failed\n";
             return false;
         }
+        // normalize H by last h33
+        H = H / H.at<float>(2,2);
+//        std::cout << "NDLT H =\n" << H << "\n\n";
+
         model.setDescriptor(H);
         return true;
     }

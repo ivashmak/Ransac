@@ -51,9 +51,9 @@ add_executable(
         Usac/Estimator/DLT/NormalizedDLT.h
         Usac/Estimator/DLT/GetNormalizingTransformation.h
 
-        Usac/Estimator/NPointsAlgorithms/FivePointsAlgorithm.h
-        Usac/Estimator/NPointsAlgorithms/SevenPointsAlgorithm.h
-        Usac/Estimator/NPointsAlgorithms/EightPointsAlgorithm.h
+        Usac/Estimator/NPointsAlgorithms/FivePointsEssentialEstimation.h
+        Usac/Estimator/NPointsAlgorithms/SevenPointsFundamentalEstimation.h
+        Usac/Estimator/NPointsAlgorithms/EightPointsFundamentalEstimation.h
 
         Usac/LocalOptimization/LocalOptimization.h
         Usac/LocalOptimization/RansacLocalOptimization.h

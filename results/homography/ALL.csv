@@ -1,18 +1,18 @@
-Filename,Number of Inliers (found / total points),Number of Iterations,Time (mcs)
-,,,,
-adam_pts.txt,9/28,429,7650
-Brussels_pts.txt,323/518,869,71470
-LePoint1_pts.txt,65/152,135,3650
-boat_pts.txt,30/131,1672,42281
-CapitalRegion_pts.txt,29/137,3565,72961
-LePoint2_pts.txt,43/96,112,2416
-BostonLib_pts.txt,24/202,23109,498427
-city_pts.txt,25/27,3,105
-LePoint3_pts.txt,37/54,92,1327
-Boston_pts.txt,124/393,462,14002
-Eiffel_pts.txt,69/214,423,8699
-WhiteBoard_pts.txt,78/219,283,6060
-BruggeSquare_pts.txt,16/55,640,8668
-ExtremeZoom_pts.txt,11/59,3809,57787
-BruggeTower_pts.txt,40/78,64,1418
-graf_pts.txt,104/251,153,3858
+LO 0
+Filename,Number of Inliers (found / total points),Number of Iterations,Time (mcs),Average Error (threshold = 3),,,,,
+adam_pts.txt,11/28,191,3684,23.0044
+Brussels_pts.txt,194/518,231,21016,59.2901
+LePoint1_pts.txt,77/152,67,1964,22.9426
+boat_pts.txt,31/131,1497,44949,54.1982
+CapitalRegion_pts.txt,26/137,3898,82266,150.98
+LePoint2_pts.txt,47/96,241,4594,6.95384
+BostonLib_pts.txt,37/202,12433,283114,1042.58
+city_pts.txt,25/27,4,180,7.58209
+LePoint3_pts.txt,20/54,242,3526,14.7575
+Boston_pts.txt,167/393,138,4263,47.4273
+Eiffel_pts.txt,78/214,258,6908,143.23
+WhiteBoard_pts.txt,79/219,269,8768,105.658
+BruggeSquare_pts.txt,23/55,148,3378,152.772
+ExtremeZoom_pts.txt,11/59,3809,65654,1833.76
+BruggeTower_pts.txt,38/78,79,1340,85.5558
+graf_pts.txt,143/251,205,5129,5.85745

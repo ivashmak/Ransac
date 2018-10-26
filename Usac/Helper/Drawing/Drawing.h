@@ -124,14 +124,23 @@ public:
         cv::Mat img1 = cv::imread(images_filename[0]);
         cv::Mat img2 = cv::imread(images_filename[1]);
 
-        cv::Mat img1_inl = cv::imread (images_filename[0]);
-        cv::Mat img2_inl = cv::imread (images_filename[1]);
+        if (img1.cols > img1.rows) {
+            cv::resize(img1, img1, cv::Size(std::min(800, img1.cols), std::min(600, img1.rows)));
+            cv::resize(img2, img2, cv::Size(std::min(800, img2.cols), std::min(600, img2.rows)));
+        } else {
+            cv::resize(img1, img1, cv::Size(std::min(600, img1.cols), std::min(800, img1.rows)));
+            cv::resize(img2, img2, cv::Size(std::min(600, img2.cols), std::min(800, img2.rows)));
+        }
 
-        cv::Mat gt_img1_inl = cv::imread (images_filename[0]);
-        cv::Mat gt_img2_inl = cv::imread (images_filename[1]);
+        cv::Mat img1_inl = img1.clone();
+        cv::Mat img2_inl = img2.clone();
 
-        cv::Mat opencv_img1_inl = cv::imread (images_filename[0]);
-        cv::Mat opencv_img2_inl = cv::imread (images_filename[1]);
+        cv::Mat gt_img1_inl = img1.clone();
+        cv::Mat gt_img2_inl = img2.clone();
+
+        cv::Mat opencv_img1_inl = img1.clone();
+        cv::Mat opencv_img2_inl = img2.clone();
+
 
         // draw matches
         cv::Mat img_matches, gt_img_matches;

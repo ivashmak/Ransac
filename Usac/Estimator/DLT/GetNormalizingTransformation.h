@@ -24,29 +24,37 @@ void GetNormalizingTransformation (const float * const pts, cv::OutputArray norm
 
     float summa_pts1_x = 0, summa_pts1_y = 0, summa_pts2_x = 0, summa_pts2_y = 0;
 
-    float x1i, y1i, x2i, y2i;
+//    float x1i, y1i, x2i, y2i;
     for (int i = 0; i < sample_number; i++) {
         smpl = 4*sample[i];
-        x1i = pts[smpl] - mean_pts1_x;
-        y1i = pts[smpl+1] - mean_pts1_y;
-        x2i = pts[smpl+2] - mean_pts2_x;
-        y2i = pts[smpl+3] - mean_pts2_y;
+//        x1i = pts[smpl] - mean_pts1_x;
+//        y1i = pts[smpl+1] - mean_pts1_y;
+//        x2i = pts[smpl+2] - mean_pts2_x;
+//        y2i = pts[smpl+3] - mean_pts2_y;
 
-        summa_pts1_x += x1i * x1i;
-        summa_pts1_y += y1i * y1i;
+        summa_pts1_x += fabsf(pts[smpl] - mean_pts1_x);
+        summa_pts1_y += fabsf(pts[smpl+1] - mean_pts1_y);
 
-        summa_pts2_x += x2i * x2i;
-        summa_pts2_y += y2i * y2i;
+        summa_pts2_x += fabsf(pts[smpl+2] - mean_pts2_x);
+        summa_pts2_y += fabsf(pts[smpl+3] - mean_pts2_y);
     }
 
-    /*
-     * s1 = sqrt(summa1/NUMP);
-     * s2 = sqrt(summa2/NUMP);
-     * s=sqrt((summa1+summa2)/NUMP)/sqrt(2);
-     */
+    float s1_x = sample_number/summa_pts1_x;
+    float s1_y = sample_number/summa_pts1_y;
+    float s2_x = sample_number/summa_pts2_x;
+    float s2_y = sample_number/summa_pts2_y;
 
-    float pts1_s = sqrt((summa_pts1_x + summa_pts1_y)/ sample_number) / sqrt(2);
-    float pts2_s = sqrt((summa_pts2_x + summa_pts2_y)/ sample_number) / sqrt(2);
+    /*
+     * Compute a similarity transform T that takes points xi
+     * to a new set of points x̃i such that the centroid of
+     * the points x̃i is the coordinate origin and their
+     * average distance from the origin is √2
+     *
+     * origin O(0,0)
+     * (xi yi 1) (a 0 0) = (x̃1 ỹ1 1)     sqrt(x̃*x̃ + ỹ*ỹ) = sqrt(2)
+     * ...       (0 b 0)   ...            ax*ax + by*by = 2
+     * (xn yn 1) (0 0 1)   (x̃n ỹn 1)
+     */
 
     /*
      * T1 = eye(3);
@@ -60,21 +68,21 @@ void GetNormalizingTransformation (const float * const pts, cv::OutputArray norm
      *             0 1 -mean_pts1_y
      *             0 0 1]
      *
-     * pts1_T2 = [ 1/pts1_s  0          0
-     *             0         1/pts1_s   0
+     * pts1_T2 = [ pts1_s  0          0
+     *             0         pts1_s   0
      *             0         0          1]
      *
-     * T1 = [1/pts1_s  0          -mean_pts1_x/pts1_s
-     *       0         1/pts1_s   -mean_pts1_y/pts1_s
+     * T1 = [pts1_s  0          -mean_pts1_x*pts1_s
+     *       0         pts1_s   -mean_pts1_y*pts1_s
      *       0         0          1]
      *
      */
 
-    T1 = (cv::Mat_<float>(3,3) << 1/pts1_s, 0,        -mean_pts1_x/pts1_s,
-                                  0,        1/pts1_s, -mean_pts1_y/pts1_s,
+    T1 = (cv::Mat_<float>(3,3) << s1_x, 0,        -mean_pts1_x*s1_x,
+                                  0,        s1_y, -mean_pts1_y*s1_y,
                                   0,        0,         1);
-    T2 = (cv::Mat_<float>(3,3) << 1/pts2_s, 0,        -mean_pts2_x/pts2_s,
-                                  0,        1/pts2_s, -mean_pts2_y/pts2_s,
+    T2 = (cv::Mat_<float>(3,3) << s2_x, 0,        -mean_pts2_x*s2_x,
+                                  0,        s2_y, -mean_pts2_y*s2_y,
                                   0,        0,         1);
 
     float *T1_ptr = (float *)T1.data;

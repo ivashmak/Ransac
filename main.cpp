@@ -13,7 +13,7 @@ int main (int args, char ** argv) {
     // run tests
 //    tests.testLineFitting();
      tests.testHomographyFitting();
-     tests.testFundamentalFitting();
+//     tests.testFundamentalFitting();
 //     tests.testEssentialFitting();
 
 	return 0;

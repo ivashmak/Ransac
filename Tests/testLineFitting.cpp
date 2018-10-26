@@ -106,7 +106,6 @@ void testLine (cv::InputArray points, Sampler * const sampler, Model * const mod
 
     //    drawing.draw(ransac.most_inliers, ransac.getBestModel(), ransac.getNonMinimalModel(), points);
     drawing.draw(ransacOutput->getInliers(), ransacOutput->getModel(), points);
-
 }
 
 

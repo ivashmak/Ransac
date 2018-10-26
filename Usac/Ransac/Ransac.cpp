@@ -44,6 +44,8 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
     models.push_back (model);
 
     Model *best_model = new Model;
+    Model *tmp_model = new Model;
+    tmp_model->copyFrom (model);
     best_model->copyFrom (model);
 
     /*
@@ -101,7 +103,7 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 
             if (*current_score > best_score) {
 
-                 // std::cout << "current score = " << current_score->score << '\n';
+//                  std::cout << "current score = " << current_score->score << '\n';
 
                 if (LO) {
 
@@ -144,6 +146,8 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
                     best_score->inlier_number = current_score->inlier_number;
                     best_score->score = current_score->score;
 
+//                    std::cout << "best score inlier number " << best_score->inlier_number << '\n';
+
                     // remember best model
                     best_model->setDescriptor (models[i]->returnDescriptor());
 
@@ -167,15 +171,22 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
         // get inliers from best model
         quality->getInliers(estimator, points_size, best_model, max_inliers);
         // estimate model with max inliers
-        estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *best_model);
+//        std::cout << "estimate non minimal model in the end\n";
+        estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *tmp_model);
     }
 
     auto end_time = std::chrono::steady_clock::now();
     std::chrono::duration<float> fs = end_time - begin_time;
     // here is ending ransac main implementation
 
-    quality->GetModelScore(estimator, best_model, input_points, points_size, *best_score, max_inliers, true);
+    quality->GetModelScore(estimator, tmp_model, input_points, points_size, *current_score, max_inliers, true);
+//    std::cout << "end current score " << current_score->inlier_number << '\n';
+//    std::cout << "end best score " << best_score->inlier_number << '\n';
 
+    if (*current_score > best_score) {
+        best_score->copyFrom(current_score);
+        best_model->setDescriptor(tmp_model->returnDescriptor());
+    }
     // Store results
     ransac_output = new RansacOutput (best_model, max_inliers,
             std::chrono::duration_cast<std::chrono::microseconds>(fs).count(), best_score->inlier_number, iters, lo_iterations, lo_runs);
