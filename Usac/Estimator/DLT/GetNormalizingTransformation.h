@@ -51,9 +51,8 @@ void GetNormalizingTransformation (const float * const pts, cv::OutputArray norm
      * average distance from the origin is √2
      *
      * origin O(0,0)
-     * (xi yi 1) (a 0 0) = (x̃1 ỹ1 1)     sqrt(x̃*x̃ + ỹ*ỹ) = sqrt(2)
-     * ...       (0 b 0)   ...            ax*ax + by*by = 2
-     * (xn yn 1) (0 0 1)   (x̃n ỹn 1)
+     * sqrt(x̃*x̃ + ỹ*ỹ) = sqrt(2)
+     * ax*ax + by*by = 2
      */
 
     /*
