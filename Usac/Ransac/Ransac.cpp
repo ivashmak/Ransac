@@ -1,5 +1,6 @@
 #include "Ransac.h"
 #include "../LocalOptimization/RansacLocalOptimization.h"
+#include "../Estimator/DLT/DLT.h"
 
 int getPointsSize (cv::InputArray points) {
 //    std::cout << points.getMat(0).total() << '\n';
@@ -10,6 +11,7 @@ int getPointsSize (cv::InputArray points) {
         return points.getMat().rows;
     }
 }
+
 
 void Ransac::run(cv::InputArray input_points, bool LO) {
     /*
@@ -44,15 +46,15 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
     models.push_back (model);
 
     Model *best_model = new Model;
-    Model *tmp_model = new Model;
-    tmp_model->copyFrom (model);
+    Model *non_minimal_model = new Model;
+    non_minimal_model->copyFrom (model);
     best_model->copyFrom (model);
 
     /*
      * Allocate inliers of points_size, to avoid reallocation in getModelScore()
      */
-    int * inliers = new int[points_size];
     int * max_inliers = new int[points_size];
+    int * inliers = new int[points_size];
     int * sample = new int[estimator->SampleNumber()];
 
     bool best_LO_model = false;
@@ -99,6 +101,15 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 //            cv::circle (img, pts[sample[1]], 3, cv::Scalar(255, 255, 0), -1);
 //            cv::imshow("samples img", img); cv::waitKey(0);
 //            cv::imwrite( "../results/"+model->model_name+"_"+std::to_string(iters)+".jpg", img);
+            // -------------------------------------------
+//            Drawing drawing;
+//            cv::Mat img = cv::imread ("../dataset/homography/boatA.png");
+//            // std::vector<int> inl;
+//            // for (int i = 0; i < lo_score->inlier_number; i++) {
+//            //     inl.push_back(lo_inliers[i]);
+//            // }
+//            // drawing.showInliers(input_points, inl, img);
+//            cv::imshow("H", img); cv::waitKey(0);
             // -------------------------------------------
 
             if (*current_score > best_score) {
@@ -171,21 +182,23 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
         // get inliers from best model
         quality->getInliers(estimator, points_size, best_model, max_inliers);
         // estimate model with max inliers
-//        std::cout << "estimate non minimal model in the end\n";
-        estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *tmp_model);
+        estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model);
     }
 
     auto end_time = std::chrono::steady_clock::now();
     std::chrono::duration<float> fs = end_time - begin_time;
     // here is ending ransac main implementation
 
-    quality->GetModelScore(estimator, tmp_model, input_points, points_size, *current_score, max_inliers, true);
-//    std::cout << "end current score " << current_score->inlier_number << '\n';
+    quality->GetModelScore(estimator, non_minimal_model, input_points, points_size, *current_score, max_inliers, true);
+//    std::cout << "end non minimal score " << current_score->inlier_number << '\n';
 //    std::cout << "end best score " << best_score->inlier_number << '\n';
 
     if (*current_score > best_score) {
         best_score->copyFrom(current_score);
-        best_model->setDescriptor(tmp_model->returnDescriptor());
+        best_model->setDescriptor(non_minimal_model->returnDescriptor());
+    } else {
+        if (current_score->inlier_number < best_score->inlier_number)
+        std::cout << "\033[1;31mNon minimal model worse than best ransac model. May be something wrong. Check it!\033[0m \n";
     }
     // Store results
     ransac_output = new RansacOutput (best_model, max_inliers,

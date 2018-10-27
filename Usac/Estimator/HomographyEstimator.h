@@ -2,7 +2,7 @@
 #define RANSAC_HOMOGRAPHYESTIMATOR_H
 
 #include "Estimator.h"
-#include "../Estimator/DLT/NormalizedDLT.h"
+#include "DLT/DLT.h"
 
 class HomographyEstimator : public Estimator{
 private:
@@ -18,20 +18,6 @@ public:
      * ....
      * img1_xN img1_yN img2_xN img2_yN
      *
-     * float array 4N x 1
-     * img1_x1
-     * img1_y1
-     * img2_x1
-     * img2_y1
-     * img1_x2
-     * img1_y2
-     * img2_x2
-     * img2_y2
-     * ...
-     * img1_xN
-     * img1_yN
-     * img2_xN
-     * img2_yN
      */
 
     HomographyEstimator(cv::InputArray input_points) : points((float *)input_points.getMat().data) {

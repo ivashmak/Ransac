@@ -47,9 +47,9 @@ add_executable(
         Usac/Estimator/EssentialEstimator.h
         Usac/Estimator/FundamentalEstimator.h
 
-        Usac/Estimator/DLT/DLT.h
-        Usac/Estimator/DLT/NormalizedDLT.h
-        Usac/Estimator/DLT/GetNormalizingTransformation.h
+        Usac/Estimator/DLT/DLT.h Usac/Estimator/DLT/DLT.cpp
+        Usac/Estimator/DLT/NormalizedDLT.cpp
+        Usac/Estimator/DLT/NormalizingTransformation.cpp
 
         Usac/Estimator/NPointsAlgorithms/FivePointsEssentialEstimation.h
         Usac/Estimator/NPointsAlgorithms/SevenPointsFundamentalEstimation.h

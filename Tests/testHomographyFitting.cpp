@@ -22,7 +22,7 @@ void testHomography (cv::InputArray points, Model * const model, Sampler * const
 void storeResults ();
 
 void Tests::testHomographyFitting() {
-    std::string img_name = "boat";
+    std::string img_name = "Eiffel";
     std::string points_filename = "../dataset/homography/"+img_name+"_pts.txt";
     std::vector<std::string> images_filename;
     images_filename.push_back("../dataset/homography/"+img_name+"A.png");
@@ -68,7 +68,7 @@ void Tests::testHomographyFitting() {
     uniform_sampler->setPointsSize(points1.rows);
     uniform_sampler->initRandomGenerator();
 
-//   testHomography (points, homography_model, uniform_sampler, images_filename, points_filename);
+   testHomography (points, homography_model, uniform_sampler, images_filename, points_filename);
 
     Estimator * homograpy_estimator = new HomographyEstimator (points);
     TerminationCriteria *termination_criteria = new TerminationCriteria;
@@ -76,7 +76,7 @@ void Tests::testHomographyFitting() {
 
 //    runNTimes(points, homograpy_estimator, homography_model, uniform_sampler, termination_criteria, quality, 1000, LO);
 
-     storeResults();
+//     storeResults();
 }
 
 void testHomography (cv::InputArray points, Model * const model, Sampler * const sampler, std::vector<std::string> images_filename, std::string points_filename) {
@@ -124,6 +124,7 @@ void storeResults () {
                      "Average Error (threshold = " << homography_model->threshold <<"),,,,,\n";
 
     for (std::string img_name : points_filename) {
+        std::cout << img_name << '\n';
         cv::Mat points1, points2;
         read_points (points1, points2, "../dataset/homography/"+img_name);
         cv::hconcat(points1, points2, points1);

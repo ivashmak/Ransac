@@ -8,30 +8,83 @@ void read_points (cv::Mat &pts1, cv::Mat &pts2, const std::string &filename) {
 
     float x1, y1, z1, x2, y2, z2, inl;
     cv::Mat tmp = cv::Mat_<float>(1, 2);
+    float eps = 3;
     while (file >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> inl) {
+        float * pts1_ptr = (float *) pts1.data;
+        float * pts2_ptr = (float *) pts2.data;
+        bool cont = false;
+//        for (int i = 0; i < pts1.rows; i++) {
+//            if ((pts1_ptr[2*i] <= x1+eps) && (pts1_ptr[2*i] >= x1-eps)){
+//                if ((pts1_ptr[2*i+1] <= y1+eps) && (pts1_ptr[2*i+1] >= y1-eps)){
+//                    cont = true;
+//                    break;
+//                }
+//            }
+//
+//            if ((pts2_ptr[2*i] <= x2+eps) && (pts2_ptr[2*i] >= x2-eps)){
+//                if ((pts2_ptr[2*i+1] <= y2+eps) && (pts2_ptr[2*i+1] >= y2-eps)){
+//                    cont = true;
+//                    break;
+//                }
+//            }
+//        }
+
+        if (cont) continue;
+
         tmp.at<float>(0) = x1;
         tmp.at<float>(1) = y1;
-//        tmp.at<float>(2) = z1;
 
         pts1.push_back(tmp);
 
         tmp.at<float>(0) = x2;
         tmp.at<float>(1) = y2;
-//        tmp.at<float>(2) = z2;
 
         pts2.push_back(tmp);
+
     }
 }
 
 void getInliers (const std::string &filename, std::vector<int> &inliers) {
     std::fstream file(filename, std::ios_base::in);
 
+    cv::Mat tmp = cv::Mat_<float>(1, 2), pts1, pts2;
     float x1, y1, z1, x2, y2, z2;
     int inl;
     int p = 0;
+    float eps = 3;
     while (file >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> inl) {
+        float * pts1_ptr = (float *) pts1.data;
+        float * pts2_ptr = (float *) pts2.data;
+        bool cont = false;
+//        for (int i = 0; i < pts1.rows; i++) {
+//            if ((pts1_ptr[2*i] <= x1+eps) && (pts1_ptr[2*i] >= x1-eps)){
+//                if ((pts1_ptr[2*i+1] <= y1+eps) && (pts1_ptr[2*i+1] >= y1-eps)){
+//                    cont = true;
+//                    break;
+//                }
+//            }
+//
+//            if ((pts2_ptr[2*i] <= x2+eps) && (pts2_ptr[2*i] >= x2-eps)){
+//                if ((pts2_ptr[2*i+1] <= y2+eps) && (pts2_ptr[2*i+1] >= y2-eps)){
+//                    cont = true;
+//                    break;
+//                }
+//            }
+//        }
+
+        if (cont) continue;
         if (inl) inliers.push_back(p);
         p++;
+
+        tmp.at<float>(0) = x1;
+        tmp.at<float>(1) = y1;
+
+        pts1.push_back(tmp);
+
+        tmp.at<float>(0) = x2;
+        tmp.at<float>(1) = y2;
+
+        pts2.push_back(tmp);
     }
 }
 

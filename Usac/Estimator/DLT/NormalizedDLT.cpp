@@ -1,8 +1,3 @@
-#ifndef RANSAC_NDLT_H
-#define RANSAC_NDLT_H
-
-#include <opencv2/core.hpp>
-#include "GetNormalizingTransformation.h"
 #include "DLT.h"
 
 bool NormalizedDLT (const float * const points, const int * const sample, int sample_number, cv::Mat &H) {
@@ -12,21 +7,14 @@ bool NormalizedDLT (const float * const points, const int * const sample, int sa
 
     // std::cout << "GetNormalizingTransformation finished \n";
 
-//    std::cout << T1 << "\n\n" << T2 << "\n\n";
-//    std::cout << norm_points << "\n";
-
     const float * const newpoints = (float *) norm_points.data;
-    
+
     // solution not found
     if (DLT(newpoints, sample_number, H) == false) {
-    	return false;
+        return false;
     }
 
-	// std::cout << "DLT finished\n";
-    
     H = T2.inv()*H*T1;
 
     return true;
 }
-
-#endif // RANSAC_NDLT_H
