@@ -17,24 +17,6 @@ public:
      * img1_x2 img1_y2 img2_x2 img2_y2
      * ....
      * img1_xN img1_yN img2_xN img2_yN
-     *
-     * Size N x (2*|imgs|)
-     *
-     *
-     * float array 4N x 1
-     * img1_x1
-     * img1_y1
-     * img2_x1
-     * img2_y1
-     * img1_x2
-     * img1_y2
-     * img2_x2
-     * img2_y2
-     * ...
-     * img1_xN
-     * img1_yN
-     * img2_xN
-     * img2_yN
      */
 
     FundamentalEstimator(cv::InputArray input_points) : points((float *)input_points.getMat().data) {
@@ -45,7 +27,6 @@ public:
         F = cv::Mat_<float>(model->returnDescriptor());
 
         /*
-         * Attention!
          * To make pointer from Mat class, this Mat class should exists as long as exists pointer
          * So this->F and this->F_inv must be global in class
          */
@@ -61,28 +42,27 @@ public:
             return 0;
         }
 
-        models[0]->setDescriptor(F.rowRange(0,3));
-//        std::cout << "Roots " << roots << "\n\n";
-
-        for (int i = 1; i < roots; i++) {
-            if (models.size() <= i) {
+        std::cout << "Roots " << roots << "\n\n";
+        if (models.size() < roots) {
+            for (int i = 0; i < roots; i++) {
                 models.push_back(new Model(models[0]->threshold,
                                            models[0]->sample_number,
                                            models[0]->desired_prob,
                                            models[0]->k_nearest_neighbors,
                                            models[0]->model_name));
             }
+        }
+        for (int i = 0; i < roots; i++) {
             models[i]->setDescriptor(F.rowRange(i * 3, i * 3 + 3));
         }
 
-    
         return roots;
     }
 
     bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
         cv::Mat_<float> F;
-
         EightPointsAlgorithm(points, sample, sample_size, F);
+
         F_ptr = (float *) F.data;
 
         model.setDescriptor(F);

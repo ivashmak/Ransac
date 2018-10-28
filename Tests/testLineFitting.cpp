@@ -46,7 +46,7 @@ void Tests::testLineFitting() {
         return dists1.at<float>(1) < dists2.at<float>(1);
     });
     //---
-    bool LO = true;
+    bool LO = false;
 
      Model *ransac_model = new Model (10, 2, 0.99, 0, "ransac");
      Sampler *uniform_sampler = new UniformSampler;

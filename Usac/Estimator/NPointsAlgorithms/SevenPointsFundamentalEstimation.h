@@ -1,5 +1,45 @@
 #ifndef USAC_SEVENPOINTSALGORITHM_H
 #define USAC_SEVENPOINTSALGORITHM_H
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                          License Agreement
+//                For Open Source Computer Vision Library
+//
+// Copyright (C) 2000, Intel Corporation, all rights reserved.
+// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of the copyright holders may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the Intel Corporation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//M*/
 
 // 7,8-point algortihm
 // R. I. Hartley and  A. Zisserman, Multiple  View  Geometry  in  Computer Vision. Cambridge University Press, 2
@@ -9,11 +49,11 @@
 #include <opencv2/core/mat.hpp>
 #include <iostream>
 
-int SevenPointsAlgorithm (const float * const pts, const int * const sample, cv::OutputArray F_out) {
-    float a[7*9], w[7], u[9*9], v[9*9], c[4], r[3];
+int SevenPointsAlgorithm (const float * const pts, const int * const sample, cv::Mat &F) {
+    float w[7], u[9*9], v[9*9], c[4], r[3];
     float* f1, *f2;
     float t0, t1, t2;
-    cv::Mat_<float> A (7, 9, a);
+    cv::Mat_<float> A (7, 9);
     cv::Mat_<float> U (7, 9, u);
     cv::Mat_<float> Vt (9, 9, v);
     cv::Mat_<float> W (7, 1, w);
@@ -22,24 +62,26 @@ int SevenPointsAlgorithm (const float * const pts, const int * const sample, cv:
 
     // form a linear system: i-th row of A(=a) represents
     // the equation: (m2[i], 1)'*F*(m1[i], 1) = 0
+    float * A_ptr = (float *) A.data;
 
     unsigned int smpl;
-    for (int i = 0; i < 7; i++ ) {
+    float x1, y1, x2, y2;
+    for (unsigned int i = 0; i < 7; i++ ) {
         smpl = 4*sample[i];
-        float x1 = pts[smpl];
-        float y1 = pts[smpl+1];
-        float x2 = pts[smpl+2];
-        float y2 = pts[smpl+3];
+        x1 = pts[smpl];
+        y1 = pts[smpl+1];
+        x2 = pts[smpl+2];
+        y2 = pts[smpl+3];
 
-        a[i*9+0] = x2*x1;
-        a[i*9+1] = x2*y1;
-        a[i*9+2] = x2;
-        a[i*9+3] = y2*x1;
-        a[i*9+4] = y2*y1;
-        a[i*9+5] = y2;
-        a[i*9+6] = x1;
-        a[i*9+7] = y1;
-        a[i*9+8] = 1;
+        (*A_ptr++) = x2*x1;
+        (*A_ptr++) = x2*y1;
+        (*A_ptr++) = x2;
+        (*A_ptr++) = y2*x1;
+        (*A_ptr++) = y2*y1;
+        (*A_ptr++) = y2;
+        (*A_ptr++) = x1;
+        (*A_ptr++) = y1;
+        (*A_ptr++) = 1;
     }
 
     // A*(f11 f12 ... f33)' = 0 is singular (7 equations for 9 variables), so
@@ -89,14 +131,14 @@ int SevenPointsAlgorithm (const float * const pts, const int * const sample, cv:
     c[0] = f1[0]*t0 - f1[1]*t1 + f1[2]*t2;
 
     // solve the cubic equation; there can be 1 to 3 roots ...
-    int n = cv::solveCubic (coeffs, roots);
+    int nroots = cv::solveCubic (coeffs, roots);
+    if (nroots < 1) return nroots;
 
-    if (n < 1) return n;
-    cv::Mat F  = cv::Mat_<float>(n*3,3); // todo add n*3,3
+    F  = cv::Mat_<float>(nroots*3,3); // todo add n*3,3
 
     float* F_ptr = (float *) F.data;
 
-    for (int k = 0; k < n; k++ , F_ptr += 9) {
+    for (int k = 0; k < nroots; k++ , F_ptr += 9) {
         // for each root form the fundamental matrix
         float lambda = r[k], mu = 1;
         float s = f1[8]*r[k] + f2[8];
@@ -113,8 +155,7 @@ int SevenPointsAlgorithm (const float * const pts, const int * const sample, cv:
             F_ptr[i] = f1[i] * lambda + f2[i] * mu;
         }
     }
-    F.copyTo(F_out);
-    return n;
+    return nroots;
 }
 
 

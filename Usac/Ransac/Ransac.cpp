@@ -26,6 +26,12 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
     assert(termination_criteria != nullptr);
     assert(sampler->isInit());
 
+    if (LO) {
+        std::cout << "Ransac runs with local optimization\n";
+    } else {
+        std::cout << "Ransac runs without local optimization\n";
+    }
+
 //    std::cout << "asserted\n";
 
     auto begin_time = std::chrono::steady_clock::now();
@@ -190,14 +196,14 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
     // here is ending ransac main implementation
 
     quality->GetModelScore(estimator, non_minimal_model, input_points, points_size, *current_score, max_inliers, true);
-//    std::cout << "end non minimal score " << current_score->inlier_number << '\n';
-//    std::cout << "end best score " << best_score->inlier_number << '\n';
+    std::cout << "end non minimal score " << current_score->inlier_number << '\n';
+    std::cout << "end best score " << best_score->inlier_number << '\n';
 
-    if (*current_score > best_score) {
+    if (current_score->inlier_number >=  best_score->inlier_number) {
         best_score->copyFrom(current_score);
         best_model->setDescriptor(non_minimal_model->returnDescriptor());
     } else {
-        if (current_score->inlier_number < best_score->inlier_number)
+//        if (current_score->inlier_number < best_score->inlier_number)
         std::cout << "\033[1;31mNon minimal model worse than best ransac model. May be something wrong. Check it!\033[0m \n";
     }
     // Store results
