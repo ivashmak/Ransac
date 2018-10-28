@@ -38,3 +38,5 @@ Add Uniform Random Generator (better than array generator in case to allocate ne
 Realloc for models
 ArrayGenerator sub intervals;
 Avoid set Model parameters.
+
+Float or double???

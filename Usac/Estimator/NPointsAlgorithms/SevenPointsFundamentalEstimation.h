@@ -134,7 +134,7 @@ int SevenPointsAlgorithm (const float * const pts, const int * const sample, cv:
     int nroots = cv::solveCubic (coeffs, roots);
     if (nroots < 1) return nroots;
 
-    F  = cv::Mat_<float>(nroots*3,3); // todo add n*3,3
+    F  = cv::Mat_<float>(nroots*3,3);
 
     float* F_ptr = (float *) F.data;
 

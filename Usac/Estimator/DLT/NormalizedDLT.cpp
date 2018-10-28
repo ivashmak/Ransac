@@ -7,10 +7,10 @@ bool NormalizedDLT (const float * const points, const int * const sample, int sa
 
     // std::cout << "GetNormalizingTransformation finished \n";
 
-    const float * const newpoints = (float *) norm_points.data;
+    const float * const norm_points_ptr = (float *) norm_points.data;
 
     // solution not found
-    if (DLT(newpoints, sample_number, H) == false) {
+    if (DLT(norm_points_ptr, sample_number, H) == false) {
         return false;
     }
 
