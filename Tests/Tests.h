@@ -41,6 +41,9 @@ public:
 
     //todo add functions for test () and storeResults ()
 
+    void showResults (RansacOutput * ransacOutput) {
+
+    }
 };
 
 #endif //TESTS_TESTS_H

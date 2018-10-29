@@ -206,6 +206,9 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 //        if (current_score->inlier_number < best_score->inlier_number)
         std::cout << "\033[1;31mNon minimal model worse than best ransac model. May be something wrong. Check it!\033[0m \n";
     }
+
+    std::cout << "Average error " << quality->getAverageError(estimator, non_minimal_model, input_points, points_size) << "\n";
+
     // Store results
     ransac_output = new RansacOutput (best_model, max_inliers,
             std::chrono::duration_cast<std::chrono::microseconds>(fs).count(), best_score->inlier_number, iters, lo_iterations, lo_runs);

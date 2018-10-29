@@ -2,7 +2,7 @@
 #define USAC_FUNDAMENTALESTIMATOR_H
 
 #include "Estimator.h"
-#include "NPointsAlgorithms/EightPointsFundamentalEstimation.h"
+#include "Fundamental/EightPoints.h"
 
 class FundamentalEstimator : public Estimator {
 private:
@@ -41,8 +41,8 @@ public:
             std::cout << "roots less than 1\n";
             return 0;
         }
+//        std::cout << "Roots " << roots << "\n\n";
 
-        std::cout << "Roots " << roots << "\n\n";
         if (models.size() < roots) {
             for (int i = 0; i < roots; i++) {
                 models.push_back(new Model(models[0]->threshold,
@@ -62,12 +62,6 @@ public:
     bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
         cv::Mat_<float> F;
         EightPointsAlgorithm(points, sample, sample_size, F);
-
-        cv::Mat_<float> Ff;
-        EightPointsAlgorithm_float(points, sample, sample_size, Ff);
-
-        std::cout << "F = \n" << F << "\n\n";
-        std::cout << "Ff = \n" << Ff << "\n\n";
 
         F_ptr = (float *) F.data;
 

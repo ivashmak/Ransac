@@ -42,8 +42,5 @@ Avoid set Model parameters.
 Float or double??? float
 
 
-
-1) 8 points float
-2) comments
-3) add folders for estimators
-4) save errors.
+1) comments
+2) save errors.
