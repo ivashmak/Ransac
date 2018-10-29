@@ -71,6 +71,8 @@ add_executable(
 
         dataset/Dataset.h dataset/Dataset.cpp
 
+        Usac/Utils/Math.cpp Usac/Utils/Math.h
+
         Usac/Verbose.h
 )
 # parallel

@@ -63,6 +63,12 @@ public:
         cv::Mat_<float> F;
         EightPointsAlgorithm(points, sample, sample_size, F);
 
+        cv::Mat_<float> Ff;
+        EightPointsAlgorithm_float(points, sample, sample_size, Ff);
+
+        std::cout << "F = \n" << F << "\n\n";
+        std::cout << "Ff = \n" << Ff << "\n\n";
+
         F_ptr = (float *) F.data;
 
         model.setDescriptor(F);

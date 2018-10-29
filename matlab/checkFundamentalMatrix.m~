@@ -44,22 +44,18 @@ Fgt = [ ...
          -3.7750447e-06, 2.8917873e-06, -0.02240199;
          0.0013357102, 0.021094287, 1];
 
-err1 = 0;
-err2 = 0;
-err3 = 0;
-
 for pt = 1:size (pts1, 2)
     pt
-    err1 = err1 + sampson_error (pts1(:,pt), pts2(:,pt), Fgt);
-    err2 = err2 + sampson_error (pts1(:,pt), pts2(:,pt), F_my1);
-    err3 = err3 + sampson_error (pts1(:,pt), pts2(:,pt), F_my2);
+    err1 = sampson_error (pts1(:,pt), pts2(:,pt), Fgt)
+    err2 = sampson_error (pts1(:,pt), pts2(:,pt), F_my1)
+    err3 = sampson_error (pts1(:,pt), pts2(:,pt), F_my2)
 end
 
 norm (err1 - err2)
 norm (err1 - err3)
 
 sum (err2)/size(pts1,2)
-sum (err3)/size(pts1,2)
+sum (err2)/size(pts1,2)
 
 
 function err = sampson_error (pt1, pt2, F)

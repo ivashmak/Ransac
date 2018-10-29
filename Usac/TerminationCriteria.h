@@ -9,6 +9,7 @@ private:
     int sample_number;
     bool initialized = false;
     unsigned int max_iterations = 10000;
+    float epsilon = 0.00001;
     /*
      * Declare my_pow function as pow is very slow
      * https://stackoverflow.com/questions/41072787/why-is-powint-int-so-slow/41072811
@@ -62,7 +63,7 @@ public:
             inl_prob *= inl_ratio;
             k--;
         }
-        if (inl_prob < 0.00001) return max_iterations;
+        if (inl_prob < epsilon) return max_iterations;
         return log_1_p/log(1 - inl_prob);
     }
     
@@ -73,20 +74,19 @@ public:
             inl_prob *= (inlier_points/total_points);
             k--;
         }
-        if (inl_prob < 0.00001) return max_iterations;
+        if (inl_prob < epsilon) return max_iterations;
         return log_1_p/log(1 - inl_prob);
     }
 
     inline unsigned int getUpBoundIterations (float inlier_points, float total_points, unsigned int sample_number, float desired_prob) {
-        float log_1_p = log (1 - desired_prob);
         float inl_prob = (inlier_points/total_points) * (inlier_points/total_points);
         int k = sample_number;
         while (k > 2) {
             inl_prob *= (inlier_points/total_points);
             k--;
         }
-        if (inl_prob < 0.00001) return max_iterations;
-        return log_1_p/log(1 - inl_prob);
+        if (inl_prob < epsilon) return max_iterations;
+        return log (1 - desired_prob)/log(1 - inl_prob);
     }
 
 };
