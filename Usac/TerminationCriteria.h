@@ -10,19 +10,6 @@ private:
     bool initialized = false;
     unsigned int max_iterations = 10000;
     float epsilon = 0.00001;
-    /*
-     * Declare my_pow function as pow is very slow
-     * https://stackoverflow.com/questions/41072787/why-is-powint-int-so-slow/41072811
-     * pow(x,y) = e^(y log(x))
-     * Assume that my pow is called for power at least 2.
-     */
-    float my_pow (float n, int k) {
-        float res = n * n;
-        while (k > 2) {
-            res *= n; k--;
-        }
-        return res;
-    }
 public:
 
     void init (const Model * const model) {

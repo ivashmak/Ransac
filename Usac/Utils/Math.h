@@ -7,9 +7,6 @@
 
 bool inverse3x3 (cv::Mat& A);
 
-/*
- * n^k, k >= 2
- */
 float fast_pow (float n, int k);
 
 //void fast_

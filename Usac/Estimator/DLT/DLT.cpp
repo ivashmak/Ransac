@@ -1,6 +1,6 @@
 #include "DLT.h"
 
-void DLT (const float * const points, const int * const sample, int sample_number, cv::Mat &H) {
+bool DLT (const float * const points, const int * const sample, int sample_number, cv::Mat &H) {
     float x1, y1, x2, y2;
     int smpl;
 
@@ -53,13 +53,11 @@ void DLT (const float * const points, const int * const sample, int sample_numbe
      * u and vt matrices of sufficiently large size for the further A reconstruction;
      * if, however, FULL_UV flag is specified, u and vt will be full-size square orthogonal matrices.
      */
-    // todo use eigen
     cv::SVD::compute(A, w, u, vt);
 
-//    std::cout << "A=\n"<< A << "\n\n";
-//    std::cout << "vt=\n" << vt << "\n\n";
-
     H = cv::Mat_<float>(vt.row(vt.rows-1).reshape (3,3));
+
+    return true;
 }
 
 bool DLT (const float * const points, int sample_number, cv::Mat &H) {
