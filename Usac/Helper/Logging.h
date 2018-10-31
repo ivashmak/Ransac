@@ -2,7 +2,7 @@
 #define USAC_LOGGING_H
 
 #include "../Model.h"
-#include "../Quality.h"
+#include "../Quality/Quality.h"
 
 #include <fstream>
 
@@ -14,7 +14,7 @@ public:
      */
     void saveResult (const Model * const model, RansacOutput * const ransacOutput) {
         std::ofstream write_log;
-        std::string filename = "../results/" + model->model_name +".txt";
+        std::string filename = "../results/" + model->name +".txt";
         write_log.open (filename);
         write_log << ransacOutput->getTimeMicroSeconds() <<"\n";
         write_log << ransacOutput->getNumberOfIterations() <<"\n";
@@ -27,7 +27,7 @@ public:
      */
     void compare (const Model * const model, RansacOutput * const ransacOutput) {
         std::ifstream read_log;
-        std::string filename = "../results/" + model->model_name +".txt";
+        std::string filename = "../results/" + model->name +".txt";
         read_log.open(filename);
         float time;
         int iters, points_under_treshold;

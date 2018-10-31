@@ -8,6 +8,34 @@
 class Drawing {
 public:
 
+    /*
+     * w ~ original width;  h ~ original height; S original square;
+     * constraint 1: new square is S' = w' * h' == 480000
+     * constraint 2: ratio is the same
+     *      S'
+     * h' = -
+     *      w'
+     *
+     * w'  w             wh'   wS'                  wS'
+     * - = -   =>  w' = ---  = --   =>  w' = sqrt (----)
+     * h'  h             h     hw'                  h
+     *
+     *                                              hS'
+     *                                  h' = sqrt (----)
+     *                                              w
+     */
+    void drawing_resize (cv::Mat &image) {
+        float nS = 480000;
+        cv::resize(image, image, cv::Size(sqrt ((image.cols * nS)/image.rows), sqrt ((image.rows * nS)/image.cols)));
+
+    }
+
+    /*
+     * Show inliers for image
+     * @input_points         all point
+     * @input_inliers_idxes  indexes of inliers
+     * @image                image
+     */
     void showInliers (cv::InputArray input_points, cv::InputArray input_inliers_idxes, cv::Mat image) {
         int *inliers_idxes = (int *) input_inliers_idxes.getMat().data;
         cv::Point_<float> *points = (cv::Point_<float> *) input_points.getMat().data;
@@ -63,7 +91,7 @@ public:
         cv::line (img, cv::Point(corner_x1, corner_y1), cv::Point(corner_x2, corner_y2), color,  2, 8);
     }
     
-    void draw_model (Model * const model, cv::Scalar color, cv::Mat img, bool threshold) {
+    void draw_line_model (Model * const model, cv::Scalar color, cv::Mat img, bool threshold) {
         cv::Mat desc = model->returnDescriptor();
         auto * params = reinterpret_cast<float *>(desc.data);
         std::cout <<"model: a = "<< params[0] << " b = " << params[1] << " c = " <<params[2] << '\n';
@@ -89,9 +117,9 @@ public:
     void draw (cv::InputArray inliers, Model * const model, cv::InputArray points) {
         cv::Mat image  = cv::imread("../dataset/image1.jpg");
         showInliers(points, inliers, image);
-        draw_model(model, cv::Scalar(255, 0, 0), image, true);
+        draw_line_model(model, cv::Scalar(255, 0, 0), image, true);
         imshow("Inliers", image);
-        std::string filename = "../results/linefitting_"+model->model_name+".jpg";
+        std::string filename = "../results/linefitting_"+model->name+".jpg";
         cv::imwrite(filename, image);
         cv::waitKey (0);
     }
@@ -124,13 +152,8 @@ public:
         cv::Mat img1 = cv::imread(images_filename[0]);
         cv::Mat img2 = cv::imread(images_filename[1]);
 
-        if (img1.cols > img1.rows) {
-            cv::resize(img1, img1, cv::Size(std::min(800, img1.cols), std::min(600, img1.rows)));
-            cv::resize(img2, img2, cv::Size(std::min(800, img2.cols), std::min(600, img2.rows)));
-        } else {
-            cv::resize(img1, img1, cv::Size(std::min(600, img1.cols), std::min(800, img1.rows)));
-            cv::resize(img2, img2, cv::Size(std::min(600, img2.cols), std::min(800, img2.rows)));
-        }
+        drawing_resize(img1);
+        drawing_resize(img2);
 
         cv::Mat img1_inl = img1.clone();
         cv::Mat img2_inl = img2.clone();
@@ -152,7 +175,7 @@ public:
 
         cv::Mat H_opencv = cv::Mat_<float>(cv::findHomography(points1, points2));
         cv::Mat H_gt;
-        getH (points_filename.substr(0, points_filename.find('_'))+"_model.txt", H_gt);
+        getMatrix3x3 (points_filename.substr(0, points_filename.find('_'))+"_model.txt", H_gt);
 
         drawErrors(img1_inl, img2_inl, points1, points2, H);
         drawErrors(gt_img1_inl, gt_img2_inl, points1, points2, H_gt.inv());

@@ -74,11 +74,14 @@ void Tests::testHomographyFitting() {
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
 
-//    runNTimes(points, homograpy_estimator, homography_model, uniform_sampler, termination_criteria, quality, 1000, LO);
+//    getAverageResults(points, homograpy_estimator, homography_model, uniform_sampler, termination_criteria, quality, 1000, LO);
 
 //     storeResults();
 }
 
+/*
+ * Test homography matrix estimation for one image correspondence
+ */
 void testHomography (cv::InputArray points, Model * const model, Sampler * const sampler, std::vector<std::string> images_filename, std::string points_filename) {
     Estimator * homograpy_estimator = new HomographyEstimator (points);
     Drawing drawing;
@@ -91,15 +94,14 @@ void testHomography (cv::InputArray points, Model * const model, Sampler * const
 
     RansacOutput * ransacOutput = ransac.getRansacOutput();
 
-    std::cout << model->model_name << " time: ";
+    std::cout << model->name << " time: ";
     ransacOutput->printTime();
-    std::cout << model->model_name << " iterations: " << ransacOutput->getNumberOfIterations() <<
+    std::cout << model->name << " iterations: " << ransacOutput->getNumberOfIterations() <<
               " (" << ((int)ransacOutput->getNumberOfIterations () -(int)ransacOutput->getNumberOfLOIterations ()) << 
               " + " << ransacOutput->getNumberOfLOIterations () << " (" << ransacOutput->getLORuns() << " lo inner + iterative runs)) \n";
     
-    std::cout << model->model_name << " points under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
-    std::cout << ransacOutput->getModel()->returnDescriptor() << '\n';
-    cv::Mat H = ransacOutput->getModel()->returnDescriptor();
+    std::cout << model->name << " points under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
+    std::cout << "Average error " << ransacOutput->getAverageError() << "\n";
 
     // save result and compare with last run
     logResult.compare(model, ransacOutput);
@@ -109,6 +111,10 @@ void testHomography (cv::InputArray points, Model * const model, Sampler * const
     drawing.drawHomographies(images_filename, points_filename, ransacOutput->getInliers(), ransacOutput->getModel()->returnDescriptor());
 }
 
+
+/*
+ * Store results from dataset to csv file.
+ */
 void storeResults () {
     std::vector<std::string> points_filename = getHomographyDatasetPoints();
 
@@ -155,11 +161,12 @@ void storeResults () {
         save_model << ransacOutput->getNumberOfIterations() << '\n';
         save_model << ransacOutput->getTimeMicroSeconds() << '\n';
 
+        // save to csv file
         results_total << img_name << ",";
         results_total << ransacOutput->getNumberOfInliers() << "/" << points1.rows << ",";
         results_total << ransacOutput->getNumberOfIterations() << ",";
         results_total << ransacOutput->getTimeMicroSeconds() << ",";
-        results_total << quality->getAverageError(homograpy_estimator, ransacOutput->getModel(), points1, points1.rows) << "\n";
+        results_total << ransacOutput->getAverageError() << "\n";
         save_model.close();
     }
 

@@ -24,7 +24,9 @@ void drawEpipolarLines_ (cv::Mat &img1, cv::Mat& img2, const cv::Mat& lines, con
     }
 }
 
-
+/*
+ * Draw epipolar line for Fundamental matrix
+ */
 void Drawing::drawEpipolarLines (const std::vector<std::string>& images_filename, cv::InputArray points1, cv::InputArray points2, const cv::Mat& F) {
     cv::Mat pts1 = points1.getMat(), pts2 = points2.getMat();
 
@@ -41,9 +43,12 @@ void Drawing::drawEpipolarLines (const std::vector<std::string>& images_filename
     cv::computeCorrespondEpilines(pts1, 1, F, lines2);
 
     cv::Mat img1 = cv::imread(images_filename[0]),
-            img2 = cv::imread(images_filename[1]),
-            img3 = cv::imread(images_filename[0]),
-            img4 = cv::imread(images_filename[1]);
+            img2 = cv::imread(images_filename[1]);
+
+    Drawing::drawing_resize(img1);
+    Drawing::drawing_resize(img2);
+
+    cv::Mat img3 = img1.clone(), img4 = img2.clone();
 
     drawEpipolarLines_ (img1, img2, lines1, pts1, pts2);
     drawEpipolarLines_ (img4, img3, lines2, pts2, pts1);

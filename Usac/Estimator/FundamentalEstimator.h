@@ -49,7 +49,7 @@ public:
                                            models[0]->sample_number,
                                            models[0]->desired_prob,
                                            models[0]->k_nearest_neighbors,
-                                           models[0]->model_name));
+                                           models[0]->name));
             }
         }
         for (int i = 0; i < roots; i++) {

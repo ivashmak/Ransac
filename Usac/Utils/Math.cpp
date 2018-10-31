@@ -2,6 +2,7 @@
 
 /*
  * Fast finding inverse matrix 3x3
+ * A^-1 = adj(A)/det(A)
  */
 bool inverse3x3 (cv::Mat& A) {
 //    assert (A.rows == 3 && A.cols == 3);

@@ -1,5 +1,13 @@
 #include "detector.h"
 
+/*
+ * Get points from image with name "filename".
+ * Using different key points detection.
+ *
+ * Example of usage
+ * std::vector<cv::KeyPoint> points = detect("data/image1.jpg", "sift");
+ *
+ */
 std::vector<cv::KeyPoint> detect(std::string filename, std::string detector_name) {
 	cv::Mat img = imread (filename, cv::IMREAD_GRAYSCALE);
 	

@@ -185,33 +185,39 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
      * so we don't need to run it again. And model will be equal to non minimal model.
      */
     if (!best_LO_model) {
+        std::cout << "Calculate Non minimal model\n";
         // get inliers from best model
         quality->getInliers(estimator, points_size, best_model, max_inliers);
         // estimate model with max inliers
         estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model);
+
+        quality->GetModelScore(estimator, non_minimal_model, input_points, points_size, *current_score, max_inliers, true);
+
+        std::cout << "end non minimal score " << current_score->inlier_number << '\n';
+        std::cout << "end best score " << best_score->inlier_number << '\n';
+
+        if (current_score->inlier_number >= best_score->inlier_number) {
+            best_score->copyFrom(current_score);
+            best_model->setDescriptor(non_minimal_model->returnDescriptor());
+        } else {
+            //        if (current_score->inlier_number < best_score->inlier_number)
+            std::cout
+                    << "\033[1;31mNon minimal model worse than best ransac model. May be something wrong. Check it!\033[0m \n";
+        }
     }
 
     auto end_time = std::chrono::steady_clock::now();
     std::chrono::duration<float> fs = end_time - begin_time;
     // here is ending ransac main implementation
 
-    quality->GetModelScore(estimator, non_minimal_model, input_points, points_size, *current_score, max_inliers, true);
-    std::cout << "end non minimal score " << current_score->inlier_number << '\n';
-    std::cout << "end best score " << best_score->inlier_number << '\n';
-
-    if (current_score->inlier_number >=  best_score->inlier_number) {
-        best_score->copyFrom(current_score);
-        best_model->setDescriptor(non_minimal_model->returnDescriptor());
-    } else {
-//        if (current_score->inlier_number < best_score->inlier_number)
-        std::cout << "\033[1;31mNon minimal model worse than best ransac model. May be something wrong. Check it!\033[0m \n";
-    }
-
-    std::cout << "Average error " << quality->getAverageError(estimator, non_minimal_model, input_points, points_size) << "\n";
+    // get final inliers of the best model
+    quality->getInliers(estimator, points_size, best_model, max_inliers);
+    float average_error = quality->getAverageError(estimator, best_model, max_inliers, best_score->inlier_number);
+    std::cout << "Average error " << average_error << "\n";
 
     // Store results
     ransac_output = new RansacOutput (best_model, max_inliers,
-            std::chrono::duration_cast<std::chrono::microseconds>(fs).count(), best_score->inlier_number, iters, lo_iterations, lo_runs);
+            std::chrono::duration_cast<std::chrono::microseconds>(fs).count(), average_error, best_score->inlier_number, iters, lo_iterations, lo_runs);
 
     if (LO) {
         delete lo_ransac, lo_model, lo_score;

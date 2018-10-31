@@ -3,7 +3,7 @@
 
 
 #include "../Usac/Estimator/Estimator.h"
-#include "../Usac/Quality.h"
+#include "../Usac/Quality/Quality.h"
 #include "../Usac/Ransac/Ransac.h"
 
 class Tests {
@@ -13,7 +13,11 @@ public:
     void testFundamentalFitting ();
     void testEssentialFitting ();
 
-    void runNTimes (cv::InputArray points,
+    /*
+     * Display average results such as computational time,
+     * number of inliers of N runs of Ransac.
+     */
+    void getAverageResults (cv::InputArray points,
                     Estimator *const estimator,
                     Model *const model,
                     Sampler *const sampler,
@@ -25,21 +29,31 @@ public:
         
         int bad_models_counter = 0;
         double time = 0;
+        float num_inliers = 0;
         for (int i = 0; i < N; i++) {
             Ransac ransac (*model, *sampler, *termination_criteria, *quality, *estimator);
             ransac.run(points, LO);
             RansacOutput *ransacOutput = ransac.getRansacOutput();
             time += ransacOutput->getTimeMicroSeconds();
-            if (ransacOutput->getNumberOfInliers() < 1300)
-                bad_models_counter++;
-
+            num_inliers += ransacOutput->getNumberOfInliers();
         }
-        std::cout << "average time of "<< N <<" runs is " << (time/N) << "mcs using " << model->model_name
-                  << ". Points size is " << points.size().width << "\n";
-        std::cout << "bad models " << bad_models_counter << '\n';
+        std::cout << N << " runs of Ransac " << " for model estimation " << model->name << " with points size " << points.size().width << '\n';
+        std::cout << "\tAverage time of is " << (time/N) << "mcs.\n";
+        std::cout << "\tAverage number of inliers is " << (num_inliers/N) << ".\n";
+
+        //        std::cout << "bad models " << bad_models_counter << '\n';
     }
 
-    //todo add functions for test () and storeResults ()
+    //todo add functions for test (), storeResults () and showResults
+
+
+    void test () {
+
+    }
+
+    void storeResults () {
+
+    }
 
     void showResults (RansacOutput * ransacOutput) {
 

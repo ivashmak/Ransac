@@ -7,7 +7,7 @@ public:
 	int sample_number = 2;
 	float desired_prob = 0.95;
 	int max_iterations = 10000;
-	std::string model_name = "ransac";
+	std::string name = "ransac";
 	int k_nearest_neighbors = 2;
 
 	/*
@@ -33,13 +33,13 @@ public:
 	~Model () {}
 	Model () {}
 	
-	Model (float threshold, int sample_number, float desired_prob, int knn, std::string model_name) {
-		this->threshold = threshold;
-		this->lo_threshold = threshold;
-		this->sample_number = sample_number;
-		this->desired_prob = desired_prob;
-		this->k_nearest_neighbors = knn;
-		this->model_name = model_name;
+	Model (float threshold_, int sample_number_, float desired_prob_, int knn, std::string model_name_) {
+		threshold = threshold_;
+		lo_threshold = threshold_;
+		sample_number = sample_number_;
+		desired_prob = desired_prob_;
+		k_nearest_neighbors = knn;
+		name = model_name_;
 	}
 
 	void setLOParametres (unsigned int lo_iterative_iters, unsigned int lo_max_iters, float lo_thresh, unsigned int lo_thresh_mult) {
@@ -74,7 +74,7 @@ public:
 	}
 
 	void setModelName (std::string model_name) {
-		this->model_name = model_name;
+		this->name = model_name;
 	}
 
 	void setKNearestNeighbors (int k_nearest_neighbors) {
@@ -85,7 +85,7 @@ public:
         sample_number = model->sample_number;
         desired_prob = model->desired_prob;
         max_iterations = model->max_iterations;
-        model_name = model->model_name;
+        name = model->name;
         k_nearest_neighbors = model->k_nearest_neighbors;
         estimated_inliers_ratio = model->estimated_inliers_ratio;
         lo_sample_size = model->lo_sample_size;

@@ -3,20 +3,22 @@
 
 #include <omp.h>
 #include <thread>
-#include "Estimator/Estimator.h"
-#include "Model.h"
+#include "../Estimator/Estimator.h"
+#include "../Model.h"
 #include <cmath>
 #include <chrono>
 
+/*
+ * Score for model estimation
+ */
 class Score {
 public:
     int inlier_number = 0;
     float score = 0;
 
-//    inline friend bool operator>(const Score& score1, const Score& score2) {
-//        std::cout << "operator " << score1.score << " " << score2.score << '\n';
-//        return score1.score > score2.score;
-//    }
+    inline bool bigger (const Score * const score2) {
+        return score > score2->score;
+    }
 
     inline bool operator>(const Score& score2) {
         return score > score2.score;
@@ -127,9 +129,11 @@ public:
         }
     }
 
+    /*
+     * Calculate average error for all points.
+     */
     float getAverageError (Estimator * const estimator,
                            Model * const model,
-                           cv::InputArray input_points,
                            int points_size) {
 
         estimator->setModelParameters(model);
@@ -140,6 +144,24 @@ public:
         }
         return sum_errors/points_size;
     }
+
+    /*
+     * Calculate average error for inliers.
+     */
+    float getAverageError (Estimator * const estimator,
+                           Model * const model,
+                           const int * const inliers,
+                           int inliers_size) {
+
+        estimator->setModelParameters(model);
+        float sum_errors = 0;
+
+        for (int point = 0; point < inliers_size; point++) {
+            sum_errors += estimator->GetError(inliers[point]);
+        }
+        return sum_errors/inliers_size;
+    }
+
 
 };
 

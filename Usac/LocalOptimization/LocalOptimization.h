@@ -3,7 +3,7 @@
 
 
 #include "../Estimator/Estimator.h"
-#include "../Quality.h"
+#include "../Quality/Quality.h"
 
 class LocalOptimization {
 public:

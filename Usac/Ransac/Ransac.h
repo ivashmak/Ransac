@@ -3,7 +3,7 @@
 
 #include "../Estimator/Estimator.h"
 #include "../Estimator/Line2DEstimator.h"
-#include "../Quality.h"
+#include "../Quality/Quality.h"
 #include "../Sampler/Sampler.h"
 
 #include "../Verbose.h"

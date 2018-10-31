@@ -2,7 +2,7 @@
 #define USAC_RANSACLOCALOPTIMIZATION_H
 
 #include "LocalOptimization.h"
-#include "../Quality.h"
+#include "../Quality/Quality.h"
 #include "../Helper/Drawing/Drawing.h"
 
 /*

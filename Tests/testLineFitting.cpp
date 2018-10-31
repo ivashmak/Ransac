@@ -75,10 +75,12 @@ void Tests::testLineFitting() {
     Estimator *line2destimator = new Line2DEstimator (points);
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
-    runNTimes(points, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 2000, LO);
+    getAverageResults(points, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 2000, LO);
 }
 
-
+/*
+ * test line fitting estimation for one data image.
+ */
 void testLine (cv::InputArray points, Sampler * const sampler, Model * const model) {
     Estimator *estimator2d = new Line2DEstimator (points);
     Drawing drawing;
@@ -91,13 +93,14 @@ void testLine (cv::InputArray points, Sampler * const sampler, Model * const mod
 
     RansacOutput *ransacOutput = ransac.getRansacOutput();
 
-    std::cout << model->model_name << " time: ";
+    std::cout << model->name << " time: ";
     ransacOutput->printTime();
-    std::cout << model->model_name << " iterations: " << ransacOutput->getNumberOfIterations() <<
+    std::cout << model->name << " iterations: " << ransacOutput->getNumberOfIterations() <<
               " (" << ((int)ransacOutput->getNumberOfIterations () -(int)ransacOutput->getNumberOfLOIterations ()) << 
               " + " << ransacOutput->getNumberOfLOIterations () << " (" << ransacOutput->getLORuns() << " lo inner + iterative runs)) \n";
     
-    std::cout << model->model_name << " points under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
+    std::cout << model->name << " points under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
+    std::cout << "Average error " << ransacOutput->getAverageError() << "\n";
 
     // save result and compare with last run
     logResult.compare(model, ransacOutput);

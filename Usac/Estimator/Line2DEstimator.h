@@ -12,6 +12,11 @@ public:
         assert(!input_array_points.empty());
     }
 
+    /*
+     *                 x1 - x2                                      y2 - y1
+     * a = --------------------------------        b = ----------------------------------
+     *     sqrt ((x1 - x2)^2 + (y2 - y1)^2)            sqrt ((x1 - x2)^2 + (y2 - y1)^2)
+     */
     int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         const int idx1 = sample[0];
         const int idx2 = sample[1];
@@ -22,7 +27,7 @@ public:
         b = -(input_points[2*idx2] - input_points[2*idx1]); // tangent_x
         a = input_points[2*idx2+1] - input_points[2*idx1+1]; // tangent_y
 
-        float mag = (float) (sqrt(a * a + b * b));
+        float mag = sqrt(a * a + b * b);
         a /= mag;
         b /= mag;
         c = (input_points[2*idx2] * input_points[2*idx1+1] - input_points[2*idx2+1] * input_points[2*idx1])/mag;
@@ -44,7 +49,6 @@ public:
            *points_arr++ = input_points[2*sample[i]];
            *points_arr++ = input_points[2*sample[i]+1];
        }
-
 
         cv::Mat covar, eigenvecs, means, eigenvals;
         // Find the covariance matrix
@@ -133,7 +137,10 @@ public:
 
         model.setDescriptor((cv::Mat_<float>(1,3) <<  a, b, c));
     }
-    
+
+    /*
+     * |ax + by + c|
+     */
     inline float GetError(int pidx) override {
         return fabsf (a * input_points[2*pidx] + b * input_points[2*pidx+1] + c);
     }

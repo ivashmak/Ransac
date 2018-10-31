@@ -9,7 +9,7 @@ private:
     int sample_number;
     bool initialized = false;
     unsigned int max_iterations = 10000;
-    float epsilon = 0.00001;
+    const float EPSILON = 0.00001;
 public:
 
     void init (const Model * const model) {
@@ -52,7 +52,7 @@ public:
             inl_prob *= inl_ratio;
             k--;
         }
-        if (inl_prob < epsilon) return max_iterations;
+        if (inl_prob < EPSILON) return max_iterations;
         return log_1_p/log(1 - inl_prob);
     }
     
@@ -63,7 +63,7 @@ public:
             inl_prob *= (inlier_points/total_points);
             k--;
         }
-        if (inl_prob < epsilon) return max_iterations;
+        if (inl_prob < EPSILON) return max_iterations;
         return log_1_p/log(1 - inl_prob);
     }
 
@@ -74,7 +74,7 @@ public:
             inl_prob *= (inlier_points/total_points);
             k--;
         }
-        if (inl_prob < epsilon) return max_iterations;
+        if (inl_prob < EPSILON) return max_iterations;
         return log (1 - desired_prob)/log(1 - inl_prob);
     }
 

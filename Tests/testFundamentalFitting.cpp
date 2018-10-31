@@ -70,11 +70,14 @@ void Tests::testFundamentalFitting() {
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
 
-//    runNTimes(points, fundamental_estimator, fundamental_model, uniform_sampler, termination_criteria, quality, 1000, LO);
+//    getAverageResults (points, fundamental_estimator, fundamental_model, uniform_sampler, termination_criteria, quality, 1000, LO);
 
 //    storeResultsFundamental ();
 }
 
+/*
+ * Test fundamental matrix estimation for one image correspondence
+ */
 void testFundamental (cv::InputArray points, Model * const model, Sampler * const sampler, const std::vector<std::string>& images_filename, std::string points_filename) {
     Estimator * fundamental_estimator = new FundamentalEstimator (points);
     Drawing drawing;
@@ -87,14 +90,14 @@ void testFundamental (cv::InputArray points, Model * const model, Sampler * cons
 
     RansacOutput *ransacOutput = ransac.getRansacOutput();
 
-    std::cout << model->model_name << " time: ";
+    std::cout << model->name << " time: ";
     ransacOutput->printTime();
-    std::cout << model->model_name << " iterations: " << ransacOutput->getNumberOfIterations() <<
+    std::cout << model->name << " iterations: " << ransacOutput->getNumberOfIterations() <<
               " (" << ((int)ransacOutput->getNumberOfIterations () -(int)ransacOutput->getNumberOfLOIterations ()) << 
               " + " << ransacOutput->getNumberOfLOIterations () << " (" << ransacOutput->getLORuns() << " lo inner + iterative runs)) \n";
     
-    std::cout << model->model_name << " points under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
-    std::cout << "Average error " << quality->getAverageError(fundamental_estimator, ransacOutput->getModel(), points, points.getMat().rows) << "\n";
+    std::cout << model->name << " points under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
+    std::cout << "Average error " << ransacOutput->getAverageError() << "\n";
 
     std::cout << "estimated model " << ransacOutput->getModel()->returnDescriptor() << "\n\n";
 
@@ -107,6 +110,9 @@ void testFundamental (cv::InputArray points, Model * const model, Sampler * cons
     drawing.drawEpipolarLines(images_filename, pts.colRange(0,2), pts.colRange(2,4), model->returnDescriptor());
 }
 
+/*
+ * Store results from dataset to csv file.
+ */
 void storeResultsFundamental () {
     std::vector<std::string> points_filename = getFundamentalDatasetPoints();
 
@@ -159,7 +165,7 @@ void storeResultsFundamental () {
         results_total << ransacOutput->getNumberOfInliers() << "/" << points1.rows << ",";
         results_total << ransacOutput->getNumberOfIterations() << ",";
         results_total << ransacOutput->getTimeMicroSeconds() << ",";
-        results_total << quality->getAverageError(fundamental_estimator, ransacOutput->getModel(), points1, points1.rows) << "\n";
+        results_total << ransacOutput->getAverageError() << "\n";
 
         save_model.close();
     }

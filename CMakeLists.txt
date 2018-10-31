@@ -19,7 +19,7 @@ add_executable(
         Detector/detector.cpp
         Detector/detector.h
 
-        Usac/Quality.h
+        Usac/Quality/Quality.h
         Usac/Model.h
         Usac/TerminationCriteria.h
         Usac/ProsacTerminationCriteria.h
