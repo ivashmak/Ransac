@@ -67,7 +67,6 @@ public:
                 std::to_string (time->microseconds) + " mcs\n";
     }
 
-
     std::vector<int> getInliers () {
         return inliers;
     }

@@ -12,7 +12,7 @@
  * http://www.bmva.org/bmvc/2002/papers/164/full_164.pdf
  *
  */
-class NapsacNearSampler : public Sampler {
+class GradualNapsac : public Sampler {
 private:
     int taking_sample_size_from_block = 0;
     int current_block = 0;
@@ -30,7 +30,7 @@ public:
      * from KNN using formula knn!/(sample_number!*(knn-sample_number)!
      * and reset KNN after iterations expired.
      */
-    NapsacNearSampler (cv::InputArray input_points, unsigned int sample_size, bool reset_time = true) {
+    GradualNapsac (cv::InputArray input_points, unsigned int sample_size, bool reset_time = true) {
         assert (!input_points.empty());
 
         this->sample_size = sample_size;

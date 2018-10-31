@@ -12,7 +12,7 @@
 
 #include "../Usac/Sampler/Sampler.h"
 #include "../Usac/Sampler/NapsacSampler.h"
-#include "../Usac/Sampler/NapsacNearSampler.h"
+#include "../Usac/Sampler/GradualNapsac.h"
 #include "../Usac/Sampler/EvsacSampler.h"
 #include "../Usac/Sampler/UniformSampler.h"
 #include "../Usac/Sampler/ProsacSampler.h"
@@ -48,25 +48,25 @@ void Tests::testLineFitting() {
     //---
     bool LO = false;
 
-     Model *ransac_model = new Model (10, 2, 0.99, 0, "ransac");
+     Model *ransac_model = new Model (10, 2, 0.99, 0, ESTIMATOR::Line2d, SAMPLER::Uniform);
      Sampler *uniform_sampler = new UniformSampler;
      uniform_sampler->setSampleSize(ransac_model->sample_number);
      uniform_sampler->setPointsSize(points.size());
      uniform_sampler->initRandomGenerator();
 
-//    Model *napsac_near_model = new Model (10, 2, 0.99, 20, "napsac_near");
-//    Sampler *napsac_near_sampler = new NapsacNearSampler(points, napsac_near_model->sample_number);
+//    Model *napsac_near_model = new Model (10, 2, 0.99, 20, ESTIMATOR::Line2d, SAMPLER::GradualNapsac);
+//    Sampler *napsac_near_sampler = new GradualNapsac(points, napsac_near_model->sample_number);
 
-   // Model *napsac_model = new Model (10, 2, 0.99, 20, "napsac");
-   // Sampler *napsac_sampler = new NapsacSampler(points, napsac_model->k_nearest_neighbors, napsac_model->sample_number);
+//    Model *napsac_model = new Model (10, 2, 0.99, 20, ESTIMATOR::Line2d, SAMPLER::Napsac);
+//    Sampler *napsac_sampler = new NapsacSampler(points, napsac_model->k_nearest_neighbors, napsac_model->sample_number);
 
-//    Model *evsac_model = new Model (10, 2, 0.99, 7, "evsac");
+//    Model *evsac_model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Evsac);
 //    Sampler *evsac_sampler = new EvsacSampler(points, points.size(), evsac_model->k_nearest_neighbors, evsac_model->sample_number);
 //
-//    Model *prosac_model = new Model (10, 2, 0.99, 0, "prosac");
+//    Model *prosac_model = new Model (10, 2, 0.99, 0, ESTIMATOR::Line2d, SAMPLER::Prosac);
 //    Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
 
-//     testLine (points, uniform_sampler, ransac_model);
+     testLine (points, uniform_sampler, ransac_model);
 //    testLine (points, napsac_near_sampler, napsac_near_model);
     // testLine (points, napsac_sampler, napsac_model);
     // testLine (points, evsac_sampler, evsac_model);
@@ -75,6 +75,7 @@ void Tests::testLineFitting() {
     Estimator *line2destimator = new Line2DEstimator (points);
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
+
     getAverageResults(points, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 2000, LO);
 }
 
@@ -93,13 +94,14 @@ void testLine (cv::InputArray points, Sampler * const sampler, Model * const mod
 
     RansacOutput *ransacOutput = ransac.getRansacOutput();
 
-    std::cout << model->name << " time: ";
+    std::cout << model->getName() << "\n";
+    std::cout << "\ttime: ";
     ransacOutput->printTime();
-    std::cout << model->name << " iterations: " << ransacOutput->getNumberOfIterations() <<
+    std::cout <<"\titerations: " << ransacOutput->getNumberOfIterations() <<
               " (" << ((int)ransacOutput->getNumberOfIterations () -(int)ransacOutput->getNumberOfLOIterations ()) << 
               " + " << ransacOutput->getNumberOfLOIterations () << " (" << ransacOutput->getLORuns() << " lo inner + iterative runs)) \n";
     
-    std::cout << model->name << " points under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
+    std::cout <<"\tpoints under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
     std::cout << "Average error " << ransacOutput->getAverageError() << "\n";
 
     // save result and compare with last run

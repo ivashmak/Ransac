@@ -58,13 +58,13 @@ void Tests::testFundamentalFitting() {
 
     bool LO = false;
 
-    Model *fundamental_model = new Model (5, 7, 0.99, 0, "fundamental");
+    Model *fundamental_model = new Model (5, 7, 0.99, 0, ESTIMATOR::Fundamental, SAMPLER::Uniform);
     Sampler *uniform_sampler = new UniformSampler;
     uniform_sampler->setSampleSize(fundamental_model->sample_number);
     uniform_sampler->setPointsSize(points1.rows);
     uniform_sampler->initRandomGenerator();
 
-    testFundamental (points, fundamental_model, uniform_sampler, images_filename, points_filename);
+//    testFundamental (points, fundamental_model, uniform_sampler, images_filename, points_filename);
 
     Estimator *fundamental_estimator = new FundamentalEstimator (points);
     TerminationCriteria *termination_criteria = new TerminationCriteria;
@@ -72,7 +72,7 @@ void Tests::testFundamentalFitting() {
 
 //    getAverageResults (points, fundamental_estimator, fundamental_model, uniform_sampler, termination_criteria, quality, 1000, LO);
 
-//    storeResultsFundamental ();
+    storeResultsFundamental ();
 }
 
 /*
@@ -90,16 +90,15 @@ void testFundamental (cv::InputArray points, Model * const model, Sampler * cons
 
     RansacOutput *ransacOutput = ransac.getRansacOutput();
 
-    std::cout << model->name << " time: ";
+    std::cout << model->getName();
+    std::cout << "\ttime: ";
     ransacOutput->printTime();
-    std::cout << model->name << " iterations: " << ransacOutput->getNumberOfIterations() <<
+    std::cout << "\titerations: " << ransacOutput->getNumberOfIterations() <<
               " (" << ((int)ransacOutput->getNumberOfIterations () -(int)ransacOutput->getNumberOfLOIterations ()) << 
               " + " << ransacOutput->getNumberOfLOIterations () << " (" << ransacOutput->getLORuns() << " lo inner + iterative runs)) \n";
     
-    std::cout << model->name << " points under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
-    std::cout << "Average error " << ransacOutput->getAverageError() << "\n";
-
-    std::cout << "estimated model " << ransacOutput->getModel()->returnDescriptor() << "\n\n";
+    std::cout << "\tpoints under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
+    std::cout << "\tAverage error " << ransacOutput->getAverageError() << "\n";
 
     // save result and compare with last run
     logResult.compare(model, ransacOutput);
@@ -121,7 +120,7 @@ void storeResultsFundamental () {
 
     bool LO = false;
 
-    Model *fundamental_model = new Model(3, 7, 0.99, 0, "fundamental");
+    Model *fundamental_model = new Model(3, 7, 0.99, 0, ESTIMATOR::Fundamental, SAMPLER::Uniform);
 
     std::ofstream results_total;
     results_total.open ("../results/fundamental/ALL.csv");
@@ -130,6 +129,7 @@ void storeResultsFundamental () {
                      "Average Error (threshold = " << fundamental_model->threshold <<"),,,,,\n";
 
     for (std::string img_name : points_filename) {
+        std::cout << img_name << '\n';
         cv::Mat points1, points2;
         read_points(points1, points2, "../dataset/fundamental/" + img_name);
         cv::hconcat(points1, points2, points1);

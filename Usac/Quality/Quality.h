@@ -130,22 +130,6 @@ public:
     }
 
     /*
-     * Calculate average error for all points.
-     */
-    float getAverageError (Estimator * const estimator,
-                           Model * const model,
-                           int points_size) {
-
-        estimator->setModelParameters(model);
-        float sum_errors = 0;
-
-        for (int point = 0; point < points_size; point++) {
-            sum_errors += estimator->GetError(point);
-        }
-        return sum_errors/points_size;
-    }
-
-    /*
      * Calculate average error for inliers.
      */
     float getAverageError (Estimator * const estimator,
@@ -161,7 +145,6 @@ public:
         }
         return sum_errors/inliers_size;
     }
-
 
 };
 

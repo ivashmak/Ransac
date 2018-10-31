@@ -12,9 +12,9 @@ public:
     /*
      * Save results to file
      */
-    void saveResult (const Model * const model, RansacOutput * const ransacOutput) {
+    void saveResult (Model * const model, RansacOutput * const ransacOutput) {
         std::ofstream write_log;
-        std::string filename = "../results/" + model->name +".txt";
+        std::string filename = "../results/" + model->getName() +".txt";
         write_log.open (filename);
         write_log << ransacOutput->getTimeMicroSeconds() <<"\n";
         write_log << ransacOutput->getNumberOfIterations() <<"\n";
@@ -25,9 +25,9 @@ public:
     /*
      * Read results from saved file and compare with current results.
      */
-    void compare (const Model * const model, RansacOutput * const ransacOutput) {
+    void compare (Model * const model, RansacOutput * const ransacOutput) {
         std::ifstream read_log;
-        std::string filename = "../results/" + model->name +".txt";
+        std::string filename = "../results/" + model->getName() +".txt";
         read_log.open(filename);
         float time;
         int iters, points_under_treshold;

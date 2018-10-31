@@ -26,11 +26,11 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
     assert(termination_criteria != nullptr);
     assert(sampler->isInit());
 
-    if (LO) {
-        std::cout << "Ransac runs with local optimization\n";
-    } else {
-        std::cout << "Ransac runs without local optimization\n";
-    }
+//    if (LO) {
+//        std::cout << "Ransac runs with local optimization\n";
+//    } else {
+//        std::cout << "Ransac runs without local optimization\n";
+//    }
 
 //    std::cout << "asserted\n";
 
@@ -185,7 +185,7 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
      * so we don't need to run it again. And model will be equal to non minimal model.
      */
     if (!best_LO_model) {
-        std::cout << "Calculate Non minimal model\n";
+//        std::cout << "Calculate Non minimal model\n";
         // get inliers from best model
         quality->getInliers(estimator, points_size, best_model, max_inliers);
         // estimate model with max inliers
@@ -193,16 +193,16 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 
         quality->GetModelScore(estimator, non_minimal_model, input_points, points_size, *current_score, max_inliers, true);
 
-        std::cout << "end non minimal score " << current_score->inlier_number << '\n';
-        std::cout << "end best score " << best_score->inlier_number << '\n';
+//        std::cout << "end non minimal score " << current_score->inlier_number << '\n';
+//        std::cout << "end best score " << best_score->inlier_number << '\n';
 
         if (current_score->inlier_number >= best_score->inlier_number) {
             best_score->copyFrom(current_score);
             best_model->setDescriptor(non_minimal_model->returnDescriptor());
         } else {
             //        if (current_score->inlier_number < best_score->inlier_number)
-            std::cout
-                    << "\033[1;31mNon minimal model worse than best ransac model. May be something wrong. Check it!\033[0m \n";
+//            std::cout
+//                    << "\033[1;31mNon minimal model worse than best ransac model. May be something wrong. Check it!\033[0m \n";
         }
     }
 
@@ -213,7 +213,6 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
     // get final inliers of the best model
     quality->getInliers(estimator, points_size, best_model, max_inliers);
     float average_error = quality->getAverageError(estimator, best_model, max_inliers, best_score->inlier_number);
-    std::cout << "Average error " << average_error << "\n";
 
     // Store results
     ransac_output = new RansacOutput (best_model, max_inliers,

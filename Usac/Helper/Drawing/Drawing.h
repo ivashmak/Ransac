@@ -119,7 +119,7 @@ public:
         showInliers(points, inliers, image);
         draw_line_model(model, cv::Scalar(255, 0, 0), image, true);
         imshow("Inliers", image);
-        std::string filename = "../results/linefitting_"+model->name+".jpg";
+        std::string filename = "../results/linefitting_"+model->getName()+".jpg";
         cv::imwrite(filename, image);
         cv::waitKey (0);
     }

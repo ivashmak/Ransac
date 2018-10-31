@@ -16,24 +16,6 @@ public:
      * img1_x2 img1_y2 img2_x2 img2_y2
      * ....
      * img1_xN img1_yN img2_xN img2_yN
-     *
-     * Size N x (2*|imgs|)
-     *
-     *
-     * float array 4N x 1
-     * img1_x1
-     * img1_y1
-     * img2_x1
-     * img2_y1
-     * img1_x2
-     * img1_y2
-     * img2_x2
-     * img2_y2
-     * ...
-     * img1_xN
-     * img1_yN
-     * img2_xN
-     * img2_yN
      */
 
     EssentialEstimator(cv::InputArray input_points) : points((float *)input_points.getMat().data) {
@@ -45,7 +27,6 @@ public:
         E_inv = E.inv();
 
         /*
-         * Attention!
          * To make pointer from Mat class, this Mat class should exists as long as exists pointer
          * So this->E and this->E_inv must be global in class
          */
@@ -58,7 +39,7 @@ public:
     }
 
     bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
-
+        return true;
     }
 
     float GetError(int pidx) override {
