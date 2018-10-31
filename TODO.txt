@@ -41,6 +41,4 @@ Avoid set Model parameters.
 
 Float or double??? float
 
-
-1) comments
-2) save errors.
+Nano flann

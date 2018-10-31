@@ -72,8 +72,11 @@ add_executable(
         dataset/Dataset.h dataset/Dataset.cpp
 
         Usac/Utils/Math.cpp Usac/Utils/Math.h
+        Usac/Utils/NearestNeighbors.cpp Usac/Utils/NearestNeighbors.h
 
         Usac/Verbose.h
+
+        include/nanoflann.hpp
 )
 # parallel
 set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -pthread -ggdb" )

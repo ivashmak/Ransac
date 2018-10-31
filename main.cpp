@@ -4,16 +4,20 @@
 #include "Usac/Ransac/RansacOutput.h"
 
 #include "dataset/Dataset.h"
+#include "Usac/Utils/NearestNeighbors.h"
+
 int main (int args, char ** argv) {
     Tests tests;
 
     // evaluating random generators
    // evaluateRandomGenerators();
+    NearestNeighbors nn;
+    nn.test();
 
     // run tests
 //    tests.testLineFitting();
 //     tests.testHomographyFitting();
-     tests.testFundamentalFitting();
+//     tests.testFundamentalFitting();
 //     tests.testEssentialFitting();
 
 	return 0;
