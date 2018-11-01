@@ -12,7 +12,7 @@
 
 #include "../Usac/Sampler/Sampler.h"
 #include "../Usac/Sampler/NapsacSampler.h"
-#include "../Usac/Sampler/GradualNapsac.h"
+#include "../Usac/Sampler/GradualNapsacSampler.h"
 #include "../Usac/Sampler/EvsacSampler.h"
 #include "../Usac/Sampler/UniformSampler.h"
 #include "../Usac/Sampler/ProsacSampler.h"
@@ -49,22 +49,21 @@ void Tests::testLineFitting() {
     //---
     bool LO = false;
 
-//     Model *ransac_model = new Model (10, 2, 0.99, 0, ESTIMATOR::Line2d, SAMPLER::Uniform);
-//     Sampler *uniform_sampler = new UniformSampler;
-//     uniform_sampler->setSampleSize(ransac_model->sample_number);
-//     uniform_sampler->setPointsSize(points.size());
-//     uniform_sampler->initRandomGenerator();
+     Model *ransac_model = new Model (10, 2, 0.99, 0, ESTIMATOR::Line2d, SAMPLER::Uniform);
+     Sampler *uniform_sampler = new UniformSampler;
+     uniform_sampler->setSampleSize(ransac_model->sample_number);
+     uniform_sampler->setPointsSize(points.size());
+     uniform_sampler->initRandomGenerator();
 
-//    Model *gradual_napsac_model = new Model (10, 2, 0.99, 20, ESTIMATOR::Line2d, SAMPLER::GradualNapsac);
-//    Sampler *gradual_napsac_sampler = new GradualNapsac(points, napsac_near_model->sample_number);
-
-    knn = 7;
-    Model *napsac_model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Napsac);
-    cv::Mat neighbors;
-    NearestNeighbors nn;
-    nn.getNearestNeighbors_flann(p, knn+1, neighbors);
-//    std::cout << "nearest neighbors =\n" << neighbors << "\n\n";
-    Sampler *napsac_sampler = new NapsacSampler(neighbors, napsac_model->k_nearest_neighbors, napsac_model->sample_number);
+//    Model *gradual_napsac_model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::GradualNapsac);
+//    Sampler *gradual_napsac_sampler = new GradualNapsacSampler(points, gradual_napsac_model->sample_number);
+//
+//    knn = 7;
+//    Model *napsac_model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Napsac);
+//    cv::Mat neighbors;
+//    NearestNeighbors nn;
+//    nn.getNearestNeighbors_flann(p, knn+1, neighbors);
+//    Sampler *napsac_sampler = new NapsacSampler(neighbors, napsac_model->k_nearest_neighbors, napsac_model->sample_number);
 
 //    Model *evsac_model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Evsac);
 //    Sampler *evsac_sampler = new EvsacSampler(points, points.size(), evsac_model->k_nearest_neighbors, evsac_model->sample_number);
@@ -72,9 +71,9 @@ void Tests::testLineFitting() {
 //    Model *prosac_model = new Model (10, 2, 0.99, 0, ESTIMATOR::Line2d, SAMPLER::Prosac);
 //    Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
 
-//     testLine (points, uniform_sampler, ransac_model);
-//    testLine (points, gradual_napsac_sampler, gradual_napsac_model);
-     testLine (points, napsac_sampler, napsac_model);
+     testLine (points, uniform_sampler, ransac_model);
+//     testLine (points, gradual_napsac_sampler, gradual_napsac_model);
+//     testLine (points, napsac_sampler, napsac_model);
     // testLine (points, evsac_sampler, evsac_model);
     // testLine (sorted_points, prosac_sampler, prosac_model);
 

@@ -23,9 +23,11 @@ bool inverse3x3 (cv::Mat& A) {
     if (detA == 0) {
         std::cout << "\033[1;31mDeterminant of A is 0\033[0m\n";
         return false;
-    } else if (detA < 0.0000001) {
-        std::cout << "\033[1;33mDeterminant of A is very small\033[0m\n";
     }
+//    else if (detA < 0.0000001) {
+//        std::cout << detA << "\n";
+//        std::cout << "\033[1;33mDeterminant of A is very small\033[0m\n";
+//    }
 
     A_ptr[0] = (a22*a33 - a23*a32)/detA;
     A_ptr[1] = (a13*a32 - a12*a33)/detA;
@@ -39,6 +41,12 @@ bool inverse3x3 (cv::Mat& A) {
 
     return true;
 }
+
+bool inverse3x3 (const cv::Mat& A, cv::Mat& A_inv){
+    A_inv = A.clone();
+    inverse3x3(A_inv);
+}
+
 
 /*
  *
@@ -54,4 +62,40 @@ float fast_pow (float n, int k) {
         res *= n; k--;
     }
     return res;
+}
+
+int fast_factorial (int n) {
+    int res = n;
+    while (n > 2) {
+        res *= --n;
+    }
+    return res;
+}
+
+void testInv () {
+    cv::Mat A;
+    A = (cv::Mat_<float>(3,3) << 12, 2, 6, 12, 88, 0, 17, 90, 1);
+    cv::Mat A_inv;
+    int test_size = 1000000;
+
+    std::clock_t start;
+    double duration;
+
+    start = std::clock();
+    for (int i = 0; i < test_size; i++) {
+        A_inv = A.inv();
+    }
+    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    std::cout << "duration: "<< duration <<'\n';
+
+    std::cout << A_inv << "\n";
+
+    start = std::clock();
+    for (int i = 0; i < test_size; i++) {
+        inverse3x3(A, A_inv);
+    }
+    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    std::cout<< "duration: "<< duration <<'\n';
+
+    std::cout << A_inv << "\n";
 }

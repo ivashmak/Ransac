@@ -66,8 +66,6 @@ public:
     }
 
 
-
-
     void generateSample (int * sample) {
         // revert to RANSAC-style sampling if maximum number of PROSAC samples have been tested
         if (hypCount > prosac_growth_max_samples_) {

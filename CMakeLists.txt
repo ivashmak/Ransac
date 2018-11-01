@@ -32,7 +32,7 @@ add_executable(
         Usac/Sampler/Sampler.h
         Usac/Sampler/UniformSampler.h
         Usac/Sampler/NapsacSampler.h
-        Usac/Sampler/GradualNapsac.h
+        Usac/Sampler/GradualNapsacSampler.h
         Usac/Sampler/EvsacSampler.h
         Usac/Sampler/ProsacSampler.h
         Usac/Sampler/ProsacSampler2.h
@@ -74,10 +74,21 @@ add_executable(
         Usac/Utils/Math.cpp Usac/Utils/Math.h
         Usac/Utils/NearestNeighbors.cpp Usac/Utils/NearestNeighbors.h
 
+        Usac/LocalOptimization/GraphCut.cpp Usac/LocalOptimization/GraphCut.h
+
         Usac/Verbose.h
 
+        # include 3d parties
         include/nanoflann.hpp
+
+#        include/gco-v3.0/energy.h
+#        include/gco-v3.0/graph.h
+#        include/gco-v3.0/block.h
+#        include/gco-v3.0/GCoptimization.cpp include/gco-v3.0/GCoptimization.h
+#        include/gco-v3.0/LinkedBlockList.cpp include/gco-v3.0/LinkedBlockList.h
+
 )
+
 # parallel
 set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -pthread -ggdb" )
 # warnings

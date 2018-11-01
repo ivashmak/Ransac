@@ -35,7 +35,7 @@ public:
         t_n_prime = 1.0;
 
         // From Equations leading up to Eq 3 in Chum et al.
-        //t_n samples containing only data points from U_n and
+        // t_n samples containing only data points from U_n and
         // t_n+1 samples containing only data points from U_n+1
         for (int i = 0; i < sample_size; i++) {
             t_n *= (double) (n - i) / (points_size - i);

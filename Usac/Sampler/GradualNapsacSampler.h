@@ -1,18 +1,19 @@
-#ifndef USAC_NAPSACNEARSAMPLER_H
-#define USAC_NAPSACNEARSAMPLER_H
+#ifndef USAC_GRADUALNAPSAC_H
+#define USAC_GRADUALNAPSAC_H
 
 #include <opencv2/core/mat.hpp>
 #include <opencv2/flann/flann.hpp>
 #include "Sampler.h"
 #include "../Helper/Drawing/Drawing.h"
 #include "../../RandomGenerator/ArrayRandomGenerator.h"
+#include "../Utils/Math.h"
 
 /*
  * https://pdfs.semanticscholar.org/cec1/2adbb307124e0c62efbaaa870836c3846b5f.pdf
  * http://www.bmva.org/bmvc/2002/papers/164/full_164.pdf
  *
  */
-class GradualNapsac : public Sampler {
+class GradualNapsacSampler : public Sampler {
 private:
     int taking_sample_size_from_block = 0;
     int current_block = 0;
@@ -25,12 +26,8 @@ private:
     int first_best_blocks;
 public:
 
-    /*
-     * find K nearest neighbors for one, compute maximum iterations by getting SampleNumber
-     * from KNN using formula knn!/(sample_number!*(knn-sample_number)!
-     * and reset KNN after iterations expired.
-     */
-    GradualNapsac (cv::InputArray input_points, unsigned int sample_size, bool reset_time = true) {
+
+    GradualNapsacSampler (cv::InputArray input_points, unsigned int sample_size, bool reset_time = true) {
         assert (!input_points.empty());
 
         this->sample_size = sample_size;
@@ -40,20 +37,20 @@ public:
 
         int rows_split = 10;
         int cols_split = 10;
-        
+
         /*
          *  Block are rectangles with left up and right down corners (x1,y1) (x2,y2)
             b11 b12 ... b1n
             b21 b22 ... b2n
             ...
             bm1 bm2 ... bmn
-         */    
+         */
         int blocks_size = rows_split*cols_split;
         float * blocks = new float[blocks_size*4];
         float bx = 0, by = 0;
-        
+
         // get maximum size of image
-        float max_x = 0; 
+        float max_x = 0;
         float max_y = 0;
         unsigned int idx;
         for (int i = 0; i < points_size; i++) {
@@ -63,7 +60,7 @@ public:
             }
             if (max_y < points[idx+1]) {
                 max_y = points[idx+1];
-            }   
+            }
         }
         // --------------------------
 
@@ -72,20 +69,20 @@ public:
         unsigned int blk;
         for (int i = 0; i < rows_split; i++) {
             bx = 0;
-            for (int j = 0; j < cols_split; j++) {    
+            for (int j = 0; j < cols_split; j++) {
                 blk = 4*(i*cols_split+j);
                 blocks[blk] = bx;
                 blocks[blk+1] = by;
                 bx += step_x;
                 blocks[blk+2] = bx;
                 blocks[blk+3] = by+step_y;
-                // std::cout << "(" << blocks[blk] << ", " << blocks[blk+1] << ", " << 
+                // std::cout << "(" << blocks[blk] << ", " << blocks[blk+1] << ", " <<
                 //                     blocks[blk+2] << ", " << blocks[blk+3] << ") ";
             }
             // std::cout << '\n';
             by += step_y;
         }
-        
+
 
         points_in_blocks = std::vector< std::vector<int> > (blocks_size);
 
@@ -106,27 +103,29 @@ public:
         cv::Mat img = cv::imread ("../dataset/image1.jpg");
         for (int b = 0; b < blocks_size; b++) {
             cv::Scalar color = cv::Scalar (random() % 256, random() % 256, random() % 256);
-            
-            cv::rectangle (img, cv::Point_<float>(blocks[4*b], blocks[4*b+1]), 
+
+            cv::rectangle (img, cv::Point_<float>(blocks[4*b], blocks[4*b+1]),
                                  cv::Point_<float>(blocks[4*b+2], blocks[4*b+3]), color, 8);
-            
+
             for (int p = 0; p < points_in_blocks[b].size(); p++) {
                 cv::circle(img, cv::Point_<float>(points[2*points_in_blocks[b][p]],
                                                   points[2*points_in_blocks[b][p]+1]), 3, color, -1);
             }
         }
-        cv::imshow ("rect ", img); cv::waitKey (0); cv::imwrite ("../results/blocks.jpg", img);   
+        cv::imshow ("rect ", img);
+//        cv::waitKey (0);
+        cv::imwrite ("../results/blocks.jpg", img);
         // -------------------------
 
-        /*  
+        /*
          * Complexity O(n*log(n))
          *   https://en.cppreference.com/w/cpp/algorithm/sort
          */
-        std::sort(points_in_blocks.begin(), points_in_blocks.end(), [] (const std::vector<int>& v1, 
+        std::sort(points_in_blocks.begin(), points_in_blocks.end(), [] (const std::vector<int>& v1,
                                                                         const std::vector<int>& v2) {
             return v1.size() > v2.size();
         });
-        
+        std::cout << "blocks sorted\n";
         // for debug
         for (int b = 0; b < blocks_size; b++) {
             std::cout << points_in_blocks[b].size() << '\n';
@@ -141,8 +140,8 @@ public:
         current_block = 0;
         taken_sample_counter = 0;
         k_iterations = 0;
-        fact_sample_size = factorial (sample_size);
-        first_best_blocks = std::min ((int) points_in_blocks.size(), 10); 
+        fact_sample_size = fast_factorial (sample_size);
+        first_best_blocks = std::min ((int) points_in_blocks.size(), 10);
 
         getSamplesFromBlocks ();
     }
@@ -156,20 +155,20 @@ public:
                                              k     k! (n - k)!          k!
             k is sample_size, n is number of points in block
 
-            This value is large enough. We need to be carefull. 
+            This value is large enough. We need to be carefull.
             So in case data has big noise and points in block are not inliers, then
-            take only 20 (should be set as parameter). 
+            take only 20 (should be set as parameter).
 
             taking_sample_size_from_block = min (taking_sample_size_from_block, 20);
         */
         taking_sample_size_from_block = 1;
         for (int i = points_in_blocks[current_block].size() - sample_size + 1; i < points_in_blocks[current_block].size(); i++) {
             taking_sample_size_from_block *= i;
-        }                  
+        }
         taking_sample_size_from_block = std::min (taking_sample_size_from_block/fact_sample_size, max_taken);
         block_samples = &points_in_blocks[current_block][0];
-        
-        array_randomGenerator->resetGenerator(0, points_in_blocks[current_block].size()-1);  
+
+        array_randomGenerator->resetGenerator(0, points_in_blocks[current_block].size()-1);
     }
 
     void generateSample (int *sample) override {
@@ -178,18 +177,18 @@ public:
         if (taken_sample_counter > taking_sample_size_from_block) {
             /*
              *   If first best blocks used -> start again.
-             */   
+             */
             current_block = (current_block + 1) % first_best_blocks;
             getSamplesFromBlocks();
             taken_sample_counter = 0;
         }
 
         array_randomGenerator->generateUniqueRandomSet(sample);
-        
+
         for (int i = 0; i < sample_size; i++) {
             sample[i] = block_samples[sample[i]];
         }
-        
+
         // std::cout << "sampled generated\n";
 
         taken_sample_counter++;
@@ -204,4 +203,4 @@ public:
 
 
 
-#endif //USAC_NAPSACNEARSAMPLER_H
+#endif //USAC_GRADUALNAPSAC_H

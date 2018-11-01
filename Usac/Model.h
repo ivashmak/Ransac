@@ -28,6 +28,10 @@ public:
     float lo_threshold = 10.0;
     unsigned int lo_threshold_multiplier = 15;
 
+    // Graph cut
+    float lambda_graph_cut = 0.1; // range <0; 1>
+
+    // name
     ESTIMATOR estimator;
     SAMPLER sampler;
 private:
@@ -107,7 +111,7 @@ public:
 	        name = "Essential";
 	    } else if (estimator == ESTIMATOR::Fundamental) {
 	        name = "Fundamental";
-	    } else {
+	    } else if (estimator == ESTIMATOR::Line2d) {
 	        name = "Line2d";
 	    }
 	    name += "_estimator_";
@@ -119,8 +123,8 @@ public:
 	        name += "Prosac";
 	    } else if (sampler == SAMPLER ::Napsac) {
 	        name += "Napsac";
-	    } else {
-	        name += "GradualNapsac";
+	    } else if (sampler == SAMPLER ::GradualNapsac) {
+	        name += "GradualNapsacSampler";
 	    }
 	    name += "_sampler";
         return name;

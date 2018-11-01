@@ -41,8 +41,15 @@ public:
 	 * If inlier ratio is almost 0, so under logarithm is almost 1, so denominator is almost 0
 	 * In this case just return max iterations from model parameters or 10000 if model is not defined.
 	 * Otherwise upper bound iterations will not fit unsigned int type and will be (unsigned int) -inf = 0
+     *
+	 * n is points size, w is inlier ratio, p is desired probability, k is expceted number of iterations.
+	 * 1 - p = (1 - w^n)^k,
+	 * k = log_(1-w^n) (1-p)
+	 * k = ln (1-p) / ln (1-w^n)
 	 *
-	 *
+	 * w^n is probability that all N points are inliers.
+	 * (1 - w^n) is probability that at least one point of N is outlier.
+	 * 1 - p = (1-w^n)^k is probability that in K steps of getting at least one outlier is 1% (5%).
 	 */
     inline unsigned int getUpBoundIterations (float inlier_points, float total_points) {
         float inl_ratio = inlier_points/total_points;

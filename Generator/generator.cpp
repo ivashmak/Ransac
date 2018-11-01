@@ -9,8 +9,8 @@ void generate (std::vector<cv::Point2f> &points_out, bool reset_time) {
     int width = 600; // Width of the image
     int height = 600; // Height of the image
     float noise = 3.0f; // Noise sigma
-    int outlier_number = 1500; // Number of points not lying on the line
-    int inlier_number = 1500; // Number of points from the line
+    int outlier_number = 3000; // 1500; // Number of points not lying on the line
+    int inlier_number = 300; //1500; // Number of points from the line
     int N = outlier_number + inlier_number;
     std::vector<cv::Point2f> points(N);
     Generate2DLinePoints(noise, inlier_number, outlier_number, width, height, points);
@@ -20,9 +20,9 @@ void generate (std::vector<cv::Point2f> &points_out, bool reset_time) {
 
     for (int i = 0; i < N; ++i)
         circle(image, points[i], 3, cv::Scalar(0, 0, 0), -1);
-    // imshow("Image", image);
-    // cv::waitKey(0);
-    imwrite( "../dateset/image1.jpg", image );
+//     imshow("Image", image);
+//     cv::waitKey(0);
+    imwrite ("../dataset/image1.jpg", image);
 
     points_out.swap(points);
 }

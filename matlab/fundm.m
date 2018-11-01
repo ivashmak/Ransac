@@ -10,3 +10,4 @@ syms a11 a12 a13 a21 a22 a23 a31 a32 a33
 A = [a11 a12 a13; a21 a22 a23; a31 a32 a33];
 dA = det (A)
 (dA * inv(A))
+inv (A)

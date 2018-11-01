@@ -1,6 +1,7 @@
 #include "Ransac.h"
 #include "../LocalOptimization/RansacLocalOptimization.h"
 #include "../Estimator/DLT/DLT.h"
+#include "../LocalOptimization/GraphCut.h"
 
 int getPointsSize (cv::InputArray points) {
 //    std::cout << points.getMat(0).total() << '\n';
@@ -68,6 +69,9 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
     unsigned int lo_iterations = 0;
     unsigned int number_of_models;
 
+    // Graph cut local optimization
+    GraphCut * graphCut = new GraphCut;
+
     LocalOptimization * lo_ransac;
     Score *lo_score;
     Model *lo_model;                
@@ -92,31 +96,7 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
             // we need inliers only for local optimization
             quality->GetModelScore(estimator, models[i], input_points, points_size, *current_score, inliers, LO);
 
-
-            // ---------- for debug ----------------------
-//            Drawing drawing;
-//            cv::Mat img = cv::imread ("../dataset/image1.jpg");
-//            // std::vector<int> inl;
-//            // for (int i = 0; i < lo_score->inlier_number; i++) {
-//            //     inl.push_back(lo_inliers[i]);
-//            // }
-//            // drawing.showInliers(input_points, inl, img);
-//            cv::Point_<float> * pts = (cv::Point_<float> *) input_points.getMat().data;
-//            drawing.draw_model(models[0], cv::Scalar(255, 0, 0), img, false);
-//            cv::circle (img, pts[sample[0]], 3, cv::Scalar(255, 255, 0), -1);
-//            cv::circle (img, pts[sample[1]], 3, cv::Scalar(255, 255, 0), -1);
-//            cv::imshow("samples img", img); cv::waitKey(0);
-//            cv::imwrite( "../results/"+model->model_name+"_"+std::to_string(iters)+".jpg", img);
-            // -------------------------------------------
-//            Drawing drawing;
-//            cv::Mat img = cv::imread ("../dataset/homography/boatA.png");
-//            // std::vector<int> inl;
-//            // for (int i = 0; i < lo_score->inlier_number; i++) {
-//            //     inl.push_back(lo_inliers[i]);
-//            // }
-//            // drawing.showInliers(input_points, inl, img);
-//            cv::imshow("H", img); cv::waitKey(0);
-            // -------------------------------------------
+//            graphCut->labeling(estimator, models[i], inliers, points_size);
 
             if (*current_score > best_score) {
 
@@ -223,3 +203,29 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
     }
     delete sample, current_score, best_score, inliers, max_inliers, best_model;
 }
+
+
+// ---------- for debug ----------------------
+//            Drawing drawing;
+//            cv::Mat img = cv::imread ("../dataset/image1.jpg");
+//            // std::vector<int> inl;
+//            // for (int i = 0; i < lo_score->inlier_number; i++) {
+//            //     inl.push_back(lo_inliers[i]);
+//            // }
+//            // drawing.showInliers(input_points, inl, img);
+//            cv::Point_<float> * pts = (cv::Point_<float> *) input_points.getMat().data;
+//            drawing.draw_model(models[0], cv::Scalar(255, 0, 0), img, false);
+//            cv::circle (img, pts[sample[0]], 3, cv::Scalar(255, 255, 0), -1);
+//            cv::circle (img, pts[sample[1]], 3, cv::Scalar(255, 255, 0), -1);
+//            cv::imshow("samples img", img); cv::waitKey(0);
+//            cv::imwrite( "../results/"+model->model_name+"_"+std::to_string(iters)+".jpg", img);
+// -------------------------------------------
+//            Drawing drawing;
+//            cv::Mat img = cv::imread ("../dataset/homography/boatA.png");
+//            // std::vector<int> inl;
+//            // for (int i = 0; i < lo_score->inlier_number; i++) {
+//            //     inl.push_back(lo_inliers[i]);
+//            // }
+//            // drawing.showInliers(input_points, inl, img);
+//            cv::imshow("H", img); cv::waitKey(0);
+// -------------------------------------------

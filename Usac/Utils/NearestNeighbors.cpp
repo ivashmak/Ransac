@@ -21,8 +21,6 @@ void NearestNeighbors::getNearestNeighbors_nanoflann (cv::InputArray input_point
     cv::Mat_<float> mat = input_points.getMat();
     const float max_range = 20;
 
-    //	cout << mat << endl;
-
     // Query point:
     std::vector<float> query_pt(dim);
 
