@@ -22,72 +22,54 @@ int factorial (int n) {
  */
 class NapsacSampler : public Sampler {
 private:
-    cv::Mat k_nearest_neighbors_indices, points, dists;
-    int knn, taking_sample_size_from_knn;
-    cv::flann::Index * flannIndex;
-    RandomGenerator * simple_randomGenerator; // random generator for sample
-    RandomGenerator * array_randomGenerator; // random generator for k nearest neighbors
+    RandomGenerator * random_generator;
+    int knn;
+    const int * const k_nearest_neighbors_indices_ptr;
+    int * next_neighbors;
 public:
 
+    ~NapsacSampler() {
+        delete next_neighbors;
+    }
+
     /*
-     * find K nearest neighbors for one, compute maximum iterations by getting SampleNumber
-     * from KNN using formula knn!/(sample_number!*(knn-sample_number)!
-     * and reset KNN after iterations expired.
+     * @k_nearest_neighbors_indices is matrix points_size (N) x k nearest neighbors (K)
+     * neighbor1_of_(x1,y1) ... neighborK_of_(x1,y1)
+     * ...
+     * neighbor1_of_(xN,yN) ... neighborK_of_(xN,yN)
      */
-    NapsacSampler (cv::InputArray input_points, int knn, unsigned int sample_size, bool reset_time = true) {
-        assert (!input_points.empty());
+    NapsacSampler (cv::InputArray k_nearest_neighbors_indices, int knn, unsigned int sample_size, bool reset_time = true)
+            : k_nearest_neighbors_indices_ptr ((int *) k_nearest_neighbors_indices.getMat().data) {
+
+        assert (!k_nearest_neighbors_indices.empty());
 
         this->knn = knn;
-        this->points = input_points.getMat();
         this->sample_size = sample_size;
-        this->points_size = points.size().width;
+        this->points_size = k_nearest_neighbors_indices.getMat().rows;
 
-        simple_randomGenerator = new ArrayRandomGenerator;
-        array_randomGenerator = new ArrayRandomGenerator;
+        random_generator = new ArrayRandomGenerator;
+        random_generator->resetGenerator(0, points_size-1);
 
-        simple_randomGenerator->resetGenerator(0, points_size-1);
-        array_randomGenerator->resetGenerator(0, knn);
+        if (reset_time) random_generator->resetTime();
 
-        if (reset_time) { array_randomGenerator->resetTime();
-                          simple_randomGenerator->resetTime(); }
-
-        cv::flann::LinearIndexParams flannIndexParams;
-        flannIndex = new cv::flann::Index (cv::Mat(points_size, 2, CV_32F, input_points.getMat().data).reshape(1), flannIndexParams);
-
-        getKNearestNeighorsIndices();
-
-        // quantity of all possible combination of taken sample_size from k nearest neighbors
-        taking_sample_size_from_knn = factorial(knn)/(factorial(sample_size)*factorial(knn-sample_size));
-        k_iterations = 0;
+        // allocate as zeros
+        next_neighbors = (int *) calloc (points_size, sizeof (int));
     }
 
     /*
-     * Get randomly initial point from all points.
-     * Find k nearest neighbors using flann.
-     */
-    void getKNearestNeighorsIndices () {
-        flannIndex->knnSearch(cv::Mat_<float>(points.at<cv::Point_<float>>(simple_randomGenerator->getRandomNumber())),
-                              k_nearest_neighbors_indices, dists, knn);
-    }
-
-    /*
-     * Generate sample from k nearest neighbors points.
-     * If all possible sample_size combinations of k nearest neighbors were taken then
-     * Generate k neighbors again
+     * Take uniformly one initial point.
+     * Take (sample_size-1) points from initial point neighborhood.
      */
     void generateSample (int *sample) override {
-        if (k_iterations % taking_sample_size_from_knn) {
-            getKNearestNeighorsIndices();
-        }
 
-        int * knn_idxs = (int *) k_nearest_neighbors_indices.data;
-        array_randomGenerator->generateUniqueRandomSet(sample);
-        
-        for (int i = 0; i < sample_size; i++) {
-            sample[i] = knn_idxs[sample[i]];
-        }
+        int initial_point = random_generator->getRandomNumber();
+        sample[0] = initial_point;
 
-        k_iterations++;
+        for (int i = 1; i < sample_size; i++) {
+            sample[i] = k_nearest_neighbors_indices_ptr[(knn * initial_point) + next_neighbors[initial_point]];
+            // move next neighbor
+            next_neighbors[initial_point] = (next_neighbors[initial_point] + 1) % knn;
+        }
     }
 
     bool isInit () override {
