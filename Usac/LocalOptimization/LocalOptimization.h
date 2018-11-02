@@ -9,6 +9,11 @@ class LocalOptimization {
 public:
 	virtual ~LocalOptimization () {}
 
+	/*
+	 * Returns as int number local optimization iterations including inner
+	 * and iterative ransac.
+	 * Returns also best lo model and best lo score.
+	 */
     virtual int GetLOModelScore  (Model &best_lo_model,
                                   Score &lo_score,
                                   Score *kth_ransac_score,
@@ -16,7 +21,10 @@ public:
                                   unsigned int points_size,
                                   unsigned int kth_step,
                                   const int * const inliers,
-                                  bool *can_finish) = 0;
+                                  bool *can_finish) {
+        return 0;
+	}
+
 };
 
 

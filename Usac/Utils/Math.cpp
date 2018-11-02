@@ -24,7 +24,7 @@ bool inverse3x3 (cv::Mat& A) {
         std::cout << "\033[1;31mDeterminant of A is 0\033[0m\n";
         return false;
     }
-//    else if (detA < 0.0000001) {
+//    else if (fabsf(detA) < 0.0000001) {
 //        std::cout << detA << "\n";
 //        std::cout << "\033[1;33mDeterminant of A is very small\033[0m\n";
 //    }

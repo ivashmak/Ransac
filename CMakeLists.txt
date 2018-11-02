@@ -4,10 +4,6 @@ set (CMAKE_CXX_STANDARD 11)
 project (Usac)
 find_package (OpenCV REQUIRED)
 
-# theia
-#find_package(Theia REQUIRED)
-#include_directories(${THEIA_INCLUDE_DIRS})
-
 add_executable(
         ransac main.cpp
 
@@ -79,8 +75,6 @@ add_executable(
         Usac/Verbose.h
 
         # include 3d parties
-        include/nanoflann.hpp
-
 #        include/gco-v3.0/energy.h
 #        include/gco-v3.0/graph.h
 #        include/gco-v3.0/block.h
@@ -97,4 +91,16 @@ set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fopenmp -pthread -ggdb" )
 #set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -O3" )
 
 target_link_libraries (ransac ${OpenCV_LIBS} )
+
+# theia
+#find_package(Theia REQUIRED)
+#include_directories(${THEIA_INCLUDE_DIRS})
 #target_link_libraries (ransac ${THEIA_LIBRARIES})
+
+# Nanoflann
+find_package(nanoflann)
+target_link_libraries(ransac nanoflann::nanoflann)
+
+# Eigen
+find_package (Eigen3 3.3 REQUIRED NO_MODULE)
+target_link_libraries (ransac Eigen3::Eigen)
