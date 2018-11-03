@@ -9,11 +9,11 @@ int main (int args, char ** argv) {
 
     // evaluating random generators
    // evaluateRandomGenerators();
-
-    NearestNeighbors nn;
-    nn.test();
+//
+//    NearestNeighbors nn;
+//    nn.test();
     // run tests
-//    tests.testLineFitting();
+    tests.testLineFitting();
 //     tests.testHomographyFitting();
 //     tests.testFundamentalFitting();
 //     tests.testEssentialFitting();

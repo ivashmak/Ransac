@@ -30,9 +30,9 @@ void NearestNeighbors::getNearestNeighbors_nanoflann (cv::InputArray input_point
     mat_index.index->buildIndex();
 
     // do a knn search
-    unsigned long * ret_indexes = new unsigned long [k_nearest_neighbors];
-    float * out_dists_sqr = new float [k_nearest_neighbors];
-    nanoflann::KNNResultSet<float> resultSet(k_nearest_neighbors);
+    unsigned long * ret_indexes = new unsigned long [k_nearest_neighbors+1];
+    float * out_dists_sqr = new float [k_nearest_neighbors+1];
+    nanoflann::KNNResultSet<float> resultSet(k_nearest_neighbors+1);
 
     nearest_neighbors = cv::Mat_<int> (points_size, k_nearest_neighbors);
     int * nearest_neighbors_ptr = (int *) nearest_neighbors.data;
@@ -46,10 +46,9 @@ void NearestNeighbors::getNearestNeighbors_nanoflann (cv::InputArray input_point
         for (int nn = 0; nn < k_nearest_neighbors; nn++) {
 //            std::cout << "\tret_index[" << nn << "]=" << ret_indexes[nn]
 //                      << "\tout_dist_sqr=" << out_dists_sqr[nn] << '\n';
-            nearest_neighbors_ptr[pp + nn] = ret_indexes[nn];
+            nearest_neighbors_ptr[pp + nn] = ret_indexes[nn+1];
         }
     }
-    nearest_neighbors = nearest_neighbors.colRange(1, k_nearest_neighbors);
 
     delete ret_indexes, out_dists_sqr;
 }
@@ -75,11 +74,11 @@ void NearestNeighbors::getNearestNeighbors_flann (cv::InputArray input_points, i
     cv::flann::Index flannIndex (points.reshape(1), flannIndexParams);
     cv::Mat dists;
 
-    flannIndex.knnSearch(points, nearest_neighbors, dists, k_nearest_neighbors);
+    flannIndex.knnSearch(points, nearest_neighbors, dists, k_nearest_neighbors+1);
 
     // first nearest neighbor of point is this point itself.
     // remove this first column
-    nearest_neighbors = nearest_neighbors.colRange(1, k_nearest_neighbors);
+    nearest_neighbors = nearest_neighbors.colRange(1, k_nearest_neighbors+1);
 }
 
 void NearestNeighbors::test (int knn) {
@@ -106,10 +105,9 @@ void NearestNeighbors::test (int knn) {
     // flann 0.33 mcs
     // nanoflann 0.014
 
-//    knn -= 1;
 //    cv::hconcat(nearest_neighbors_flann, cv::Mat_<int>::zeros(points.size(), 3), nearest_neighbors_flann);
 //    cv::hconcat(nearest_neighbors_flann, nearest_neighbors_nanoflann, nearest_neighbors_flann);
-
+//
 //    std::cout << nearest_neighbors_flann << "\n";
 
 //    for (int p = 0; p < points.size(); p++) {
