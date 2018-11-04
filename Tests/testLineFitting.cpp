@@ -29,12 +29,11 @@ void Tests::testLineFitting() {
     generate(points, false);
     std::cout << "generated points\n";
 
-
     // sort points for Prosac
-    cv::Mat indicies, dists1, dists2, p (points);
+    cv::Mat indicies, dists1, dists2, pts (points);
     int knn = 2;
     cv::flann::LinearIndexParams flannIndexParams;
-    cv::flann::Index * flannIndex = new cv::flann::Index (p.reshape(1), flannIndexParams);
+    cv::flann::Index * flannIndex = new cv::flann::Index (pts.reshape(1), flannIndexParams);
     std::vector<cv::Point_<float>> sorted_points (points);
 
     /*
@@ -49,7 +48,7 @@ void Tests::testLineFitting() {
     //---
     bool LO = false;
 
-     Model *ransac_model = new Model (10, 2, 0.99, 0, ESTIMATOR::Line2d, SAMPLER::Uniform);
+     Model *ransac_model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Uniform);
      Sampler *uniform_sampler = new UniformSampler;
      uniform_sampler->setSampleSize(ransac_model->sample_number);
      uniform_sampler->setPointsSize(points.size());
@@ -62,7 +61,7 @@ void Tests::testLineFitting() {
 //    Model *napsac_model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Napsac);
 //    cv::Mat neighbors;
 //    NearestNeighbors nn;
-//    nn.getNearestNeighbors_flann(p, knn+1, neighbors);
+//    nn.getNearestNeighbors_flann(pts, knn+1, neighbors);
 //    Sampler *napsac_sampler = new NapsacSampler(neighbors, napsac_model->k_nearest_neighbors, napsac_model->sample_number);
 
 //    Model *evsac_model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Evsac);
@@ -71,17 +70,17 @@ void Tests::testLineFitting() {
 //    Model *prosac_model = new Model (10, 2, 0.99, 0, ESTIMATOR::Line2d, SAMPLER::Prosac);
 //    Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
 
-     testLine (points, uniform_sampler, ransac_model);
-//     testLine (points, gradual_napsac_sampler, gradual_napsac_model);
-//     testLine (points, napsac_sampler, napsac_model);
-    // testLine (points, evsac_sampler, evsac_model);
-    // testLine (sorted_points, prosac_sampler, prosac_model);
+     testLine (pts, uniform_sampler, ransac_model);
+//     testLine (pts, gradual_napsac_sampler, gradual_napsac_model);
+//     testLine (pts, napsac_sampler, napsac_model);
+    // testLine (pts, evsac_sampler, evsac_model);
+    // testLine (cv::Mat(sorted_points), prosac_sampler, prosac_model);
 
 //    Estimator *line2destimator = new Line2DEstimator (points);
 //    TerminationCriteria *termination_criteria = new TerminationCriteria;
 //    Quality *quality = new Quality;
 //
-//    getAverageResults(points, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 2000, LO);
+//    getAverageResults(pts, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 2000, LO);
 }
 
 /*
@@ -95,6 +94,11 @@ void testLine (cv::InputArray points, Sampler * const sampler, Model * const mod
     Quality *quality = new Quality;
 
     Ransac ransac (*model, *sampler, *termination_criteria, *quality, *estimator2d);
+    
+    cv::Mat neighbors;
+    NearestNeighbors nn;
+    nn.getNearestNeighbors_flann(points, model->k_nearest_neighbors, neighbors);
+    ransac.setNeighbors (neighbors);
     ransac.run(points);
 
     RansacOutput *ransacOutput = ransac.getRansacOutput();

@@ -18,13 +18,17 @@ void generate (std::vector<cv::Point2f> &points_out, bool reset_time) {
     // Do some clever things, e.g. draw the points
     cv::Mat image(height, width, CV_8UC3, cv::Scalar(255, 255, 255)); // Create a 600*600 image
 
-    for (int i = 0; i < N; ++i)
-        circle(image, points[i], 3, cv::Scalar(0, 0, 0), -1);
-//     imshow("Image", image);
-//     cv::waitKey(0);
-    imwrite ("../dataset/image1.jpg", image);
-
+    for (int i = 0; i < N; ++i) {
+        cv::circle(image, points[i], 3, cv::Scalar(0, 0, 0), -1);
+    }
+    cv::imwrite ("../dataset/image1.jpg", image);
+    
+    // cv::imshow("Image", image);
+    // cv::waitKey(0);
+    
     points_out.swap(points);
+    // std::cout << "ready\n";
+    // exit (0);
 }
 
 void Generate2DLinePoints(float noise, int inlier_number, int outlier_number,

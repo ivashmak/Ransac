@@ -40,12 +40,12 @@ public:
         this->estimator = &estimator;
     }
 
-    void set_neighbors (const cv::Mat& neighbors_) {
+    void setNeighbors (const cv::Mat& neighbors_) {
 //        knn_neighbors = neighbors_.clone();
         neighbors = (int *) neighbors_.data;
     }
 
-    const int * get_neighbors () const {
+    const int * getNeighbors () const {
         assert(neighbors != nullptr);
         return neighbors;
     }

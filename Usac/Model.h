@@ -10,7 +10,7 @@ public:
 	int sample_number = 2;
 	float desired_prob = 0.95;
 	int max_iterations = 10000;
-	int k_nearest_neighbors = 2;
+	int k_nearest_neighbors = 7;
 
 	/*
 	 * |expected number of inliers|

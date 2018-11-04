@@ -45,6 +45,11 @@ public:
                           const int * const inliers,
                           bool *can_finish) override {
 
+        /*
+         * Could happen, that predicted number of iterations is reached
+         * in Local Optimization, so we should not run standart Ransac
+         * after this
+         */ 
         *can_finish = false;
             
         /*
@@ -77,7 +82,7 @@ public:
         Score *lo_score = new Score;
         
 
-        int *lo_sample = new int[lo_sample_size];
+        int * lo_sample = new int[lo_sample_size];
         int * lo_inliers = new int[points_size];
 
         sampler->setSampleSize(lo_sample_size);
@@ -106,7 +111,8 @@ public:
             }
 
             /*
-             * Generate sample of lo_sample_size from reached best_sample in current iteration
+             * Generate sample of lo_sample_size from inliers from best model of standart 
+             * Ransac or from inliers of best LO model.
              */
             sampler->generateSample(lo_sample);
             if (lo_better_than_kth_ransac) {
@@ -123,8 +129,9 @@ public:
             /*
              * Estimate model of best sample from k-th step of Ransac
              */
-            if (!estimator->EstimateModelNonMinimalSample(lo_sample, lo_sample_size, *lo_model))
+            if (!estimator->EstimateModelNonMinimalSample(lo_sample, lo_sample_size, *lo_model)) {
                 continue;
+            }
             
             // Evaluate model and get inliers
             quality->GetModelScore(estimator, lo_model, input_points, points_size, *lo_score, lo_inliers, true);
@@ -153,7 +160,7 @@ public:
              * Repeat until iteration < lo_iterations
              */
 
-            cv::Scalar color = cv::Scalar (random()%256,random()%256,random()%256);
+            // cv::Scalar color = cv::Scalar (random()%256,random()%256,random()%256);
 
             for (int iterations = 0; iterations < lo_iterative_iterations; iterations++) {
                 lo_model->threshold -= reduce_threshold;
@@ -167,7 +174,6 @@ public:
 
                 // std::cout << "lo iterative score  = " << lo_score->inlier_number << '\n';
 //                std::cout << "lo model  = " << lo_model->returnDescriptor() << '\n';
-
 
                 // ---------- for debug ----------------------
                 // Drawing drawing;

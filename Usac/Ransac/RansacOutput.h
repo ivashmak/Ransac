@@ -2,13 +2,7 @@
 #define USAC_RANSACOUTPUT_H
 
 #include "../Model.h"
-
-struct Time {
-    long minutes;
-    long seconds;
-    long milliseconds;
-    long microseconds;
-};
+#include "../Utils/Math.h"
 
 class RansacOutput {
 private:
@@ -52,10 +46,7 @@ public:
         lo_runs = lo_runs_;
 
         time = new Time;
-        time->microseconds = time_mcs % 1000;
-        time->milliseconds = ((time_mcs - time->microseconds)/1000) % 1000;
-        time->seconds = ((time_mcs - 1000*time->milliseconds - time->microseconds)/(1000*1000)) % 60;
-        time->minutes = ((time_mcs - 60*1000*time->seconds - 1000*time->milliseconds - time->microseconds)/(60*1000*1000)) % 60;
+        splitTime (time, time_mcs);
     }
 
     void printTime () {

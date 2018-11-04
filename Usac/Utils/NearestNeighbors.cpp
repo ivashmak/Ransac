@@ -1,7 +1,6 @@
 #include "NearestNeighbors.h"
 
 #include <Eigen/Dense>
-#include <opencv/cxeigen.hpp>
 #include <opencv2/core/eigen.hpp>
 /*
  * @points N x 2
@@ -74,11 +73,15 @@ void NearestNeighbors::getNearestNeighbors_flann (cv::InputArray input_points, i
     cv::flann::Index flannIndex (points.reshape(1), flannIndexParams);
     cv::Mat dists;
 
+    // std::cout << k_nearest_neighbors << "\n";
+    // std::cout << points << "\n\n";
+    // std::cout << points.size() << "\n\n";
+    
     flannIndex.knnSearch(points, nearest_neighbors, dists, k_nearest_neighbors+1);
 
     // first nearest neighbor of point is this point itself.
     // remove this first column
-    nearest_neighbors = nearest_neighbors.colRange(1, k_nearest_neighbors+1);
+    nearest_neighbors.colRange(1, k_nearest_neighbors+1).copyTo (nearest_neighbors);
 }
 
 void NearestNeighbors::test (int knn) {

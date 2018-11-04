@@ -60,9 +60,9 @@ public:
         // Find the eigenvectors and eigenvalues of the covariance matrix
         cv::eigen (covar, eigenvals, eigenvecs);
 
-        std::cout << covar << "\n\n";
-        std::cout << eigenvals << "\n\n";
-        std::cout << eigenvecs << "\n\n";
+        // std::cout << covar << "\n\n";
+        // std::cout << eigenvals << "\n\n";
+        // std::cout << eigenvecs << "\n\n";
 
         a = (float) -eigenvecs.at<double>(1,0);
         b = (float) -eigenvecs.at<double>(1,1);

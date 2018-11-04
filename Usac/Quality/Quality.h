@@ -82,18 +82,25 @@ public:
 //            float mean = 0;
 //            int pt;
 
-            for (int point = 0; point < points_size; point++) {
-                if (estimator->GetError(point) < model->threshold) {
-//                    pt = 2*point;
-//                    truth[score.inlier_number-1] = points[pt+1];
-//                    mean += truth[score.inlier_number-1];
-//
-//                    // The sum of squares of residuals
-//                    SS_res += (truth[score.inlier_number] + c + a*points[pt])/b) *
-//                            (truth[score.inlier_number] +c + a*points[pt])/b); // y - y' = y - (-c -ax)/b
-
-                    if (get_inliers) inliers[score.inlier_number] = point;
-                    score.inlier_number++;
+            if (get_inliers) {
+                for (int point = 0; point < points_size; point++) {
+                    if (estimator->GetError(point) < model->threshold) {
+                        inliers[score.inlier_number] = point;
+                        score.inlier_number++;
+                    }    
+                }
+            } else {
+                for (int point = 0; point < points_size; point++) {
+                    if (estimator->GetError(point) < model->threshold) {
+    //                    pt = 2*point;
+    //                    truth[score.inlier_number-1] = points[pt+1];
+    //                    mean += truth[score.inlier_number-1];
+    //
+    //                    // The sum of squares of residuals
+    //                    SS_res += (truth[score.inlier_number] + c + a*points[pt])/b) *
+    //                            (truth[score.inlier_number] +c + a*points[pt])/b); // y - y' = y - (-c -ax)/b
+                        score.inlier_number++;
+                    }
                 }
             }
 //            mean /= score.inlier_number;

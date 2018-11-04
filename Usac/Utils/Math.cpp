@@ -99,3 +99,11 @@ void testInv () {
 
     std::cout << A_inv << "\n";
 }
+
+
+void splitTime (Time * time, long time_mcs) {
+    time->microseconds = time_mcs % 1000;
+    time->milliseconds = ((time_mcs - time->microseconds)/1000) % 1000;
+    time->seconds = ((time_mcs - 1000*time->milliseconds - time->microseconds)/(1000*1000)) % 60;
+    time->minutes = ((time_mcs - 60*1000*time->seconds - 1000*time->milliseconds - time->microseconds)/(60*1000*1000)) % 60;
+}
