@@ -53,6 +53,9 @@ add_executable(
 
         Usac/LocalOptimization/LocalOptimization.h
         Usac/LocalOptimization/RansacLocalOptimization.h
+        Usac/LocalOptimization/GraphCut.cpp Usac/LocalOptimization/GraphCut.h
+
+        Usac/SPRT.h
 
         Tests/Tests.h
         Tests/testHomographyFitting.cpp
@@ -70,17 +73,9 @@ add_executable(
         Usac/Utils/Math.cpp Usac/Utils/Math.h
         Usac/Utils/NearestNeighbors.cpp Usac/Utils/NearestNeighbors.h
 
-        Usac/LocalOptimization/GraphCut.cpp Usac/LocalOptimization/GraphCut.h
+
 
         Usac/Verbose.h
-
-        # include 3d parties
-#        include/gco-v3.0/energy.h
-#        include/gco-v3.0/graph.h
-#        include/gco-v3.0/block.h
-#        include/gco-v3.0/GCoptimization.cpp include/gco-v3.0/GCoptimization.h
-#        include/gco-v3.0/LinkedBlockList.cpp include/gco-v3.0/LinkedBlockList.h
-
 )
 
 # parallel

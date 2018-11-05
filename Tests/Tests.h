@@ -108,7 +108,7 @@ public:
         results->avg_avg_error = avg_errors/N;
         results->avg_num_iters = num_iters/N;
 
-        long time_, iters_, inl_, err_;
+        long time_ = 0; float iters_ = 0, inl_ = 0, err_ = 0;
         // Calculate sum ((xi - x)^2)
         for (int i = 0; i < N; i++) {
             time_ += pow (results->avg_time_mcs - times[i], 2);
