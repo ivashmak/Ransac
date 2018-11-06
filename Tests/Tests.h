@@ -29,6 +29,27 @@ public:
     float std_dev_num_iters = 0;
 
     int num_fails = -1;
+
+    friend std::ostream& operator<< (std::ostream& stream, const StatisticalResults * res) {
+        return stream 
+        << "Average time (mcs) " << res->avg_time_mcs << "\n"
+        << "Standard deviation of time " << res->std_dev_time_mcs << "\n"
+        << "Median of time " << res->median_time_mcs << "\n"
+        << "-----------------\n"
+        << "Average average error " << res->avg_avg_error << "\n"
+        << "Standard deviation of average error " << res->std_dev_avg_error << "\n"
+        << "Median of average error " << res->median_avg_error << "\n"
+        << "-----------------\n"
+        << "Average number of inliers " << res->avg_num_inliers << "\n"
+        << "Standard deviation of number of inliers " << res->std_dev_num_inliers << "\n"
+        << "Median of number of inliers " << res->median_num_inliers << "\n"
+        << "-----------------\n"
+        << "Average number of iterations " << res->avg_num_iters << "\n"
+        << "Standard deviation of number of iterations " << res->std_dev_num_iters << "\n"
+        << "Median of number of iterations " << res->median_num_iters << "\n"
+        << "-----------------\n"
+        << res->num_fails << " failed models\n";
+    }
 };
 
 
@@ -118,10 +139,10 @@ public:
         }
 
         // Calculate standart deviation
-        results->std_dev_time_mcs = sqrt (time_/N);
-        results->std_dev_num_inliers = sqrt (inl_/N);
-        results->std_dev_avg_error = sqrt (err_/N);
-        results->std_dev_num_iters = sqrt (iters_/N);
+        results->std_dev_time_mcs = sqrt (time_/(N-1));
+        results->std_dev_num_inliers = sqrt (inl_/(N-1));
+        results->std_dev_avg_error = sqrt (err_/(N-1));
+        results->std_dev_num_iters = sqrt (iters_/(N-1));
 
         // Sort results for median
         std::sort (times, times + N, [] (long a, long b) { return a < b; });
@@ -137,13 +158,7 @@ public:
         
 
         std::cout << N << " runs of Ransac for " << model->getName() << " with points size " << points.size().width << '\n';
-        std::cout << "\tAverage time of is " << (time/N) << "mcs.\n";
-        std::cout << "\tAverage number of inliers is " << (num_inliers/N) << ".\n";
-        std::cout << "\tAverage number of iterations of is " << (num_iters/N) << ".\n";
-        std::cout << "\tAverage average error is " << (avg_errors/N) << ".\n";
-        if (GT) {
-            std::cout << "Number of fails is " << fails << "\n";
-        }
+        std::cout << results << "\n";
 
         if (get_results) {
             statistical_results = new StatisticalResults(*results);

@@ -24,9 +24,10 @@ void testLine (cv::InputArray points, Sampler * sampler, Model * model);
 void Tests::testLineFitting() {
 
     std::vector<cv::Point_<float>> points;
-
+    int gt_inliers;
     // change false to true to reset time for random points generator
-    generate(points, false);
+    // get number of ground truth inliers too.
+    generate(points, false, true, &gt_inliers);
     std::cout << "generated points\n";
 
     // sort points for Prosac
@@ -70,17 +71,17 @@ void Tests::testLineFitting() {
 //    Model *prosac_model = new Model (10, 2, 0.99, 0, ESTIMATOR::Line2d, SAMPLER::Prosac);
 //    Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
 
-     testLine (pts, uniform_sampler, ransac_model);
+//     testLine (pts, uniform_sampler, ransac_model);
 //     testLine (pts, gradual_napsac_sampler, gradual_napsac_model);
 //     testLine (pts, napsac_sampler, napsac_model);
     // testLine (pts, evsac_sampler, evsac_model);
     // testLine (cv::Mat(sorted_points), prosac_sampler, prosac_model);
 
-//    Estimator *line2destimator = new Line2DEstimator (points);
-//    TerminationCriteria *termination_criteria = new TerminationCriteria;
-//    Quality *quality = new Quality;
+    Estimator *line2destimator = new Line2DEstimator (points);
+    TerminationCriteria *termination_criteria = new TerminationCriteria;
+    Quality *quality = new Quality;
 //
-//    getAverageResults(pts, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 2000, LO);
+    getAverageResults(pts, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 1000, LO, true, false, gt_inliers);
 }
 
 /*

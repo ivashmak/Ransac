@@ -2,6 +2,7 @@
 #include "../LocalOptimization/RansacLocalOptimization.h"
 #include "../Estimator/DLT/DLT.h"
 #include "../LocalOptimization/GraphCut.h"
+#include "../SPRT.h"
 
 int getPointsSize (cv::InputArray points) {
 //    std::cout << points.getMat(0).total() << '\n';
@@ -39,7 +40,7 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 
     int points_size = getPointsSize(input_points);
 
-   std::cout << "Points size " << points_size << '\n';
+//   std::cout << "Points size " << points_size << '\n';
 
     // initialize termination criteria
     termination_criteria->init(model);
@@ -82,6 +83,9 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
         lo_ransac = new RansacLocalOptimization (model, sampler, termination_criteria, quality, estimator);
     }
 
+    SPRT * sprt = new SPRT;
+    sprt->initialize(model, points_size);
+
     bool gc_lo = true;
 
     while (iters < max_iters) {
@@ -102,7 +106,12 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
             // } else {
                 // we need inliers only for local optimization
                 quality->GetModelScore(estimator, models[i], input_points, points_size, *current_score, inliers, LO);
-            // }
+
+//                std::cout << "verify sprt\n";
+//                sprt->verify(estimator, model, iters, best_score->inlier_number);
+//                std::cout << "verified\n";
+
+                // }
             // std::cout << "general " << current_score->inlier_number << "\n";
             
             if (*current_score > best_score) {
@@ -158,7 +167,13 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
                 }
 
                 max_iters = termination_criteria->getUpBoundIterations(best_score->inlier_number, points_size);
-               // std::cout << "max iters prediction = " << max_iters << '\n';
+
+//                int max_iterations_sprt = sprt->getMaximumIterations(current_score->inlier_number);
+//                std::cout << "max iteratnions sprt " << max_iterations_sprt << "\n";
+
+//                max_iters = max_iterations_sprt;
+
+                // std::cout << "max iters prediction = " << max_iters << '\n';
             }
             // std::cout << "current iteration = " << iters << '\n';
             iters++;
@@ -172,7 +187,7 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
      * so we don't need to run it again. And model will be equal to non minimal model.
      */
     if (!best_LO_model) {
-       std::cout << "Calculate Non minimal model\n";
+//       std::cout << "Calculate Non minimal model\n";
         // get inliers from best model
         
             quality->getInliers(estimator, points_size, best_model, max_inliers);
@@ -182,8 +197,8 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 
         quality->GetModelScore(estimator, non_minimal_model, input_points, points_size, *current_score, max_inliers, true);
 
-       std::cout << "end non minimal score " << current_score->inlier_number << '\n';
-       std::cout << "end best score " << best_score->inlier_number << '\n';
+//       std::cout << "end non minimal score " << current_score->inlier_number << '\n';
+//       std::cout << "end best score " << best_score->inlier_number << '\n';
 
         // if (current_score->inlier_number >= best_score->inlier_number) {
             best_score->copyFrom(current_score);

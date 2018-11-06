@@ -16,7 +16,7 @@ function H=NormalizedDLT(pts1,pts2)
     
     H=DLT(pts1Tr,pts2Tr);    
 
-    keyboard
+%     keyboard
     
     H=T2\H*T1;    
 end

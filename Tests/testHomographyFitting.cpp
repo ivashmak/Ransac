@@ -22,7 +22,7 @@ void testHomography (cv::InputArray points, Model * const model, Sampler * const
 void storeResults ();
 
 void Tests::testHomographyFitting() {
-    std::string img_name = "Eiffel";
+    std::string img_name = "graf";
     std::string points_filename = "../dataset/homography/"+img_name+"_pts.txt";
     std::vector<std::string> images_filename;
     images_filename.push_back("../dataset/homography/"+img_name+"A.png");
@@ -56,6 +56,16 @@ void Tests::testHomographyFitting() {
 //    points1 = 1000 * points1;
 //    points2 = 100 * points2;
 
+    /*
+     * Gt homography:
+
+   1.0e+02 *
+
+  [-0.000394568713042   0.034427299615096   0.852682108468499
+  -0.010737816748454   0.051400467575938  -2.462277854245654
+  -0.000014881986801   0.000066358177039   0.010000000000000]
+
+     */
     cv::hconcat(points1, points2, points);
 
 //    std::cout << cv::findHomography(points1, points2) << '\n';
@@ -68,7 +78,7 @@ void Tests::testHomographyFitting() {
     uniform_sampler->setPointsSize(points1.rows);
     uniform_sampler->initRandomGenerator();
 
-//   testHomography (points, homography_model, uniform_sampler, images_filename, points_filename);
+   testHomography (points, homography_model, uniform_sampler, images_filename, points_filename);
 
     Estimator * homograpy_estimator = new HomographyEstimator (points);
     TerminationCriteria *termination_criteria = new TerminationCriteria;
@@ -76,7 +86,7 @@ void Tests::testHomographyFitting() {
 //
 //    getAverageResults(points, homograpy_estimator, homography_model, uniform_sampler, termination_criteria, quality, 1000, LO);
 
-     storeResults();
+//     storeResults();
 }
 
 /*

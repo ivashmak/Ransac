@@ -3,7 +3,7 @@
 void Generate2DLinePoints(float noise, int inlier_number, int outlier_number,
                              int border_x, int border_y, std::vector<cv::Point2f> &points);
 
-void generate (std::vector<cv::Point2f> &points_out, bool reset_time) {
+void generate (std::vector<cv::Point2f> &points_out, bool reset_time, bool getGT,  int * gt_inliers) {
     if (reset_time) srand (time(NULL));
 
     int width = 600; // Width of the image
@@ -11,6 +11,11 @@ void generate (std::vector<cv::Point2f> &points_out, bool reset_time) {
     float noise = 3.0f; // Noise sigma
     int outlier_number = 3000; // 1500; // Number of points not lying on the line
     int inlier_number = 300; //1500; // Number of points from the line
+
+    if (getGT) {
+        *gt_inliers = inlier_number;
+    }
+
     int N = outlier_number + inlier_number;
     std::vector<cv::Point2f> points(N);
     Generate2DLinePoints(noise, inlier_number, outlier_number, width, height, points);
