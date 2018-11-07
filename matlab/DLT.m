@@ -13,15 +13,15 @@ function H=DLT(pts1,pts2)
         A(2*i,:)=[0,0,0,-x1,-y1,-1.0,y2*x1,y2*y1,y2];
     end
     
-    [tmp1,tmp2,V]=svd(A);
-    h=V(:,9);
-    H=[h(1),h(2),h(3);h(4),h(5),h(6);h(7),h(8),h(9)];
+    % lambda1 >= lambda2 >= ... >= lambdaN
+    [~,~,V]=svd(A);
+    H=reshape (V(:,9), 3, 3)';
+    % H = H / H(3,3);
     
-    H = H / H(3,3);
-    
+    % lambda1 <= lambda2 <= ... <= lambdaN (eigen values)
     [VV, ~] = eig (A'*A);
-    H = VV(:,9);
-    H = reshape (H, 3,3);
-    H = H / H (3,3);
+    HH = reshape (-VV(:,1), 3, 3)';
+    % HH = HH / HH (3,3);
     
+    norm (H - HH)
 end
