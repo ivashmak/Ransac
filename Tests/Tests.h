@@ -89,6 +89,14 @@ public:
         int num_iters = 0;
         int fails = 0;
 
+        cv::Mat_<float> best_model;
+        cv::Mat_<float> avg_model;
+        if (model->estimator == ESTIMATOR::Line2d) {
+            avg_model = cv::Mat_<float>::zeros (1, 3);
+        } else {
+            avg_model = cv::Mat_<float>::zeros (3, 3);    
+        }
+
         // Calculate Average of number of inliers, number of iteration,
         // time and average error.
         // If we have GT number of inliers, then find number of fails model.
@@ -125,9 +133,9 @@ public:
         }
 
         results->avg_time_mcs = time/N;
-        results->avg_num_inliers = num_inliers/N;
+        results->avg_num_inliers = (float) num_inliers/N;
         results->avg_avg_error = avg_errors/N;
-        results->avg_num_iters = num_iters/N;
+        results->avg_num_iters = (float) num_iters/N;
 
         long time_ = 0; float iters_ = 0, inl_ = 0, err_ = 0;
         // Calculate sum ((xi - x)^2)
@@ -139,10 +147,11 @@ public:
         }
 
         // Calculate standart deviation
-        results->std_dev_time_mcs = sqrt (time_/(N-1));
-        results->std_dev_num_inliers = sqrt (inl_/(N-1));
-        results->std_dev_avg_error = sqrt (err_/(N-1));
-        results->std_dev_num_iters = sqrt (iters_/(N-1));
+        int biased = 1;
+        results->std_dev_time_mcs = sqrt (time_/(N-biased));
+        results->std_dev_num_inliers = sqrt ((float) inl_/(N-biased));
+        results->std_dev_avg_error = sqrt (err_/(N-biased));
+        results->std_dev_num_iters = sqrt ((float) iters_/(N-biased));
 
         // Sort results for median
         std::sort (times, times + N, [] (long a, long b) { return a < b; });

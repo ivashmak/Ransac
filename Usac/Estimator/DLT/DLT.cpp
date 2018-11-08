@@ -38,7 +38,7 @@ bool DLT (const float * const points, const int * const sample, int sample_numbe
 
     /*
      * src	decomposed matrix
-     * w 	calculated singular values
+     * w 	calculated singular values (descending order)
      * u	calculated left singular vectors
      * vt	transposed matrix of right singular values
      *
@@ -56,6 +56,28 @@ bool DLT (const float * const points, const int * const sample, int sample_numbe
     cv::SVD::compute(A, w, u, vt);
 
     H = cv::Mat_<float>(vt.row(vt.rows-1).reshape (3,3));
+
+    /*
+        cv::Mat_<float> V, D;
+        
+        // eigenvalues (D) – output vector of eigenvalues of the same type as src; 
+        // the eigenvalues are stored in the DESCENDING order.
+         
+        // eigenvectors (V) – output matrix of eigenvectors; it has the same size and type as src; 
+        // the eigenvectors are stored as subsequent matrix ROWS, in the same order as the 
+        // corresponding eigenvalues.
+        
+        cv::eigen (A.t() * A, D, V);
+        
+        // so in this case H should be last row of V
+        // H = V.row(8);
+        std::cout << "A = \n" << A << "\n\n";
+        std::cout << "vt =\n" << vt << "\n\n";
+        std::cout << "w = \n" << w << "\n\n";
+        std::cout << "V =\n" << V << "\n\n";
+        std::cout << "D =\n" << D << "\n\n";
+        std::cout << "==========================\n" << "\n\n";
+     */
 
     return true;
 }
@@ -98,7 +120,6 @@ bool DLT (const float * const points, int sample_number, cv::Mat &H) {
 
     cv::SVD::compute(A, w, u, vt);
 
-    // std::cout << "\033[1;32mSVD computed \033[0m \n";
     if (vt.empty ()) {
         std::cout << "\033[1;31mDecomposed Matrix Vt is empty\033[0m \n";
         return false;

@@ -116,17 +116,16 @@ void getInliers (const std::string &filename, std::vector<int> &inliers) {
  * a21 a22 a23
  * a31 a32 a33
  */
-void getMatrix3x3 (const std::string &filename, cv::OutputArray H) {
-    cv::Mat H_ = cv::Mat_<float>(3,3);
+void getMatrix3x3 (const std::string &filename, cv::Mat &model) {
+    model = cv::Mat_<float>(3,3);
     std::fstream file(filename, std::ios_base::in);
 
     float val;
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             file >> val;
-            H_.at<float>(i,j) = val;
+            model.at<float>(i,j) = val;
         }
     }
 
-    H_.copyTo (H);
 }

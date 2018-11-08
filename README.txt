@@ -33,5 +33,7 @@ Napsac: https://pdfs.semanticscholar.org/cec1/2adbb307124e0c62efbaaa870836c3846b
 Prosac: http://cmp.felk.cvut.cz/~matas/papers/chum-prosac-cvpr05.pdf
 Evsac: https://ieeexplore.ieee.org/document/6751418/
 
+Randomized RANSAC (Authors: J. Matas, O. Chum) https://ieeexplore.ieee.org/document/1544925
+
 Graph cut: http://openaccess.thecvf.com/content_cvpr_2018/papers/Barath_Graph-Cut_RANSAC_CVPR_2018_paper.pdf
 Local Optimization: http://cmp.felk.cvut.cz/~matas/papers/chum-dagm03.pdf

@@ -5,6 +5,6 @@
 
 void read_points (cv::Mat &pts1, cv::Mat &pts2, const std::string &filename);
 void getInliers (const std::string &filename, std::vector<int> &inliers);
-void getMatrix3x3 (const std::string &filename, cv::OutputArray H);
+void getMatrix3x3 (const std::string &filename, cv::Mat &model);
 
 #endif //READPOINTS_READPOINTS_H

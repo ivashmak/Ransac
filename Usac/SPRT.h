@@ -61,7 +61,7 @@ public:
      int current_sprt_idx;
      int last_sprt_update;
 
-     float t_M, m_S, threshold;
+     float t_M, m_S, threshold, prob_threshold;
      bool is_init = false;
      int points_size, sample_size, max_iterations;
      std::vector<SPRT_history*> sprt_histories;
@@ -110,7 +110,6 @@ public:
              * The initial value of ε0 can be derived from the maximal time the
              * user is willing to allocate to the algorithm.
              */
-            // model->max_iters;
             sprt_histories[0]->epsilon = 0.1; // ???
 
         }
@@ -120,6 +119,7 @@ public:
 
          sample_size = model->sample_number;
          threshold = model->threshold;
+         prob_threshold = 0.95; //model->desired_prob;
          max_iterations = model->max_iterations;
          points_size = points_size_;
 
@@ -204,7 +204,7 @@ public:
                  /*
                  * Model rejected: re-estimate δ. If the estimate δ_ differs
                  * from δi by more than 5% design (i+1)-th test (εi+1 = εi,
-                 * δi+1 = δ_, i = i+ 1)
+                 * δi+1 = δˆ, i = i + 1)
                  */
                  new_sprt_history->epsilon = epsilon;
                  new_sprt_history->delta = delta_estimated;
@@ -276,20 +276,21 @@ public:
       * k(l) = -----------------------
       *          log (1 - Pg*A(l)^-1)
       */
-     int getMaximumIterations  (int inliers_size) {
+     int getMaximumIterations (int inliers_size) {
          // debug
-         for (int t = 0; t <= current_sprt_idx; t++) {
-             std::cout << "test " << t << "\n";
-             std::cout << "e = " <<  sprt_histories[t]->epsilon << "\n";
-             std::cout << "d = " << sprt_histories[t]->delta << "\n";
-             std::cout << "----\n";
-         }
+         // for (int t = 0; t <= current_sprt_idx; t++) {
+         //     std::cout << "test " << t << "\n";
+         //     std::cout << "e = " <<  sprt_histories[t]->epsilon << "\n";
+         //     std::cout << "d = " << sprt_histories[t]->delta << "\n";
+         //     std::cout << "A = " << sprt_histories[t]->A << "\n";
+         //     std::cout << "----\n";
+         // }
 
 
          double n_inliers = 1.0;
          double n_pts = 1.0;
          double h, k = 0, prob_reject_good_model, log_eta = 0;
-         double new_eps = inliers_size / points_size;
+         double new_eps = (double) inliers_size / points_size;
 
          for (unsigned int i = 0; i < sample_size; ++i) {
              n_inliers *= inliers_size - i;
@@ -297,6 +298,7 @@ public:
          }
 
          double prob_good_model = n_inliers / n_pts;
+         // std::cout << "prob_good_model " << prob_good_model << '\n';
 
          if (prob_good_model < std::numeric_limits<double>::epsilon() ) {
              return max_iterations;
@@ -309,15 +311,16 @@ public:
              h = computeExponentH(sprt_histories[test]->epsilon, new_eps, sprt_histories[test]->delta);
              prob_reject_good_model = 1/(exp( h*log(sprt_histories[test]->A) ));
 
-             std::cout << "k = " << k << '\n';
-             std::cout << "h = " << h << '\n';
-             std::cout << "prob reject good model " << prob_reject_good_model << "\n";
+             // std::cout << "k = " << k << '\n';
+             // std::cout << "h = " << h << '\n';
+             // std::cout << "prob reject good model " << prob_reject_good_model << "\n";
 
              log_eta += sprt_histories[test]->k * log( 1 - prob_good_model*(1-prob_reject_good_model) );
          }
 
-         double nusample_s = k + ( log(1-threshold) - log_eta ) / log( 1-prob_good_model * (1-(1/sprt_histories[current_sprt_idx]->A)) );
-         return (unsigned int) ceil(nusample_s);
+        // log (1 - threshold) ????????????? CHECK IT
+         double nusample_s = k + ( log(1-prob_threshold) - log_eta ) / log (1-prob_good_model * (1-(1/sprt_histories[current_sprt_idx]->A)) );
+         return nusample_s > max_iterations ? max_iterations : (unsigned int) ceil(nusample_s);
      }
 
      /*
@@ -340,15 +343,17 @@ public:
          x1 = log( (1-2*v0) / (1-epsilon_new) )/be;
          v1 = epsilon_new * exp(x1 * al) + (1-epsilon_new) * exp(x1 * be);
 
-         std::cout << "epsilon " << epsilon << '\n';
-         std::cout << "delta " << delta << '\n';
-
-         std::cout << "al " << al << '\n';
-         std::cout << "be " << be << '\n';
-         std::cout << "v0 " << v0 << '\n';
-         std::cout << "v1 " << v1 << '\n';
-         std::cout << "x0 " << x0 << '\n';
-         std::cout << "x1 " << x1 << '\n';
+         // std::cout << "------compute h--------\n";
+         // std::cout << "epsilon " << epsilon << '\n';
+         // std::cout << "epsilon_new " << epsilon_new << '\n';
+         // std::cout << "delta " << delta << '\n';
+         // std::cout << "al " << al << '\n';
+         // std::cout << "be " << be << '\n';
+         // std::cout << "v0 " << v0 << '\n';
+         // std::cout << "v1 " << v1 << '\n';
+         // std::cout << "x0 " << x0 << '\n';
+         // std::cout << "x1 " << x1 << '\n';
+         // std::cout << "------------------------------------------\n";
 
          return x0 - (x0 - x1)/(1+v0 - v1)*v0; // h
      }

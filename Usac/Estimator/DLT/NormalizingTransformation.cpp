@@ -3,46 +3,43 @@
 void GetNormalizingTransformation (const float * const pts, cv::Mat& norm_points,
                                    const int * const sample, int sample_number, cv::Mat &T1, cv::Mat &T2) {
 
-    float mean_pts1_x = 0, mean_pts1_y = 0, mean_pts2_x = 0, mean_pts2_y = 0;
-
-    int smpl;
-    for (int i = 0; i < sample_number; i++) {
-        smpl = 4 * sample[i];
-        mean_pts1_x += pts[smpl];
-        mean_pts1_y += pts[smpl + 1];
-        mean_pts2_x += pts[smpl + 2];
-        mean_pts2_y += pts[smpl + 3];
-    }
-    mean_pts1_x /= sample_number;
-    mean_pts1_y /= sample_number;
-    mean_pts2_x /= sample_number;
-    mean_pts2_y /= sample_number;
-
-    /*
-     * Compute a similarity transform T that takes points xi
-     * to a new set of points x̃i such that the centroid of
-     * the points x̃i is the coordinate origin and their
-     * average distance from the origin is √2
-     *
-     * origin O(0,0)
-     * sqrt(x̃*x̃ + ỹ*ỹ) = sqrt(2)
-     * ax*ax + by*by = 2
-     */
-    float avg_dist1, avg_dist2, x1, y1, x2, y2;
-    for (int i = 0; i < sample_number; i++) {
+    float mean_pts1_x = 0, mean_pts1_y = 0, mean_pts2_x = 0, mean_pts2_y = 0,
+          avg_dist1 = 0, avg_dist2 = 0, x1, y1, x2, y2;
+    
+    unsigned int smpl;
+    for (unsigned int i = 0; i < sample_number; i++) {
         smpl = 4 * sample[i];
         x1 = pts[smpl];
         y1 = pts[smpl+1];
         x2 = pts[smpl+2];
         y2 = pts[smpl+3];
+        
+        mean_pts1_x += x1;
+        mean_pts1_y += y1;
+        mean_pts2_x += x2;
+        mean_pts2_y += y2;
+
+        /*
+         * Compute a similarity transform T that takes points xi
+         * to a new set of points x̃i such that the centroid of
+         * the points x̃i is the coordinate origin and their
+         * average distance from the origin is √2
+         *
+         * origin O(0,0)
+         * sqrt(x̃*x̃ + ỹ*ỹ) = sqrt(2)
+         * ax*ax + by*by = 2
+         */
         avg_dist1 += sqrt (x1 * x1 + y1 * y1);
         avg_dist2 += sqrt (x2 * x2 + y2 * y2);
     }
 
+    mean_pts1_x /= sample_number;
+    mean_pts1_y /= sample_number;
+    mean_pts2_x /= sample_number;
+    mean_pts2_y /= sample_number;
+
     avg_dist1 = M_SQRT2 / (avg_dist1 / sample_number);
     avg_dist2 = M_SQRT2 / (avg_dist2 / sample_number);
-
-
 
     /*
      * pts1_T1 = [ 1 0 -mean_pts1_x;
@@ -94,8 +91,8 @@ void GetNormalizingTransformation (const float * const pts, cv::Mat& norm_points
      *
      * We don't need T(1,2) * y1 and T(2,2) * x1 because T(1,2) = T(2,1) = 0
      */
-    int norm_pts_idx;
-    for (int i = 0; i < sample_number; i++) {
+    unsigned int norm_pts_idx;
+    for (unsigned int i = 0; i < sample_number; i++) {
         smpl = 4 * sample[i];
         norm_pts_idx = 4 * i;
         norm_points_ptr[norm_pts_idx    ] = T1_ptr[0] * pts[smpl    ] + T1_ptr[2]; // Norm_img1_xi

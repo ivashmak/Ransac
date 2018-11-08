@@ -108,7 +108,7 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
                 quality->GetModelScore(estimator, models[i], input_points, points_size, *current_score, inliers, LO);
 
 //                std::cout << "verify sprt\n";
-//                sprt->verify(estimator, model, iters, best_score->inlier_number);
+               sprt->verify(estimator, model, iters, best_score->inlier_number);
 //                std::cout << "verified\n";
 
                 // }
@@ -168,10 +168,10 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 
                 max_iters = termination_criteria->getUpBoundIterations(best_score->inlier_number, points_size);
 
-//                int max_iterations_sprt = sprt->getMaximumIterations(current_score->inlier_number);
-//                std::cout << "max iteratnions sprt " << max_iterations_sprt << "\n";
+               int max_iterations_sprt = sprt->getMaximumIterations(current_score->inlier_number);
+               std::cout << "max iteratnions sprt " << max_iterations_sprt << "\n";
 
-//                max_iters = max_iterations_sprt;
+               max_iters = max_iterations_sprt;
 
                 // std::cout << "max iters prediction = " << max_iters << '\n';
             }
