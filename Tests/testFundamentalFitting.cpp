@@ -56,8 +56,6 @@ void Tests::testFundamentalFitting() {
 
     cv::hconcat(points1, points2, points);
 
-    bool LO = false;
-
     Model *fundamental_model = new Model (5, 7, 0.99, 0, ESTIMATOR::Fundamental, SAMPLER::Uniform);
     Sampler *uniform_sampler = new UniformSampler;
     uniform_sampler->setSampleSize(fundamental_model->sample_number);
@@ -70,7 +68,7 @@ void Tests::testFundamentalFitting() {
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
 
-//    getAverageResults (points, fundamental_estimator, fundamental_model, uniform_sampler, termination_criteria, quality, 1000, LO);
+//    getAverageResults (points, fundamental_estimator, fundamental_model, uniform_sampler, termination_criteria, quality, 1000);
 
     storeResultsFundamental ();
 }
@@ -118,13 +116,10 @@ void storeResultsFundamental () {
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
 
-    bool LO = false;
-
     Model *fundamental_model = new Model(3, 7, 0.99, 0, ESTIMATOR::Fundamental, SAMPLER::Uniform);
 
     std::ofstream results_total;
     results_total.open ("../results/fundamental/ALL.csv");
-    results_total << "LO " << LO << '\n';
     results_total << "Filename,Number of Inliers (found / total points),Number of Iterations,Time (mcs),"
                      "Average Error (threshold = " << fundamental_model->threshold <<"),,,,,\n";
 

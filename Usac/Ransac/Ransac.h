@@ -50,7 +50,7 @@ public:
         return neighbors;
     }
 
-    void run (cv::InputArray input_points, bool LO=false);
+    void run (cv::InputArray input_points);
 
     void setSampler (Sampler &sampler) {
         this->sampler = &sampler;

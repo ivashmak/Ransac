@@ -47,7 +47,6 @@ void Tests::testLineFitting() {
         return dists1.at<float>(1) < dists2.at<float>(1);
     });
     //---
-    bool LO = false;
 
      Model *ransac_model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Uniform);
      Sampler *uniform_sampler = new UniformSampler;
@@ -81,7 +80,7 @@ void Tests::testLineFitting() {
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
 //
-    getAverageResults(pts, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 1000, LO, true, false, gt_inliers);
+    getAverageResults(pts, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 1000, true, false, gt_inliers);
 }
 
 /*

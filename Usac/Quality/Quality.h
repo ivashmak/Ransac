@@ -85,8 +85,7 @@ public:
             if (get_inliers) {
                 for (int point = 0; point < points_size; point++) {
                     if (estimator->GetError(point) < model->threshold) {
-                        inliers[score.inlier_number] = point;
-                        score.inlier_number++;
+                        inliers[score.inlier_number++] = point;
                     }    
                 }
             } else {
@@ -137,7 +136,7 @@ public:
     }
 
     /*
-     * Calculate average error for inliers.
+     * Calculate average error for any inliers (e.g. GT inliers or output inliers).
      */
     float getAverageError (Estimator * const estimator,
                            Model * const model,

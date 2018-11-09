@@ -34,6 +34,10 @@ public:
     // name
     ESTIMATOR estimator;
     SAMPLER sampler;
+
+    bool LO = false;
+    bool GraphCutLO = false;
+    bool SprtLO = false;
 private:
     cv::Mat descriptor;
 	
@@ -50,6 +54,18 @@ public:
 		k_nearest_neighbors = knn;
 		estimator = estimator_;
 		sampler = sampler_;
+	}
+
+	void setStandardRansacLO (bool LO_) {
+		LO = LO_;
+	}
+
+	void setGraphCutLO (bool GraphCutLO_) {
+		GraphCutLO = GraphCutLO_;
+	}
+	
+	void setSprtLO (bool SprtLO_) {
+		SprtLO = SprtLO_;
 	}
 
 	void setLOParametres (unsigned int lo_iterative_iters, unsigned int lo_max_iters, float lo_thresh, unsigned int lo_thresh_mult) {

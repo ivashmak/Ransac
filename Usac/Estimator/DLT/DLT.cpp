@@ -57,28 +57,6 @@ bool DLT (const float * const points, const int * const sample, int sample_numbe
 
     H = cv::Mat_<float>(vt.row(vt.rows-1).reshape (3,3));
 
-    /*
-        cv::Mat_<float> V, D;
-        
-        // eigenvalues (D) – output vector of eigenvalues of the same type as src; 
-        // the eigenvalues are stored in the DESCENDING order.
-         
-        // eigenvectors (V) – output matrix of eigenvectors; it has the same size and type as src; 
-        // the eigenvectors are stored as subsequent matrix ROWS, in the same order as the 
-        // corresponding eigenvalues.
-        
-        cv::eigen (A.t() * A, D, V);
-        
-        // so in this case H should be last row of V
-        // H = V.row(8);
-        std::cout << "A = \n" << A << "\n\n";
-        std::cout << "vt =\n" << vt << "\n\n";
-        std::cout << "w = \n" << w << "\n\n";
-        std::cout << "V =\n" << V << "\n\n";
-        std::cout << "D =\n" << D << "\n\n";
-        std::cout << "==========================\n" << "\n\n";
-     */
-
     return true;
 }
 
@@ -125,8 +103,44 @@ bool DLT (const float * const points, int sample_number, cv::Mat &H) {
         return false;
     }
 
+/*    
+        cv::Mat_<float> V, D;
+        
+        // eigenvalues (D) – output vector of eigenvalues of the same type as src; 
+        // the eigenvalues are stored in the DESCENDING order.
+         
+        // eigenvectors (V) – output matrix of eigenvectors; it has the same size and type as src; 
+        // the eigenvectors are stored as subsequent matrix ROWS, in the same order as the 
+        // corresponding eigenvalues.
+    
+        std::clock_t start;
+        double duration;
+
+        start = std::clock();
+        
+        cv::eigen (A.t() * A, D, V);
+
+        duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+        std::cout << "Eigen: "<< duration <<'\n';
+            
+        
+        // so in this case H should be last row of V
+        // H = V.row(8);
+        // std::cout << "A = \n" << A << "\n\n";
+        // std::cout << "vt =\n" << vt << "\n\n";
+        // std::cout << "w = \n" << w << "\n\n";
+        // std::cout << "V =\n" << V << "\n\n";
+        // std::cout << "D =\n" << D << "\n\n";
+        // std::cout << "==========================\n" << "\n\n";
+
+        H = cv::Mat_<float>(V.row(V.rows-1).reshape (3,3));
+        
+        // Eigen like this is 2-3 times faster than svd. 
+    
+*/
     H = cv::Mat_<float>(vt.row(vt.rows-1).reshape (3,3));
 
+    
     return true;
 }
 

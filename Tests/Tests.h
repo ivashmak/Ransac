@@ -71,7 +71,6 @@ public:
                     TerminationCriteria * const termination_criteria,
                     Quality *const quality,
                     int N,
-                    bool LO,
                     bool GT = false, bool get_results = false,
                     int gt_num_inliers=0, StatisticalResults * statistical_results=0) {
 
@@ -102,7 +101,7 @@ public:
         // If we have GT number of inliers, then find number of fails model.
         for (int i = 0; i < N; i++) {
             Ransac ransac (*model, *sampler, *termination_criteria, *quality, *estimator);
-            ransac.run(points, LO);
+            ransac.run(points);
             RansacOutput *ransacOutput = ransac.getRansacOutput();
 
             times[i] = ransacOutput->getTimeMicroSeconds();

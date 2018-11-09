@@ -135,7 +135,6 @@ public:
      }
 
      /*
-      * eq (1)
       *                      p(x(r)|Hb)                  p(x(j)|Hb)
       * lambda(j) = Product (----------) = lambda(j-1) * ----------
       *                      p(x(r)|Hg)                  p(x(j)|Hg)
@@ -146,24 +145,29 @@ public:
       * 3.  If λj >  A, decide the model is ’bad’ (model ”re-jected”),
       * else increment j or continue testing
       * 4.  If j = N the number of correspondences decide model ”accepted
+      *
+      * Verifies model and returns model score.
       */
-     void verify (Estimator * estimator, Model * model, int current_hypothese, int maximum_score) {
+     void verifyModelAndGetModelScore (Estimator * estimator, Model * model, int current_hypothese, 
+                    int maximum_score, bool get_score, Score *score, bool get_inliers, int * inliers) {
+         
          estimator->setModelParameters(model);
-
-         float lambda_new, lambda = 1;
-         bool good = true;
-         int num_inliers = 0;
 
          float epsilon = sprt_histories[current_sprt_idx]->epsilon;
          float delta = sprt_histories[current_sprt_idx]->delta;
          float A = sprt_histories[current_sprt_idx]->A;
+         float lambda_new, lambda = 1;        
 
-         int tested_point;
+         int tested_inliers = 0;
+         int tested_point = 0;
+         
+         bool good = true;
          for (tested_point = 0; tested_point < points_size; tested_point++) {
-
              if (estimator->GetError(tested_point) < threshold) {
-                 // x(tested_point) is inlier
-                 num_inliers++;
+                 if (get_inliers) {
+                    inliers[tested_inliers] = tested_point;
+                 }
+                 tested_inliers++;
                  lambda_new = lambda * (delta / epsilon);
              } else {
                  lambda_new = lambda * ((1 - delta) / (1 - epsilon));
@@ -174,10 +178,29 @@ public:
                  tested_point++;
                  break;
              }
-             lambda = lambda_new;
+             lambda = lambda_new;   
+         }
+         
+         if (get_score) {
+            int total_inliers = tested_inliers; 
+            if (get_inliers) {
+                for (int j = tested_point+1; j < points_size; j++) {
+                    if (estimator->GetError (j) < threshold) {
+                        inliers[total_inliers++] = j;
+                    }
+                }
+            } else {
+                for (int j = tested_point+1; j < points_size; j++) {
+                    if (estimator->GetError (j) < threshold) {
+                        total_inliers++;
+                    }
+                }
+            }
+            score->inlier_number = total_inliers;
+            score->score = total_inliers;
          }
 
-         float delta_estimated = (float) num_inliers / tested_point;
+         float delta_estimated = (float) tested_inliers / tested_point;
 
          if (good) {
              /*
@@ -185,10 +208,10 @@ public:
               * design (i+1)-th test (εi + 1= εˆ, δi+1 = δˆ, i = i + 1).
               * Store the current model parameters θ
               */
-             if (num_inliers > maximum_score) {
+             if (tested_inliers > maximum_score) {
                  SPRT_history * new_sprt_history = new SPRT_history;
 
-                 new_sprt_history->epsilon = (float) num_inliers / points_size;
+                 new_sprt_history->epsilon = (float) tested_inliers / points_size;
                  new_sprt_history->delta = delta_estimated;
                  new_sprt_history->A = estimateThresholdA (new_sprt_history->epsilon, delta_estimated);
                  new_sprt_history->k = current_hypothese - last_sprt_update;
@@ -216,7 +239,6 @@ public:
              }
              
          }
-
      }
 
      /*

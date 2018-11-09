@@ -15,7 +15,7 @@ int getPointsSize (cv::InputArray points) {
 }
 
 
-void Ransac::run(cv::InputArray input_points, bool LO) {
+void Ransac::run(cv::InputArray input_points) {
     /*
      * Check if all components are initialized and safe to run
      * todo: add more criteria
@@ -58,6 +58,15 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
     non_minimal_model->copyFrom (model);
     best_model->copyFrom (model);
 
+    // get information from model about LO
+    bool LO = model->LO;
+    bool GraphCutLO = model->GraphCutLO;
+    bool SprtLO = model->SprtLO;
+    
+    std::cout << "General ransac Local Optimization " << LO << "\n";
+    std::cout << "graphCut Local Optimization " << GraphCutLO << "\n";
+    std::cout << "Sprt Local Optimization " << SprtLO << "\n";    
+
     /*
      * Allocate inliers of points_size, to avoid reallocation in getModelScore()
      */
@@ -70,23 +79,26 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
     unsigned int lo_iterations = 0;
     unsigned int number_of_models;
 
-    // Graph cut local optimization
-    GraphCut * graphCut = new GraphCut;
-
     LocalOptimization * lo_ransac;
     Score *lo_score;
     Model *lo_model;   
-             
     if (LO) {
         lo_score = new Score;
         lo_model = new Model; lo_model->copyFrom(model);
         lo_ransac = new RansacLocalOptimization (model, sampler, termination_criteria, quality, estimator);
     }
 
-    SPRT * sprt = new SPRT;
-    sprt->initialize(model, points_size);
+    SPRT * sprt;
+    if (SprtLO) {
+        sprt = new SPRT;
+        sprt->initialize(model, points_size);
+    }
 
-    bool gc_lo = true;
+    // Graph cut local optimization
+    GraphCut * graphCut;
+    if (GraphCutLO) {
+        graphCut = new GraphCut;
+    }
 
     while (iters < max_iters) {
 
@@ -100,16 +112,42 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
         for (int i = 0; i < number_of_models; i++) {
             // std::cout << i << "-th model\n";
 
-            // if (gc_lo) {
-                // graphCut->labeling(neighbors, estimator, models[i], inliers, *current_score, points_size, false);
-                // std::cout << "gc " << current_score->inlier_number << "\n";
-            // } else {
-                // we need inliers only for local optimization
-                quality->GetModelScore(estimator, models[i], input_points, points_size, *current_score, inliers, LO);
-
-//                std::cout << "verify sprt\n";
-               sprt->verify(estimator, model, iters, best_score->inlier_number);
-//                std::cout << "verified\n";
+                if (GraphCutLO) {
+                    // if LO is true than get inliers   
+                    // we need inliers only for local optimization
+                    if (LO) {
+                        graphCut->labeling(neighbors, estimator, models[i], inliers, *current_score,
+                        points_size, true);    
+                    } else {
+                        std::cout << "get gc score\n";
+                        graphCut->labeling(neighbors, estimator, models[i], nullptr, *current_score,
+                        points_size, false);    
+                        std::cout << "gc score is " << current_score->score << "\n";
+                    }
+                    
+                    if (SprtLO) {
+                        // we don't no model score, no inliers
+                        sprt->verifyModelAndGetModelScore(estimator, model, iters, best_score->inlier_number, 
+                            false, nullptr, false, nullptr);        
+                    }
+                } else 
+                if (SprtLO) {
+                    if (LO) {
+                        sprt->verifyModelAndGetModelScore(estimator, model, iters, best_score->inlier_number,
+                        true, current_score, true, inliers);        
+                    } else {
+                        sprt->verifyModelAndGetModelScore(estimator, model, iters, best_score->inlier_number,
+                        true, current_score, false, nullptr);      
+                    }
+                } else {
+                    if (LO) {
+                        quality->GetModelScore(estimator, models[i], input_points, points_size, *current_score, 
+                        inliers, true);            
+                    } else {
+                        quality->GetModelScore(estimator, models[i], input_points, points_size, *current_score, 
+                        nullptr, false);            
+                    }
+                }
 
                 // }
             // std::cout << "general " << current_score->inlier_number << "\n";
@@ -166,12 +204,11 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
 
                 }
 
-                max_iters = termination_criteria->getUpBoundIterations(best_score->inlier_number, points_size);
-
-               int max_iterations_sprt = sprt->getMaximumIterations(current_score->inlier_number);
-               std::cout << "max iteratnions sprt " << max_iterations_sprt << "\n";
-
-               max_iters = max_iterations_sprt;
+                if (SprtLO) {
+                    max_iters = sprt->getMaximumIterations(current_score->inlier_number);
+                } else {
+                    max_iters = termination_criteria->getUpBoundIterations(best_score->inlier_number, points_size);      
+                }
 
                 // std::cout << "max iters prediction = " << max_iters << '\n';
             }
@@ -187,11 +224,15 @@ void Ransac::run(cv::InputArray input_points, bool LO) {
      * so we don't need to run it again. And model will be equal to non minimal model.
      */
     if (!best_LO_model) {
-//       std::cout << "Calculate Non minimal model\n";
+      std::cout << "Calculate Non minimal model\n";
         // get inliers from best model
         
+        if (GraphCutLO) {
+            graphCut->labeling(neighbors, estimator, best_model, max_inliers, *current_score, points_size, true);
+        } else {
             quality->getInliers(estimator, points_size, best_model, max_inliers);
-            // graphCut->labeling(neighbors, estimator, best_model, max_inliers, *current_score, points_size, true);
+        }
+            
         // estimate model with max inliers
         estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model);
 

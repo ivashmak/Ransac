@@ -78,14 +78,12 @@ void GraphCut::labeling (const int * const neighbors, Estimator * estimator,
     // std::cout << "minimize\n";
 
     e->minimize();
-    unsigned int inl = 0;
     score.inlier_number = 0;
     
     if (get_inliers) {
         for (int i = 0; i < points_size; ++i) {
             if (e->what_segment(i) == Graph<float, float, float>::SINK) {
-                inliers[inl++] = i;
-                score.inlier_number++;
+                inliers[score.inlier_number++] = i;
             }
         }
     } else {

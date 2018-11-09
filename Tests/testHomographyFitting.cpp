@@ -66,9 +66,11 @@ void Tests::testHomographyFitting() {
 
 //    std::cout << cv::findHomography(points1, points2) << '\n';
 
-    bool LO = false;
-
-    Model *homography_model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform);
+    Model *homography_model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform); 
+    homography_model->setStandardRansacLO(true);
+    homography_model->setGraphCutLO(true);
+    homography_model->setSprtLO(true);
+    
     Sampler *uniform_sampler = new UniformSampler;
     uniform_sampler->setSampleSize(homography_model->sample_number);
     uniform_sampler->setPointsSize(points1.rows);
@@ -80,7 +82,7 @@ void Tests::testHomographyFitting() {
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
 
-   // getAverageResults(points, homograpy_estimator, homography_model, uniform_sampler, termination_criteria, quality, 1000, LO);
+   // getAverageResults(points, homograpy_estimator, homography_model, uniform_sampler, termination_criteria, quality, 1000);
 
 //     storeResults();
 }
@@ -142,11 +144,9 @@ void storeResults () {
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
     Model *homography_model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform);
-    bool LO = false;
 
     std::ofstream results_total;
     results_total.open ("../results/homography/ALL.csv");
-    results_total << "LO " << LO << '\n';
     results_total << "Filename,Number of Inliers (found / total points),Number of Iterations,Time (mcs),"
                      "Average Error (threshold = " << homography_model->threshold <<"),,,,,\n";
 
