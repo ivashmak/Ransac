@@ -8,18 +8,13 @@
 #include "../Usac/Sampler/UniformSampler.h"
 #include "../dataset/Dataset.h"
 
-void testFundamental (cv::InputArray points, Model * const model, Sampler * const sampler, const std::vector<std::string>& images_filename, std::string points_filename);
 void storeResultsFundamental ();
 
 void Tests::testFundamentalFitting() {
     std::string img_name = "ladysymon";
-    std::string points_filename = "../dataset/fundamental/"+img_name+"_pts.txt";
-    std::vector<std::string> images_filename;
-    images_filename.push_back("../dataset/fundamental/"+img_name+"A.png");
-    images_filename.push_back("../dataset/fundamental/"+img_name+"B.png");
-
+    
     cv::Mat points, points1, points2;
-    read_points (points1, points2, points_filename);
+    read_points (points1, points2, "../dataset/fundamental/"+img_name+"_pts.txt");
 
 //    points1 = (cv::Mat_<float> (10, 2) <<
 //            3.020519301751723,   2.596786959172094,
@@ -62,51 +57,18 @@ void Tests::testFundamentalFitting() {
     uniform_sampler->setPointsSize(points1.rows);
     uniform_sampler->initRandomGenerator();
 
-//    testFundamental (points, fundamental_model, uniform_sampler, images_filename, points_filename);
-
     Estimator *fundamental_estimator = new FundamentalEstimator (points);
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
 
+    test (points, fundamental_estimator, uniform_sampler, fundamental_model, quality, termination_criteria,
+            img_name, 0);
+
 //    getAverageResults (points, fundamental_estimator, fundamental_model, uniform_sampler, termination_criteria, quality, 1000);
 
-    storeResultsFundamental ();
+    // storeResultsFundamental ();
 }
-
-/*
- * Test fundamental matrix estimation for one image correspondence
- */
-void testFundamental (cv::InputArray points, Model * const model, Sampler * const sampler, const std::vector<std::string>& images_filename, std::string points_filename) {
-    Estimator * fundamental_estimator = new FundamentalEstimator (points);
-    Drawing drawing;
-    Logging logResult;
-    TerminationCriteria *termination_criteria = new TerminationCriteria;
-    Quality * quality = new Quality;
-
-    Ransac ransac (*model, *sampler, *termination_criteria, *quality, *fundamental_estimator);
-    ransac.run(points);
-
-    RansacOutput *ransacOutput = ransac.getRansacOutput();
-
-    std::cout << model->getName();
-    std::cout << "\ttime: ";
-    ransacOutput->printTime();
-    std::cout << "\titerations: " << ransacOutput->getNumberOfIterations() <<
-              " (" << ((int)ransacOutput->getNumberOfIterations () -(int)ransacOutput->getNumberOfLOIterations ()) << 
-              " + " << ransacOutput->getNumberOfLOIterations () << " (" << ransacOutput->getLORuns() << " lo inner + iterative runs)) \n";
-    
-    std::cout << "\tpoints under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
-    std::cout << "\tAverage error " << ransacOutput->getAverageError() << "\n";
-
-    // save result and compare with last run
-    logResult.compare(model, ransacOutput);
-    logResult.saveResult(model, ransacOutput);
-    std::cout << "-----------------------------------------------------------------------------------------\n";
-
-    cv::Mat pts = points.getMat();
-    drawing.drawEpipolarLines(images_filename, pts.colRange(0,2), pts.colRange(2,4), model->returnDescriptor());
-}
-
+ 
 /*
  * Store results from dataset to csv file.
  */
@@ -136,7 +98,7 @@ void storeResultsFundamental () {
         uniform_sampler->setPointsSize(points1.rows);
         uniform_sampler->initRandomGenerator();
 
-        Ransac ransac(*fundamental_model, *uniform_sampler, *termination_criteria, *quality, *fundamental_estimator);
+        Ransac ransac(fundamental_model, uniform_sampler, termination_criteria, quality, fundamental_estimator);
         ransac.run(points1);
 
         RansacOutput *ransacOutput = ransac.getRansacOutput();

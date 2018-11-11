@@ -200,6 +200,12 @@ public:
             score->score = total_inliers;
          }
 
+          /*
+           * Since almost all tested models are ‘bad’, the probability
+           * δ can be estimated as the average fraction of consistent data points
+           * in rejected models.
+           * ???????????????????
+           */
          float delta_estimated = (float) tested_inliers / tested_point;
 
          if (good) {
@@ -241,21 +247,6 @@ public:
          }
      }
 
-     /*
-      * Since almost all tested models are ‘bad’, the probability
-      * δ can be estimated as the average fraction of consistent data points
-      * in rejected models.
-      */
-//     float estimateDelta (int tested_points) {
-//         return tested_points / points_size;
-//     }
-
-     /*
-      * epsilon (i+1) = I(i+1) / N;
-      */
-//     float estimateEpsilon (int inliers_size) {
-//         return inliers_size / points_size;
-//     }
 
      /*
      * A(0) = K1/K2 + 1
@@ -340,7 +331,6 @@ public:
              log_eta += sprt_histories[test]->k * log( 1 - prob_good_model*(1-prob_reject_good_model) );
          }
 
-        // log (1 - threshold) ????????????? CHECK IT
          double nusample_s = k + ( log(1-prob_threshold) - log_eta ) / log (1-prob_good_model * (1-(1/sprt_histories[current_sprt_idx]->A)) );
          return nusample_s > max_iterations ? max_iterations : (unsigned int) ceil(nusample_s);
      }

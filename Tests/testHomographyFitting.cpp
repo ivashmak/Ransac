@@ -18,7 +18,6 @@
 
 #include "../Generator/generator.h"
 #include "../dataset/Dataset.h"
-void testHomography (cv::InputArray points, Model * const model, Sampler * const sampler, std::string img_name);
 void storeResults ();
 int getGTNumInliers (const std::string &filename, float threshold, float desired_prob);
 
@@ -76,62 +75,17 @@ void Tests::testHomographyFitting() {
     uniform_sampler->setPointsSize(points1.rows);
     uniform_sampler->initRandomGenerator();
 
-   testHomography (points, homography_model, uniform_sampler, img_name);
-
     Estimator * homograpy_estimator = new HomographyEstimator (points);
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
+    int gt_inliers = getGTNumInliers (img_name, homography_model->threshold, homography_model->desired_prob);
 
+    test (points, homograpy_estimator, uniform_sampler, homography_model, quality, termination_criteria,
+            img_name, gt_inliers);
+    
    // getAverageResults(points, homograpy_estimator, homography_model, uniform_sampler, termination_criteria, quality, 1000);
 
 //     storeResults();
-}
-
-/*
- * Test homography matrix estimation for one image correspondence
- */
-void testHomography (cv::InputArray points, Model * const model, Sampler * const sampler, std::string img_name) {
-    Estimator * homograpy_estimator = new HomographyEstimator (points);
-    Drawing drawing;
-    Logging logResult;
-    TerminationCriteria *termination_criteria = new TerminationCriteria;
-    Quality *quality = new Quality;
-
-    Ransac ransac (*model, *sampler, *termination_criteria, *quality, *homograpy_estimator);
-    ransac.run(points);
-
-    RansacOutput * ransacOutput = ransac.getRansacOutput();
-
-    std::cout << model->getName() << "\n";
-    std::cout << "\ttime: ";
-    ransacOutput->printTime();
-    std::cout << "\titerations: " << ransacOutput->getNumberOfIterations() <<
-              " (" << ((int)ransacOutput->getNumberOfIterations () -(int)ransacOutput->getNumberOfLOIterations ()) << 
-              " + " << ransacOutput->getNumberOfLOIterations () << " (" << ransacOutput->getLORuns() << " lo inner + iterative runs)) \n";
-    
-    std::cout << "\tpoints under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
-    std::cout << "Average error " << ransacOutput->getAverageError() << "\n";
-
-    int gt_num_inliers = getGTNumInliers (img_name, model->threshold, 
-                                            model->desired_prob);
-
-    std::cout << "best model = ...\n" << ransacOutput->getModel ()->returnDescriptor() << "\n";
-
-    std::cout << "Ground Truth number of inliers for same model parametres is " << gt_num_inliers << "\n";
-    // save result and compare with last run
-    logResult.compare(model, ransacOutput);
-    logResult.saveResult(model, ransacOutput);
-    std::cout << "-----------------------------------------------------------------------------------------\n";
-
-    
-    std::string points_filename = "../dataset/homography/"+img_name+"_pts.txt";
-    std::vector<std::string> images_filename;
-    images_filename.push_back("../dataset/homography/"+img_name+"A.png");
-    images_filename.push_back("../dataset/homography/"+img_name+"B.png");
-    
-
-    drawing.drawHomographies(images_filename, points_filename, ransacOutput->getInliers(), ransacOutput->getModel()->returnDescriptor());
-    delete quality, homograpy_estimator ,termination_criteria;
 }
 
 
@@ -163,7 +117,7 @@ void storeResults () {
         uniform_sampler->setPointsSize(points1.rows);
         uniform_sampler->initRandomGenerator();
 
-        Ransac ransac (*homography_model, *uniform_sampler, *termination_criteria, *quality, *homograpy_estimator);
+        Ransac ransac (homography_model, uniform_sampler, termination_criteria, quality, homograpy_estimator);
         ransac.run(points1);
 
         RansacOutput *ransacOutput = ransac.getRansacOutput();

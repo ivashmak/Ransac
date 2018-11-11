@@ -127,15 +127,16 @@ public:
     /*
      * Draw epipolar lines by Fundamental Matrix
      */
-    void drawEpipolarLines (const std::vector<std::string>& images_filename, cv::InputArray points1, cv::InputArray points2, const cv::Mat& F);
+    void drawEpipolarLines (const std::string& img_name, cv::InputArray points1, cv::InputArray points2, const cv::Mat& F);
 
-    void drawHomographies (const std::vector<std::string>& images_filename, const std::string &points_filename, cv::InputArray in_inliers,
-                           const cv::Mat &H) {
+    void drawHomographies (const std::string& img_name, cv::InputArray in_inliers, const cv::Mat &H) {
         int * inliers =  (int *) in_inliers.getMat().data;
         int inliers_size = in_inliers.size().width;
 
         std::vector<int> gt_inliers;
         cv::Mat points1, points2;
+        std::string folder = "../dataset/homography/";
+        std::string points_filename = folder + img_name + "_pts.txt";
         read_points(points1, points2, points_filename);
 
         if (points1.cols == 2) {
@@ -149,8 +150,8 @@ public:
         std::cout << "gt inliers " << gt_inliers.size() << '\n';
         std::cout << "inliers_size " << inliers_size << '\n';
 
-        cv::Mat img1 = cv::imread(images_filename[0]);
-        cv::Mat img2 = cv::imread(images_filename[1]);
+        cv::Mat img1 = cv::imread(folder + img_name + "A.png");
+        cv::Mat img2 = cv::imread(folder + img_name + "B.png");
 
         drawing_resize(img1);
         drawing_resize(img2);

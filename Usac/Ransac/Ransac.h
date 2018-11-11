@@ -27,17 +27,23 @@ public:
     
     ~Ransac () {}
 
-    Ransac (Model &model,
-            Sampler &sampler,
-            TerminationCriteria &termination_criteria,
-            Quality &quality,
-            Estimator &estimator) {
+    Ransac (Model * model_,
+            Sampler * sampler_,
+            TerminationCriteria * termination_criteria_,
+            Quality * quality_,
+            Estimator * estimator_) {
 
-        this->model = &model;
-        this->sampler = &sampler;
-        this->termination_criteria = &termination_criteria;
-        this->quality = &quality;
-        this->estimator = &estimator;
+        assert (model_ != nullptr);
+        assert (sampler_ != nullptr);
+        assert (termination_criteria_ != nullptr);
+        assert (quality_ != nullptr);
+        assert (estimator_ != nullptr);
+
+        model = model_;
+        sampler = sampler_;
+        termination_criteria = termination_criteria_;
+        quality = quality_;
+        estimator = estimator_;
     }
 
     void setNeighbors (const cv::Mat& neighbors_) {

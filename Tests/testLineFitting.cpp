@@ -18,9 +18,6 @@
 #include "../Usac/Sampler/ProsacSampler.h"
 #include "../Usac/Utils/NearestNeighbors.h"
 
-
-void testLine (cv::InputArray points, Sampler * sampler, Model * model);
-
 void Tests::testLineFitting() {
 
     std::vector<cv::Point_<float>> points;
@@ -48,9 +45,9 @@ void Tests::testLineFitting() {
     });
     //---
 
-     Model *ransac_model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Uniform);
+     Model *model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Uniform);
      Sampler *uniform_sampler = new UniformSampler;
-     uniform_sampler->setSampleSize(ransac_model->sample_number);
+     uniform_sampler->setSampleSize(model->sample_number);
      uniform_sampler->setPointsSize(points.size());
      uniform_sampler->initRandomGenerator();
 
@@ -70,56 +67,16 @@ void Tests::testLineFitting() {
 //    Model *prosac_model = new Model (10, 2, 0.99, 0, ESTIMATOR::Line2d, SAMPLER::Prosac);
 //    Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
 
-//     testLine (pts, uniform_sampler, ransac_model);
-//     testLine (pts, gradual_napsac_sampler, gradual_napsac_model);
-//     testLine (pts, napsac_sampler, napsac_model);
-    // testLine (pts, evsac_sampler, evsac_model);
-    // testLine (cv::Mat(sorted_points), prosac_sampler, prosac_model);
-
     Estimator *line2destimator = new Line2DEstimator (points);
     TerminationCriteria *termination_criteria = new TerminationCriteria;
     Quality *quality = new Quality;
-//
-    getAverageResults(pts, line2destimator, ransac_model, uniform_sampler, termination_criteria, quality, 1000, true, false, gt_inliers);
-}
 
-/*
- * test line fitting estimation for one data image.
- */
-void testLine (cv::InputArray points, Sampler * const sampler, Model * const model) {
-    Estimator *estimator2d = new Line2DEstimator (points);
-    Drawing drawing;
-    Logging logResult;
-    TerminationCriteria *termination_criteria = new TerminationCriteria;
-    Quality *quality = new Quality;
-
-    Ransac ransac (*model, *sampler, *termination_criteria, *quality, *estimator2d);
+    test (pts, line2destimator, uniform_sampler, model, quality, termination_criteria, "", 0);
+    // test (pts, line2destimator, napsac_sampler, model, quality, termination_criteria, "", 0);
+    // test (pts, line2destimator, evsac_sampler, model, quality, termination_criteria, "", 0);
+    // test (pts, line2destimator, prosac_sampler, model, quality, termination_criteria, "", 0);
+    // test (pts, line2destimator, gradual_napsac_sampler, model, quality, termination_criteria, "", 0);
     
-    cv::Mat neighbors;
-    NearestNeighbors nn;
-    nn.getNearestNeighbors_flann(points, model->k_nearest_neighbors, neighbors);
-    ransac.setNeighbors (neighbors);
-    ransac.run(points);
-
-    RansacOutput *ransacOutput = ransac.getRansacOutput();
-
-    std::cout << model->getName() << "\n";
-    std::cout << "\ttime: ";
-    ransacOutput->printTime();
-    std::cout <<"\titerations: " << ransacOutput->getNumberOfIterations() <<
-              " (" << ((int)ransacOutput->getNumberOfIterations () -(int)ransacOutput->getNumberOfLOIterations ()) << 
-              " + " << ransacOutput->getNumberOfLOIterations () << " (" << ransacOutput->getLORuns() << " lo inner + iterative runs)) \n";
-    
-    std::cout <<"\tpoints under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
-    std::cout << "\tAverage error " << ransacOutput->getAverageError() << "\n";
-
-    // save result and compare with last run
-    logResult.compare(model, ransacOutput);
-    logResult.saveResult(model, ransacOutput);
-    std::cout << "-----------------------------------------------------------------------------------------\n";
-
-    //    drawing.draw(ransac.most_inliers, ransac.getBestModel(), ransac.getNonMinimalModel(), points);
-    drawing.draw(ransacOutput->getInliers(), ransacOutput->getModel(), points);
+    // getAverageResults(pts, line2destimator, model, uniform_sampler, termination_criteria, quality, 1000, true, false, gt_inliers);
 }
-
 

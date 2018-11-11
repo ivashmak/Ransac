@@ -18,7 +18,7 @@ add_executable(
         Usac/Quality/Quality.h
         Usac/Model.h
         Usac/TerminationCriteria.h
-        Usac/ProsacTerminationCriteria.h
+        Usac/TerminationCriteria/ProsacTerminationCriteria.h
 
         Usac/Helper/Logging.h
         Usac/Helper/Drawing/Drawing.h
@@ -72,8 +72,6 @@ add_executable(
 
         Usac/Utils/Math.cpp Usac/Utils/Math.h
         Usac/Utils/NearestNeighbors.cpp Usac/Utils/NearestNeighbors.h
-
-
 
         Usac/Verbose.h
 )

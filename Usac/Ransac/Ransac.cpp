@@ -16,6 +16,8 @@ int getPointsSize (cv::InputArray points) {
 
 
 void Ransac::run(cv::InputArray input_points) {
+    // todo: initialize (= new) estimator, quality, sampler and others here...
+
     /*
      * Check if all components are initialized and safe to run
      * todo: add more criteria
@@ -23,18 +25,10 @@ void Ransac::run(cv::InputArray input_points) {
     assert(!input_points.empty());
     assert(estimator != nullptr);
     assert(model != nullptr);
-    assert(quality != NULL);
+    assert(quality != nullptr);
     assert(sampler != nullptr);
     assert(termination_criteria != nullptr);
     assert(sampler->isInit());
-
-//    if (LO) {
-//        std::cout << "Ransac runs with local optimization\n";
-//    } else {
-//        std::cout << "Ransac runs without local optimization\n";
-//    }
-
-//    std::cout << "asserted\n";
 
     auto begin_time = std::chrono::steady_clock::now();
 
@@ -45,17 +39,12 @@ void Ransac::run(cv::InputArray input_points) {
     // initialize termination criteria
     termination_criteria->init(model);
 
-    int iters = 0;
-    int max_iters = model->max_iterations;
-
     Score *best_score = new Score, *current_score = new Score;
 
     std::vector<Model*> models;
     models.push_back (model);
 
     Model *best_model = new Model;
-    Model *non_minimal_model = new Model;
-    non_minimal_model->copyFrom (model);
     best_model->copyFrom (model);
 
     // get information from model about LO
@@ -100,6 +89,9 @@ void Ransac::run(cv::InputArray input_points) {
         graphCut = new GraphCut;
     }
 
+    int iters = 0;
+    int max_iters = model->max_iterations;
+
     while (iters < max_iters) {
 
         sampler->generateSample(sample);
@@ -119,24 +111,22 @@ void Ransac::run(cv::InputArray input_points) {
                         graphCut->labeling(neighbors, estimator, models[i], inliers, *current_score,
                         points_size, true);    
                     } else {
-                        std::cout << "get gc score\n";
                         graphCut->labeling(neighbors, estimator, models[i], nullptr, *current_score,
                         points_size, false);    
-                        std::cout << "gc score is " << current_score->score << "\n";
                     }
                     
                     if (SprtLO) {
                         // we don't no model score, no inliers
-                        sprt->verifyModelAndGetModelScore(estimator, model, iters, best_score->inlier_number, 
+                        sprt->verifyModelAndGetModelScore(estimator, models[i], iters, best_score->inlier_number, 
                             false, nullptr, false, nullptr);        
                     }
                 } else 
                 if (SprtLO) {
                     if (LO) {
-                        sprt->verifyModelAndGetModelScore(estimator, model, iters, best_score->inlier_number,
+                        sprt->verifyModelAndGetModelScore(estimator, models[i], iters, best_score->inlier_number,
                         true, current_score, true, inliers);        
                     } else {
-                        sprt->verifyModelAndGetModelScore(estimator, model, iters, best_score->inlier_number,
+                        sprt->verifyModelAndGetModelScore(estimator, models[i], iters, best_score->inlier_number,
                         true, current_score, false, nullptr);      
                     }
                 } else {
@@ -183,8 +173,11 @@ void Ransac::run(cv::InputArray input_points) {
                     // std::cout << "best score " << best_score->inlier_number << '\n';
 
                     iters += lo_iters;
+
+                    // no need, just for experiments
                     lo_iterations += lo_iters;
                     lo_runs++;
+                    //
 
                     if (can_finish) {
                         iters++;
@@ -201,7 +194,6 @@ void Ransac::run(cv::InputArray input_points) {
 
                     // remember best model
                     best_model->setDescriptor (models[i]->returnDescriptor());
-
                 }
 
                 if (SprtLO) {
@@ -224,31 +216,33 @@ void Ransac::run(cv::InputArray input_points) {
      * so we don't need to run it again. And model will be equal to non minimal model.
      */
     if (!best_LO_model) {
-      std::cout << "Calculate Non minimal model\n";
+        // std::cout << "Calculate Non minimal model\n";
+        Model *non_minimal_model = new Model;
+        non_minimal_model->copyFrom (model);
+    
         // get inliers from best model
-        
         if (GraphCutLO) {
             graphCut->labeling(neighbors, estimator, best_model, max_inliers, *current_score, points_size, true);
         } else {
             quality->getInliers(estimator, points_size, best_model, max_inliers);
         }
             
-        // estimate model with max inliers
+        // estimate non minimal model with max inliers
         estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model);
+        quality->GetModelScore(estimator, non_minimal_model, input_points, points_size, *current_score, 
+            nullptr, false);
 
-        quality->GetModelScore(estimator, non_minimal_model, input_points, points_size, *current_score, max_inliers, true);
-
-//       std::cout << "end non minimal score " << current_score->inlier_number << '\n';
-//       std::cout << "end best score " << best_score->inlier_number << '\n';
-
-        // if (current_score->inlier_number >= best_score->inlier_number) {
+        // What if non minimal model is a bit worse than best ransac model?
+        if (current_score->inlier_number >= best_score->inlier_number) {
             best_score->copyFrom(current_score);
             best_model->setDescriptor(non_minimal_model->returnDescriptor());
-        // } else {
-                   // if (current_score->inlier_number < best_score->inlier_number)
-           // std::cout
-                   // << "\033[1;31mNon minimal model worse than best ransac model. May be something wrong. Check it!\033[0m \n";
-        // }
+        } else {
+                   if (current_score->inlier_number < best_score->inlier_number)
+           std::cout
+                   << "\033[1;31mNon minimal model worse than best ransac model. May be something wrong. Check it!\033[0m \n";
+           std::cout << "end non minimal score " << current_score->inlier_number << '\n';
+           std::cout << "end best score " << best_score->inlier_number << '\n';
+        }
     }
 
     auto end_time = std::chrono::steady_clock::now();
@@ -265,6 +259,12 @@ void Ransac::run(cv::InputArray input_points) {
 
     if (LO) {
         delete lo_ransac, lo_model, lo_score;
+    }
+    if (GraphCutLO) {
+        delete graphCut;
+    }
+    if (SprtLO) {
+        delete sprt;
     }
     delete sample, current_score, best_score, inliers, max_inliers, best_model;
 }
