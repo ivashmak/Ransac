@@ -1,76 +1,113 @@
-#ifndef USAC_PROSACSAMPLER_H
-#define USAC_PROSACSAMPLER_H
+#ifndef USAC_PROSACSAMPLER2_H
+#define USAC_PROSACSAMPLER2_H
 
 #include <cmath>
 #include <vector>
 #include <iostream>
 #include "Sampler.h"
 #include "../Model.h"
-#include "../../RandomGenerator/ArrayRandomGenerator.h"
-
-// theia implementation
-// Copyright (C) 2014 The Regents of the University of California (Regents).
+#include "../../RandomGenerator/UniformRandomGenerator.h"
 
 class ProsacSampler : public Sampler {
 protected:
-    int kth_sample_number_;
-    double t_n;
-    int n;
-    double t_n_prime;
-    RandomGenerator *array_rand_gen;
+    bool initialized = false;
+
+    unsigned int * growth_function;
+
+    unsigned int subset_size;
+    unsigned int largest_sample_size;
+
+    unsigned int hypCount;
+
+    const unsigned int growth_max_samples = 20000;
+
+    unsigned int sample_size;
+    unsigned int points_size;
+    
+    RandomGenerator * randomGenerator;
 public:
-    ProsacSampler (unsigned int sample_size, unsigned int N_points, bool reset_time = true) {
-        array_rand_gen = new ArrayRandomGenerator;
-        initSample(sample_size, N_points);
+    ~ProsacSampler () {
+        delete growth_function;
     }
 
-    void initSample (unsigned int sample_size, unsigned int points_size, bool reset_time = true) {
-        if (reset_time) array_rand_gen->resetTime();
+    const unsigned int * getGrowthFunction () const {
+        return growth_function;
+    }
 
-        this->sample_size = sample_size;
-        this->points_size = points_size;
+    unsigned int getLargestSampleSize () {
+        return largest_sample_size;
+    }
 
-        n = sample_size;
-        t_n = 1000;
-        t_n_prime = 1.0;
+    bool isInitialized () { return initialized; }
 
-        // From Equations leading up to Eq 3 in Chum et al.
-        // t_n samples containing only data points from U_n and
-        // t_n+1 samples containing only data points from U_n+1
-        for (int i = 0; i < sample_size; i++) {
-            t_n *= (double) (n - i) / (points_size - i);
+    void initProsacSampler (unsigned int sample_size_, int points_size_, bool reset_time = true) {
+        randomGenerator = new UniformRandomGenerator;
+        if (reset_time) randomGenerator->resetTime();
+
+        sample_size = sample_size_;
+        points_size = points_size_;
+
+        growth_function = new unsigned int[points_size];
+        
+        unsigned int T_n_p = 1;
+        // compute initial value for T_n
+        double T_n = growth_max_samples;
+        for (unsigned int i = 0; i < sample_size; ++i) {
+            T_n *= (double)(sample_size-i)/(points_size-i);
+        }
+        // compute values using recurrent relation
+        for (unsigned int i = 0; i < points_size; ++i) {
+            if (i+1 <= sample_size) {
+                growth_function[i] = T_n_p;
+                continue;
+            }
+            double temp = (double)(i+1)*T_n/(i+1-sample_size);
+            growth_function[i] = T_n_p + (unsigned int)ceil(temp - T_n);
+            T_n = temp;
+            T_n_p = growth_function[i];
         }
 
-        kth_sample_number_ = 1;
+        // other initializations
+        largest_sample_size = sample_size;       // largest set sampled in PROSAC
+        subset_size = sample_size;		// size of the current sampling pool
+        hypCount = 1;
+
+        initialized = true;
     }
 
 
     void generateSample (int * sample) override {
-
-        // Choice of the hypothesis generation set
-        if (kth_sample_number_ > t_n_prime && n < points_size) {
-            double t_n_plus1 = (t_n * (n + 1.0)) / (n + 1.0 - sample_size);
-            t_n_prime += ceil(t_n_plus1 - t_n);
-            t_n = t_n_plus1;
-            n++;
-        }
-
-        // Semi-random sample Mt of size m
-        if (t_n_prime < kth_sample_number_) {
-            array_rand_gen->resetGenerator(0, n-1);
-            array_rand_gen->generateUniqueRandomSet(sample, sample_size);
-        } else {
-            array_rand_gen->resetGenerator(0, n-2);
-            array_rand_gen->generateUniqueRandomSet(sample, sample_size-1);
-            sample[sample_size-1] = n; // Make the last point from the nth position.
-        }
-
-        kth_sample_number_++;
     }
+    
+    void generateSample (int * sample, unsigned int stopping_length) {
+        // revert to RANSAC-style sampling if maximum number of PROSAC samples have been tested
+        if (hypCount > growth_max_samples) {
+            randomGenerator->generateUniqueRandomSet(sample, points_size, sample_size);
+            return;
+        }
 
-    bool isInit () override {
-        return true;
+        // if current stopping length is less than size of current pool, use only points up to the stopping length
+        if (subset_size > stopping_length) {
+            randomGenerator->generateUniqueRandomSet(sample, stopping_length, sample_size);
+        }
+
+        // increment the size of the sampling pool if required
+        if (hypCount > growth_function[subset_size-1]) {
+            ++subset_size;
+            if (subset_size > points_size) {
+                subset_size = points_size;
+            }
+            if (largest_sample_size < subset_size) {
+                largest_sample_size = subset_size;
+            }
+        }
+
+        // generate PROSAC sample
+        randomGenerator->generateUniqueRandomSet(sample, subset_size-1, sample_size-1);
+        sample[sample_size-1] = subset_size-1;
+
+        hypCount++;
     }
 };
 
-#endif //USAC_PROSACSAMPLER_H
+#endif //USAC_PROSACSAMPLER2_H

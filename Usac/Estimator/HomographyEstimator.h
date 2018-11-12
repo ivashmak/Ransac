@@ -36,7 +36,7 @@ public:
         H_inv_ptr = (float *) H_inv.data;
     }
 
-    int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
+    unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         cv::Mat H;
         DLT (points, sample, 4, H);
         // normalize H by last h33

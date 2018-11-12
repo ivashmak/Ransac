@@ -69,7 +69,7 @@ public:
                     Estimator *const estimator,
                     Model *const model,
                     Sampler *const sampler,
-                    TerminationCriteria * const termination_criteria,
+                    StandardTerminationCriteria * const termination_criteria,
                     Quality *const quality,
                     int N,
                     bool GT = false, bool get_results = false,
@@ -88,14 +88,6 @@ public:
         float avg_errors = 0;
         int num_iters = 0;
         int fails = 0;
-
-        cv::Mat_<float> best_model;
-        cv::Mat_<float> avg_model;
-        if (model->estimator == ESTIMATOR::Line2d) {
-            avg_model = cv::Mat_<float>::zeros (1, 3);
-        } else {
-            avg_model = cv::Mat_<float>::zeros (3, 3);    
-        }
 
         // Calculate Average of number of inliers, number of iteration,
         // time and average error.
@@ -177,7 +169,7 @@ public:
         //        std::cout << "bad models " << bad_models_counter << '\n';
     }
 
-    //todo add functions for test (), storeResults () and showResults
+    //todo add functions for storeResults () and showResults
 
 
    void test (cv::InputArray points,
@@ -185,7 +177,7 @@ public:
                Sampler * sampler,
                Model * model,
                Quality * quality,
-               TerminationCriteria * termination_criteria,
+               StandardTerminationCriteria * termination_criteria,
                const std::string &img_name,
                int GT_num_inliers) {
 

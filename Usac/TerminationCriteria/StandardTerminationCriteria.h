@@ -1,8 +1,10 @@
-#ifndef RANSAC_TERMINATION_CRITERIA_H
-#define RANSAC_TERMINATION_CRITERIA_H
+#ifndef RANSAC_STANDARD_TERMINATION_CRITERIA_H
+#define RANSAC_STANDARD_TERMINATION_CRITERIA_H
 
 
-class TerminationCriteria {
+#include "TerminationCriteria.h"
+
+class StandardTerminationCriteria : public TerminationCriteria {
 private:
     const Model * model;
     float log_1_p;
@@ -12,7 +14,7 @@ private:
     const float EPSILON = 0.00001;
 public:
 
-    void init (const Model * const model) {
+    void init (const Model * const model) override {
         assert (model != nullptr);
         setModel(model);
         initialized = true;
@@ -51,7 +53,7 @@ public:
 	 * (1 - w^n) is probability that at least one point of N is outlier.
 	 * 1 - p = (1-w^n)^k is probability that in K steps of getting at least one outlier is 1% (5%).
 	 */
-    inline unsigned int getUpBoundIterations (float inlier_points, float total_points) {
+    inline unsigned int getUpBoundIterations (float inlier_points, float total_points) override {
         float inl_ratio = inlier_points/total_points;
         float inl_prob = inl_ratio * inl_ratio;
         int k = sample_number;
@@ -88,4 +90,4 @@ public:
 };
 
 
-#endif //RANSAC_TERMINATION_CRITERIA_H
+#endif //RANSAC_STANDARD_TERMINATION_CRITERIA_H

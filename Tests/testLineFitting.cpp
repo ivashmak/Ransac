@@ -15,7 +15,7 @@
 #include "../Usac/Sampler/GradualNapsacSampler.h"
 #include "../Usac/Sampler/EvsacSampler.h"
 #include "../Usac/Sampler/UniformSampler.h"
-#include "../Usac/Sampler/ProsacSampler.h"
+#include "../Usac/Sampler/ProsacSimpleSampler.h"
 #include "../Usac/Utils/NearestNeighbors.h"
 
 void Tests::testLineFitting() {
@@ -65,10 +65,10 @@ void Tests::testLineFitting() {
 //    Sampler *evsac_sampler = new EvsacSampler(points, points.size(), evsac_model->k_nearest_neighbors, evsac_model->sample_number);
 //
 //    Model *prosac_model = new Model (10, 2, 0.99, 0, ESTIMATOR::Line2d, SAMPLER::Prosac);
-//    Sampler *prosac_sampler = new ProsacSampler(prosac_model->sample_number, points.size());
+//    Sampler *prosac_sampler = new ProsacSimpleSampler(prosac_model->sample_number, points.size());
 
     Estimator *line2destimator = new Line2DEstimator (points);
-    TerminationCriteria *termination_criteria = new TerminationCriteria;
+    StandardTerminationCriteria *termination_criteria = new StandardTerminationCriteria;
     Quality *quality = new Quality;
 
     test (pts, line2destimator, uniform_sampler, model, quality, termination_criteria, "", 0);

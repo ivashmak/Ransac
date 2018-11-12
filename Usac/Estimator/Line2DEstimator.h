@@ -21,7 +21,7 @@ public:
      * c = --------------------------------
      *     sqrt ((x1 - x2)^2 + (y2 - y1)^2)
      */
-    int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
+    unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         const int idx1 = sample[0];
         const int idx2 = sample[1];
         

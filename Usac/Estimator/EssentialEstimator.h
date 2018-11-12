@@ -34,7 +34,7 @@ public:
         E_inv_ptr = (float *) E_inv.data;
     }
 
-    int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
+    unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         return 1;
     }
 

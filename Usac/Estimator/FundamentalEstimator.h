@@ -33,7 +33,7 @@ public:
         F_ptr = (float *) F.data;
     }
 
-    int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
+    unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         cv::Mat_<float> F; // use global
 
         int roots = SevenPointsAlgorithm(points, sample, F);

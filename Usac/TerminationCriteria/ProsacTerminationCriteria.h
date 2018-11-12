@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <opencv2/core/mat.hpp>
-#include "../TerminationCriteria.h"
+#include "StandardTerminationCriteria.h"
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -23,7 +23,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-class ProsacTerminationCriteria {
+class ProsacTerminationCriteria : public TerminationCriteria {
 private:
     bool initialized = false;
 
@@ -38,7 +38,7 @@ private:
     unsigned int points_size;
     unsigned int sample_size;
 
-    TerminationCriteria standart_termination_criteria;
+    StandardTerminationCriteria standart_termination_criteria;
 public:
 
     ~ProsacTerminationCriteria () {
@@ -46,6 +46,10 @@ public:
     }
 
     bool isInitialized () { return initialized; }
+
+    void init (const Model * const model) override {
+
+    }
 
     /*
         All arrays have been initialized in Prosac Sampler,
@@ -122,9 +126,12 @@ public:
         return stopping_length;
     }
 
-    /*
-        Returns predicted maximum iterations
-     */
+    inline unsigned int getUpBoundIterations (float inlier_points, float total_points) override {
+        return 0;
+    }
+        /*
+            Returns predicted maximum iterations
+         */
     unsigned int updatePROSACStopping(unsigned int hypCount, unsigned int largest_sample_size) {
 
         unsigned int max_samples = maximality_samples[stopping_length-1];

@@ -147,7 +147,6 @@ void Ransac::run(cv::InputArray input_points) {
                  // std::cout << "current score = " << current_score->score << '\n';
 
                 if (LO) {
-
                     bool can_finish;
                     unsigned int lo_iters = lo_ransac->GetLOModelScore (*lo_model, *lo_score,
                             current_score, input_points, points_size, iters, inliers, &can_finish);
@@ -195,7 +194,7 @@ void Ransac::run(cv::InputArray input_points) {
                     // remember best model
                     best_model->setDescriptor (models[i]->returnDescriptor());
                 }
-
+                
                 if (SprtLO) {
                     max_iters = sprt->getMaximumIterations(current_score->inlier_number);
                 } else {
@@ -232,17 +231,17 @@ void Ransac::run(cv::InputArray input_points) {
         quality->GetModelScore(estimator, non_minimal_model, input_points, points_size, *current_score, 
             nullptr, false);
 
-        // What if non minimal model is a bit worse than best ransac model?
-        if (current_score->inlier_number >= best_score->inlier_number) {
+        // Priority is for non minimal model estimation
+//        if (current_score->inlier_number >= best_score->inlier_number) {
             best_score->copyFrom(current_score);
             best_model->setDescriptor(non_minimal_model->returnDescriptor());
-        } else {
+//        } else {
                    if (current_score->inlier_number < best_score->inlier_number)
            std::cout
                    << "\033[1;31mNon minimal model worse than best ransac model. May be something wrong. Check it!\033[0m \n";
            std::cout << "end non minimal score " << current_score->inlier_number << '\n';
            std::cout << "end best score " << best_score->inlier_number << '\n';
-        }
+//        }
     }
 
     auto end_time = std::chrono::steady_clock::now();

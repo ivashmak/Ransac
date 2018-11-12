@@ -58,7 +58,7 @@ void Tests::testFundamentalFitting() {
     uniform_sampler->initRandomGenerator();
 
     Estimator *fundamental_estimator = new FundamentalEstimator (points);
-    TerminationCriteria *termination_criteria = new TerminationCriteria;
+    StandardTerminationCriteria *termination_criteria = new StandardTerminationCriteria;
     Quality *quality = new Quality;
 
     test (points, fundamental_estimator, uniform_sampler, fundamental_model, quality, termination_criteria,
@@ -75,7 +75,7 @@ void Tests::testFundamentalFitting() {
 void storeResultsFundamental () {
     std::vector<std::string> points_filename = getFundamentalDatasetPoints();
 
-    TerminationCriteria *termination_criteria = new TerminationCriteria;
+    StandardTerminationCriteria *termination_criteria = new StandardTerminationCriteria;
     Quality *quality = new Quality;
 
     Model *fundamental_model = new Model(3, 7, 0.99, 0, ESTIMATOR::Fundamental, SAMPLER::Uniform);

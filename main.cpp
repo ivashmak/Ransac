@@ -4,7 +4,7 @@
 #include "Usac/Ransac/RansacOutput.h"
 #include "Usac/Utils/NearestNeighbors.h"
 
-#include "Usac/Sampler/ProsacSampler2.h"
+#include "Usac/Sampler/ProsacSampler.h"
 #include "Usac/TerminationCriteria/ProsacTerminationCriteria.h"
 
 int main (int args, char ** argv) {
@@ -13,15 +13,15 @@ int main (int args, char ** argv) {
     // evaluating random generators
    // evaluateRandomGenerators();
 
-    // ProsacSampler2 * sm = new ProsacSampler2;
+    // ProsacSampler * sm = new ProsacSampler;
     // ProsacTerminationCriteria * pr_t = new ProsacTerminationCriteria;
 
 //    NearestNeighbors nn;
 //    nn.test();
     // run tests
     tests.testLineFitting();
-    // tests.testHomographyFitting();
-    // tests.testFundamentalFitting();
+//     tests.testHomographyFitting();
+//     tests.testFundamentalFitting();
 //     tests.testEssentialFitting();
 
 	return 0;

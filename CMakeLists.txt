@@ -17,8 +17,10 @@ add_executable(
 
         Usac/Quality/Quality.h
         Usac/Model.h
-        Usac/TerminationCriteria.h
+
+        Usac/TerminationCriteria/StandardTerminationCriteria.h
         Usac/TerminationCriteria/ProsacTerminationCriteria.h
+        Usac/TerminationCriteria/TerminationCriteria.h
 
         Usac/Helper/Logging.h
         Usac/Helper/Drawing/Drawing.h
@@ -30,8 +32,8 @@ add_executable(
         Usac/Sampler/NapsacSampler.h
         Usac/Sampler/GradualNapsacSampler.h
         Usac/Sampler/EvsacSampler.h
+        Usac/Sampler/ProsacSimpleSampler.h
         Usac/Sampler/ProsacSampler.h
-        Usac/Sampler/ProsacSampler2.h
 
         Usac/Ransac/Ransac.cpp
         Usac/Ransac/Ransac.h
