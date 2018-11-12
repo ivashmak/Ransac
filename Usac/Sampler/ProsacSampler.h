@@ -1,5 +1,5 @@
-#ifndef USAC_PROSACSAMPLER2_H
-#define USAC_PROSACSAMPLER2_H
+#ifndef RANSAC_PROSAC_SAMPLER_H
+#define RANSAC_PROSAC_SAMPLER_H
 
 #include <cmath>
 #include <vector>
@@ -30,7 +30,7 @@ public:
         delete growth_function;
     }
 
-    const unsigned int * getGrowthFunction () const {
+    unsigned int * getGrowthFunction () {
         return growth_function;
     }
 
@@ -41,12 +41,12 @@ public:
     bool isInitialized () { return initialized; }
 
     void initProsacSampler (unsigned int sample_size_, int points_size_, bool reset_time = true) {
-        randomGenerator = new UniformRandomGenerator;
-        if (reset_time) randomGenerator->resetTime();
-
         sample_size = sample_size_;
         points_size = points_size_;
 
+        randomGenerator = new UniformRandomGenerator;
+        if (reset_time) randomGenerator->resetTime();
+        
         growth_function = new unsigned int[points_size];
         
         unsigned int T_n_p = 1;
@@ -80,15 +80,17 @@ public:
     }
     
     void generateSample (int * sample, unsigned int stopping_length) {
+        std::cout << "stopping length " << stopping_length << "\n";
+
         // revert to RANSAC-style sampling if maximum number of PROSAC samples have been tested
         if (hypCount > growth_max_samples) {
-            randomGenerator->generateUniqueRandomSet(sample, points_size, sample_size);
+            randomGenerator->generateUniqueRandomSet(sample, sample_size, points_size);
             return;
         }
 
         // if current stopping length is less than size of current pool, use only points up to the stopping length
         if (subset_size > stopping_length) {
-            randomGenerator->generateUniqueRandomSet(sample, stopping_length, sample_size);
+            randomGenerator->generateUniqueRandomSet(sample, sample_size, stopping_length);
         }
 
         // increment the size of the sampling pool if required
@@ -103,11 +105,15 @@ public:
         }
 
         // generate PROSAC sample
-        randomGenerator->generateUniqueRandomSet(sample, subset_size-1, sample_size-1);
+        randomGenerator->generateUniqueRandomSet(sample, sample_size-1, subset_size-1);
         sample[sample_size-1] = subset_size-1;
 
         hypCount++;
     }
+
+    bool isInit () override {
+        return true;
+    }
 };
 
-#endif //USAC_PROSACSAMPLER2_H
+#endif //RANSAC_PROSAC_SAMPLER_H

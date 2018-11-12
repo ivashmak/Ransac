@@ -76,7 +76,7 @@ void Tests::testHomographyFitting() {
     uniform_sampler->initRandomGenerator();
 
     Estimator * homograpy_estimator = new HomographyEstimator (points);
-    StandardTerminationCriteria *termination_criteria = new StandardTerminationCriteria;
+    TerminationCriteria *termination_criteria = new StandardTerminationCriteria;
     Quality *quality = new Quality;
     int gt_inliers = getGTNumInliers (img_name, homography_model->threshold, homography_model->desired_prob);
 
@@ -95,7 +95,7 @@ void Tests::testHomographyFitting() {
 void storeResults () {
     std::vector<std::string> points_filename = getHomographyDatasetPoints();
 
-    StandardTerminationCriteria *termination_criteria = new StandardTerminationCriteria;
+    TerminationCriteria *termination_criteria = new StandardTerminationCriteria;
     Quality *quality = new Quality;
     Model *homography_model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform);
 

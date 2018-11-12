@@ -1,5 +1,5 @@
-#ifndef USAC_PROSACSAMPLER_H
-#define USAC_PROSACSAMPLER_H
+#ifndef USAC_PROSAC_SIMPLE_SAMPLER_H
+#define USAC_PROSAC_SIMPLE_SAMPLER_H
 
 #include <cmath>
 #include <vector>
@@ -73,4 +73,4 @@ public:
     }
 };
 
-#endif //USAC_PROSACSAMPLER_H
+#endif //USAC_PROSAC_SIMPLE_SAMPLER_H

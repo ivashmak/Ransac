@@ -4,6 +4,9 @@
 #include "../LocalOptimization/GraphCut.h"
 #include "../SPRT.h"
 
+#include "../Sampler/ProsacSampler.h"
+#include "../TerminationCriteria/ProsacTerminationCriteria.h"
+
 int getPointsSize (cv::InputArray points) {
 //    std::cout << points.getMat(0).total() << '\n';
 
@@ -56,6 +59,17 @@ void Ransac::run(cv::InputArray input_points) {
     std::cout << "graphCut Local Optimization " << GraphCutLO << "\n";
     std::cout << "Sprt Local Optimization " << SprtLO << "\n";    
 
+    // prosac
+    ProsacTerminationCriteria * prosac_termination_criteria;
+    ProsacSampler * prosac_sampler;
+    bool is_prosac = model->sampler == SAMPLER::Prosac;
+    if (is_prosac) {
+        prosac_sampler = (ProsacSampler *) sampler;
+        prosac_termination_criteria = (ProsacTerminationCriteria *) termination_criteria;
+    }
+    //
+    bool get_inliers = LO || is_prosac;
+
     /*
      * Allocate inliers of points_size, to avoid reallocation in getModelScore()
      */
@@ -94,7 +108,15 @@ void Ransac::run(cv::InputArray input_points) {
 
     while (iters < max_iters) {
 
-        sampler->generateSample(sample);
+        if (is_prosac) {
+            std::cout << "generate prosac sample\n";
+            prosac_sampler->generateSample (sample, prosac_termination_criteria->getStoppingLength());
+            std::cout << "sampler generated\n";
+        } else {
+            sampler->generateSample(sample);
+            
+        }
+
         // std::cout << "samples are generated\n";
 
         number_of_models = estimator->EstimateModel(sample, models);
@@ -107,7 +129,7 @@ void Ransac::run(cv::InputArray input_points) {
                 if (GraphCutLO) {
                     // if LO is true than get inliers   
                     // we need inliers only for local optimization
-                    if (LO) {
+                    if (get_inliers) {
                         graphCut->labeling(neighbors, estimator, models[i], inliers, *current_score,
                         points_size, true);    
                     } else {
@@ -122,7 +144,7 @@ void Ransac::run(cv::InputArray input_points) {
                     }
                 } else 
                 if (SprtLO) {
-                    if (LO) {
+                    if (get_inliers) {
                         sprt->verifyModelAndGetModelScore(estimator, models[i], iters, best_score->inlier_number,
                         true, current_score, true, inliers);        
                     } else {
@@ -130,7 +152,7 @@ void Ransac::run(cv::InputArray input_points) {
                         true, current_score, false, nullptr);      
                     }
                 } else {
-                    if (LO) {
+                    if (get_inliers) {
                         quality->GetModelScore(estimator, models[i], input_points, points_size, *current_score, 
                         inliers, true);            
                     } else {
@@ -194,11 +216,19 @@ void Ransac::run(cv::InputArray input_points) {
                     // remember best model
                     best_model->setDescriptor (models[i]->returnDescriptor());
                 }
-                
+
+                // How combine prosac termination criteria and sprt test?
                 if (SprtLO) {
                     max_iters = sprt->getMaximumIterations(current_score->inlier_number);
                 } else {
-                    max_iters = termination_criteria->getUpBoundIterations(best_score->inlier_number, points_size);      
+                    if (is_prosac) {
+                        max_iters = prosac_termination_criteria->
+                            updatePROSACStopping(iters, prosac_sampler->getLargestSampleSize(),
+                                    inliers, best_score->inlier_number);
+                        std::cout << "Prosac max iterations " << max_iters << "\n";
+                    } else {
+                        max_iters = termination_criteria->getUpBoundIterations(best_score->inlier_number, points_size);              
+                    }
                 }
 
                 // std::cout << "max iters prediction = " << max_iters << '\n';

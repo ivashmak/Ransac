@@ -30,7 +30,6 @@ private:
     unsigned int * maximality_samples;
     unsigned int * non_random_inliers;
     unsigned int * growth_function;
-    unsigned int * inlier_flags;
 
     unsigned int stopping_length;
     const unsigned int min_stopping_length = 20;
@@ -38,7 +37,7 @@ private:
     unsigned int points_size;
     unsigned int sample_size;
 
-    StandardTerminationCriteria standart_termination_criteria;
+    StandardTerminationCriteria * standart_termination_criteria;
 public:
 
     ~ProsacTerminationCriteria () {
@@ -56,14 +55,15 @@ public:
         so termination criteria have only pointer to them.
     */
     void initProsacTerminationCriteria (unsigned int * growth_function_,
-                                        unsigned int * inlier_flags_,
-                                        unsigned int sample_size_,
+                                        const Model * const model,
                                         unsigned int points_size_) {
 
-        growth_function = growth_function_;
-        inlier_flags = inlier_flags_;
+        standart_termination_criteria = new StandardTerminationCriteria;
+        standart_termination_criteria->init (model);
 
-        sample_size = sample_size_;
+        growth_function = growth_function_;
+
+        sample_size = model->sample_number;
         points_size = points_size_;
 
         stopping_length = points_size;
@@ -132,7 +132,13 @@ public:
         /*
             Returns predicted maximum iterations
          */
-    unsigned int updatePROSACStopping(unsigned int hypCount, unsigned int largest_sample_size) {
+    unsigned int updatePROSACStopping(unsigned int hypCount, unsigned int largest_sample_size,
+                                    const int * const inliers, unsigned int inliers_size) {
+
+        unsigned int * inlier_flags = (unsigned int *) calloc (points_size, sizeof(unsigned int));
+        for (int i = 0; i < inliers_size; i++) {
+            inlier_flags[inliers[i]] = 1;
+        }
 
         unsigned int max_samples = maximality_samples[stopping_length-1];
 
@@ -153,7 +159,9 @@ public:
 
                 // update the number of samples based on this inlier count
                 if ((i == points_size-1) || (inlier_flags[i] && !inlier_flags[i+1])) {
-                    unsigned int new_samples = standart_termination_criteria.getUpBoundIterations(inlier_count, i+1, sample_size, 0.99);
+                    unsigned int new_samples = standart_termination_criteria->
+                                            getUpBoundIterations(inlier_count, i+1);
+
                     if (i+1 < largest_sample_size) {
                         // correct for number of samples that have points in [i+1, largest_sample_size-1]
                         new_samples += hypCount - growth_function[i];

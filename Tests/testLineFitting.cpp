@@ -17,6 +17,8 @@
 #include "../Usac/Sampler/UniformSampler.h"
 #include "../Usac/Sampler/ProsacSimpleSampler.h"
 #include "../Usac/Utils/NearestNeighbors.h"
+#include "../Usac/TerminationCriteria/ProsacTerminationCriteria.h"
+#include "../Usac/Sampler/ProsacSampler.h"
 
 void Tests::testLineFitting() {
 
@@ -45,11 +47,22 @@ void Tests::testLineFitting() {
     });
     //---
 
-     Model *model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Uniform);
-     Sampler *uniform_sampler = new UniformSampler;
-     uniform_sampler->setSampleSize(model->sample_number);
-     uniform_sampler->setPointsSize(points.size());
-     uniform_sampler->initRandomGenerator();
+     // Model *model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Uniform);
+     // Sampler *uniform_sampler = new UniformSampler;
+     // uniform_sampler->setSampleSize(model->sample_number);
+     // uniform_sampler->setPointsSize(points.size());
+     // uniform_sampler->initRandomGenerator();
+
+    Model *prosac_model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Prosac);
+    ProsacSampler *prosac_sampler_ = new ProsacSampler;
+    prosac_sampler_->initProsacSampler (2, points.size());
+    Sampler * prosac_sampler = prosac_sampler_;
+
+    ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
+    prosac_termination_criteria_->initProsacTerminationCriteria (prosac_sampler_->getGrowthFunction(),
+                                                prosac_model, points.size());
+
+    TerminationCriteria * prosac_termination_criteria = prosac_termination_criteria_;
 
 //    Model *gradual_napsac_model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::GradualNapsac);
 //    Sampler *gradual_napsac_sampler = new GradualNapsacSampler(points, gradual_napsac_model->sample_number);
@@ -64,17 +77,16 @@ void Tests::testLineFitting() {
 //    Model *evsac_model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Evsac);
 //    Sampler *evsac_sampler = new EvsacSampler(points, points.size(), evsac_model->k_nearest_neighbors, evsac_model->sample_number);
 //
-//    Model *prosac_model = new Model (10, 2, 0.99, 0, ESTIMATOR::Line2d, SAMPLER::Prosac);
-//    Sampler *prosac_sampler = new ProsacSimpleSampler(prosac_model->sample_number, points.size());
 
     Estimator *line2destimator = new Line2DEstimator (points);
     StandardTerminationCriteria *termination_criteria = new StandardTerminationCriteria;
     Quality *quality = new Quality;
 
-    test (pts, line2destimator, uniform_sampler, model, quality, termination_criteria, "", 0);
+    // test (pts, line2destimator, uniform_sampler, model, quality, termination_criteria, "", 0);
     // test (pts, line2destimator, napsac_sampler, model, quality, termination_criteria, "", 0);
     // test (pts, line2destimator, evsac_sampler, model, quality, termination_criteria, "", 0);
-    // test (pts, line2destimator, prosac_sampler, model, quality, termination_criteria, "", 0);
+    cv::Mat sorted_pts (sorted_points);
+    test (sorted_pts, line2destimator, prosac_sampler, prosac_model, quality, prosac_termination_criteria, "", 0);
     // test (pts, line2destimator, gradual_napsac_sampler, model, quality, termination_criteria, "", 0);
     
     // getAverageResults(pts, line2destimator, model, uniform_sampler, termination_criteria, quality, 1000, true, false, gt_inliers);

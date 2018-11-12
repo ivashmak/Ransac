@@ -69,7 +69,7 @@ public:
                     Estimator *const estimator,
                     Model *const model,
                     Sampler *const sampler,
-                    StandardTerminationCriteria * const termination_criteria,
+                    TerminationCriteria * const termination_criteria,
                     Quality *const quality,
                     int N,
                     bool GT = false, bool get_results = false,
@@ -177,7 +177,7 @@ public:
                Sampler * sampler,
                Model * model,
                Quality * quality,
-               StandardTerminationCriteria * termination_criteria,
+               TerminationCriteria * termination_criteria,
                const std::string &img_name,
                int GT_num_inliers) {
 
