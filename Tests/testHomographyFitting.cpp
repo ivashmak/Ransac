@@ -83,7 +83,7 @@ void Tests::testHomographyFitting() {
     test (points, homograpy_estimator, uniform_sampler, homography_model, quality, termination_criteria,
             img_name, gt_inliers);
     
-   // getAverageResults(points, homograpy_estimator, homography_model, uniform_sampler, termination_criteria, quality, 1000);
+   // getStatisticalResults(points, homograpy_estimator, homography_model, uniform_sampler, termination_criteria, quality, 1000);
 
 //     storeResults();
 }

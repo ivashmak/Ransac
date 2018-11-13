@@ -62,9 +62,9 @@ void Tests::testFundamentalFitting() {
     Quality *quality = new Quality;
 
     test (points, fundamental_estimator, uniform_sampler, fundamental_model, quality, termination_criteria,
-            img_name, 0);
+            img_name, -1);
 
-//    getAverageResults (points, fundamental_estimator, fundamental_model, uniform_sampler, termination_criteria, quality, 1000);
+//    getStatisticalResults (points, fundamental_estimator, fundamental_model, uniform_sampler, termination_criteria, quality, 1000);
 
     // storeResultsFundamental ();
 }

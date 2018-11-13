@@ -25,6 +25,7 @@ void Ransac::run(cv::InputArray input_points) {
      * Check if all components are initialized and safe to run
      * todo: add more criteria
      */
+//    assert(model->estimator != ESTIMATOR::NullE && model->sampler != SAMPLER::NullS);
     assert(!input_points.empty());
     assert(estimator != nullptr);
     assert(model != nullptr);
@@ -45,7 +46,14 @@ void Ransac::run(cv::InputArray input_points) {
     Score *best_score = new Score, *current_score = new Score;
 
     std::vector<Model*> models;
-    models.push_back (model);
+    models.push_back (new Model(*model));
+
+    // Allocate max size of models for fundamental matrix
+    // estimation to avoid reallocation
+    if (model->estimator == ESTIMATOR::Fundamental) {
+        models.push_back (new Model(*model));
+        models.push_back (new Model(*model));
+    }
 
     Model *best_model = new Model;
     best_model->copyFrom (model);
@@ -170,10 +178,7 @@ void Ransac::run(cv::InputArray input_points) {
                     unsigned int lo_iters = lo_ransac->GetLOModelScore (*lo_model, *lo_score,
                             current_score, input_points, points_size, iters, inliers, &can_finish);
 
-                     // std::cout << "lo iterations " << lo_iters << '\n';
-                     // std::cout << "lo score " << lo_score->inlier_number << '\n';
-                     // std::cout << "curr score " << current_score->inlier_number << '\n';
-                     // std::cout << "lo model best found " << lo_model->returnDescriptor() << '\n';
+                    // std::cout << "lo score " << lo_score->inlier_number << '\n';
                     if (*lo_score > current_score) {
                         // std::cout << "LO score is better than current score\n";
                         best_score->copyFrom(lo_score);
@@ -187,9 +192,6 @@ void Ransac::run(cv::InputArray input_points) {
                         best_model->setDescriptor(models[i]->returnDescriptor());
                     }
 
-                    // std::cout << "best model descriptor " << best_model->returnDescriptor() << '\n';
-                    // std::cout << "best score " << best_score->inlier_number << '\n';
-
                     iters += lo_iters;
 
                     // no need, just for experiments
@@ -197,6 +199,10 @@ void Ransac::run(cv::InputArray input_points) {
                     lo_runs++;
                     //
 
+                    /*
+                     * If max predicted iterations reached in
+                     * Local optimization, so we can finish now.
+                     */
                     if (can_finish) {
                         iters++;
                         // std::cout << "CAN FINISH\n";

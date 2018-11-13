@@ -1,8 +1,8 @@
 #ifndef RANSAC_MODEL_H
 #define RANSAC_MODEL_H
 
-enum ESTIMATOR  { Line2d, Homography, Fundamental, Essential };
-enum SAMPLER  { Uniform, GradualNapsac, Napsac, Prosac, Evsac };
+enum ESTIMATOR  { NullE, Line2d, Homography, Fundamental, Essential };
+enum SAMPLER  { NullS, Uniform, GradualNapsac, Napsac, Prosac, Evsac };
 
 class Model {
 public:
@@ -32,8 +32,8 @@ public:
     float lambda_graph_cut = 0.1; // range <0; 1>
 
     // name
-    ESTIMATOR estimator;
-    SAMPLER sampler;
+    ESTIMATOR estimator = NullE;
+    SAMPLER sampler = NullS;
 
     bool LO = false;
     bool GraphCutLO = false;

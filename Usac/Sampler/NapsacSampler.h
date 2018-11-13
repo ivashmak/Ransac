@@ -63,9 +63,14 @@ public:
 //        std::cout << sample[0] << " ";
         for (int i = 1; i < sample_size; i++) {
             // get the farthest neighbor
-            sample[i] = k_nearest_neighbors_indices_ptr[(knn * initial_point) + next_neighbors[initial_point] + knn-1];
-            // move next neighbor
-            next_neighbors[initial_point] = (next_neighbors[initial_point] - 1) % -knn;
+//            sample[i] = k_nearest_neighbors_indices_ptr[(knn * initial_point) + next_neighbors[initial_point] + knn-1];
+//            // move next neighbor
+//            next_neighbors[initial_point] = (next_neighbors[initial_point] - 1) % -knn;
+
+            sample[i] = k_nearest_neighbors_indices_ptr[(knn * initial_point) + next_neighbors[initial_point]];
+            next_neighbors[initial_point] = (next_neighbors[initial_point] + 1) % knn;
+
+
 //            std::cout << sample[i] << " ";
         }
 //        std::cout << '\n';

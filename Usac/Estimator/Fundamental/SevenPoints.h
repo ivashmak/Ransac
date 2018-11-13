@@ -49,7 +49,7 @@
 #include <opencv2/core/mat.hpp>
 #include <iostream>
 
-int SevenPointsAlgorithm (const float * const pts, const int * const sample, cv::Mat &F) {
+unsigned int SevenPointsAlgorithm (const float * const pts, const int * const sample, cv::Mat &F) {
     float w[7], u[9*9], v[9*9], c[4], r[3];
     float* f1, *f2;
     float t0, t1, t2;

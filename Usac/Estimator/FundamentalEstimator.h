@@ -36,22 +36,13 @@ public:
     unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         cv::Mat_<float> F; // use global
 
-        int roots = SevenPointsAlgorithm(points, sample, F);
+        unsigned int roots = SevenPointsAlgorithm(points, sample, F);
         if (roots < 1) {
             std::cout << "roots less than 1\n";
             return 0;
         }
 //        std::cout << "Roots " << roots << "\n\n";
 
-        if (models.size() < roots) {
-            for (int i = 0; i < roots; i++) {
-                models.push_back(new Model(models[0]->threshold,
-                                           models[0]->sample_number,
-                                           models[0]->desired_prob,
-                                           models[0]->k_nearest_neighbors,
-                                           models[0]->estimator, models[0]->sampler));
-            }
-        }
         for (int i = 0; i < roots; i++) {
             models[i]->setDescriptor(F.rowRange(i * 3, i * 3 + 3));
         }

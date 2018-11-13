@@ -34,6 +34,8 @@ add_executable(
         Usac/Sampler/EvsacSampler.h
         Usac/Sampler/ProsacSimpleSampler.h
         Usac/Sampler/ProsacSampler.h
+        Usac/Sampler/ProsacNapsac1Sampler.h
+        Usac/Sampler/ProsacNapsac2Sampler.h
 
         Usac/Ransac/Ransac.cpp
         Usac/Ransac/Ransac.h
@@ -64,6 +66,9 @@ add_executable(
         Tests/testLineFitting.cpp
         Tests/testEssentialFitting.cpp
         Tests/testFundamentalFitting.cpp
+        Tests/test.cpp
+        Tests/StatisticalResults.h
+        Tests/samplerInitialization.cpp
 
         RandomGenerator/RandomGenerator.h
         RandomGenerator/ArrayRandomGenerator.h

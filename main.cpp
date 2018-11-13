@@ -13,11 +13,6 @@ int main (int args, char ** argv) {
     // evaluating random generators
    // evaluateRandomGenerators();
 
-    // ProsacSampler * sm = new ProsacSampler;
-    // ProsacTerminationCriteria * pr_t = new ProsacTerminationCriteria;
-
-//    NearestNeighbors nn;
-//    nn.test();
     // run tests
     tests.testLineFitting();
 //     tests.testHomographyFitting();
