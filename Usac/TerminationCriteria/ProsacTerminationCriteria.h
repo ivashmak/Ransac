@@ -29,6 +29,8 @@ private:
 
     unsigned int * maximality_samples;
     unsigned int * non_random_inliers;
+    unsigned int * inlier_flags;
+
     unsigned int * growth_function;
 
     unsigned int stopping_length;
@@ -41,7 +43,7 @@ private:
 public:
 
     ~ProsacTerminationCriteria () {
-        delete maximality_samples, non_random_inliers;
+        delete maximality_samples, non_random_inliers, inlier_flags;
     }
 
     bool isInitialized () { return initialized; }
@@ -132,10 +134,10 @@ public:
         /*
             Returns predicted maximum iterations
          */
-    unsigned int updatePROSACStopping(unsigned int hypCount, unsigned int largest_sample_size,
+    unsigned int getUpBoundIterations(unsigned int hypCount, unsigned int largest_sample_size,
                                     const int * const inliers, unsigned int inliers_size) {
 
-        unsigned int * inlier_flags = (unsigned int *) calloc (points_size, sizeof(unsigned int));
+        inlier_flags = (unsigned int *) calloc (points_size, sizeof(unsigned int));
         for (int i = 0; i < inliers_size; i++) {
             inlier_flags[inliers[i]] = 1;
         }
@@ -170,7 +172,7 @@ public:
                     if (new_samples < maximality_samples[i]) {
                         // if number of samples can be lowered, store values and update stopping length
                         maximality_samples[i] = new_samples;
-                        if ( (new_samples < max_samples) || ( (new_samples == max_samples) && (i+1 >= stopping_length) ) ) {
+                        if ((new_samples < max_samples) || ((new_samples == max_samples) && (i+1 >= stopping_length))) {
                             stopping_length = i+1;
                             max_samples = new_samples;
                         }
@@ -178,6 +180,7 @@ public:
                 }
             }
         }
+
         return max_samples;
     }
 };

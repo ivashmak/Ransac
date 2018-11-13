@@ -35,10 +35,14 @@ Destructors
 
 Add Uniform Random Generator (better than array generator in case to allocate new array for different size)
 
-Realloc for models
 ArrayGenerator sub intervals;
 Avoid set Model parameters.
 
 Float or double??? float
 
-Nano flann
+
+
+------------------
+
+prosac quality sort
+init everything directly ransac

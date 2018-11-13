@@ -40,7 +40,7 @@ public:
 
     bool isInitialized () { return initialized; }
 
-    void initProsacSampler (unsigned int sample_size_, int points_size_, bool reset_time = true) {
+    void initProsacSampler (unsigned int sample_size_, unsigned int points_size_, bool reset_time = true) {
         sample_size = sample_size_;
         points_size = points_size_;
 

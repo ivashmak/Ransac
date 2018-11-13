@@ -18,7 +18,10 @@ public:
     long milliseconds;
     long microseconds;
 
-    // operator::<<
+    friend std::ostream& operator<< (std::ostream& stream, const Time * time) {
+        return stream << time->seconds << " secs " << time->milliseconds << " ms " <<
+               time->microseconds << " mcs\n";
+    }
 };
 
 bool inverse3x3 (cv::Mat& A);

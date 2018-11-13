@@ -73,7 +73,6 @@ void Ransac::run(cv::InputArray input_points) {
     /*
      * Allocate inliers of points_size, to avoid reallocation in getModelScore()
      */
-    int * max_inliers = new int[points_size];
     int * inliers = new int[points_size];
     int * sample = new int[estimator->SampleNumber()];
 
@@ -109,9 +108,7 @@ void Ransac::run(cv::InputArray input_points) {
     while (iters < max_iters) {
 
         if (is_prosac) {
-            std::cout << "generate prosac sample\n";
             prosac_sampler->generateSample (sample, prosac_termination_criteria->getStoppingLength());
-            std::cout << "sampler generated\n";
         } else {
             sampler->generateSample(sample);
             
@@ -217,15 +214,20 @@ void Ransac::run(cv::InputArray input_points) {
                     best_model->setDescriptor (models[i]->returnDescriptor());
                 }
 
-                // How combine prosac termination criteria and sprt test?
                 if (SprtLO) {
-                    max_iters = sprt->getMaximumIterations(current_score->inlier_number);
+                    if (is_prosac) {
+                        max_iters = std::min ((int)sprt->getMaximumIterations(current_score->inlier_number),
+                                (int)prosac_termination_criteria->
+                                           getUpBoundIterations(iters, prosac_sampler->getLargestSampleSize(),
+                                                                           inliers, best_score->inlier_number));
+                    } else {
+                        max_iters = sprt->getMaximumIterations(current_score->inlier_number);
+                    }
                 } else {
                     if (is_prosac) {
                         max_iters = prosac_termination_criteria->
-                            updatePROSACStopping(iters, prosac_sampler->getLargestSampleSize(),
-                                    inliers, best_score->inlier_number);
-                        std::cout << "Prosac max iterations " << max_iters << "\n";
+                                getUpBoundIterations(iters, prosac_sampler->getLargestSampleSize(),
+                                                     inliers, best_score->inlier_number);
                     } else {
                         max_iters = termination_criteria->getUpBoundIterations(best_score->inlier_number, points_size);              
                     }
@@ -244,6 +246,7 @@ void Ransac::run(cv::InputArray input_points) {
      * If best model is LO model, so lo used non minimal model estimation
      * so we don't need to run it again. And model will be equal to non minimal model.
      */
+    int * max_inliers = new int[points_size];
     if (!best_LO_model) {
         // std::cout << "Calculate Non minimal model\n";
         Model *non_minimal_model = new Model;
@@ -255,7 +258,7 @@ void Ransac::run(cv::InputArray input_points) {
         } else {
             quality->getInliers(estimator, points_size, best_model, max_inliers);
         }
-            
+
         // estimate non minimal model with max inliers
         estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model);
         quality->GetModelScore(estimator, non_minimal_model, input_points, points_size, *current_score, 
