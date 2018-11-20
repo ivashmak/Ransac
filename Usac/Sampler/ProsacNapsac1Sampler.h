@@ -2,6 +2,8 @@
 #define USAC_PROSACNAPSAC1SAMPLER_H
 
 #include "Sampler.h"
+#include "NapsacSampler.h"
+#include "ProsacSampler.h"
 
 class ProsacNapsac1Sampler : public Sampler {
 private:
@@ -11,6 +13,16 @@ public:
     /*
      * Select the first point by PROSAC. Then the rest by NAPSAC.
      */
+    void initSampler (unsigned int sample_size, unsigned int points_size, const int * const neighbors) {
+        Sampler * prosac = new ProsacSampler;
+        Sampler * napsac = new NapsacSampler (neighbors, sample_size, points_size);
+
+    }
+
+    void generateSampler (int * sample) override {
+
+    }
+
     bool isInit () override {
         return true;
     }
