@@ -78,67 +78,33 @@ public:
      *     Make optinions of:
      *     1) Least Square Fitting.
      *     2) Weighted Least Square Fitting.
-     *     3) Robust Least Squre Fitting.
      */
     void LeastSquaresFitting (const int * const sample, int sample_size, Model &model) override {
         float a = 0, b = 0, c;
         float x, y, x_mean = 0, y_mean = 0;
-        // float xx_mean = 0, yy_mean = 0, varx, vary;
         unsigned int smpl;
+        
         for (unsigned int i = 0; i < sample_size; i++) {
             smpl = 2*sample[i];
             x = input_points[smpl];
             y = input_points[smpl+1];
             x_mean += x;
             y_mean += y;
-            // xx_mean += x*x;
-            // yy_mean += y*y;
         }
 
-        // float MADx = 0, MADy;
-        // for (int i = 0; i < sample_size; i++) {
-        //     x = input_points[2*sample[i]];
-        //     y = input_points[2*sample[i]+1];
-        //     MADx += fabsf (x - x_mean);
-        //     MADy += fabsf (y - y_mean);   
-        // }
-
         x_mean /= sample_size; y_mean /= sample_size;
-
-        // xx_mean /= sample_size; yy_mean /= sample_size;
-
-        // MADy /= sample_size;
-
-        // varx = xx_mean - x_mean * x_mean;
-        // vary = yy_mean - y_mean * y_mean;
-        // float w = 1/(sqrt (varx*varx + vary*vary));
-        
-        // float robust_w, residual_adj, residual_adj_x, residual_adj_y, y_pred, K = 4.685;
-        // float s = MADy/0.6745;
-        
         for (unsigned int i = 0; i < sample_size; i++) {
             smpl = 2*sample[i];
             x = input_points[smpl];
             y = input_points[smpl+1];
             
-            // residual_adj_x = residuals_x[i]/sqrt(1-residuals_x[i]/x);
-            // residual_adj_y = (y - y_mean)/sqrt(1-(y-y_mean)/y);
-
-            // float u = residual_adj_y/(K*s);
-            // if (u >= 1) {
-            //     robust_w = 0;
-            // } else {
-            //     robust_w = (1 - u*u) * (1 - u*u);
-            // }   
-
-            // w = 1/(y - (-x*this->a - this->c)/this->b);
             a += (x-x_mean) * (y-y_mean);
             b += (x-x_mean) * (x-x_mean);
         }
         a = -a;
         c = -b*y_mean - a*x_mean;
 
-        float mag = (float) (sqrt(a * a + b * b));
+        float mag = sqrt(a * a + b * b);
         a /= mag;
         b /= mag;
         c /= mag;

@@ -28,7 +28,7 @@ public:
     virtual void LeastSquaresFitting (const int * const sample, int sample_size, Model &model) {
         EstimateModelNonMinimalSample(sample, sample_size, model);
     }
-    
+
     virtual float GetError(int pidx) = 0;
     virtual int SampleNumber()  = 0;
 
