@@ -11,9 +11,10 @@ enum NEAR_NEIGHBORS_METHOD { FLANN, NANOFLANN };
 
 class NearestNeighbors {
 public:
-    void getNearestNeighbors_flann (cv::InputArray input_points, int k_nearest_neighbors, cv::Mat &nearest_neighbors);
-    void getNearestNeighbors_nanoflann (cv::InputArray input_points, int k_nearest_neighbors, cv::Mat &nearest_neighbors);
-
+    void getNearestNeighbors_flann (const cv::Mat& points, int k_nearest_neighbors, cv::Mat &nearest_neighbors);
+    void getNearestNeighbors_nanoflann (const cv::Mat& points, int k_nearest_neighbors,
+                                                          cv::Mat &nearest_neighbors, bool get_distances,
+                                                          cv::Mat &nearest_neighbors_distances);
     void test (int knn=7);
 };
 #endif //USAC_NEARESTNEIGHBORS_H

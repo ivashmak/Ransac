@@ -28,24 +28,39 @@ void Tests::testLineFitting() {
     // get number of ground truth inliers too.
     generate(points, false, true, &gt_inliers);
     std::cout << "generated points\n";
+    unsigned int points_size = points.size();
 
-    // sort points for Prosac
-    cv::Mat indicies, dists1, dists2, pts (points);
-    int knn = 2;
-    cv::flann::LinearIndexParams flannIndexParams;
-    cv::flann::Index * flannIndex = new cv::flann::Index (pts.reshape(1), flannIndexParams);
-    std::vector<cv::Point_<float>> sorted_points (points);
+
+    int knn = 7;
+    cv::Mat_<float> pts = cv::Mat (points);
+    cv::Mat_<float> neighbors, neighbors_dists;
+    NearestNeighbors nn;
+    nn.getNearestNeighbors_nanoflann(pts, knn+1, neighbors, true, neighbors_dists);
+    std::vector<int> sorted_idx (points_size);
+    std::iota(sorted_idx.begin(), sorted_idx.end(), 0);
 
     /*
      * Prosac quality sort.
-     * Sorting by distance of first nearest neighbor.
+     * Sorting by sum of distances of the (3) nearest neighbors.
      */
-    std::sort(sorted_points.begin(), sorted_points.end(), [&] (const cv::Point_<float>& a, const cv::Point_<float>& b) {
-        flannIndex->knnSearch(cv::Mat_<float>(a), indicies, dists1, knn);
-        flannIndex->knnSearch(cv::Mat_<float>(b), indicies, dists2, knn);
-        return dists1.at<float>(1) < dists2.at<float>(1);
+    float sum1, sum2;
+    int idxa, idxb;
+    float * neighbors_dists_ptr = (float *) neighbors_dists.data;
+    std::sort(sorted_idx.begin(), sorted_idx.end(), [&] (int a, int b) {
+        sum1 = 0, sum2 = 0;
+        idxa = knn*a, idxb = knn*b;
+        for (int i = 0; i < 3; i++) {
+            sum1 += neighbors_dists_ptr[idxa + i];
+            sum2 += neighbors_dists_ptr[idxb + i];
+        }
+        return sum1 < sum2;
     });
-    //---
+
+    std::vector<cv::Point_<float>> sorted_points;
+    for (int i = 0; i < points_size; i++) {
+        sorted_points.push_back(points[sorted_idx[i]]);
+    }
+
 
     // Main Ransac components
     Estimator *estimator = new Line2DEstimator (points);
@@ -55,39 +70,42 @@ void Tests::testLineFitting() {
     Sampler * sampler;
     //
 
-    unsigned int points_size = points.size();
+
 
     // ---------------- uniform -------------------
-    model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Uniform);
-
-    model->setSprtLO(false);
-    model->setGraphCutLO(false);
-    model->setStandardRansacLO(false);
-
-    initUniform(sampler, model->sample_number, points_size);
-     test (pts, estimator, sampler, model, quality, termination_criteria, "", gt_inliers);
+//    model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Uniform);
+//
+//    model->setSprtLO(false);
+//    model->setGraphCutLO(false);
+//    model->setStandardRansacLO(false);
+//
+//    initUniform(sampler, model->sample_number, points_size);
+//     test (pts, estimator, sampler, model, quality, termination_criteria, "", gt_inliers);
     //------------------------------------------
 
 
 
+
+
     // --------------  prosac ---------------------
-//    model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Prosac);
-//    initProsac(sampler, model->sample_number, points.size());std::cout << "inited\n";
-//    ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
-//
-//    ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
-//    prosac_termination_criteria_->initProsacTerminationCriteria (prosac_sampler_->getGrowthFunction(),
-//                                                model, points.size());
-//
-//    TerminationCriteria * prosac_termination_criteria = prosac_termination_criteria_;
-//    cv::Mat sorted_pts (sorted_points);
-//    estimator = new Line2DEstimator (sorted_points);
-//
-//    test (sorted_pts, estimator, sampler, model, quality, prosac_termination_criteria, "", gt_inliers);
-//
-//    // switch to unsorted points back (not necessary, just for testing)
-//    estimator = new Line2DEstimator (points);
+    model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Prosac);
+    initProsac(sampler, model->sample_number, points.size());
+    ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
+
+    ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
+    prosac_termination_criteria_->initProsacTerminationCriteria (prosac_sampler_->getGrowthFunction(),
+                                                model, points_size);
+
+    TerminationCriteria * prosac_termination_criteria = prosac_termination_criteria_;
+    cv::Mat sorted_pts (sorted_points);
+    estimator = new Line2DEstimator (sorted_points);
+
+    test (sorted_pts, estimator, sampler, model, quality, prosac_termination_criteria, "", gt_inliers);
+
+    // switch to unsorted points back (not necessary, just for testing)
+    estimator = new Line2DEstimator (points);
     // ------------------------------------------------
+
 
 
 
@@ -95,9 +113,6 @@ void Tests::testLineFitting() {
     // ---------------- napsac -------------------------------
 //    knn = 7;
 //    model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Napsac);
-//    cv::Mat neighbors;
-//    NearestNeighbors nn;
-//    nn.getNearestNeighbors_flann(pts, knn+1, neighbors);
 //    initNapsac(sampler, neighbors, model->k_nearest_neighbors, model->sample_number);
 //
 //     test (pts, estimator, sampler, model, quality, termination_criteria, "", gt_inliers);
@@ -112,6 +127,7 @@ void Tests::testLineFitting() {
 
     // test (pts, estimator, evsac_sampler, model, quality, termination_criteria, "", gt_inliers);
     // ------------------------------------------------------------
+
 
 
 

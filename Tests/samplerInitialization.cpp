@@ -21,7 +21,7 @@ void Tests::initUniform (Sampler *& sampler, unsigned int sample_number, unsigne
 void Tests::initNapsac (Sampler *& sampler, const cv::Mat &neighbors, unsigned int k_nearest_neighbors,
                         unsigned int sample_number) {
 
-    sampler = new NapsacSampler(neighbors, k_nearest_neighbors, sample_number);
+    sampler = new NapsacSampler((int *)neighbors.data, k_nearest_neighbors, sample_number, neighbors.rows);
 }
 
 void Tests::initEvsac (Sampler *& sampler, cv::InputArray points, unsigned int sample_number,

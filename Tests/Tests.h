@@ -7,6 +7,8 @@
 #include "../Usac/Quality/Quality.h"
 #include "../Usac/Ransac/Ransac.h"
 #include "StatisticalResults.h"
+#include "../Usac/Sampler/ProsacSampler.h"
+#include "../Usac/TerminationCriteria/ProsacTerminationCriteria.h"
 
 
 class Tests {
@@ -36,6 +38,16 @@ public:
                const std::string &img_name,
                int GT_num_inliers);
 
+
+    void getSortedPoints (const cv::Mat& neighbors_dists) {
+    }
+
+    std::string getComputerInfo () {
+        return "RAM 15.6 GB\n"
+               "Intel Core i7\n"
+               "OS type 64 bit\n"
+               "8 CPUs\n";
+    }
     /*
      * Display average results such as computational time,
      * number of inliers of N runs of Ransac.
@@ -43,14 +55,15 @@ public:
     void getStatisticalResults (cv::InputArray points,
                     Estimator *const estimator,
                     Model *const model,
-                    Sampler *const sampler,
-                    TerminationCriteria * const termination_criteria,
+                    Sampler * sampler,
+                    TerminationCriteria * termination_criteria,
                     Quality *const quality,
                     int N,
                     bool GT = false, bool get_results = false,
                     int gt_num_inliers=0, StatisticalResults * statistical_results=0) {
 
-        
+
+
         int bad_models_counter = 0;
 
         long * times = new long[N];
@@ -68,6 +81,11 @@ public:
         // time and average error.
         // If we have GT number of inliers, then find number of fails model.
         for (int i = 0; i < N; i++) {
+            if (model->sampler == SAMPLER::Prosac) {
+                sampler = new ProsacSampler (*(ProsacSampler *)sampler);
+                termination_criteria = new ProsacTerminationCriteria(*(ProsacTerminationCriteria *)termination_criteria);
+            }
+
             Ransac ransac (model, sampler, termination_criteria, quality, estimator);
             ransac.run(points);
             RansacOutput *ransacOutput = ransac.getRansacOutput();
@@ -133,11 +151,11 @@ public:
         results->median_num_iters = (num_iterss[N/2-1] + num_iterss[N/2])/2;
         
 
-        std::cout << N << " runs of Ransac for " << model->getName() << " with points size " << points.size().width << '\n';
-        std::cout << results << "\n";
+//        std::cout << N << " runs of Ransac for " << model->getName() << " with points size " << points.size().width << '\n';
+//        std::cout << results << "\n";
 
         if (get_results) {
-            statistical_results = new StatisticalResults(*results);
+            statistical_results->copyFrom(results);
         }
 
         delete avg_errorss, num_inlierss, num_iterss, times, results;

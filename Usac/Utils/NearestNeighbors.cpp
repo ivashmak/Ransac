@@ -15,13 +15,14 @@
  * ...
  * xN_nn1 xN_nn2 ... xN_nnk
  */
-void NearestNeighbors::getNearestNeighbors_nanoflann (cv::InputArray input_points, int k_nearest_neighbors,
-                                                      cv::Mat &nearest_neighbors) {
-    unsigned int points_size = input_points.getMat().rows;
-    unsigned int dim = input_points.getMat().cols;
+void NearestNeighbors::getNearestNeighbors_nanoflann (const cv::Mat& points, int k_nearest_neighbors,
+                                                      cv::Mat &nearest_neighbors, bool get_distances,
+                                                      cv::Mat &nearest_neighbors_distances) {
+    unsigned int points_size = points.rows;
+    unsigned int dim = points.cols;
 
     Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic> mat;
-    cv::cv2eigen(cv::Mat_<float>(input_points.getMat()), mat);
+    cv::cv2eigen(points, mat);
 
     typedef nanoflann::KDTreeEigenMatrixAdaptor<Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>> my_kd_tree_t;
 
@@ -29,25 +30,45 @@ void NearestNeighbors::getNearestNeighbors_nanoflann (cv::InputArray input_point
     mat_index.index->buildIndex();
 
     // do a knn search
-    unsigned long * ret_indexes = new unsigned long [k_nearest_neighbors+1];
-    float * out_dists_sqr = new float [k_nearest_neighbors+1];
-    nanoflann::KNNResultSet<float> resultSet(k_nearest_neighbors+1);
+    unsigned long *ret_indexes = new unsigned long[k_nearest_neighbors + 1];
+    float *out_dists_sqr = new float[k_nearest_neighbors + 1];
+    nanoflann::KNNResultSet<float> resultSet(k_nearest_neighbors + 1);
 
-    nearest_neighbors = cv::Mat_<int> (points_size, k_nearest_neighbors);
-    int * nearest_neighbors_ptr = (int *) nearest_neighbors.data;
-    int pp;
-    for (int p = 0; p < points_size; p++) {
-        resultSet.init(ret_indexes, out_dists_sqr);
-        mat_index.index->findNeighbors(resultSet, Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>(mat.row(p)).data(), nanoflann::SearchParams(10));
+    nearest_neighbors = cv::Mat_<int>(points_size, k_nearest_neighbors);
+    int *nearest_neighbors_ptr = (int *) nearest_neighbors.data;
 
-//        std::cout << "query point idx " << p << " value is " << mat.row(p) << "\n";
-        pp = k_nearest_neighbors * p;
-        for (int nn = 0; nn < k_nearest_neighbors; nn++) {
-//            std::cout << "\tret_index[" << nn << "]=" << ret_indexes[nn]
-//                      << "\tout_dist_sqr=" << out_dists_sqr[nn] << '\n';
-            nearest_neighbors_ptr[pp + nn] = ret_indexes[nn+1];
+    int p_idx;
+    if (get_distances) {
+        nearest_neighbors_distances = cv::Mat_<float>(points_size, k_nearest_neighbors);
+        float *nearest_neighbors_distances_ptr = (float *) nearest_neighbors_distances.data;
+
+        for (int p = 0; p < points_size; p++) {
+            resultSet.init(ret_indexes, out_dists_sqr);
+            mat_index.index->findNeighbors(resultSet,
+                                           Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>(mat.row(p)).data(),
+                                           nanoflann::SearchParams(10));
+            p_idx = k_nearest_neighbors * p;
+
+            for (int nn = 0; nn < k_nearest_neighbors; nn++) {
+                nearest_neighbors_ptr[p_idx + nn] = (int) ret_indexes[nn + 1];
+                nearest_neighbors_distances_ptr[p_idx + nn] = out_dists_sqr[nn + 1];
+            }
+        }
+    } else {
+        for (int p = 0; p < points_size; p++) {
+            resultSet.init(ret_indexes, out_dists_sqr);
+            mat_index.index->findNeighbors(resultSet,
+                                           Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>(mat.row(p)).data(),
+                                           nanoflann::SearchParams(10));
+            p_idx = k_nearest_neighbors * p;
+            for (int nn = 0; nn < k_nearest_neighbors; nn++) {
+                nearest_neighbors_ptr[p_idx + nn] = ret_indexes[nn + 1];
+            }
         }
     }
+
+//    std::cout << nearest_neighbors << "\n\n";
+//    std::cout << nearest_neighbors_distances << "\n\n";
 
     delete ret_indexes, out_dists_sqr;
 }
@@ -66,22 +87,20 @@ void NearestNeighbors::getNearestNeighbors_nanoflann (cv::InputArray input_point
  * xN_nn1 xN_nn2 ... xN_nnk
  *
  */
-void NearestNeighbors::getNearestNeighbors_flann (cv::InputArray input_points, int k_nearest_neighbors, cv::Mat &nearest_neighbors) {
-    unsigned int points_size = input_points.getMat().rows;
-    cv::Mat_<float> points = input_points.getMat();
+void NearestNeighbors::getNearestNeighbors_flann (const cv::Mat& points, int k_nearest_neighbors, cv::Mat &nearest_neighbors) {
+    unsigned int points_size = points.rows;
     cv::flann::LinearIndexParams flannIndexParams;
     cv::flann::Index flannIndex (points.reshape(1), flannIndexParams);
     cv::Mat dists;
 
-    // std::cout << k_nearest_neighbors << "\n";
-    // std::cout << points << "\n\n";
-    // std::cout << points.size() << "\n\n";
-    
     flannIndex.knnSearch(points, nearest_neighbors, dists, k_nearest_neighbors+1);
 
     // first nearest neighbor of point is this point itself.
     // remove this first column
     nearest_neighbors.colRange(1, k_nearest_neighbors+1).copyTo (nearest_neighbors);
+
+//    std::cout << nearest_neighbors << "\n\n";
+//    std::cout << dists << "\n\n";
 }
 
 void NearestNeighbors::test (int knn) {
@@ -100,7 +119,8 @@ void NearestNeighbors::test (int knn) {
     std::cout << "duration flann: "<< duration <<'\n';
 
     start = std::clock();
-    getNearestNeighbors_nanoflann(points_mat, knn, nearest_neighbors_nanoflann);
+    cv::Mat neighbors_distances;
+    getNearestNeighbors_nanoflann(points_mat, knn, nearest_neighbors_nanoflann, false, neighbors_distances);
     duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
     std::cout << "duration nanoflann: "<< duration <<'\n';
 

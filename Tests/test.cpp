@@ -55,7 +55,7 @@ void Tests::test (cv::InputArray points,
     if (model->estimator == ESTIMATOR::Essential) {
 
     } else {
-
+        std::cout << "UNKNOWN ESTIMATOR\n";
     }
 
 }

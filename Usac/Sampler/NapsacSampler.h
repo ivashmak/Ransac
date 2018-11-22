@@ -16,7 +16,7 @@ class NapsacSampler : public Sampler {
 private:
     RandomGenerator * random_generator;
     int knn;
-    const int * const k_nearest_neighbors_indices_ptr;
+    const int * const neighbors;
     int * next_neighbors;
 public:
 
@@ -31,17 +31,17 @@ public:
      * ...
      * neighbor1_of_(xN,yN) ... neighborK_of_(xN,yN)
      */
-    NapsacSampler (cv::InputArray k_nearest_neighbors_indices, int knn, unsigned int sample_size, bool reset_time = true)
-            : k_nearest_neighbors_indices_ptr ((int *) k_nearest_neighbors_indices.getMat().data) {
+    NapsacSampler (const int * const k_nearest_neighbors_indices, int knn_, unsigned int sample_size_, unsigned int points_size_, bool reset_time = true)
+            : neighbors (k_nearest_neighbors_indices) {
 
 //        std::cout << k_nearest_neighbors_indices.getMat() << "\n";
 
-        assert (!k_nearest_neighbors_indices.empty());
+        assert (k_nearest_neighbors_indices != nullptr);
 
-        this->knn = knn;
-        this->sample_size = sample_size;
-        this->points_size = k_nearest_neighbors_indices.getMat().rows;
-
+        this->knn = knn_;
+        this->sample_size = sample_size_;
+        this->points_size = points_size_;
+        
         random_generator = new ArrayRandomGenerator;
         random_generator->resetGenerator(0, points_size-1);
 
@@ -63,11 +63,11 @@ public:
 //        std::cout << sample[0] << " ";
         for (int i = 1; i < sample_size; i++) {
             // get the farthest neighbor
-//            sample[i] = k_nearest_neighbors_indices_ptr[(knn * initial_point) + next_neighbors[initial_point] + knn-1];
+//            sample[i] = neighbors[(knn * initial_point) + next_neighbors[initial_point] + knn-1];
 //            // move next neighbor
 //            next_neighbors[initial_point] = (next_neighbors[initial_point] - 1) % -knn;
 
-            sample[i] = k_nearest_neighbors_indices_ptr[(knn * initial_point) + next_neighbors[initial_point]];
+            sample[i] = neighbors[(knn * initial_point) + next_neighbors[initial_point]];
             next_neighbors[initial_point] = (next_neighbors[initial_point] + 1) % knn;
 
 

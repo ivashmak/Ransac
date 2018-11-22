@@ -6,8 +6,8 @@ enum SAMPLER  { NullS, Uniform, GradualNapsac, Napsac, Prosac, Evsac };
 
 class Model {
 public:
-	float threshold = 10.0;
-	int sample_number = 2;
+	float threshold = 3;
+	int sample_number = 4;
 	float desired_prob = 0.95;
 	int max_iterations = 10000;
 	int k_nearest_neighbors = 7;
@@ -80,8 +80,10 @@ public:
     }
 
     void getDescriptor(cv::Mat &_desc) { 
-    	_desc = descriptor;
-    }    
+//    	_desc = descriptor;
+		_desc = descriptor.clone();
+
+	}
 
     cv::Mat returnDescriptor () {
         return descriptor;

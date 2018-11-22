@@ -25,8 +25,8 @@ public:
     virtual unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) = 0;
     
     virtual bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) = 0;
-    virtual void LeastSquaresFitting (const int * const sample, int sample_size, Model &model) {
-        EstimateModelNonMinimalSample(sample, sample_size, model);
+    virtual bool LeastSquaresFitting (const int * const sample, int sample_size, Model &model) {
+        return EstimateModelNonMinimalSample(sample, sample_size, model);
     }
 
     virtual float GetError(int pidx) = 0;

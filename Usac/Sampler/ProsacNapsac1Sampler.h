@@ -13,10 +13,9 @@ public:
     /*
      * Select the first point by PROSAC. Then the rest by NAPSAC.
      */
-    void initSampler (unsigned int sample_size, unsigned int points_size, const int * const neighbors) {
+    void initSampler (unsigned int knn, unsigned int sample_size, unsigned int points_size, const int * const neighbors) {
         Sampler * prosac = new ProsacSampler;
-        Sampler * napsac = new NapsacSampler (neighbors, sample_size, points_size);
-
+        Sampler * napsac = new NapsacSampler (neighbors, knn, sample_size, points_size);
     }
 
     void generateSampler (int * sample) override {

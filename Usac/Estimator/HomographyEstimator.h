@@ -39,7 +39,7 @@ public:
     unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         cv::Mat H;
         DLT (points, sample, 4, H);
-        // normalize H by last h33
+        // normalize H by h33
         H = H / H.at<float>(2,2);
 
         models[0]->setDescriptor(H);

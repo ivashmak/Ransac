@@ -45,6 +45,26 @@ public:
                 << "-----------------\n"
                 << res->num_fails << " failed models\n";
     }
+
+    void copyFrom (StatisticalResults * statisticalResults) {
+        avg_time_mcs = statisticalResults->avg_time_mcs;
+        median_time_mcs = statisticalResults->median_time_mcs;
+        std_dev_time_mcs = statisticalResults->std_dev_time_mcs;
+
+        avg_num_inliers = statisticalResults->avg_num_inliers;
+        median_num_inliers = statisticalResults->median_num_inliers;
+        std_dev_num_inliers = statisticalResults->std_dev_num_inliers;
+
+        avg_avg_error = statisticalResults->avg_avg_error;
+        median_avg_error = statisticalResults->median_avg_error;
+        std_dev_avg_error = statisticalResults->std_dev_avg_error;
+
+        avg_num_iters = statisticalResults->avg_num_iters;
+        median_num_iters = statisticalResults->median_num_iters;
+        std_dev_num_iters = statisticalResults->std_dev_num_iters;
+
+        num_fails = statisticalResults->num_fails;
+    }
 };
 
 

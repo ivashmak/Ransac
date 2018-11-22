@@ -18,8 +18,11 @@
 
 #include "../Generator/generator.h"
 #include "../dataset/Dataset.h"
+#include "../Usac/Utils/NearestNeighbors.h"
+#include "../Usac/TerminationCriteria/ProsacTerminationCriteria.h"
+
 void storeResults ();
-int getGTNumInliers (const std::string &filename, float threshold, float desired_prob);
+int getGTNumInliers (const std::string &filename, float threshold);
 
 void Tests::testHomographyFitting() {
     std::string img_name = "graf";
@@ -65,27 +68,89 @@ void Tests::testHomographyFitting() {
 
 //    std::cout << cv::findHomography(points1, points2) << '\n';
 
-    Model *homography_model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform); 
-    homography_model->setStandardRansacLO(true);
-    homography_model->setGraphCutLO(true);
-    homography_model->setSprtLO(true);
-    
-    Sampler *uniform_sampler = new UniformSampler;
-    uniform_sampler->setSampleSize(homography_model->sample_number);
-    uniform_sampler->setPointsSize(points1.rows);
-    uniform_sampler->initRandomGenerator();
+    unsigned int points_size = (unsigned int) points.rows;
+    int knn = 7;
 
-    Estimator * homograpy_estimator = new HomographyEstimator (points);
+    cv::Mat_<float> neighbors, neighbors_dists;
+    NearestNeighbors nn;
+    nn.getNearestNeighbors_nanoflann(points1, knn+1, neighbors, true, neighbors_dists);
+    std::vector<int> sorted_idx (points_size);
+    std::iota(sorted_idx.begin(), sorted_idx.end(), 0);
+
+    /*
+     * Prosac quality sort.
+     * Sorting by sum of distances of the (3) nearest neighbors.
+     */
+    float sum1, sum2;
+    int idxa, idxb;
+    float * neighbors_dists_ptr = (float *) neighbors_dists.data;
+    std::sort(sorted_idx.begin(), sorted_idx.end(), [&] (int a, int b) {
+        sum1 = 0, sum2 = 0;
+        idxa = knn*a, idxb = knn*b;
+        for (int i = 0; i < 3; i++) {
+            sum1 += neighbors_dists_ptr[idxa + i];
+            sum2 += neighbors_dists_ptr[idxb + i];
+        }
+        return sum1 < sum2;
+    });
+
+    cv::Mat_<float> sorted_points;
+    for (int i = 0; i < points_size; i++) {
+        sorted_points.push_back(points.row(i));
+    }
+
+    Model * model;
+    Sampler * sampler;
+    Estimator * estimator;
     TerminationCriteria *termination_criteria = new StandardTerminationCriteria;
     Quality *quality = new Quality;
-    int gt_inliers = getGTNumInliers (img_name, homography_model->threshold, homography_model->desired_prob);
+    int gt_inliers = getGTNumInliers (img_name, 3 /*model->threshold*/);
 
-    test (points, homograpy_estimator, uniform_sampler, homography_model, quality, termination_criteria,
-            img_name, gt_inliers);
-    
-   // getStatisticalResults(points, homograpy_estimator, homography_model, uniform_sampler, termination_criteria, quality, 1000);
 
-//     storeResults();
+    // ---------------------- uniform ----------------------------------
+//    model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform);
+//    model->setStandardRansacLO(false);
+//    model->setGraphCutLO(false);
+//    model->setSprtLO(false);
+//
+//    sampler = new UniformSampler;
+//    initUniform(sampler, model->sample_number, points_size);
+//
+//    estimator = new HomographyEstimator (points);
+//
+//    test (points, estimator, sampler, model, quality, termination_criteria,
+//            img_name, gt_inliers);
+    // --------------------------------------------------------------
+
+
+
+
+// ------------------ prosac ---------------------
+//    model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Prosac);
+//    model->setStandardRansacLO(false);
+//    model->setGraphCutLO(false);
+//    model->setSprtLO(false);
+//    initProsac(sampler, model->sample_number, points_size);
+//    ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
+//
+//    ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
+//    prosac_termination_criteria_->initProsacTerminationCriteria (prosac_sampler_->getGrowthFunction(),
+//                                                                 model, points_size);
+//
+//    termination_criteria = prosac_termination_criteria_;
+//
+//    estimator = new HomographyEstimator (sorted_points);
+//    test (points, estimator, sampler, model, quality, termination_criteria,
+//          img_name, gt_inliers);
+    // -------------------------------------------------
+
+
+
+
+//    getStatisticalResults(points, estimator, model, sampler, termination_criteria,
+//                          quality, 300, true, false, gt_inliers, nullptr);
+
+     storeResults();
 }
 
 
@@ -97,74 +162,96 @@ void storeResults () {
 
     TerminationCriteria *termination_criteria = new StandardTerminationCriteria;
     Quality *quality = new Quality;
-    Model *homography_model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform);
+    Model *model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform);
+    Tests tests;
+
+    model->setStandardRansacLO(true);
+    model->setGraphCutLO(true);
+    model->setSprtLO(true);
+
+    int N_runs = 50;
 
     std::ofstream results_total;
-    results_total.open ("../results/homography/ALL.csv");
-    results_total << "Filename,Number of Inliers (found / total points),Number of Iterations,Time (mcs),"
-                     "Average Error (threshold = " << homography_model->threshold <<"),,,,,\n";
+    results_total.open ("../results/homography/all_uniform.csv");
+    results_total << tests.getComputerInfo();
+    results_total << model->getName() << ",,,,,,,,,,,,,\n";
+    results_total << "Runs for each image = " << N_runs << "\n";
+    results_total << "Threshold for each image = " << model->threshold << "\n";
+    results_total << "Desired probability for each image = " << model->desired_prob << "\n";
+    results_total << "Standard LO = " << (bool) model->LO << "\n";
+    results_total << "Graph Cut LO = " << (bool) model->GraphCutLO << "\n";
+    results_total << "SPRT = " << (bool) model->SprtLO << "\n\n\n";
+
+    results_total << "Filename,Avg num inl/gt,Std dev num inl,Med num inl,"
+                     "Avg num iters,Std dev num iters,Med num iters,"
+                     "Avg time (mcs),Std dev time,Med time,"
+                     "Num fails\n";
+
 
     for (std::string img_name : points_filename) {
         std::cout << img_name << '\n';
         cv::Mat points1, points2;
-        read_points (points1, points2, "../dataset/homography/"+img_name);
+        read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
         cv::hconcat(points1, points2, points1);
 
-        Estimator * homograpy_estimator = new HomographyEstimator (points1);
-        Sampler *uniform_sampler = new UniformSampler;
+        Estimator * estimator = new HomographyEstimator (points1);
+        Sampler * sampler = new UniformSampler;
 
-        uniform_sampler->setSampleSize(homography_model->sample_number);
-        uniform_sampler->setPointsSize(points1.rows);
-        uniform_sampler->initRandomGenerator();
+        tests.initUniform(sampler, model->sample_number, points1.rows);
 
-        Ransac ransac (homography_model, uniform_sampler, termination_criteria, quality, homograpy_estimator);
-        ransac.run(points1);
+        int gt_inliers = getGTNumInliers (img_name, model->threshold);
+        StatisticalResults * statistical_results = new StatisticalResults;
 
-        RansacOutput *ransacOutput = ransac.getRansacOutput();
-
-        cv::Mat H = ransacOutput->getModel()->returnDescriptor();
-
-        std::ofstream save_model;
-        std::string filename = "../results/homography/" + img_name.substr(0, img_name.find('_')) +".csv";
-        save_model.open(filename);
-
-        save_model << H.at<float>(0,0) << "," << H.at<float>(0,1) << "," << H.at<float>(0,2) << ",\n"
-                   << H.at<float>(1,0) << "," << H.at<float>(1,1) << "," << H.at<float>(1,2) << ",\n"
-                   << H.at<float>(2,0) << "," << H.at<float>(2,1) << "," << H.at<float>(2,2) << ",\n";
-
-        save_model << ransacOutput->getNumberOfInliers() << '\n';
-        save_model << ransacOutput->getNumberOfIterations() << '\n';
-        save_model << ransacOutput->getTimeMicroSeconds() << '\n';
+        tests.getStatisticalResults(points1, estimator, model, sampler, termination_criteria,
+                              quality, N_runs, true, true, gt_inliers, statistical_results);
 
         // save to csv file
         results_total << img_name << ",";
-        results_total << ransacOutput->getNumberOfInliers() << "/" << points1.rows << ",";
-        results_total << ransacOutput->getNumberOfIterations() << ",";
-        results_total << ransacOutput->getTimeMicroSeconds() << ",";
-        results_total << ransacOutput->getAverageError() << "\n";
-        save_model.close();
+        results_total << statistical_results->avg_num_inliers << " / " << gt_inliers << ",";
+        results_total << statistical_results->std_dev_num_inliers << ",";
+        results_total << statistical_results->median_num_inliers << ",";
+
+        results_total << statistical_results->avg_num_iters << ",";
+        results_total << statistical_results->std_dev_num_iters << ",";
+        results_total << statistical_results->median_num_iters << ",";
+
+        results_total << statistical_results->avg_time_mcs << ",";
+        results_total << statistical_results->std_dev_time_mcs << ",";
+        results_total << statistical_results->median_time_mcs << ",";
+
+        results_total << statistical_results->num_fails << "\n";
     }
 
     results_total.close();
-    delete homography_model, quality, termination_criteria;
+    delete model, quality, termination_criteria;
 }
 
-int getGTNumInliers (const std::string &filename, float threshold, float desired_prob) {
+
+
+int getGTNumInliers (const std::string &filename, float threshold) {
     cv::Mat_<float> H;
     getMatrix3x3 ("../dataset/homography/"+filename+"_model.txt", H);
     Quality * quality = new Quality;
     cv::Mat points, points1, points2;
     read_points (points1, points2, "../dataset/homography/"+filename+"_pts.txt");
     cv::hconcat(points1, points2, points);
-
-    HomographyEstimator * estimator = new HomographyEstimator(points);
-    Model * model = new Model (threshold, 4, desired_prob, 0, ESTIMATOR::Homography, SAMPLER::Uniform);
-    model->setDescriptor (H);
-
     int * inliers = new int [points.rows];
     Score * score = new Score;
+    Estimator * estimator = new HomographyEstimator(points);
+    Model * model = new Model (threshold, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform);
+
+
+    // In some ground truth model, the correct homography matrix is inverse.
+    model->setDescriptor (H.inv());
     quality->GetModelScore (estimator, model, points, points.rows, *score, inliers, false);
 
+    int score1 = score->inlier_number;
+
+    model->setDescriptor (H);
+    quality->GetModelScore (estimator, model, points, points.rows, *score, inliers, false);
+
+    int score2 = score->inlier_number;
+
     delete inliers, score, model, quality, estimator;
-    return score->inlier_number;
+    return std::max (score1, score2);
 }

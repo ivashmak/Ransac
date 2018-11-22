@@ -13,9 +13,15 @@ int main (int args, char ** argv) {
     // evaluating random generators
    // evaluateRandomGenerators();
 
+
+    // test calculating nearest neighbors using flann and nano flann
+//    NearestNeighbors nn;
+//    nn.test();
+
+
     // run tests
-    tests.testLineFitting();
-//     tests.testHomographyFitting();
+//    tests.testLineFitting();
+     tests.testHomographyFitting();
 //     tests.testFundamentalFitting();
 //     tests.testEssentialFitting();
 

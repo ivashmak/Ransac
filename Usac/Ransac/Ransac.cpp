@@ -63,9 +63,9 @@ void Ransac::run(cv::InputArray input_points) {
     bool GraphCutLO = model->GraphCutLO;
     bool SprtLO = model->SprtLO;
     
-    std::cout << "General ransac Local Optimization " << LO << "\n";
-    std::cout << "graphCut Local Optimization " << GraphCutLO << "\n";
-    std::cout << "Sprt Local Optimization " << SprtLO << "\n";    
+//    std::cout << "General ransac Local Optimization " << LO << "\n";
+//    std::cout << "graphCut Local Optimization " << GraphCutLO << "\n";
+//    std::cout << "Sprt Local Optimization " << SprtLO << "\n";
 
     // prosac
     ProsacTerminationCriteria * prosac_termination_criteria;
@@ -116,7 +116,7 @@ void Ransac::run(cv::InputArray input_points) {
     while (iters < max_iters) {
 
         if (is_prosac) {
-            prosac_sampler->generateSample (sample, prosac_termination_criteria->getStoppingLength());
+            prosac_sampler->generateSampleProsac (sample, prosac_termination_criteria->getStoppingLength());
         } else {
             sampler->generateSample(sample);
             
@@ -169,22 +169,23 @@ void Ransac::run(cv::InputArray input_points) {
                 // }
             // std::cout << "general " << current_score->inlier_number << "\n";
             
-            if (*current_score > best_score) {
+            if (current_score->bigger(best_score)) {
 
-                 // std::cout << "current score = " << current_score->score << '\n';
+//                  std::cout << "current score = " << current_score->score << '\n';
 
                 if (LO) {
                     bool can_finish;
                     unsigned int lo_iters = lo_ransac->GetLOModelScore (*lo_model, *lo_score,
                             current_score, input_points, points_size, iters, inliers, &can_finish);
 
-                    // std::cout << "lo score " << lo_score->inlier_number << '\n';
-                    if (*lo_score > current_score) {
+//                     std::cout << "lo score " << lo_score->inlier_number << '\n';
+                    if (lo_score->bigger(current_score)) {
                         // std::cout << "LO score is better than current score\n";
                         best_score->copyFrom(lo_score);
                         best_LO_model = true;
 
                         best_model->setDescriptor(lo_model->returnDescriptor());
+//                        std::cout << "best model " << best_model->returnDescriptor() << "\n";
                     } else{
                         best_score->copyFrom(current_score);
                         best_LO_model = false;
@@ -254,7 +255,7 @@ void Ransac::run(cv::InputArray input_points) {
      */
     int * max_inliers = new int[points_size];
     if (!best_LO_model) {
-        // std::cout << "Calculate Non minimal model\n";
+//         std::cout << "Calculate Non minimal model\n";
         Model *non_minimal_model = new Model;
         non_minimal_model->copyFrom (model);
     
@@ -272,14 +273,19 @@ void Ransac::run(cv::InputArray input_points) {
 
         // Priority is for non minimal model estimation
 //        if (current_score->inlier_number >= best_score->inlier_number) {
+//        std::cout << "end non minimal score " << current_score->inlier_number << '\n';
+//        std::cout << "end best score " << best_score->inlier_number << '\n';
+        if (current_score->inlier_number == 0) {
+//            std::cout << "NON minimal model completely failed!\n";
+//            exit (1);
+        }
             best_score->copyFrom(current_score);
             best_model->setDescriptor(non_minimal_model->returnDescriptor());
 //        } else {
-                   if (current_score->inlier_number < best_score->inlier_number)
-           std::cout
-                   << "\033[1;31mNon minimal model worse than best ransac model. May be something wrong. Check it!\033[0m \n";
-           std::cout << "end non minimal score " << current_score->inlier_number << '\n';
-           std::cout << "end best score " << best_score->inlier_number << '\n';
+//                   if (current_score->inlier_number < best_score->inlier_number)
+//           std::cout
+//                   << "\033[1;31mNon minimal model worse than best ransac model. May be something wrong. Check it!\033[0m \n";
+
 //        }
     }
 

@@ -79,7 +79,7 @@ public:
      *     1) Least Square Fitting.
      *     2) Weighted Least Square Fitting.
      */
-    void LeastSquaresFitting (const int * const sample, int sample_size, Model &model) override {
+    bool LeastSquaresFitting (const int * const sample, int sample_size, Model &model) override {
         float a = 0, b = 0, c;
         float x, y, x_mean = 0, y_mean = 0;
         unsigned int smpl;
@@ -110,6 +110,7 @@ public:
         c /= mag;
 
         model.setDescriptor((cv::Mat_<float>(1,3) <<  a, b, c));
+        return true;
     }
 
     /*

@@ -84,6 +84,7 @@ public:
 
         int * lo_sample = new int[lo_sample_size];
         int * lo_inliers = new int[points_size];
+        int * max_lo_inliers = new int [points_size];
 
         sampler->setSampleSize(lo_sample_size);
         sampler->setPointsSize(kth_ransac_score->inlier_number);
@@ -117,8 +118,8 @@ public:
             sampler->generateSample(lo_sample);
             if (lo_better_than_kth_ransac) {
                 for (int smpl = 0; smpl < lo_sample_size; smpl++) {
-                    lo_sample[smpl] = lo_inliers[lo_sample[smpl]];
-                }   
+                   lo_sample[smpl] = max_lo_inliers[lo_sample[smpl]];
+                }
             } else {
                 for (int smpl = 0; smpl < lo_sample_size; smpl++) {
                     lo_sample[smpl] = inliers[lo_sample[smpl]];
@@ -129,10 +130,8 @@ public:
             /*
              * Estimate model of best sample from k-th step of Ransac
              */
-            if (!estimator->EstimateModelNonMinimalSample(lo_sample, lo_sample_size, *lo_model)) {
-                continue;
-            }
-            
+            if (!estimator->EstimateModelNonMinimalSample(lo_sample, lo_sample_size, *lo_model)) continue;
+
             // Evaluate model and get inliers
             quality->GetModelScore(estimator, lo_model, input_points, points_size, *lo_score, lo_inliers, true);
 
@@ -142,9 +141,14 @@ public:
              * Else best lo score is lo score;
              */
 
-            if (*lo_score > best_lo_score) {
+            if (lo_score->bigger(best_lo_score)) {
                 best_lo_score.copyFrom (lo_score);
                 best_lo_model.setDescriptor(lo_model->returnDescriptor());
+                lo_better_than_kth_ransac = true;
+                std::copy (lo_inliers, lo_inliers+lo_score->inlier_number, max_lo_inliers);
+                sampler->setPointsSize(lo_score->inlier_number);
+                sampler->initRandomGenerator();
+                max_iters = termination_criteria->getUpBoundIterations(best_lo_score.inlier_number, points_size);
             }
 
             // std::cout << "lo inner score = " << lo_score->score << '\n';
@@ -168,7 +172,10 @@ public:
                 // std::cout << "lo  threshold " << lo_model->threshold << '\n';
 //                std::cout << "begin lo score " << lo_score->inlier_number << '\n';
 
-                estimator->LeastSquaresFitting(lo_inliers, lo_score->inlier_number, *lo_model);
+
+//                std::cout << "est non minimal 2\n";
+                if (!estimator->LeastSquaresFitting(lo_inliers, lo_score->inlier_number, *lo_model)) continue;
+//                std::cout << "ested non minimal 2\n";
 
                 quality->GetModelScore(estimator, lo_model, input_points, points_size, *lo_score, lo_inliers, true);
 
@@ -187,25 +194,31 @@ public:
 
                 lo_iters++;
                 // if current model is not better then break
-                if (best_lo_score > lo_score) {
+                if (best_lo_score.bigger(lo_score)) {
                     break;
                 }
             }
+            // get original threshold back
+            lo_model->threshold = best_lo_model.threshold;
+
             // lo_iters++;
 
             // std::cout << "end iterative lo inner score  = " << lo_score->inlier_number << '\n';
 
-            if (*lo_score > best_lo_score) {
+            if (lo_score->bigger(best_lo_score)) {
                 best_lo_model.setDescriptor(lo_model->returnDescriptor());
                 best_lo_score.copyFrom (lo_score);
                 lo_better_than_kth_ransac = true;
-
+                std::copy (lo_inliers, lo_inliers+lo_score->inlier_number, max_lo_inliers);
+                sampler->setPointsSize(lo_score->inlier_number);
+                sampler->initRandomGenerator();
                 max_iters = termination_criteria->getUpBoundIterations(best_lo_score.inlier_number, points_size);
                 // std::cout << "lo max iters prediction " << max_iters << '\n';
             }
             lo_iters++;
         }
 
+        // reinit sampler back
         sampler->setSampleSize(model->sample_number);
         sampler->setPointsSize(points_size);
         sampler->initRandomGenerator();

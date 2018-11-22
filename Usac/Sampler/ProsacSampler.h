@@ -79,8 +79,8 @@ public:
     void generateSample (int * sample) override {
     }
     
-    void generateSample (int * sample, unsigned int stopping_length) {
-        std::cout << "stopping length " << stopping_length << "\n";
+    void generateSampleProsac (int * sample, unsigned int stopping_length) {
+//        std::cout << "stopping length " << stopping_length << "\n";
 
         // revert to RANSAC-style sampling if maximum number of PROSAC samples have been tested
         if (hypCount > growth_max_samples) {

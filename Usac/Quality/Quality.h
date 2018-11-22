@@ -19,18 +19,19 @@ public:
     inline bool bigger (const Score * const score2) {
         return score > score2->score;
     }
-
-    inline bool operator>(const Score& score2) {
+    inline bool bigger (const Score& score2) {
         return score > score2.score;
     }
 
     /*
      * Compare score of model evaluation
      */
-
-    inline bool operator>(const Score *const score2) {
-        return score > score2->score;
-    }
+//    inline bool operator>(const Score& score2) {
+//        return score > score2.score;
+//    }
+//    inline bool operator>(const Score *const score2) {
+//        return score > score2->score;
+//    }
 
     void copyFrom (const Score * const score_to_copy) {
         score = score_to_copy->score;
