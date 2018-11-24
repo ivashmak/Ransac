@@ -119,7 +119,7 @@ public:
 
          sample_size = model->sample_number;
          threshold = model->threshold;
-         prob_threshold = 0.95; //model->desired_prob;
+         prob_threshold = model->desired_prob;
          max_iterations = model->max_iterations;
          points_size = points_size_;
 

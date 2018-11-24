@@ -25,9 +25,8 @@ public:
      *                                              w
      */
     void drawing_resize (cv::Mat &image) {
-        float nS = 480000;
+        float nS = 480000; // 600 x 800
         cv::resize(image, image, cv::Size(sqrt ((image.cols * nS)/image.rows), sqrt ((image.rows * nS)/image.cols)));
-
     }
 
     /*
@@ -152,9 +151,13 @@ public:
 
         cv::Mat img1 = cv::imread(folder + img_name + "A.png");
         cv::Mat img2 = cv::imread(folder + img_name + "B.png");
+        if (img1.empty()) {
+            img1 = cv::imread(folder + img_name + "A.jpg");
+            img2 = cv::imread(folder + img_name + "B.jpg");
+        }
 
-        drawing_resize(img1);
-        drawing_resize(img2);
+//        drawing_resize(img1);
+//        drawing_resize(img2);
 
         cv::Mat img1_inl = img1.clone();
         cv::Mat img2_inl = img2.clone();
@@ -179,17 +182,23 @@ public:
         getMatrix3x3 (points_filename.substr(0, points_filename.find('_'))+"_model.txt", H_gt);
 
         drawErrors(img1_inl, img2_inl, points1, points2, H);
+
         drawErrors(gt_img1_inl, gt_img2_inl, points1, points2, H_gt.inv());
+//        drawErrors(gt_img1_inl, gt_img2_inl, points1, points2, H_gt.inv());
+
         drawErrors(opencv_img1_inl, opencv_img2_inl, points1, points2, H_opencv);
 
-        cv::vconcat(img2_inl, gt_img2_inl, img2_inl);
-        cv::vconcat(img2_inl, opencv_img2_inl, img2_inl);
+        cv::hconcat(img1_inl, img2_inl, img1_inl);
+        cv::hconcat(gt_img1_inl, gt_img2_inl, gt_img1_inl);
+        cv::hconcat(opencv_img1_inl, opencv_img2_inl, opencv_img1_inl);
+
         cv::vconcat(img1_inl, gt_img1_inl, img1_inl);
         cv::vconcat(img1_inl, opencv_img1_inl, img1_inl);
-        cv::hconcat(img1_inl, img2_inl, img2_inl);
 
-        cv::resize(img2_inl, img2_inl, cv::Size (0.75 * img2_inl.cols, 0.5 * img2_inl.rows));
-        cv::imshow ("estimated points on correspondence images vs grand truth estimated points vs opencv", img2_inl);
+//        cv::resize(img2_inl, img2_inl, cv::Size (0.75 * img2_inl.cols, 0.5 * img2_inl.rows));
+//        drawing_resize(img2_inl);
+//        cv::imshow ("estimated points on correspondence images vs grand truth estimated points vs opencv", img2_inl);
+        cv::imwrite("../results/homography/"+img_name+".png", img1_inl);
 
         // draw panorama
         cv::Mat panorama_opencv, panorama_gt, panorama;
@@ -199,16 +208,16 @@ public:
         drawPanorama(images, panorama_gt, H_gt);
         drawPanorama(images, panorama_opencv, H_opencv.inv());
 
-        cv::resize(img_matches, img_matches, cv::Size (0.7 * img_matches.cols, 0.7 * img_matches.rows));
+        drawing_resize(img_matches);
 
         cv::vconcat(panorama, panorama_gt, panorama);
         cv::vconcat(panorama, panorama_opencv, panorama);
 
-        cv::resize(panorama, panorama, cv::Size ( img_matches.cols, 1 * img_matches.rows));
-        cv::imshow("panorama", panorama);
+        drawing_resize(panorama);
+//        cv::imshow("panorama", panorama);
         // -------------------------------------
 
-        cv::imshow("imgs ", img_matches);
+//        cv::imshow("imgs ", img_matches);
 
         cv::waitKey(0);
     }
@@ -253,11 +262,11 @@ public:
             cv::line(img2_error, cv::Point_<float> (points2.at<float>(i, 0), points2.at<float>(i, 1)),
                                  cv::Point_<float> (est_pts_on_corr2.at<float>(0, i), est_pts_on_corr2.at<float>(1, i)), color, 2);
 
-            cv::circle (img1_error, cv::Point_<float>(points1.at<float>(i, 0), points1.at<float>(i, 1)), 3, cv::Scalar(255, 255, 0), -1);
-            cv::circle (img2_error, cv::Point_<float>(points2.at<float>(i, 0), points2.at<float>(i, 1)), 3, cv::Scalar(255, 255, 0), -1);
+            cv::circle (img1_error, cv::Point_<float>(points1.at<float>(i, 0), points1.at<float>(i, 1)), 3, cv::Scalar(0, 255, 0), -1);
+            cv::circle (img2_error, cv::Point_<float>(points2.at<float>(i, 0), points2.at<float>(i, 1)), 3, cv::Scalar(0, 255, 0), -1);
 
-            cv::circle (img1_error, cv::Point_<float>(est_pts_on_corr1.at<float>(0, i), est_pts_on_corr1.at<float>(1, i)), 3, cv::Scalar(255, 0, 0), -1);
-            cv::circle (img2_error, cv::Point_<float>(est_pts_on_corr2.at<float>(0, i), est_pts_on_corr2.at<float>(1, i)), 3, cv::Scalar(255, 0, 0), -1);
+            cv::circle (img1_error, cv::Point_<float>(est_pts_on_corr1.at<float>(0, i), est_pts_on_corr1.at<float>(1, i)), 3, cv::Scalar(0, 0, 255), -1);
+            cv::circle (img2_error, cv::Point_<float>(est_pts_on_corr2.at<float>(0, i), est_pts_on_corr2.at<float>(1, i)), 3, cv::Scalar(0, 0, 255), -1);
         }
     }
 

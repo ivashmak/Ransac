@@ -16,11 +16,26 @@ public:
     int inlier_number = 0;
     float score = 0;
 
+    // priority for inlier number
     inline bool bigger (const Score * const score2) {
-        return score > score2->score;
+//        return score > score2->score;
+        return inlier_number > score2->inlier_number;
+//        if (inlier_number > score2->inlier_number) return true;
+//        if (inlier_number == score2->inlier_number) {
+//            return score > score2->score;
+//        } else {
+//            return false;
+//        }
     }
     inline bool bigger (const Score& score2) {
-        return score > score2.score;
+//        return score > score2.score;
+        return inlier_number > score2.inlier_number;
+//        if (inlier_number > score2.inlier_number) return true;
+//        if (inlier_number == score2.inlier_number) {
+//            return score > score2.score;
+//        } else {
+//            return false;
+//        }
     }
 
     /*

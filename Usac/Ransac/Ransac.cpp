@@ -133,42 +133,43 @@ void Ransac::run(cv::InputArray input_points) {
         for (int i = 0; i < number_of_models; i++) {
             // std::cout << i << "-th model\n";
 
-                if (GraphCutLO) {
-                    // if LO is true than get inliers   
-                    // we need inliers only for local optimization
-                    if (get_inliers) {
-                        graphCut->labeling(neighbors, estimator, models[i], inliers, *current_score,
-                        points_size, true);    
-                    } else {
-                        graphCut->labeling(neighbors, estimator, models[i], nullptr, *current_score,
-                        points_size, false);    
-                    }
-                    
-                    if (SprtLO) {
-                        // we don't no model score, no inliers
-                        sprt->verifyModelAndGetModelScore(estimator, models[i], iters, best_score->inlier_number, 
-                            false, nullptr, false, nullptr);        
-                    }
-                } else 
-                if (SprtLO) {
-                    if (get_inliers) {
-                        sprt->verifyModelAndGetModelScore(estimator, models[i], iters, best_score->inlier_number,
-                        true, current_score, true, inliers);        
-                    } else {
-                        sprt->verifyModelAndGetModelScore(estimator, models[i], iters, best_score->inlier_number,
-                        true, current_score, false, nullptr);      
-                    }
+            if (GraphCutLO) {
+                // if LO is true than get inliers
+                // we need inliers only for local optimization
+                if (get_inliers) {
+                    graphCut->labeling(neighbors, estimator, models[i], inliers, current_score,
+                    points_size, true);
                 } else {
-                    if (get_inliers) {
-                        quality->getNumberInliers(current_score, models[i]->returnDescriptor(), true, inliers);
-                    } else {
-                        quality->getNumberInliers(current_score, models[i]->returnDescriptor(), false, nullptr);
-                    }
+                    graphCut->labeling(neighbors, estimator, models[i], nullptr, current_score,
+                    points_size, false);
                 }
 
-                // }
-            // std::cout << "general " << current_score->inlier_number << "\n";
-            
+                if (SprtLO) {
+                    // we don't no model score, no inliers
+                    // as soon as we use graph cut labeling, the inlier number is score
+                    sprt->verifyModelAndGetModelScore(estimator, models[i], iters, best_score->score/*inlier_number*/,
+                        false, nullptr, false, nullptr);
+                }
+            } else
+            if (SprtLO) {
+                if (get_inliers) {
+                    sprt->verifyModelAndGetModelScore(estimator, models[i], iters, best_score->inlier_number,
+                    true, current_score, true, inliers);
+                } else {
+                    sprt->verifyModelAndGetModelScore(estimator, models[i], iters, best_score->inlier_number,
+                    true, current_score, false, nullptr);
+                }
+            } else {
+                if (get_inliers) {
+                    quality->getNumberInliers(current_score, models[i]->returnDescriptor(), true, inliers);
+                } else {
+                    quality->getNumberInliers(current_score, models[i]->returnDescriptor(), false, nullptr);
+                }
+            }
+
+//            std::cout << "current num inl " << current_score->inlier_number << "\n";
+//            std::cout << "current score " << current_score->score << "\n";
+
             if (current_score->bigger(best_score)) {
 
 //                  std::cout << "current score = " << current_score->score << '\n';
@@ -207,32 +208,31 @@ void Ransac::run(cv::InputArray input_points) {
                     }
                 } else {
                     // copy current score to best score
-                    best_score->inlier_number = current_score->inlier_number;
-                    best_score->score = current_score->score;
+                    best_score->copyFrom(current_score);
 
-                    // std::cout << "best score inlier number " << best_score->inlier_number << '\n';
+//                     std::cout << "best score inlier number " << best_score->inlier_number << '\n';
+//                     std::cout << "best score " << best_score->score << '\n';
 
                     // remember best model
                     best_model->setDescriptor (models[i]->returnDescriptor());
                 }
 
-                if (SprtLO) {
-                    if (is_prosac) {
-                        max_iters = std::min ((int)sprt->getMaximumIterations(current_score->inlier_number),
-                                (int)prosac_termination_criteria->
-                                           getUpBoundIterations(iters, prosac_sampler->getLargestSampleSize(),
-                                                                           inliers, best_score->inlier_number));
-                    } else {
-                        max_iters = sprt->getMaximumIterations(current_score->inlier_number);
-                    }
+                unsigned int inlier_number;
+                if (GraphCutLO) {
+                    inlier_number = best_score->score;
                 } else {
-                    if (is_prosac) {
-                        max_iters = prosac_termination_criteria->
-                                getUpBoundIterations(iters, prosac_sampler->getLargestSampleSize(),
-                                                     inliers, best_score->inlier_number);
-                    } else {
-                        max_iters = termination_criteria->getUpBoundIterations(best_score->inlier_number, points_size);              
-                    }
+                    inlier_number = best_score->inlier_number;
+                }
+
+                if (is_prosac) {
+                    max_iters = prosac_termination_criteria->
+                            getUpBoundIterations(iters, prosac_sampler->getLargestSampleSize(),
+                                                 inliers, inlier_number);
+                } else {
+                    max_iters = termination_criteria->getUpBoundIterations (inlier_number, points_size);
+                }
+                if (SprtLO) {
+                    max_iters = std::min (max_iters, (int)sprt->getMaximumIterations(inlier_number));
                 }
 
                 // std::cout << "max iters prediction = " << max_iters << '\n';
@@ -245,38 +245,47 @@ void Ransac::run(cv::InputArray input_points) {
     end:
 
     int * max_inliers = new int[points_size];
-    //         std::cout << "Calculate Non minimal model\n";
+//    std::cout << "Calculate Non minimal model\n";
+
     Model *non_minimal_model = new Model;
     non_minimal_model->copyFrom (model);
 
-    // get inliers from best model
-    if (GraphCutLO) {
-        // ???????????????????????????????? (only get Inliers?)
-        graphCut->labeling(neighbors, estimator, best_model, max_inliers, *current_score, points_size, true);
-    } else {
+    std::cout << "end best inl num " << best_score->inlier_number << '\n';
+    std::cout << "end best score " << best_score->score << '\n';
+
+
+    unsigned int normalization = 3;
+    unsigned int previous_non_minimal_num_inlier = 0;
+
+    for (int norm = 0; norm < normalization; norm++) {
+        // get inliers from best model
         quality->getInliers(best_model->returnDescriptor(), max_inliers);
-    }
 
-    // estimate non minimal model with max inliers
-    estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model);
-    quality->getNumberInliers(current_score, non_minimal_model->returnDescriptor(), false, nullptr);
+        // estimate non minimal model with max inliers
+        if (estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model)) {
+            quality->getNumberInliers(current_score, non_minimal_model->returnDescriptor(), false, nullptr);
 
-    // Priority is for non minimal model estimation
-//        if (current_score->inlier_number >= best_score->inlier_number) {
-//        std::cout << "end non minimal score " << current_score->inlier_number << '\n';
-//        std::cout << "end best score " << best_score->inlier_number << '\n';
-    if (current_score->inlier_number == 0) {
+            // Priority is for non minimal model estimation
+            std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
+
+            if ((float) current_score->inlier_number / best_score->inlier_number < 0.5) {
+                std::cout
+                        << "\033[1;31mNON minimal model has less than 50% of inliers to compare with best score!\033[0m \n";
+            }
+
+            // if normalization score is equal, so next normalization are equal too, so break.
+            if (current_score->inlier_number <= previous_non_minimal_num_inlier) {
+                break;
+            }
+
+            previous_non_minimal_num_inlier = current_score->inlier_number;
+
+            best_score->copyFrom(current_score);
+            best_model->setDescriptor(non_minimal_model->returnDescriptor());
+        } else {
             std::cout << "\033[1;31mNON minimal model completely failed!\033[0m \n";
-//            exit (1);
+        }
     }
-        best_score->copyFrom(current_score);
-        best_model->setDescriptor(non_minimal_model->returnDescriptor());
-//        } else {
-//                   if (current_score->inlier_number < best_score->inlier_number)
-//           std::cout
-//                   << "\033[1;31mNon minimal model worse than best ransac model. May be something wrong. Check it!\033[0m \n";
-
-//        }
 
     auto end_time = std::chrono::steady_clock::now();
     std::chrono::duration<float> fs = end_time - begin_time;
@@ -284,6 +293,9 @@ void Ransac::run(cv::InputArray input_points) {
 
     // get final inliers of the best model
     quality->getInliers(best_model->returnDescriptor(), max_inliers);
+//    std::cout << "FINAL best inl num " << best_score->inlier_number << '\n';
+//    std::cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
+
     float average_error = quality->getAverageError (best_model->returnDescriptor(), max_inliers, best_score->inlier_number);
 
     // Store results

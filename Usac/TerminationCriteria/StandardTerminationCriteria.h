@@ -9,7 +9,6 @@ private:
     const Model * model;
     float log_1_p;
     int sample_number;
-    bool initialized = false;
     unsigned int max_iterations = 10000;
     const float EPSILON = 0.00001;
 public:
@@ -17,7 +16,7 @@ public:
     void init (const Model * const model) override {
         assert (model != nullptr);
         setModel(model);
-        initialized = true;
+        isinit = true;
     }
 
     /*
@@ -30,12 +29,6 @@ public:
         sample_number = model->sample_number;
         max_iterations = model->max_iterations;
     }
-
-    /*
-     * Can happen that getUpBoundIterations could be called on uninitialized values. Checker function.
-     */
-    bool isModelInitialized () { return initialized; }
-
 
 	/*
 	 * Get upper bound iterations for any sample number

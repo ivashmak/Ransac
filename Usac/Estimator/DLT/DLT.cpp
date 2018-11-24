@@ -99,7 +99,7 @@ bool DLT (const float * const points, int sample_number, cv::Mat &H) {
     cv::SVD::compute(A, w, u, vt);
 
     if (vt.empty ()) {
-        std::cout << "\033[1;31mDecomposed Matrix Vt is empty\033[0m \n";
+//        std::cout << "\033[1;31mDecomposed Matrix Vt is empty\033[0m \n";
         return false;
     }
 

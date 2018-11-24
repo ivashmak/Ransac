@@ -46,12 +46,6 @@ public:
         delete maximality_samples, non_random_inliers, inlier_flags;
     }
 
-    bool isInitialized () { return initialized; }
-
-    void init (const Model * const model) override {
-
-    }
-
     /*
         All arrays have been initialized in Prosac Sampler,
         so termination criteria have only pointer to them.

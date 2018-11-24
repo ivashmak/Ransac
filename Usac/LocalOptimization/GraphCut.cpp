@@ -5,7 +5,7 @@
  * the number inliers is more. For 2d line fitting.
  */
 void GraphCut::labeling (const int * const neighbors, Estimator * estimator, 
-    Model * model, int * inliers, Score &score, int points_size, bool get_inliers) {
+    Model * model, int * inliers, Score * score, int points_size, bool get_inliers) {
 
     estimator->setModelParameters(model->returnDescriptor());
 
@@ -21,15 +21,36 @@ void GraphCut::labeling (const int * const neighbors, Estimator * estimator,
 
     const float sqr_thr = 2 * model->threshold * model->threshold;
     float energy, distance;
-    for (int i = 0; i < points_size; ++i) {
-        distance = estimator->GetError(i);
 
-        // save errors to avoid next error calculating
-        errors[i] = distance;
-        
-        energy = exp(-(distance * distance) / sqr_thr);
+    score->score = 0;
+    score->inlier_number = 0;
 
-        e->add_term1(i, energy, 0);
+    if (get_inliers) {
+        for (int point = 0; point < points_size; ++point) {
+            distance = estimator->GetError(point);
+            if (distance < model->threshold) {
+                inliers[score->inlier_number++] = point;
+            }
+            // save errors to avoid next error calculating
+            errors[point] = distance;
+
+            energy = exp(-(distance * distance) / sqr_thr);
+
+            e->add_term1(point, energy, 0);
+        }
+    } else {
+        for (int i = 0; i < points_size; ++i) {
+            distance = estimator->GetError(i);
+            if (distance < model->threshold) {
+                score->inlier_number++;
+            }
+            // save errors to avoid next error calculating
+            errors[i] = distance;
+
+            energy = exp(-(distance * distance) / sqr_thr);
+
+            e->add_term1(i, energy, 0);
+        }
     }
 
     // std::cout << "add terms2\n";
@@ -67,23 +88,12 @@ void GraphCut::labeling (const int * const neighbors, Estimator * estimator,
     }
 
     e->minimize();
-    score.inlier_number = 0;
-    
-    if (get_inliers) {
-        for (int i = 0; i < points_size; ++i) {
-            if (e->what_segment(i) == Graph<float, float, float>::SINK) {
-                inliers[score.inlier_number++] = i;
-            }
-        }
-    } else {
-        for (int i = 0; i < points_size; ++i) {
-            if (e->what_segment(i) == Graph<float, float, float>::SINK) {
-                score.inlier_number++;
-            }
+
+    for (int i = 0; i < points_size; ++i) {
+        if (e->what_segment(i) == Graph<float, float, float>::SINK) {
+            score->score++;
         }
     }
-
-    score.score = score.inlier_number;
 
     delete e;
 }

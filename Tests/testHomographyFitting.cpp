@@ -25,7 +25,7 @@ void storeResults ();
 int getGTNumInliers (const std::string &filename, float threshold);
 
 void Tests::testHomographyFitting() {
-    std::string img_name = "graf";
+    std::string img_name = "adam";
     cv::Mat points, points1, points2;
     read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
 
@@ -69,6 +69,8 @@ void Tests::testHomographyFitting() {
 //    std::cout << cv::findHomography(points1, points2) << '\n';
 
     unsigned int points_size = (unsigned int) points.rows;
+    std::cout << "points size " << points_size << "\n";
+
     int knn = 7;
 
     cv::Mat_<float> neighbors, neighbors_dists;
@@ -111,7 +113,7 @@ void Tests::testHomographyFitting() {
 //    model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform);
 //    model->setStandardRansacLO(false);
 //    model->setGraphCutLO(false);
-//    model->setSprtLO(false);
+//    model->setSprtLO(true);
 //
 //    sampler = new UniformSampler;
 //    initUniform(sampler, model->sample_number, points_size);
@@ -127,9 +129,9 @@ void Tests::testHomographyFitting() {
 
 // ------------------ prosac ---------------------
 //    model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Prosac);
-//    model->setStandardRansacLO(false);
-//    model->setGraphCutLO(false);
-//    model->setSprtLO(false);
+//    model->setStandardRansacLO(true);
+//    model->setGraphCutLO(true);
+//    model->setSprtLO(true);
 //    initProsac(sampler, model->sample_number, points_size);
 //    ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
 //
@@ -148,9 +150,10 @@ void Tests::testHomographyFitting() {
 
 
 //    getStatisticalResults(points, estimator, model, sampler, termination_criteria,
-//                          quality, 300, true, false, gt_inliers, nullptr);
+//                          quality, 30, true, false, gt_inliers, nullptr);
 
-//     storeResults();
+
+     storeResults();
 }
 
 
@@ -165,9 +168,9 @@ void storeResults () {
     Model *model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform);
     Tests tests;
 
-    model->setStandardRansacLO(true);
-    model->setGraphCutLO(true);
-    model->setSprtLO(true);
+    model->setStandardRansacLO(false);
+    model->setGraphCutLO(false);
+    model->setSprtLO(false);
 
     int N_runs = 50;
 

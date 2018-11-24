@@ -168,8 +168,8 @@ public:
         results->median_num_iters = (num_iterss[N/2-1] + num_iterss[N/2])/2;
         
 
-//        std::cout << N << " runs of Ransac for " << model->getName() << " with points size " << points.size().width << '\n';
-//        std::cout << results << "\n";
+        std::cout << N << " runs of Ransac for " << model->getName() << " with points size " << points.size().width << '\n';
+        std::cout << results << "\n";
 
         if (get_results) {
             statistical_results->copyFrom(results);
