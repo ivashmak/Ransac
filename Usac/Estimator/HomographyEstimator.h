@@ -24,8 +24,8 @@ public:
         assert(!input_points.empty());
     }
 
-    void setModelParameters (Model * const model) override {
-        H = cv::Mat_<float>(model->returnDescriptor());
+    void setModelParameters (const cv::Mat& model) override {
+        H = cv::Mat_<float>(model); // clone
         H_inv = H.inv();
 
         /*

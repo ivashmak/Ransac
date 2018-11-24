@@ -133,7 +133,7 @@ public:
             if (!estimator->EstimateModelNonMinimalSample(lo_sample, lo_sample_size, *lo_model)) continue;
 
             // Evaluate model and get inliers
-            quality->GetModelScore(estimator, lo_model, input_points, points_size, *lo_score, lo_inliers, true);
+            quality->getNumberInliers(lo_score, lo_model->returnDescriptor(), true, lo_inliers);
 
             /*
              * If current inner lo score worse than best lo score, so
@@ -177,7 +177,7 @@ public:
                 if (!estimator->LeastSquaresFitting(lo_inliers, lo_score->inlier_number, *lo_model)) continue;
 //                std::cout << "ested non minimal 2\n";
 
-                quality->GetModelScore(estimator, lo_model, input_points, points_size, *lo_score, lo_inliers, true);
+                quality->getNumberInliers(lo_score, lo_model->returnDescriptor(), true, lo_inliers);
 
                 // std::cout << "lo iterative score  = " << lo_score->inlier_number << '\n';
 //                std::cout << "lo model  = " << lo_model->returnDescriptor() << '\n';

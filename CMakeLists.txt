@@ -16,6 +16,8 @@ add_executable(
         Detector/detector.h
 
         Usac/Quality/Quality.h
+        Usac/Quality/LineQuality.h
+
         Usac/Model.h
 
         Usac/TerminationCriteria/StandardTerminationCriteria.h

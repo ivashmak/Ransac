@@ -7,22 +7,15 @@
 void GraphCut::labeling (const int * const neighbors, Estimator * estimator, 
     Model * model, int * inliers, Score &score, int points_size, bool get_inliers) {
 
-    estimator->setModelParameters(model);
+    estimator->setModelParameters(model->returnDescriptor());
 
     int knn = model->k_nearest_neighbors;
     float lambda = model->lambda_graph_cut;
-    Energy<float, float, float> *e = new Energy<float, float, float>(points_size,
-                                                                     knn * points_size,
-                                                                     NULL);
+    Energy<float, float, float> *e = new Energy<float, float, float>(points_size, knn * points_size, NULL);
 
-    // std::cout << "add nodes\n";
-    // errors for each point.
-    
     for (auto i = 0; i < points_size; ++i) {
         e->add_node();
     }
-
-    // std::cout << "add terms\n";
 
     float * errors = new float [points_size];
 
@@ -30,6 +23,8 @@ void GraphCut::labeling (const int * const neighbors, Estimator * estimator,
     float energy, distance;
     for (int i = 0; i < points_size; ++i) {
         distance = estimator->GetError(i);
+
+        // save errors to avoid next error calculating
         errors[i] = distance;
         
         energy = exp(-(distance * distance) / sqr_thr);
@@ -43,19 +38,15 @@ void GraphCut::labeling (const int * const neighbors, Estimator * estimator,
     int neighbors_row, n_idx;
     float e00, e01, e10, e11;
     for (int i = 0; i < points_size; ++i) {
-        // distance1 = estimator->GetError(i);
         distance1 = errors[i];
 
         energy1 = exp(-(distance1 * distance1) / sqr_thr);
 
         neighbors_row = knn * i;
-        for (int j = 0; j < knn; ++j) { // j = 1, neighbors is reduced by first neighbor (itself)
+        for (int j = 0; j < knn; ++j) { // j = 1, neighbors are reduced by first neighbor (itself)
             
             n_idx = neighbors[neighbors_row + j];
 
-            // std::cout << "(i,j) = " << i << ", " << j << " n_idx = " << n_idx << "\n";
-            
-            // distance2 = estimator->GetError(n_idx);
             distance2 = errors[n_idx];
             
             energy2 = exp(-(distance2 * distance2) / sqr_thr);
@@ -74,8 +65,6 @@ void GraphCut::labeling (const int * const neighbors, Estimator * estimator,
             e->add_term2(i, n_idx, e00 * lambda, e01 * lambda, e10 * lambda, e11 * lambda);
         }
     }
-
-    // std::cout << "minimize\n";
 
     e->minimize();
     score.inlier_number = 0;

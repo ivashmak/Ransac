@@ -39,7 +39,7 @@ public:
      * input points and descriptors as private class members.
      */
     virtual void setPoints (cv::InputArray input_points) {}
-    virtual void setModelParameters (Model * const model) {}
+    virtual void setModelParameters (const cv::Mat& model) {}
 
     virtual int getNumberOfInliers (const Model * const model) {return 0;}
 

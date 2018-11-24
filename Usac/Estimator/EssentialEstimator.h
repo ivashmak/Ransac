@@ -22,8 +22,8 @@ public:
         assert(!input_points.empty());
     }
 
-    void setModelParameters (Model * const model) override {
-        E = cv::Mat_<float>(model->returnDescriptor());
+    void setModelParameters (const cv::Mat& model) override {
+        E = cv::Mat_<float>(model);
         E_inv = E.inv();
 
         /*

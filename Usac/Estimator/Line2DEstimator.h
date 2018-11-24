@@ -104,6 +104,7 @@ public:
         a = -a;
         c = -b*y_mean - a*x_mean;
 
+        // normalize
         float mag = sqrt(a * a + b * b);
         a /= mag;
         b /= mag;
@@ -114,7 +115,7 @@ public:
     }
 
     /*
-     * |ax + by + c|
+     * |ax + by + c|, where ||(a b)|| = 1
      */
     inline float GetError(int pidx) override {
         return fabsf (a * input_points[2*pidx] + b * input_points[2*pidx+1] + c);
@@ -124,13 +125,9 @@ public:
         return 2;
     }
 
-    void setModelParameters (Model * const model) override {
-        auto *params = (float *) model->returnDescriptor().data;
-        a = params[0]; b = params[1]; c = params[2];
-
+    void setModelParameters (const cv::Mat& model) override {
+        a = model.at<float>(0); b =  model.at<float>(1); c =  model.at<float>(2);
     }
-
-
 };
 
 

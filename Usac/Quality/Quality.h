@@ -41,95 +41,81 @@ public:
 
 
 class Quality {
+protected:
+    unsigned int points_size;
+    float threshold;
+    Estimator * estimator;
+    bool isinit = false;
 public:
+    bool isInit () { return isinit; }
 
-	/*
-	 * Compute Model Score.
-	 * Find number of inliers and calculate coefficient of determination as score of model
-	 * https://en.wikipedia.org/wiki/Coefficient_of_determination
-	 */
-    inline void GetModelScore(Estimator * const estimator,
-                       Model * const model,
-                       cv::InputArray input_points,
-                       int points_size,
-                       Score &score,
-                       int * inliers,
-                       bool get_inliers,
-                       bool parallel=false) {
+    void init (unsigned int points_size_, float theshold_, Estimator * estimator_) {
+        points_size = points_size_;
+        threshold = theshold_;
+        estimator = estimator_;
+        isinit = true;
+    }
+
+    /*
+     * calculating number of inliers under current model.
+     * Here score = inlier number.
+     * To get real score use getScore
+     */
+    inline void getNumberInliers (Score * score, const cv::Mat& model, bool get_inliers,
+                                  int * inliers, bool parallel=false) {
 
         estimator->setModelParameters(model);
-        score.inlier_number = 0;
+        score->inlier_number = 0;
 
-//        float SS_tot = 0, SS_res = 0;
         if (parallel) {
             int score_inlier_number = 0;
 //            std::cout << "PARALLEL MODE\n";
 
             #pragma omp parallel for reduction (+:score_inlier_number)
             for (int point = 0; point < points_size; point++) {
-                if (estimator->GetError(point) < model->threshold) {
+                if (estimator->GetError(point) < threshold) {
                     score_inlier_number++;
                 }
             }
 
-            score.inlier_number = score_inlier_number;
+            score->inlier_number = score_inlier_number;
 
         } else {
-            // calculate coefficient of determination r^2
-//            float * points = (float * ) input_points.getMat().data;
-//            float * truth = new float[points_size];
-//            auto * params = (float * ) model->returnDescriptor().data;
-//            float a = params[0], b = params[1], c = params[2];
-//            float mean = 0;
-//            int pt;
-
             if (get_inliers) {
                 for (int point = 0; point < points_size; point++) {
-                    if (estimator->GetError(point) < model->threshold) {
-                        inliers[score.inlier_number++] = point;
+                    if (estimator->GetError(point) < threshold) {
+                        inliers[score->inlier_number++] = point;
                     }    
                 }
             } else {
                 for (int point = 0; point < points_size; point++) {
-                    if (estimator->GetError(point) < model->threshold) {
-    //                    pt = 2*point;
-    //                    truth[score.inlier_number-1] = points[pt+1];
-    //                    mean += truth[score.inlier_number-1];
-    //
-    //                    // The sum of squares of residuals
-    //                    SS_res += (truth[score.inlier_number] + c + a*points[pt])/b) *
-    //                            (truth[score.inlier_number] +c + a*points[pt])/b); // y - y' = y - (-c -ax)/b
-                        score.inlier_number++;
+                    if (estimator->GetError(point) < threshold) {
+                        score->inlier_number++;
                     }
                 }
             }
-//            mean /= score.inlier_number;
+       }
 
-            // The total sum of squares
-//            for (int i = 0; i < score.inlier_number; i++) {
-//                SS_tot += (truth[i] - mean) * (truth[i] - mean) ;
-//            }
-        }
-
-        score.score = score.inlier_number;
-
-        // store coefficient of determination
-//        score.score = 1 - SS_res/SS_tot;
-
+        score->score = score->inlier_number;
 	}
 
 
+	virtual void getScore (const float * const points, Score * score, const cv::Mat& model, int * inliers) {
+    }
+
     /*
-     * We don't need to get inliers in GetModelScore as we use them only once for estimation
+     * We don't need to get inliers in getNumberInliers as we use them only once for estimation
      * non minimal model. As result faster way will be implement separate function for getting
      * inliers. Works same as getModelScore, however save inlier's indexes.
      */
-    void getInliers (Estimator * const estimator, int points_size, Model * const  model, int * inliers, bool parallel=false) {
+    void getInliers (const cv::Mat& model, int * inliers) {
+        assert(isinit);
+
         estimator->setModelParameters(model);
 
 	    int num_inliers = 0;
 	    for (int point = 0; point < points_size; point++) {
-            if (estimator->GetError(point) < model->threshold) {
+            if (estimator->GetError(point) < threshold) {
                 inliers[num_inliers] = point;
                 num_inliers++;
             }
@@ -139,10 +125,10 @@ public:
     /*
      * Calculate average error for any inliers (e.g. GT inliers or output inliers).
      */
-    float getAverageError (Estimator * const estimator,
-                           Model * const model,
+    float getAverageError (const cv::Mat& model,
                            const int * const inliers,
                            int inliers_size) {
+        assert(isinit);
 
         estimator->setModelParameters(model);
         float sum_errors = 0;

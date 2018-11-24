@@ -73,7 +73,7 @@ void Tests::testHomographyFitting() {
 
     cv::Mat_<float> neighbors, neighbors_dists;
     NearestNeighbors nn;
-    nn.getNearestNeighbors_nanoflann(points1, knn+1, neighbors, true, neighbors_dists);
+    nn.getNearestNeighbors_nanoflann(points1, knn, neighbors, true, neighbors_dists);
     std::vector<int> sorted_idx (points_size);
     std::iota(sorted_idx.begin(), sorted_idx.end(), 0);
 
@@ -150,7 +150,7 @@ void Tests::testHomographyFitting() {
 //    getStatisticalResults(points, estimator, model, sampler, termination_criteria,
 //                          quality, 300, true, false, gt_inliers, nullptr);
 
-     storeResults();
+//     storeResults();
 }
 
 
@@ -235,23 +235,23 @@ int getGTNumInliers (const std::string &filename, float threshold) {
     cv::Mat points, points1, points2;
     read_points (points1, points2, "../dataset/homography/"+filename+"_pts.txt");
     cv::hconcat(points1, points2, points);
-    int * inliers = new int [points.rows];
     Score * score = new Score;
     Estimator * estimator = new HomographyEstimator(points);
     Model * model = new Model (threshold, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform);
 
+    quality->init(points.rows, model->threshold, estimator);
 
     // In some ground truth model, the correct homography matrix is inverse.
     model->setDescriptor (H.inv());
-    quality->GetModelScore (estimator, model, points, points.rows, *score, inliers, false);
+    quality->getNumberInliers (score, model->returnDescriptor(), false, nullptr);
 
     int score1 = score->inlier_number;
 
     model->setDescriptor (H);
-    quality->GetModelScore (estimator, model, points, points.rows, *score, inliers, false);
+    quality->getNumberInliers (score, model->returnDescriptor(), false, nullptr);
 
     int score2 = score->inlier_number;
 
-    delete inliers, score, model, quality, estimator;
+    delete score, model, quality, estimator;
     return std::max (score1, score2);
 }

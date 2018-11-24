@@ -151,7 +151,7 @@ public:
      void verifyModelAndGetModelScore (Estimator * estimator, Model * model, int current_hypothese, 
                     int maximum_score, bool get_score, Score *score, bool get_inliers, int * inliers) {
          
-         estimator->setModelParameters(model);
+         estimator->setModelParameters(model->returnDescriptor());
 
          float epsilon = sprt_histories[current_sprt_idx]->epsilon;
          float delta = sprt_histories[current_sprt_idx]->delta;

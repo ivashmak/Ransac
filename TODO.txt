@@ -46,3 +46,9 @@ Float or double??? float
 
 prosac quality sort
 init everything directly ransac
+
+
+
+Ask about weights
+Count iterations in LO?
+Use termination criteria/srpt/gc in LO?

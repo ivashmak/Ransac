@@ -23,8 +23,8 @@ public:
         assert(!input_points.empty());
     }
 
-    void setModelParameters (Model * const model) override {
-        F = cv::Mat_<float>(model->returnDescriptor());
+    void setModelParameters (const cv::Mat& model) override {
+        F = cv::Mat_<float>(model);
 
         /*
          * To make pointer from Mat class, this Mat class should exists as long as exists pointer

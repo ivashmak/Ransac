@@ -42,6 +42,23 @@ public:
     void getSortedPoints (const cv::Mat& neighbors_dists) {
     }
 
+    std::string sampler2string (SAMPLER sampler) {
+        if (sampler == SAMPLER::Prosac) return "prosac";
+        if (sampler == SAMPLER::Uniform) return "uniform";
+        if (sampler == SAMPLER::Napsac) return "napsac";
+        if (sampler == SAMPLER::Evsac) return "evsac";
+        return "";
+    }
+
+    std::string estimator2string (ESTIMATOR estimator) {
+        if (estimator == ESTIMATOR::Line2d) return "line2d";
+        if (estimator == ESTIMATOR::Homography) return "homography";
+        if (estimator == ESTIMATOR::Fundamental) return "fundamental";
+        if (estimator == ESTIMATOR::Essential) return "essential";
+        return "";
+    }
+
+
     std::string getComputerInfo () {
         return "RAM 15.6 GB\n"
                "Intel Core i7\n"

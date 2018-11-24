@@ -35,7 +35,7 @@ void Tests::testLineFitting() {
     cv::Mat_<float> pts = cv::Mat (points);
     cv::Mat_<float> neighbors, neighbors_dists;
     NearestNeighbors nn;
-    nn.getNearestNeighbors_nanoflann(pts, knn+1, neighbors, true, neighbors_dists);
+    nn.getNearestNeighbors_nanoflann(pts, knn, neighbors, true, neighbors_dists);
     std::vector<int> sorted_idx (points_size);
     std::iota(sorted_idx.begin(), sorted_idx.end(), 0);
 

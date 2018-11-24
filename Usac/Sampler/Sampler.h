@@ -72,7 +72,6 @@ public:
      * Can be different for child classes
      */
     virtual bool isInit ()  { return false; }
-
 };
 
 #endif //RANSAC_SAMPLER_H
