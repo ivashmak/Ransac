@@ -1,5 +1,5 @@
 #include "GraphCut.h"
-
+#include <math.h>
 /*
  * In expirements I found that for less k nearest neighbors
  * the number inliers is more. For 2d line fitting.
@@ -7,7 +7,6 @@
 void GraphCut::labeling (const cv::Mat& model, int * inliers, Score * score, bool get_inliers) {
 
     estimator->setModelParameters(model);
-
 
     Energy<float, float, float> *e = new Energy<float, float, float>(points_size, knn * points_size, NULL);
 
@@ -49,7 +48,6 @@ void GraphCut::labeling (const cv::Mat& model, int * inliers, Score * score, boo
         }
     }
 
-    // std::cout << "add terms2\n";
 
     float distance1, distance2, energy1, energy2;
     int neighbors_row, n_idx;
@@ -65,7 +63,12 @@ void GraphCut::labeling (const cv::Mat& model, int * inliers, Score * score, boo
             n_idx = neighbors[neighbors_row + j];
 
             distance2 = errors[n_idx];
-            
+
+            if (n_idx == i) {
+//                std::cout << "\033[1;31mIndex of neighbor is equal to index of point. Continue.\033[0m \n";
+                continue;
+            }
+
             energy2 = exp(-(distance2 * distance2) / sqr_thr);
 
             e00 = 0.5 * (energy1 + energy2);
@@ -73,12 +76,19 @@ void GraphCut::labeling (const cv::Mat& model, int * inliers, Score * score, boo
             e10 = 1;
             e11 = 1 - e00; // 1 - 0.5 * (energy1 + energy2);
 
-            if (e00 + e11 > e01 + e10) {
-                std::cout << "\033[1;33m"
-                             "Non-submodular expansion term detected;"
-                             "smooth costs must be a metric for expansion  \033[0m\n";
+            // B -= A; C -= D;
+            // assert(B + C >= 0); /* check regularity */
+            // e01*l - e00*l + e10*l - e11*l >= 0
+            // l*(e01 - e00 + e10 - e11) >= 0
+            // l > 0 => (e01 - e00 + e10 - e11) >= 0
+            // e01 + e10 >= e00 + e11
+            if (e00 + e11 > e01 + e10 || std::isnan (e00)) {
+//            if (e00 + e11 - e01 - e10 > 0.00001) {
+//                std::cout << "\033[1;31m"
+//                             "Non-submodular expansion term detected;"
+//                             "smooth costs must be a metric for expansion  \033[0m\n";
+                continue;
             }
-
             e->add_term2(i, n_idx, e00 * lambda, e01 * lambda, e10 * lambda, e11 * lambda);
         }
     }

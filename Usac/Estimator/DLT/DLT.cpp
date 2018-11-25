@@ -139,8 +139,6 @@ bool DLT (const float * const points, int sample_number, cv::Mat &H) {
     
 */
     H = cv::Mat_<float>(vt.row(vt.rows-1).reshape (3,3));
-
-    
     return true;
 }
 

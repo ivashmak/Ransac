@@ -33,6 +33,7 @@ void Tests::testLineFitting() {
 
     int knn = 7;
     cv::Mat_<float> pts = cv::Mat (points);
+
     cv::Mat_<float> neighbors, neighbors_dists;
     NearestNeighbors nn;
     nn.getNearestNeighbors_nanoflann(pts, knn, neighbors, true, neighbors_dists);
@@ -80,7 +81,7 @@ void Tests::testLineFitting() {
 //    model->setStandardRansacLO(false);
 //
 //    initUniform(sampler, model->sample_number, points_size);
-//     test (pts, estimator, sampler, model, quality, termination_criteria, "", gt_inliers);
+//     test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, "", gt_inliers);
     //------------------------------------------
 
 
@@ -88,7 +89,7 @@ void Tests::testLineFitting() {
 
 
     // --------------  prosac ---------------------
-    model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Prosac);
+    model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Prosac);
     initProsac(sampler, model->sample_number, points.size());
     ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
 
@@ -100,7 +101,7 @@ void Tests::testLineFitting() {
     cv::Mat sorted_pts (sorted_points);
     estimator = new Line2DEstimator (sorted_points);
 
-    test (sorted_pts, estimator, sampler, model, quality, prosac_termination_criteria, "", gt_inliers);
+    test (sorted_pts, estimator, sampler, model, quality, prosac_termination_criteria, neighbors, "", gt_inliers);
 
     // switch to unsorted points back (not necessary, just for testing)
     estimator = new Line2DEstimator (points);
@@ -115,17 +116,17 @@ void Tests::testLineFitting() {
 //    model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Napsac);
 //    initNapsac(sampler, neighbors, model->k_nearest_neighbors, model->sample_number);
 //
-//     test (pts, estimator, sampler, model, quality, termination_criteria, "", gt_inliers);
+//     test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, "", gt_inliers);
     // ---------------------------------------------------------------------
 
 
 
 
     // ----------------- evsac ------------------------------
-//    Model *evsac_model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Evsac);
-//    Sampler *evsac_sampler = new EvsacSampler(points, points.size(), evsac_model->k_nearest_neighbors, evsac_model->sample_number);
-
-    // test (pts, estimator, evsac_sampler, model, quality, termination_criteria, "", gt_inliers);
+//    model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Evsac);
+//    sampler = new EvsacSampler(points, points.size(), evsac_model->k_nearest_neighbors, evsac_model->sample_number);
+//
+//     test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, "", gt_inliers);
     // ------------------------------------------------------------
 
 
@@ -133,14 +134,15 @@ void Tests::testLineFitting() {
 
 
     // ------------------ gradually increasing ransac ----------------------
-//    Model *gradual_napsac_model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::GradualNapsac);
-//    Sampler *gradual_napsac_sampler = new GradualNapsacSampler(points, gradual_napsac_model->sample_number);
-
-    // test (pts, estimator, gradual_napsac_sampler, model, quality, termination_criteria, "", gt_inliers);
+//    model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::GradualNapsac);
+//    sampler = new GradualNapsacSampler(points, gradual_napsac_model->sample_number);
+//
+//     test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, "", gt_inliers);
     // --------------------------------------------------------
 
 
 
-    // getStatisticalResults(pts, estimator, model, uniform_sampler, termination_criteria, quality, 1000, true, false, gt_inliers);
+//     getStatisticalResults(pts, estimator, model, sampler, termination_criteria, quality, neighbors,
+//                           1000, true, false, gt_inliers);
 }
 

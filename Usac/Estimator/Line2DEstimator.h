@@ -13,8 +13,9 @@ public:
     }
 
     /*
-     *                 x1 - x2                                      y2 - y1
-     * a = --------------------------------        b = ----------------------------------
+     * (y1 - y2)x + (x2 - x1)y + (x1y2 - x2y1) = 0
+     *                 x2 - x1                                      y1 - y2
+     * b = --------------------------------        a = ----------------------------------
      *     sqrt ((x1 - x2)^2 + (y2 - y1)^2)            sqrt ((x1 - x2)^2 + (y2 - y1)^2)
      *
      *              x2 y1 - y2 x1
@@ -28,13 +29,13 @@ public:
         float a, b, c; // use global
 
         // Estimate the model parameters from the sample
-        b = -(input_points[2*idx2] - input_points[2*idx1]); // tangent_x
-        a = input_points[2*idx2+1] - input_points[2*idx1+1]; // tangent_y
+        a = input_points[2*idx1+1] - input_points[2*idx2+1]; // tangent_y
+        b = input_points[2*idx2] - input_points[2*idx1]; // tangent_x
 
         float mag = sqrt(a * a + b * b);
         a /= mag;
         b /= mag;
-        c = (input_points[2*idx2] * input_points[2*idx1+1] - input_points[2*idx2+1] * input_points[2*idx1])/mag;
+        c = (input_points[2*idx1] * input_points[2*idx2+1] - input_points[2*idx2] * input_points[2*idx1+1])/mag;
 
         // Set the model descriptor
         models[0]->setDescriptor((cv::Mat_<float>(1,3) <<  a, b, c));

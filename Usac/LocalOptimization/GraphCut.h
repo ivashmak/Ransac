@@ -22,6 +22,7 @@ public:
         threshold = model->threshold;
         estimator = estimator_;
         sqr_thr = 2 * threshold * threshold;
+        points_size = points_size_;
         neighbors = const_cast<int *>(neighbors_);
     }
 

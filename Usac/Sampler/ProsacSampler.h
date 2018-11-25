@@ -19,7 +19,7 @@ protected:
 
     unsigned int hypCount;
 
-    const unsigned int growth_max_samples = 20000;
+    unsigned int growth_max_samples;
 
     unsigned int sample_size;
     unsigned int points_size;
@@ -38,33 +38,50 @@ public:
         return largest_sample_size;
     }
 
-    bool isInitialized () { return initialized; }
-
     void initProsacSampler (unsigned int sample_size_, unsigned int points_size_, bool reset_time = true) {
         sample_size = sample_size_;
         points_size = points_size_;
+
+        // it is T_N
+        // Imagine standard RANSAC drawing T_N samples of size m out of N data points
+        // In our experiments, the parameter was set to T_N = 200000
+        growth_max_samples = 200000; // model->max_iters
 
         randomGenerator = new UniformRandomGenerator;
         if (reset_time) randomGenerator->resetTime();
         
         growth_function = new unsigned int[points_size];
-        
-        unsigned int T_n_p = 1;
+        // The data points in U_N are sorted in descending order w.r.t. the quality function q.
+        // Let {Mi}i = 1...T_N denote the sequence of samples Mi c U_N that are uniformly drawn by Ransac.
+
+        // Let T_n be an average number of samples from {Mi}i=1...T_N that contain data points from U_n only.
         // compute initial value for T_n
+        //                                  n - i
+        // T_n = T_N * Product i = 0...m-1 -------, n >= sample size, N = points size
+        //                                  N - i
         double T_n = growth_max_samples;
         for (unsigned int i = 0; i < sample_size; ++i) {
             T_n *= (double)(sample_size-i)/(points_size-i);
         }
+
+        unsigned int T_n_prime = 1;
         // compute values using recurrent relation
+        //             n + 1
+        // T(n+1) = --------- T(n), m is sample size.
+        //           n + 1 - m
+
+        // growth function is defined as
+        // g(t) = min {n, T'_(n) >= t}
+        // T'_(n+1) = T'_(n) + (T_(n+1) - T_(n))
         for (unsigned int i = 0; i < points_size; ++i) {
             if (i+1 <= sample_size) {
-                growth_function[i] = T_n_p;
+                growth_function[i] = T_n_prime;
                 continue;
             }
-            double temp = (double)(i+1)*T_n/(i+1-sample_size);
-            growth_function[i] = T_n_p + (unsigned int)ceil(temp - T_n);
-            T_n = temp;
-            T_n_p = growth_function[i];
+            double Tn_plus1 = (double)(i+1)*T_n/(i+1-sample_size);
+            growth_function[i] = T_n_prime + (unsigned int)ceil(Tn_plus1 - T_n);
+            T_n = Tn_plus1;
+            T_n_prime = growth_function[i];
         }
 
         // other initializations
@@ -112,7 +129,7 @@ public:
     }
 
     bool isInit () override {
-        return true;
+        return initialized;
     }
 };
 

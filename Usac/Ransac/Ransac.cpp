@@ -109,7 +109,7 @@ void Ransac::run(cv::InputArray input_points) {
     GraphCut * graphCut;
     if (GraphCutLO) {
         graphCut = new GraphCut;
-        graphCut->init(points_size, model, estimator, neighbors);
+        graphCut->init(points_size, model, estimator, getNeighbors());
     }
 
     int iters = 0;
@@ -123,14 +123,14 @@ void Ransac::run(cv::InputArray input_points) {
             sampler->generateSample(sample);
         }
 
-        // std::cout << "samples are generated\n";
+//         std::cout << "samples are generated\n";
 
         number_of_models = estimator->EstimateModel(sample, models);
 
-        // std::cout << "minimal model estimated\n";
+//         std::cout << "minimal model estimated\n";
 
         for (int i = 0; i < number_of_models; i++) {
-            // std::cout << i << "-th model\n";
+//             std::cout << i << "-th model\n";
 
             if (GraphCutLO) {
                 // if LO is true than get inliers
@@ -144,17 +144,20 @@ void Ransac::run(cv::InputArray input_points) {
                 if (SprtLO) {
                     // we don't no model score, no inliers
                     // as soon as we use graph cut labeling, the inlier number is score
-                    sprt->verifyModelAndGetModelScore(estimator, models[i], iters, best_score->score/*inlier_number*/,
+                    sprt->verifyModelAndGetModelScore(estimator, models[i], iters,
+                        std::max ((int) best_score->score, (int) current_score->inlier_number)/*inlier_number*/,
                         false, nullptr, false, nullptr);
                 }
             } else
             if (SprtLO) {
                 if (get_inliers) {
-                    sprt->verifyModelAndGetModelScore(estimator, models[i], iters, best_score->inlier_number,
-                    true, current_score, true, inliers);
+                    sprt->verifyModelAndGetModelScore(estimator, models[i], iters,
+                        std::max (best_score->inlier_number, current_score->inlier_number),
+                        true, current_score, true, inliers);
                 } else {
-                    sprt->verifyModelAndGetModelScore(estimator, models[i], iters, best_score->inlier_number,
-                    true, current_score, false, nullptr);
+                    sprt->verifyModelAndGetModelScore(estimator, models[i], iters,
+                        std::max (best_score->inlier_number, current_score->inlier_number),
+                        true, current_score, false, nullptr);
                 }
             } else {
                 if (get_inliers) {
@@ -254,13 +257,14 @@ void Ransac::run(cv::InputArray input_points) {
     std::cout << "end best inl num " << best_score->inlier_number << '\n';
     std::cout << "end best score " << best_score->score << '\n';
 
-    unsigned int normalization = 4;
+    // usually converges in 4-5 iterations
+    unsigned int normalizations = 10;
     unsigned int previous_non_minimal_num_inlier = 0;
 
     // get inliers from best model
     quality->getInliers(best_model->returnDescriptor(), max_inliers);
 
-    for (int norm = 0; norm < normalization; norm++) {
+    for (unsigned int norm = 0; norm < normalizations; norm++) {
 
         // estimate non minimal model with max inliers
         if (estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model)) {

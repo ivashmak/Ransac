@@ -7,6 +7,7 @@
 #include "../Usac/Estimator/FundamentalEstimator.h"
 #include "../Usac/Sampler/UniformSampler.h"
 #include "../dataset/Dataset.h"
+#include "../Usac/Utils/NearestNeighbors.h"
 
 void storeResultsFundamental ();
 
@@ -51,20 +52,26 @@ void Tests::testFundamentalFitting() {
 
     cv::hconcat(points1, points2, points);
 
-    Model *fundamental_model = new Model (5, 7, 0.99, 0, ESTIMATOR::Fundamental, SAMPLER::Uniform);
-    Sampler *uniform_sampler = new UniformSampler;
-    uniform_sampler->setSampleSize(fundamental_model->sample_number);
-    uniform_sampler->setPointsSize(points1.rows);
-    uniform_sampler->initRandomGenerator();
+    Model *model = new Model (5, 7, 0.99, 0, ESTIMATOR::Fundamental, SAMPLER::Uniform);
+    Sampler *sampler = new UniformSampler;
+    sampler->setSampleSize(model->sample_number);
+    sampler->setPointsSize(points1.rows);
+    sampler->initRandomGenerator();
 
-    Estimator *fundamental_estimator = new FundamentalEstimator (points);
+    Estimator *estimator = new FundamentalEstimator (points);
     TerminationCriteria *termination_criteria = new StandardTerminationCriteria;
     Quality *quality = new Quality;
 
-    test (points, fundamental_estimator, uniform_sampler, fundamental_model, quality, termination_criteria,
+    // get neighbors
+    NearestNeighbors nn;
+    cv::Mat neighbors, neighbors_dist;
+    nn.getNearestNeighbors_nanoflann(points1, model->k_nearest_neighbors, neighbors, false, neighbors_dist);
+    //
+
+    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
             img_name, -1);
 
-//    getStatisticalResults (points, fundamental_estimator, fundamental_model, uniform_sampler, termination_criteria, quality, 1000);
+//    getStatisticalResults (points, estimator, model, sampler, termination_criteria, quality, neighbors, 1000);
 
     // storeResultsFundamental ();
 }
@@ -77,55 +84,73 @@ void storeResultsFundamental () {
 
     TerminationCriteria *termination_criteria = new StandardTerminationCriteria;
     Quality *quality = new Quality;
+    Model *model = new Model (3, 4, 0.99, 7, ESTIMATOR::Fundamental, SAMPLER::Uniform);
+    Tests tests;
 
-    Model *fundamental_model = new Model(3, 7, 0.99, 0, ESTIMATOR::Fundamental, SAMPLER::Uniform);
+    model->setStandardRansacLO(false);
+    model->setGraphCutLO(false);
+    model->setSprtLO(false);
+
+    int N_runs = 50;
 
     std::ofstream results_total;
-    results_total.open ("../results/fundamental/ALL.csv");
-    results_total << "Filename,Number of Inliers (found / total points),Number of Iterations,Time (mcs),"
-                     "Average Error (threshold = " << fundamental_model->threshold <<"),,,,,\n";
+    results_total.open ("../results/fundamentla/all_uniform.csv");
+    results_total << tests.getComputerInfo();
+    results_total << model->getName() << ",,,,,,,,,,,,,\n";
+    results_total << "Runs for each image = " << N_runs << "\n";
+    results_total << "Threshold for each image = " << model->threshold << "\n";
+    results_total << "Desired probability for each image = " << model->desired_prob << "\n";
+    results_total << "Standard LO = " << (bool) model->LO << "\n";
+    results_total << "Graph Cut LO = " << (bool) model->GraphCutLO << "\n";
+    results_total << "SPRT = " << (bool) model->SprtLO << "\n\n\n";
+
+    results_total << "Filename,Avg num inl/gt,Std dev num inl,Med num inl,"
+                     "Avg num iters,Std dev num iters,Med num iters,"
+                     "Avg time (mcs),Std dev time,Med time,"
+                     "Num fails\n";
+
+    NearestNeighbors nn;
+
 
     for (std::string img_name : points_filename) {
         std::cout << img_name << '\n';
         cv::Mat points1, points2;
-        read_points(points1, points2, "../dataset/fundamental/" + img_name);
+        read_points (points1, points2, "../dataset/fundamental/"+img_name+"_pts.txt");
         cv::hconcat(points1, points2, points1);
 
-        Estimator *fundamental_estimator = new FundamentalEstimator(points1);
-        Sampler *uniform_sampler = new UniformSampler;
+        Estimator * estimator = new FundamentalEstimator (points1);
+        Sampler * sampler = new UniformSampler;
 
-        uniform_sampler->setSampleSize(fundamental_model->sample_number);
-        uniform_sampler->setPointsSize(points1.rows);
-        uniform_sampler->initRandomGenerator();
+        tests.initUniform(sampler, model->sample_number, points1.rows);
 
-        Ransac ransac(fundamental_model, uniform_sampler, termination_criteria, quality, fundamental_estimator);
-        ransac.run(points1);
+        int gt_inliers = -1;
 
-        RansacOutput *ransacOutput = ransac.getRansacOutput();
+        // get neighbors
+        cv::Mat neighbors, neighbors_dist;
+        nn.getNearestNeighbors_nanoflann(points1, model->k_nearest_neighbors, neighbors, false, neighbors_dist);
+        //
 
-        cv::Mat F = ransacOutput->getModel()->returnDescriptor();
+        StatisticalResults * statistical_results = new StatisticalResults;
+        tests.getStatisticalResults(points1, estimator, model, sampler, termination_criteria,
+                                    quality, neighbors, N_runs, true, true, gt_inliers, statistical_results);
 
-//        std::cout << F << '\n';
-
-        std::ofstream save_model;
-        save_model.open("../results/fundamental/" + img_name.substr(0, img_name.find('.')) + ".csv");
-
-        save_model << F.at<float>(0, 0) << "," << F.at<float>(0, 1) << "," << F.at<float>(0, 2) << ",\n"
-                   << F.at<float>(1, 0) << "," << F.at<float>(1, 1) << "," << F.at<float>(1, 2) << ",\n"
-                   << F.at<float>(2, 0) << "," << F.at<float>(2, 1) << "," << F.at<float>(2, 2) << ",\n";
-
-        save_model << ransacOutput->getNumberOfInliers() << '\n';
-        save_model << ransacOutput->getNumberOfIterations() << '\n';
-        save_model << ransacOutput->getTimeMicroSeconds() << '\n';
-
+        // save to csv file
         results_total << img_name << ",";
-        results_total << ransacOutput->getNumberOfInliers() << "/" << points1.rows << ",";
-        results_total << ransacOutput->getNumberOfIterations() << ",";
-        results_total << ransacOutput->getTimeMicroSeconds() << ",";
-        results_total << ransacOutput->getAverageError() << "\n";
+        results_total << statistical_results->avg_num_inliers << " / " << gt_inliers << ",";
+        results_total << statistical_results->std_dev_num_inliers << ",";
+        results_total << statistical_results->median_num_inliers << ",";
 
-        save_model.close();
+        results_total << statistical_results->avg_num_iters << ",";
+        results_total << statistical_results->std_dev_num_iters << ",";
+        results_total << statistical_results->median_num_iters << ",";
+
+        results_total << statistical_results->avg_time_mcs << ",";
+        results_total << statistical_results->std_dev_time_mcs << ",";
+        results_total << statistical_results->median_time_mcs << ",";
+
+        results_total << statistical_results->num_fails << "\n";
     }
 
     results_total.close();
+    delete model, quality, termination_criteria;
 }

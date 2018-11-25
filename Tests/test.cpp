@@ -6,6 +6,7 @@ void Tests::test (cv::InputArray points,
            Model * model,
            Quality * quality,
            TerminationCriteria * termination_criteria,
+           const cv::Mat& neighbors,
            const std::string &img_name,
            int GT_num_inliers) {
 
@@ -13,6 +14,7 @@ void Tests::test (cv::InputArray points,
     Logging logResult;
 
     Ransac ransac (model, sampler, termination_criteria, quality, estimator);
+    ransac.setNeighbors(neighbors);
     ransac.run(points);
 
     RansacOutput * ransacOutput = ransac.getRansacOutput();

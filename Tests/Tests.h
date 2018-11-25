@@ -35,6 +35,7 @@ public:
                Model * model,
                Quality * quality,
                TerminationCriteria * termination_criteria,
+               const cv::Mat& neighbors,
                const std::string &img_name,
                int GT_num_inliers);
 
@@ -75,6 +76,7 @@ public:
                     Sampler * sampler,
                     TerminationCriteria * termination_criteria,
                     Quality *const quality,
+                    const cv::Mat& neighbors,
                     int N,
                     bool GT = false, bool get_results = false,
                     int gt_num_inliers=0, StatisticalResults * statistical_results=0) {
@@ -104,6 +106,7 @@ public:
             }
 
             Ransac ransac (model, sampler, termination_criteria, quality, estimator);
+            ransac.setNeighbors(neighbors);
             ransac.run(points);
             RansacOutput *ransacOutput = ransac.getRansacOutput();
 

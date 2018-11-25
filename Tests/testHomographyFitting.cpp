@@ -25,7 +25,7 @@ void storeResults ();
 int getGTNumInliers (const std::string &filename, float threshold);
 
 void Tests::testHomographyFitting() {
-    std::string img_name = "LePoint3";
+    std::string img_name = "adam";
     cv::Mat points, points1, points2;
     read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
 
@@ -109,26 +109,28 @@ void Tests::testHomographyFitting() {
     int gt_inliers = getGTNumInliers (img_name, 3 /*model->threshold*/);
 
 
-    // ---------------------- uniform ----------------------------------
-    model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform);
-    model->setStandardRansacLO(false);
-    model->setGraphCutLO(true);
-    model->setSprtLO(false);
+    nn.getNearestNeighbors_flann(points1, knn, neighbors);
 
-    sampler = new UniformSampler;
-    initUniform(sampler, model->sample_number, points_size);
-
-    estimator = new HomographyEstimator (points);
-
-    test (points, estimator, sampler, model, quality, termination_criteria,
-            img_name, gt_inliers);
+//     ---------------------- uniform ----------------------------------
+//    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
+//    model->setStandardRansacLO(false);
+//    model->setGraphCutLO(true);
+//    model->setSprtLO(false);
+//
+//    sampler = new UniformSampler;
+//    initUniform(sampler, model->sample_number, points_size);
+//
+//    estimator = new HomographyEstimator (points);
+//
+//    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
+//            img_name, gt_inliers);
     // --------------------------------------------------------------
 
 
 
 
 // ------------------ prosac ---------------------
-//    model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Prosac);
+//    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Prosac);
 //    model->setStandardRansacLO(true);
 //    model->setGraphCutLO(true);
 //    model->setSprtLO(true);
@@ -142,18 +144,18 @@ void Tests::testHomographyFitting() {
 //    termination_criteria = prosac_termination_criteria_;
 //
 //    estimator = new HomographyEstimator (sorted_points);
-//    test (points, estimator, sampler, model, quality, termination_criteria,
+//    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
 //          img_name, gt_inliers);
     // -------------------------------------------------
 
 
 
-
+//
 //    getStatisticalResults(points, estimator, model, sampler, termination_criteria,
-//                          quality, 30, true, false, gt_inliers, nullptr);
+//                          quality, neighbors, 100, true, false, gt_inliers, nullptr);
 
 
-//     storeResults();
+     storeResults();
 }
 
 
@@ -165,7 +167,7 @@ void storeResults () {
 
     TerminationCriteria *termination_criteria = new StandardTerminationCriteria;
     Quality *quality = new Quality;
-    Model *model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform);
+    Model *model = new Model (3, 4, 0.99, 7, ESTIMATOR::Homography, SAMPLER::Uniform);
     Tests tests;
 
     model->setStandardRansacLO(false);
@@ -190,6 +192,8 @@ void storeResults () {
                      "Avg time (mcs),Std dev time,Med time,"
                      "Num fails\n";
 
+    NearestNeighbors nn;
+
 
     for (std::string img_name : points_filename) {
         std::cout << img_name << '\n';
@@ -203,10 +207,15 @@ void storeResults () {
         tests.initUniform(sampler, model->sample_number, points1.rows);
 
         int gt_inliers = getGTNumInliers (img_name, model->threshold);
-        StatisticalResults * statistical_results = new StatisticalResults;
 
+        // get neighbors
+        cv::Mat neighbors, neighbors_dist;
+        nn.getNearestNeighbors_nanoflann(points1, model->k_nearest_neighbors, neighbors, false, neighbors_dist);
+        //
+
+        StatisticalResults * statistical_results = new StatisticalResults;
         tests.getStatisticalResults(points1, estimator, model, sampler, termination_criteria,
-                              quality, N_runs, true, true, gt_inliers, statistical_results);
+                              quality, neighbors, N_runs, true, true, gt_inliers, statistical_results);
 
         // save to csv file
         results_total << img_name << ",";
