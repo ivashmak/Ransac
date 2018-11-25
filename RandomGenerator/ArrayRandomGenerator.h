@@ -19,7 +19,7 @@ protected:
 public:
 
     virtual ~ArrayRandomGenerator () {
-        // if (isInit()) delete array;
+         if (isInit()) delete array;
     }
 
     void resetGenerator (int min_range, int max_range) override {
@@ -41,7 +41,6 @@ public:
             array[k++] = i;
         }
         shuffleArray();
-    
     }
 
     void shuffleArray () {

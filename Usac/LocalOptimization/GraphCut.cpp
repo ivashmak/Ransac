@@ -4,13 +4,11 @@
  * In expirements I found that for less k nearest neighbors
  * the number inliers is more. For 2d line fitting.
  */
-void GraphCut::labeling (const int * const neighbors, Estimator * estimator, 
-    Model * model, int * inliers, Score * score, int points_size, bool get_inliers) {
+void GraphCut::labeling (const cv::Mat& model, int * inliers, Score * score, bool get_inliers) {
 
-    estimator->setModelParameters(model->returnDescriptor());
+    estimator->setModelParameters(model);
 
-    int knn = model->k_nearest_neighbors;
-    float lambda = model->lambda_graph_cut;
+
     Energy<float, float, float> *e = new Energy<float, float, float>(points_size, knn * points_size, NULL);
 
     for (auto i = 0; i < points_size; ++i) {
@@ -19,16 +17,14 @@ void GraphCut::labeling (const int * const neighbors, Estimator * estimator,
 
     float * errors = new float [points_size];
 
-    const float sqr_thr = 2 * model->threshold * model->threshold;
     float energy, distance;
 
-    score->score = 0;
     score->inlier_number = 0;
 
     if (get_inliers) {
         for (int point = 0; point < points_size; ++point) {
             distance = estimator->GetError(point);
-            if (distance < model->threshold) {
+            if (distance < threshold) {
                 inliers[score->inlier_number++] = point;
             }
             // save errors to avoid next error calculating
@@ -41,7 +37,7 @@ void GraphCut::labeling (const int * const neighbors, Estimator * estimator,
     } else {
         for (int i = 0; i < points_size; ++i) {
             distance = estimator->GetError(i);
-            if (distance < model->threshold) {
+            if (distance < threshold) {
                 score->inlier_number++;
             }
             // save errors to avoid next error calculating
@@ -89,6 +85,7 @@ void GraphCut::labeling (const int * const neighbors, Estimator * estimator,
 
     e->minimize();
 
+    score->score = 0;
     for (int i = 0; i < points_size; ++i) {
         if (e->what_segment(i) == Graph<float, float, float>::SINK) {
             score->score++;

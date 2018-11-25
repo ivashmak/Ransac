@@ -17,7 +17,6 @@ int getPointsSize (cv::InputArray points) {
     }
 }
 
-
 void Ransac::run(cv::InputArray input_points) {
     // todo: initialize (= new) estimator, quality, sampler and others here...
 
@@ -110,6 +109,7 @@ void Ransac::run(cv::InputArray input_points) {
     GraphCut * graphCut;
     if (GraphCutLO) {
         graphCut = new GraphCut;
+        graphCut->init(points_size, model, estimator, neighbors);
     }
 
     int iters = 0;
@@ -121,7 +121,6 @@ void Ransac::run(cv::InputArray input_points) {
             prosac_sampler->generateSampleProsac (sample, prosac_termination_criteria->getStoppingLength());
         } else {
             sampler->generateSample(sample);
-            
         }
 
         // std::cout << "samples are generated\n";
@@ -137,11 +136,9 @@ void Ransac::run(cv::InputArray input_points) {
                 // if LO is true than get inliers
                 // we need inliers only for local optimization
                 if (get_inliers) {
-                    graphCut->labeling(neighbors, estimator, models[i], inliers, current_score,
-                    points_size, true);
+                    graphCut->labeling(models[i]->returnDescriptor(), inliers, current_score, true);
                 } else {
-                    graphCut->labeling(neighbors, estimator, models[i], nullptr, current_score,
-                    points_size, false);
+                    graphCut->labeling(models[i]->returnDescriptor(), nullptr, current_score, false);
                 }
 
                 if (SprtLO) {
@@ -169,6 +166,7 @@ void Ransac::run(cv::InputArray input_points) {
 
 //            std::cout << "current num inl " << current_score->inlier_number << "\n";
 //            std::cout << "current score " << current_score->score << "\n";
+//            std::cout << models[i]->returnDescriptor() << "\n\n";
 
             if (current_score->bigger(best_score)) {
 
@@ -218,6 +216,9 @@ void Ransac::run(cv::InputArray input_points) {
                 }
 
                 unsigned int inlier_number;
+                /*
+                 * If we use graph cut local optimization, so number of inliers is score (?).
+                 */
                 if (GraphCutLO) {
                     inlier_number = best_score->score;
                 } else {
@@ -253,27 +254,26 @@ void Ransac::run(cv::InputArray input_points) {
     std::cout << "end best inl num " << best_score->inlier_number << '\n';
     std::cout << "end best score " << best_score->score << '\n';
 
-
-    unsigned int normalization = 3;
+    unsigned int normalization = 4;
     unsigned int previous_non_minimal_num_inlier = 0;
 
+    // get inliers from best model
+    quality->getInliers(best_model->returnDescriptor(), max_inliers);
+
     for (int norm = 0; norm < normalization; norm++) {
-        // get inliers from best model
-        quality->getInliers(best_model->returnDescriptor(), max_inliers);
 
         // estimate non minimal model with max inliers
         if (estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model)) {
-            quality->getNumberInliers(current_score, non_minimal_model->returnDescriptor(), false, nullptr);
+            quality->getNumberInliers(current_score, non_minimal_model->returnDescriptor(), true, max_inliers);
 
             // Priority is for non minimal model estimation
             std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
 
             if ((float) current_score->inlier_number / best_score->inlier_number < 0.5) {
-                std::cout
-                        << "\033[1;31mNON minimal model has less than 50% of inliers to compare with best score!\033[0m \n";
+                std::cout << "\033[1;31mNON minimal model has less than 50% of inliers to compare with best score!\033[0m \n";
             }
 
-            // if normalization score is equal, so next normalization are equal too, so break.
+            // if normalization score is less or equal, so next normalization are equal too, so break.
             if (current_score->inlier_number <= previous_non_minimal_num_inlier) {
                 break;
             }

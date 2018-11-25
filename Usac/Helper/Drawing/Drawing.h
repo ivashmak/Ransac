@@ -184,7 +184,7 @@ public:
         drawErrors(img1_inl, img2_inl, points1, points2, H);
 
         drawErrors(gt_img1_inl, gt_img2_inl, points1, points2, H_gt.inv());
-//        drawErrors(gt_img1_inl, gt_img2_inl, points1, points2, H_gt.inv());
+//        drawErrors(gt_img1_inl, gt_img2_inl, points1, points2, H_gt);
 
         drawErrors(opencv_img1_inl, opencv_img2_inl, points1, points2, H_opencv);
 

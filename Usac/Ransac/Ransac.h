@@ -48,6 +48,7 @@ public:
 
     void setNeighbors (const cv::Mat& neighbors_) {
 //        knn_neighbors = neighbors_.clone();
+        assert(neighbors_.empty());
         neighbors = (int *) neighbors_.data;
     }
 

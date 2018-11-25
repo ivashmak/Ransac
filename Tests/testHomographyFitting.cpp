@@ -25,7 +25,7 @@ void storeResults ();
 int getGTNumInliers (const std::string &filename, float threshold);
 
 void Tests::testHomographyFitting() {
-    std::string img_name = "adam";
+    std::string img_name = "LePoint3";
     cv::Mat points, points1, points2;
     read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
 
@@ -110,18 +110,18 @@ void Tests::testHomographyFitting() {
 
 
     // ---------------------- uniform ----------------------------------
-//    model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform);
-//    model->setStandardRansacLO(false);
-//    model->setGraphCutLO(false);
-//    model->setSprtLO(true);
-//
-//    sampler = new UniformSampler;
-//    initUniform(sampler, model->sample_number, points_size);
-//
-//    estimator = new HomographyEstimator (points);
-//
-//    test (points, estimator, sampler, model, quality, termination_criteria,
-//            img_name, gt_inliers);
+    model = new Model (3, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform);
+    model->setStandardRansacLO(false);
+    model->setGraphCutLO(true);
+    model->setSprtLO(false);
+
+    sampler = new UniformSampler;
+    initUniform(sampler, model->sample_number, points_size);
+
+    estimator = new HomographyEstimator (points);
+
+    test (points, estimator, sampler, model, quality, termination_criteria,
+            img_name, gt_inliers);
     // --------------------------------------------------------------
 
 
@@ -153,7 +153,7 @@ void Tests::testHomographyFitting() {
 //                          quality, 30, true, false, gt_inliers, nullptr);
 
 
-     storeResults();
+//     storeResults();
 }
 
 
