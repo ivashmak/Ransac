@@ -29,6 +29,8 @@ public:
     void initProsacNapsac1 (Sampler *& sampler, Model * model, const cv::Mat &nearest_neighors);
     void initProsacNapsac2 (Sampler *& sampler, Model * model, const cv::Mat &nearest_neighors);
 
+    void initSampler (Sampler *& sampler, Model * model, unsigned int points_size, cv::InputArray points, const cv::Mat& neighbors);
+
     void test (cv::InputArray points,
                Estimator * estimator,
                Sampler * sampler,

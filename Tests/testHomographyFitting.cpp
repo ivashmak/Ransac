@@ -25,7 +25,7 @@ void storeResults ();
 int getGTNumInliers (const std::string &filename, float threshold);
 
 void Tests::testHomographyFitting() {
-    std::string img_name = "adam";
+    std::string img_name = "Eiffel";
     cv::Mat points, points1, points2;
     read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
 
@@ -150,7 +150,7 @@ void Tests::testHomographyFitting() {
 
 
 
-//
+
 //    getStatisticalResults(points, estimator, model, sampler, termination_criteria,
 //                          quality, neighbors, 100, true, false, gt_inliers, nullptr);
 
@@ -164,78 +164,112 @@ void Tests::testHomographyFitting() {
  */
 void storeResults () {
     std::vector<std::string> points_filename = getHomographyDatasetPoints();
-
-    TerminationCriteria *termination_criteria = new StandardTerminationCriteria;
-    Quality *quality = new Quality;
-    Model *model = new Model (3, 4, 0.99, 7, ESTIMATOR::Homography, SAMPLER::Uniform);
     Tests tests;
 
-    model->setStandardRansacLO(false);
-    model->setGraphCutLO(false);
-    model->setSprtLO(false);
-
     int N_runs = 50;
-
-    std::ofstream results_total;
-    results_total.open ("../results/homography/all_uniform.csv");
-    results_total << tests.getComputerInfo();
-    results_total << model->getName() << ",,,,,,,,,,,,,\n";
-    results_total << "Runs for each image = " << N_runs << "\n";
-    results_total << "Threshold for each image = " << model->threshold << "\n";
-    results_total << "Desired probability for each image = " << model->desired_prob << "\n";
-    results_total << "Standard LO = " << (bool) model->LO << "\n";
-    results_total << "Graph Cut LO = " << (bool) model->GraphCutLO << "\n";
-    results_total << "SPRT = " << (bool) model->SprtLO << "\n\n\n";
-
-    results_total << "Filename,Avg num inl/gt,Std dev num inl,Med num inl,"
-                     "Avg num iters,Std dev num iters,Med num iters,"
-                     "Avg time (mcs),Std dev time,Med time,"
-                     "Num fails\n";
-
     NearestNeighbors nn;
 
+    std::vector<SAMPLER> samplers;
+    samplers.push_back(SAMPLER::Uniform);
 
-    for (std::string img_name : points_filename) {
-        std::cout << img_name << '\n';
-        cv::Mat points1, points2;
-        read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
-        cv::hconcat(points1, points2, points1);
+    int lo_combinations = 5;
+    bool lo[lo_combinations][3] = {
+            {false, false, false},
+            {true, false, false},
+            {false, true, false},
+            {false, false, true},
+            {true, true, true},
+    };
 
-        Estimator * estimator = new HomographyEstimator (points1);
-        Sampler * sampler = new UniformSampler;
+    for (SAMPLER smplr : samplers) {
+        for (int l = 0; l < lo_combinations; l++) {
+            std::ofstream results_total;
+            std::ofstream results_matlab;
+            std::string mfname = "../results/homography/"+tests.sampler2string(smplr)+ "_"+
+                    std::to_string(lo[l][0])+std::to_string(lo[l][1])+std::to_string(lo[l][2])+"_m.csv";
+            std::string fname = "../results/homography/"+tests.sampler2string(smplr)+"_"+
+                    std::to_string(lo[l][0])+std::to_string(lo[l][1])+std::to_string(lo[l][2])+".csv";
 
-        tests.initUniform(sampler, model->sample_number, points1.rows);
+            results_matlab.open (mfname);
+            results_total.open (fname);
 
-        int gt_inliers = getGTNumInliers (img_name, model->threshold);
+            Model *model = new Model (3, 4, 0.99, 3, ESTIMATOR::Homography, smplr);
+            model->setStandardRansacLO(lo[l][0]);
+            model->setGraphCutLO(lo[l][1]);
+            model->setSprtLO(lo[l][2]);
 
-        // get neighbors
-        cv::Mat neighbors, neighbors_dist;
-        nn.getNearestNeighbors_nanoflann(points1, model->k_nearest_neighbors, neighbors, false, neighbors_dist);
-        //
+            results_total << tests.getComputerInfo();
+            results_total << model->getName() << "\n";
+            results_total << "Runs for each image = " << N_runs << "\n";
+            results_total << "Threshold for each image = " << model->threshold << "\n";
+            results_total << "Desired probability for each image = " << model->desired_prob << "\n";
+            results_total << "Standard LO = " << (bool) model->LO << "\n";
+            results_total << "Graph Cut LO = " << (bool) model->GraphCutLO << "\n";
+            results_total << "SPRT = " << (bool) model->SprtLO << "\n\n\n";
 
-        StatisticalResults * statistical_results = new StatisticalResults;
-        tests.getStatisticalResults(points1, estimator, model, sampler, termination_criteria,
-                              quality, neighbors, N_runs, true, true, gt_inliers, statistical_results);
+            results_total << "Filename,Avg num inl/gt,Std dev num inl,Med num inl,"
+                             "Avg num iters,Std dev num iters,Med num iters,"
+                             "Avg time (mcs),Std dev time,Med time,"
+                             "Num fails\n";
 
-        // save to csv file
-        results_total << img_name << ",";
-        results_total << statistical_results->avg_num_inliers << " / " << gt_inliers << ",";
-        results_total << statistical_results->std_dev_num_inliers << ",";
-        results_total << statistical_results->median_num_inliers << ",";
+            for (std::string img_name : points_filename) {
+                std::cout << img_name << '\n';
 
-        results_total << statistical_results->avg_num_iters << ",";
-        results_total << statistical_results->std_dev_num_iters << ",";
-        results_total << statistical_results->median_num_iters << ",";
+                cv::Mat points1, points2;
+                read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
+                cv::hconcat(points1, points2, points1);
 
-        results_total << statistical_results->avg_time_mcs << ",";
-        results_total << statistical_results->std_dev_time_mcs << ",";
-        results_total << statistical_results->median_time_mcs << ",";
+                TerminationCriteria *termination_criteria = new StandardTerminationCriteria;
+                Quality *quality = new Quality;
+                Estimator * estimator = new HomographyEstimator (points1);
 
-        results_total << statistical_results->num_fails << "\n";
+                // get neighbors
+                cv::Mat neighbors, neighbors_dist;
+                nn.getNearestNeighbors_nanoflann(points1, model->k_nearest_neighbors, neighbors, false, neighbors_dist);
+                //
+
+                Sampler * sampler;
+                tests.initSampler(sampler, model, points1.rows, points1, neighbors);
+
+                int gt_inliers = getGTNumInliers (img_name, model->threshold);
+
+                StatisticalResults * statistical_results = new StatisticalResults;
+                tests.getStatisticalResults(points1, estimator, model, sampler, termination_criteria,
+                                            quality, neighbors, N_runs, true, true, gt_inliers, statistical_results);
+
+                // save to csv file
+                results_total << img_name << ",";
+                results_total << statistical_results->avg_num_inliers << " / " << gt_inliers << ",";
+                results_total << statistical_results->std_dev_num_inliers << ",";
+                results_total << statistical_results->median_num_inliers << ",";
+
+                results_total << statistical_results->avg_num_iters << ",";
+                results_total << statistical_results->std_dev_num_iters << ",";
+                results_total << statistical_results->median_num_iters << ",";
+
+                results_total << statistical_results->avg_time_mcs << ",";
+                results_total << statistical_results->std_dev_time_mcs << ",";
+                results_total << statistical_results->median_time_mcs << ",";
+
+                results_total << statistical_results->num_fails << "\n";
+
+                results_matlab << img_name << ",";
+                results_matlab << statistical_results->avg_num_inliers << ",";
+                results_matlab << statistical_results->std_dev_num_inliers << ",";
+
+                results_matlab << statistical_results->avg_num_iters << ",";
+                results_matlab << statistical_results->std_dev_num_iters << ",";
+
+                results_matlab << statistical_results->avg_time_mcs << ",";
+                results_matlab << statistical_results->std_dev_time_mcs << ",";
+
+                results_matlab << statistical_results->num_fails << "\n";
+            }
+
+            results_total.close();
+            results_matlab.close();
+        }
     }
-
-    results_total.close();
-    delete model, quality, termination_criteria;
 }
 
 

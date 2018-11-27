@@ -81,7 +81,7 @@ void Tests::testLineFitting() {
 //    model->setStandardRansacLO(false);
 //
 //    initUniform(sampler, model->sample_number, points_size);
-//     test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, "", gt_inliers);
+//    test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, "", gt_inliers);
     //------------------------------------------
 
 
@@ -89,22 +89,22 @@ void Tests::testLineFitting() {
 
 
     // --------------  prosac ---------------------
-    model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Prosac);
-    initProsac(sampler, model->sample_number, points.size());
-    ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
-
-    ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
-    prosac_termination_criteria_->initProsacTerminationCriteria (prosac_sampler_->getGrowthFunction(),
-                                                model, points_size);
-
-    TerminationCriteria * prosac_termination_criteria = prosac_termination_criteria_;
-    cv::Mat sorted_pts (sorted_points);
-    estimator = new Line2DEstimator (sorted_points);
-
-    test (sorted_pts, estimator, sampler, model, quality, prosac_termination_criteria, neighbors, "", gt_inliers);
-
-    // switch to unsorted points back (not necessary, just for testing)
-    estimator = new Line2DEstimator (points);
+//    model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Prosac);
+//    initProsac(sampler, model->sample_number, points.size());
+//    ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
+//
+//    ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
+//    prosac_termination_criteria_->initProsacTerminationCriteria (prosac_sampler_->getGrowthFunction(),
+//                                                model, points_size);
+//
+//    TerminationCriteria * prosac_termination_criteria = prosac_termination_criteria_;
+//    cv::Mat sorted_pts (sorted_points);
+//    estimator = new Line2DEstimator (sorted_points);
+//
+//    test (sorted_pts, estimator, sampler, model, quality, prosac_termination_criteria, neighbors, "", gt_inliers);
+//
+//    // switch to unsorted points back (not necessary, just for testing)
+//    estimator = new Line2DEstimator (points);
     // ------------------------------------------------
 
 

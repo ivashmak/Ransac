@@ -41,3 +41,24 @@ void Tests::initProsacNapsac1 (Sampler *& sampler, Model * model, const cv::Mat 
 void Tests::initProsacNapsac2 (Sampler *& sampler, Model * model, const cv::Mat &nearest_neighors) {
 
 }
+
+void Tests::initSampler (Sampler *& sampler, Model * model, unsigned int points_size, cv::InputArray points, const cv::Mat& neighbors) {
+    Tests tests;
+    if (model->sampler == SAMPLER::Uniform) {
+        tests.initUniform(sampler, model->sample_number, points_size);
+    } else if (model->sampler == SAMPLER::Prosac) {
+        tests.initProsac(sampler, model->sample_number, points_size);
+    } else if (model->sampler == SAMPLER::Napsac) {
+        assert(model->k_nearest_neighbors > 0);
+        assert(!neighbors.empty());
+        tests.initNapsac(sampler, neighbors, model->k_nearest_neighbors, model->sample_number);
+    } else if (model->sampler == SAMPLER::Evsac) {
+        assert(model->k_nearest_neighbors > 0);
+        tests.initEvsac(sampler, points, model->sample_number, points_size, model->k_nearest_neighbors);
+    } else if (model->sampler == SAMPLER::GradualNapsac) {
+        tests.initGraduallyIncreasingSampler(sampler, points, model->sample_number);
+    } else {
+        std::cout << "UNKOWN SAMPLER\n";
+        exit (100);
+    }
+}

@@ -39,6 +39,7 @@ private:
     unsigned int points_size;
     unsigned int sample_size;
 
+    float desired_prob;
     StandardTerminationCriteria * standart_termination_criteria;
 public:
 
@@ -55,12 +56,14 @@ public:
                                         unsigned int points_size_) {
 
         standart_termination_criteria = new StandardTerminationCriteria;
-        standart_termination_criteria->init (model);
+        standart_termination_criteria->init (model, points_size_);
 
         growth_function = growth_function_;
 
         sample_size = model->sample_number;
         points_size = points_size_;
+
+        desired_prob = model->desired_prob;
 
         stopping_length = points_size;
     
@@ -122,10 +125,14 @@ public:
         return stopping_length;
     }
 
-    inline unsigned int getUpBoundIterations (float inlier_points, float total_points) override {
-        return 0;
+    inline unsigned int getUpBoundIterations (unsigned int inlier_size) override {
+        return standart_termination_criteria->getUpBoundIterations(inlier_size);
     }
-        /*
+    inline unsigned int getUpBoundIterations (unsigned int inlier_size, unsigned int points_size) override {
+        return standart_termination_criteria->getUpBoundIterations(inlier_size, points_size);
+    }
+
+    /*
             Returns predicted maximum iterations
          */
     unsigned int getUpBoundIterations(unsigned int hypCount, unsigned int largest_sample_size,

@@ -40,7 +40,7 @@ void Ransac::run(cv::InputArray input_points) {
 //   std::cout << "Points size " << points_size << '\n';
 
     // initialize termination criteria
-    termination_criteria->init(model);
+    termination_criteria->init(model, points_size);
 
     // initialize quality
     quality->init(points_size, model->threshold, estimator);
@@ -233,7 +233,7 @@ void Ransac::run(cv::InputArray input_points) {
                             getUpBoundIterations(iters, prosac_sampler->getLargestSampleSize(),
                                                  inliers, inlier_number);
                 } else {
-                    max_iters = termination_criteria->getUpBoundIterations (inlier_number, points_size);
+                    max_iters = termination_criteria->getUpBoundIterations (inlier_number);
                 }
                 if (SprtLO) {
                     max_iters = std::min (max_iters, (int)sprt->getMaximumIterations(inlier_number));
@@ -254,8 +254,8 @@ void Ransac::run(cv::InputArray input_points) {
     Model *non_minimal_model = new Model;
     non_minimal_model->copyFrom (model);
 
-    std::cout << "end best inl num " << best_score->inlier_number << '\n';
-    std::cout << "end best score " << best_score->score << '\n';
+//    std::cout << "end best inl num " << best_score->inlier_number << '\n';
+//    std::cout << "end best score " << best_score->score << '\n';
 
     // usually converges in 4-5 iterations
     unsigned int normalizations = 10;
@@ -271,7 +271,7 @@ void Ransac::run(cv::InputArray input_points) {
             quality->getNumberInliers(current_score, non_minimal_model->returnDescriptor(), true, max_inliers);
 
             // Priority is for non minimal model estimation
-            std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
+//            std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
 
             if ((float) current_score->inlier_number / best_score->inlier_number < 0.5) {
                 std::cout << "\033[1;31mNON minimal model has less than 50% of inliers to compare with best score!\033[0m \n";

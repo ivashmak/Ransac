@@ -4,6 +4,7 @@
 #include "LocalOptimization.h"
 #include "../Quality/Quality.h"
 #include "../Helper/Drawing/Drawing.h"
+#include "../Sampler/UniformSampler.h"
 
 /*
  * Reference:
@@ -30,7 +31,9 @@ public:
                              Quality *quality_,
                              Estimator *estimator_) {
         model = model_;
-        sampler = sampler_;
+//        sampler = sampler_;
+        sampler = new UniformSampler;
+
         estimator = estimator_;
         termination_criteria = termination_criteria_;
         quality = quality_;
