@@ -145,7 +145,7 @@ void Ransac::run(cv::InputArray input_points) {
                     // we don't no model score, no inliers
                     // as soon as we use graph cut labeling, the inlier number is score
                     sprt->verifyModelAndGetModelScore(estimator, models[i], iters,
-                        std::max ((int) best_score->score, (int) current_score->inlier_number)/*inlier_number*/,
+                        std::max ((int) best_score->score, (int) current_score->score)/*inlier_number*/,
                         false, nullptr, false, nullptr);
                 }
             } else

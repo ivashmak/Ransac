@@ -76,6 +76,12 @@ while iter < max_iters
         best_score = current_score;
         best_model = [a b c];
         
+        disp ('new max score')
+        best_score 
+        
+        disp ('iteration')
+        iter
+        
         max_iters = log (0.01) / log (1 - (current_score/points_size)^sample_size);
     end
     iter = iter + 1;

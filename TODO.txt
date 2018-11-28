@@ -52,3 +52,8 @@ init everything directly ransac
 Ask about weights
 Count iterations in LO?
 Use termination criteria/srpt/gc in LO?
+
+
+
+1. Check quantity of updating best score. If it's low, so use get inliers directly in updating (not in every iteration).
+2. Check SPRT, if model is bad, can we skip?

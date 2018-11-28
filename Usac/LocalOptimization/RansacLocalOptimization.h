@@ -39,7 +39,7 @@ public:
         quality = quality_;
     }
     
-    int GetLOModelScore   (Model &best_lo_model,
+    int GetLOModelScore  (Model &best_lo_model,
                           Score &best_lo_score,
                           Score *kth_ransac_score,
                           cv::InputArray input_points,
@@ -107,9 +107,10 @@ public:
          */
 
         unsigned int max_iters = termination_criteria->getUpBoundIterations(kth_ransac_score->inlier_number, points_size);        
-        unsigned int lo_iters = kth_step;
+        unsigned int total_iters = kth_step;
+        unsigned int lo_iters = 0;
         for (int iters = 0; iters < lo_max_iterations; iters++) {
-            if (lo_iters > max_iters) {
+            if (total_iters > max_iters) {
                 *can_finish = true;
                 break;
             }
@@ -195,7 +196,6 @@ public:
                 // cv::imshow("least img", img); cv::waitKey(0);
                 // -------------------------------------------
 
-                lo_iters++;
                 // if current model is not better then break
                 if (best_lo_score.bigger(lo_score)) {
                     break;
@@ -203,8 +203,6 @@ public:
             }
             // get original threshold back
             lo_model->threshold = best_lo_model.threshold;
-
-            // lo_iters++;
 
             // std::cout << "end iterative lo inner score  = " << lo_score->inlier_number << '\n';
 
@@ -219,6 +217,7 @@ public:
                 // std::cout << "lo max iters prediction " << max_iters << '\n';
             }
             lo_iters++;
+            total_iters++;
         }
 
         // reinit sampler back
