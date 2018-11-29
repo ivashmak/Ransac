@@ -39,8 +39,8 @@ public:
         quality = quality_;
     }
     
-    int GetLOModelScore  (Model &best_lo_model,
-                          Score &best_lo_score,
+    int GetLOModelScore  (Model *best_lo_model,
+                          Score *best_lo_score,
                           Score *kth_ransac_score,
                           cv::InputArray input_points,
                           unsigned int points_size,
@@ -66,16 +66,15 @@ public:
          * Let's best lo score is at least kth ransac score.
          * Avoid comparing between current lo score with best score and kth score.
          */
-
-        best_lo_score.inlier_number = kth_ransac_score->inlier_number;
-        best_lo_score.score = kth_ransac_score->score;
+        best_lo_score->inlier_number = kth_ransac_score->inlier_number;
+        best_lo_score->score = kth_ransac_score->score;
 
         /* In our experiments the size of samples are set to min (Ik/2, 14)
          * for epipolar geometry and to min (Ik/2, 12) for the case of homography estimation
          */
-        unsigned int lo_sample_size = std::min(kth_ransac_score->inlier_number / 2 + 1, (int) best_lo_model.lo_sample_size);
-        unsigned int lo_max_iterations = best_lo_model.lo_max_iterations;
-        unsigned int lo_iterative_iterations = best_lo_model.lo_iterative_iterations;
+        unsigned int lo_sample_size = std::min(kth_ransac_score->inlier_number / 2 + 1, (int) best_lo_model->lo_sample_size);
+        unsigned int lo_max_iterations = best_lo_model->lo_max_iterations;
+        unsigned int lo_iterative_iterations = best_lo_model->lo_iterative_iterations;
 
         // std::cout << "lo sample_size " << lo_sample_size << '\n';
 
@@ -146,13 +145,13 @@ public:
              */
 
             if (lo_score->bigger(best_lo_score)) {
-                best_lo_score.copyFrom (lo_score);
-                best_lo_model.setDescriptor(lo_model->returnDescriptor());
+                best_lo_score->copyFrom (lo_score);
+                best_lo_model->setDescriptor(lo_model->returnDescriptor());
                 lo_better_than_kth_ransac = true;
                 std::copy (lo_inliers, lo_inliers+lo_score->inlier_number, max_lo_inliers);
                 sampler->setPointsSize(lo_score->inlier_number);
                 sampler->initRandomGenerator();
-                max_iters = termination_criteria->getUpBoundIterations(best_lo_score.inlier_number, points_size);
+                max_iters = termination_criteria->getUpBoundIterations(best_lo_score->inlier_number, points_size);
             }
 
             // std::cout << "lo inner score = " << lo_score->score << '\n';
@@ -197,23 +196,23 @@ public:
                 // -------------------------------------------
 
                 // if current model is not better then break
-                if (best_lo_score.bigger(lo_score)) {
+                if (best_lo_score->bigger(lo_score)) {
                     break;
                 }
             }
             // get original threshold back
-            lo_model->threshold = best_lo_model.threshold;
+            lo_model->threshold = best_lo_model->threshold;
 
             // std::cout << "end iterative lo inner score  = " << lo_score->inlier_number << '\n';
 
             if (lo_score->bigger(best_lo_score)) {
-                best_lo_model.setDescriptor(lo_model->returnDescriptor());
-                best_lo_score.copyFrom (lo_score);
+                best_lo_model->setDescriptor(lo_model->returnDescriptor());
+                best_lo_score->copyFrom (lo_score);
                 lo_better_than_kth_ransac = true;
                 std::copy (lo_inliers, lo_inliers+lo_score->inlier_number, max_lo_inliers);
                 sampler->setPointsSize(lo_score->inlier_number);
                 sampler->initRandomGenerator();
-                max_iters = termination_criteria->getUpBoundIterations(best_lo_score.inlier_number, points_size);
+                max_iters = termination_criteria->getUpBoundIterations(best_lo_score->inlier_number, points_size);
                 // std::cout << "lo max iters prediction " << max_iters << '\n';
             }
             lo_iters++;

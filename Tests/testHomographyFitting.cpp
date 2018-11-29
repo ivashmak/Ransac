@@ -25,7 +25,7 @@ void storeResults ();
 int getGTNumInliers (const std::string &filename, float threshold);
 
 void Tests::testHomographyFitting() {
-    std::string img_name = "Eiffel";
+    std::string img_name = "LePoint3";
     cv::Mat points, points1, points2;
     read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
 
@@ -112,18 +112,18 @@ void Tests::testHomographyFitting() {
     nn.getNearestNeighbors_flann(points1, knn, neighbors);
 
 //     ---------------------- uniform ----------------------------------
-//    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
-//    model->setStandardRansacLO(false);
-//    model->setGraphCutLO(true);
-//    model->setSprtLO(false);
-//
-//    sampler = new UniformSampler;
-//    initUniform(sampler, model->sample_number, points_size);
-//
-//    estimator = new HomographyEstimator (points);
-//
-//    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
-//            img_name, gt_inliers);
+    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
+    model->setStandardRansacLO(0);
+    model->setGraphCutLO(0);
+    model->setSprtLO(1);
+
+    sampler = new UniformSampler;
+    initUniform(sampler, model->sample_number, points_size);
+
+    estimator = new HomographyEstimator (points);
+
+    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
+            img_name, gt_inliers);
     // --------------------------------------------------------------
 
 
@@ -155,7 +155,7 @@ void Tests::testHomographyFitting() {
 //                          quality, neighbors, 100, true, false, gt_inliers, nullptr);
 
 
-     storeResults();
+//     storeResults();
 }
 
 
@@ -174,11 +174,11 @@ void storeResults () {
 
     int lo_combinations = 5;
     bool lo[lo_combinations][3] = {
-            {false, false, false},
-            {true, false, false},
-            {false, true, false},
-            {false, false, true},
-            {true, true, true},
+            {0, 0, 0},
+            {1, 0, 0},
+            {0, 1, 0},
+            {0, 0, 1},
+            {1, 1, 1},
     };
 
     for (SAMPLER smplr : samplers) {

@@ -26,7 +26,7 @@ public:
         neighbors = const_cast<int *>(neighbors_);
     }
 
-	void labeling (const cv::Mat& model, int * inliers, Score * score, bool get_inliers);
+	void labeling (const cv::Mat& model, Score * score, bool get_inliers=false, int * inliers = nullptr);
 };
 
 #endif //USAC_GRAPHCUT_H

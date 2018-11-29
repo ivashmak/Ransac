@@ -14,8 +14,8 @@ public:
 	 * and iterative ransac.
 	 * Returns also best lo model and best lo score.
 	 */
-    virtual int GetLOModelScore  (Model &best_lo_model,
-                                  Score &lo_score,
+    virtual int GetLOModelScore  (Model *best_lo_model,
+                                  Score *lo_score,
                                   Score *kth_ransac_score,
                                   cv::InputArray input_points,
                                   unsigned int points_size,

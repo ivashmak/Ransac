@@ -78,6 +78,7 @@ void Ransac::run(cv::InputArray input_points) {
         prosac_termination_criteria = (ProsacTerminationCriteria *) termination_criteria;
     }
     //
+    // we want inliers in case using prosac sampler or local optimization
     bool get_inliers = LO || is_prosac;
 
     /*
@@ -99,11 +100,15 @@ void Ransac::run(cv::InputArray input_points) {
         lo_ransac = new RansacLocalOptimization (model, sampler, termination_criteria, quality, estimator);
     }
 
+    //--------------------------------------------
     SPRT * sprt;
+    bool is_good_model;
     if (SprtLO) {
         sprt = new SPRT;
-        sprt->initialize(model, points_size);
+        sprt->initialize(estimator, model, points_size);
     }
+    int skipped_models = 0;
+    //--------------------------------------------
 
     // Graph cut local optimization
     GraphCut * graphCut;
@@ -135,36 +140,35 @@ void Ransac::run(cv::InputArray input_points) {
             if (GraphCutLO) {
                 // if LO is true than get inliers
                 // we need inliers only for local optimization
-                if (get_inliers) {
-                    graphCut->labeling(models[i]->returnDescriptor(), inliers, current_score, true);
-                } else {
-                    graphCut->labeling(models[i]->returnDescriptor(), nullptr, current_score, false);
-                }
+
+                graphCut->labeling(models[i]->returnDescriptor(), current_score);
 
                 if (SprtLO) {
                     // we don't no model score, no inliers
                     // as soon as we use graph cut labeling, the inlier number is score
-                    sprt->verifyModelAndGetModelScore(estimator, models[i], iters,
-                        std::max ((int) best_score->score, (int) current_score->score)/*inlier_number*/,
-                        false, nullptr, false, nullptr);
+                    is_good_model = sprt->verifyModelAndGetModelScore(models[i], iters,
+                          std::max ((int) best_score->score, (int) current_score->score)/*inlier_number*/, false, nullptr);
+                    if (!is_good_model) {
+                        iters++;
+                        continue;
+                    }
                 }
             } else
             if (SprtLO) {
-                if (get_inliers) {
-                    sprt->verifyModelAndGetModelScore(estimator, models[i], iters,
-                        std::max (best_score->inlier_number, current_score->inlier_number),
-                        true, current_score, true, inliers);
-                } else {
-                    sprt->verifyModelAndGetModelScore(estimator, models[i], iters,
-                        std::max (best_score->inlier_number, current_score->inlier_number),
-                        true, current_score, false, nullptr);
+                is_good_model = sprt->verifyModelAndGetModelScore(models[i], iters,
+                        std::max (best_score->inlier_number, current_score->inlier_number), true, current_score);
+
+//                std::cout << "sprt decision " << good << "\n";
+//                std::cout << "current num inl " << current_score->inlier_number << "\n";
+                if (!is_good_model) {
+//                    std::cout << "SKIP MODEL\n";
+//                    std::cout << "inlier number is " << current_score->inlier_number << "\n";
+                    iters++;
+                    skipped_models++;
+                    continue;
                 }
             } else {
-                if (get_inliers) {
-                    quality->getNumberInliers(current_score, models[i]->returnDescriptor(), true, inliers);
-                } else {
-                    quality->getNumberInliers(current_score, models[i]->returnDescriptor(), false, nullptr);
-                }
+                quality->getNumberInliers(current_score, models[i]->returnDescriptor());
             }
 
 //            std::cout << "current num inl " << current_score->inlier_number << "\n";
@@ -174,10 +178,13 @@ void Ransac::run(cv::InputArray input_points) {
             if (current_score->bigger(best_score)) {
 
 //                  std::cout << "current score = " << current_score->score << '\n';
+                if (get_inliers) {
+                    quality->getInliers(models[i]->returnDescriptor(), inliers);
+                }
 
                 if (LO) {
                     bool can_finish;
-                    unsigned int lo_iters = lo_ransac->GetLOModelScore (*lo_model, *lo_score,
+                    int lo_iters = lo_ransac->GetLOModelScore (lo_model, lo_score,
                             current_score, input_points, points_size, iters, inliers, &can_finish);
 
 //                     std::cout << "lo score " << lo_score->inlier_number << '\n';
@@ -223,7 +230,7 @@ void Ransac::run(cv::InputArray input_points) {
                  * If we use graph cut local optimization, so number of inliers is score (?).
                  */
                 if (GraphCutLO) {
-                    inlier_number = best_score->score;
+                    inlier_number = std::max ((int) best_score->score, (int) best_score->inlier_number);
                 } else {
                     inlier_number = best_score->inlier_number;
                 }
@@ -235,8 +242,12 @@ void Ransac::run(cv::InputArray input_points) {
                 } else {
                     max_iters = termination_criteria->getUpBoundIterations (inlier_number);
                 }
+
                 if (SprtLO) {
-                    max_iters = std::min (max_iters, (int)sprt->getMaximumIterations(inlier_number));
+//                    std::cout << "SPRT stop\n";
+                    std::cout << max_iters << " vs " << sprt->getUpperBoundIterations(inlier_number) << "\n";
+                    max_iters = std::min (max_iters, (int)sprt->getUpperBoundIterations(inlier_number));
+
                 }
 
                 // std::cout << "max iters prediction = " << max_iters << '\n';
@@ -245,7 +256,7 @@ void Ransac::run(cv::InputArray input_points) {
             iters++;
         }
     }
-
+    std::cout << "SKIPPED MODELS " << skipped_models << "\n";
     end:
 
     int * max_inliers = new int[points_size];

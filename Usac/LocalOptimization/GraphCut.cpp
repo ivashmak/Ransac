@@ -4,7 +4,7 @@
  * In expirements I found that for less k nearest neighbors
  * the number inliers is more. For 2d line fitting.
  */
-void GraphCut::labeling (const cv::Mat& model, int * inliers, Score * score, bool get_inliers) {
+void GraphCut::labeling (const cv::Mat& model, Score * score, bool get_inliers, int * inliers) {
 
     estimator->setModelParameters(model);
 

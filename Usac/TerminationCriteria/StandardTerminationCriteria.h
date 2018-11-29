@@ -11,7 +11,7 @@ private:
     unsigned int sample_size;
     unsigned int points_size;
     unsigned int max_iterations = 10000;
-    const float EPSILON = 0.00001;
+    const float EPSILON = 0.0005;
 public:
 
     /*

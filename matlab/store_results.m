@@ -23,6 +23,8 @@ inliers = [uniform000(:,1) uniform100(:,1) uniform010(:,1) uniform001(:,1) unifo
 iters = [uniform000(:,3) uniform100(:,3) uniform010(:,3) uniform001(:,3) uniform111(:,3)];
 time = [uniform000(:,5) uniform100(:,5) uniform010(:,5) uniform001(:,5) uniform111(:,5)];
 fails = [uniform000(:,7) uniform100(:,7) uniform010(:,7) uniform001(:,7) uniform111(:,7)];
+         
+colorm = colormap(hsv (size (inliers, 1)));
 
 h = heatmap(algorithms,images,inliers);
 h.Title = 'Average Number of inliers';

@@ -34,7 +34,8 @@
 
 class SPRT_history {
 public:
-    float epsilon, delta, A;
+    double epsilon, delta, A;
+    // k is number of samples processed by test
     int k;
 };
 
@@ -61,26 +62,35 @@ public:
      int current_sprt_idx;
      int last_sprt_update;
 
-     float t_M, m_S, threshold, prob_threshold;
+     double t_M, m_S, threshold, prob_threshold;
      bool is_init = false;
      int points_size, sample_size, max_iterations;
      std::vector<SPRT_history*> sprt_histories;
-     float number_points_product;
+     double number_points_product;
+
+     Estimator * estimator;
+
+     int number_rejected_models;
+     int data_points;
  public:
 
      ~SPRT() {
          sprt_histories.clear();
      }
 
-     void initialize (Model * model, int points_size_) {
+     void initialize (Estimator * estimator_, Model * model, int points_size_) {
          sprt_histories = std::vector<SPRT_history*>();
         sprt_histories.push_back(new SPRT_history);
+        estimator = estimator_;
 
         if (model->estimator == ESTIMATOR::Homography) {
             // t_M = 200, m_S = 1, delta0 = 0.01, epsilon0 = 0.1;
             sprt_histories[0]->delta = 0.01;
             sprt_histories[0]->epsilon = 0.1;
+
+            // time t_M needed to instantiate a model hypotheses given a sample
             t_M = 200;
+            // Let m_S be the number of models that are verified per sample
             m_S = 1;
             // K1 = 200 / 0.1^4 = 2 000 000
             // C = (1 - delta) * log ((1 - delta)/(1 - eps)) + delta * log (delta / eps)
@@ -132,6 +142,9 @@ public:
          sprt_histories[0]->k = 0;
 
          is_init = true;
+
+         number_rejected_models = 0;
+         data_points = 0;
      }
 
      /*
@@ -148,15 +161,20 @@ public:
       *
       * Verifies model and returns model score.
       */
-     void verifyModelAndGetModelScore (Estimator * estimator, Model * model, int current_hypothese, 
-                    int maximum_score, bool get_score, Score *score, bool get_inliers, int * inliers) {
-         
+     bool verifyModelAndGetModelScore (Model * model, int current_hypothese,
+                    int maximum_score, bool get_score, Score *score) {
+
          estimator->setModelParameters(model->returnDescriptor());
 
-         float epsilon = sprt_histories[current_sprt_idx]->epsilon;
-         float delta = sprt_histories[current_sprt_idx]->delta;
-         float A = sprt_histories[current_sprt_idx]->A;
-         float lambda_new, lambda = 1;        
+         double epsilon = sprt_histories[current_sprt_idx]->epsilon;
+         double delta = sprt_histories[current_sprt_idx]->delta;
+         double A = sprt_histories[current_sprt_idx]->A;
+
+//         std::cout << "epsilon = " << epsilon << "\n";
+//         std::cout << "delta =  " << delta << "\n";
+//         std::cout << "A =  " << A << "\n";
+
+         double lambda_new, lambda = 1;
 
          int tested_inliers = 0;
          int tested_point = 0;
@@ -164,40 +182,25 @@ public:
          bool good = true;
          for (tested_point = 0; tested_point < points_size; tested_point++) {
              if (estimator->GetError(tested_point) < threshold) {
-                 if (get_inliers) {
-                    inliers[tested_inliers] = tested_point;
-                 }
                  tested_inliers++;
                  lambda_new = lambda * (delta / epsilon);
              } else {
                  lambda_new = lambda * ((1 - delta) / (1 - epsilon));
              }
 
-             if (lambda_new < A) {
+             if (lambda_new > A) {
                  good = false;
                  tested_point++;
                  break;
              }
              lambda = lambda_new;   
          }
-         
+
          if (get_score) {
-            int total_inliers = tested_inliers; 
-            if (get_inliers) {
-                for (int j = tested_point+1; j < points_size; j++) {
-                    if (estimator->GetError (j) < threshold) {
-                        inliers[total_inliers++] = j;
-                    }
-                }
-            } else {
-                for (int j = tested_point+1; j < points_size; j++) {
-                    if (estimator->GetError (j) < threshold) {
-                        total_inliers++;
-                    }
-                }
-            }
-            score->inlier_number = total_inliers;
-            score->score = total_inliers;
+             // Assume that model is good.
+             // Otherwise we don't need model score, because model is bad.
+             score->inlier_number = tested_inliers;
+             score->score = tested_inliers;
          }
 
           /*
@@ -206,7 +209,16 @@ public:
            * in rejected models.
            * ???????????????????
            */
-         float delta_estimated = (float) tested_inliers / tested_point;
+          float delta_estimated;
+          delta_estimated = (float) tested_inliers / tested_point;
+
+//          if (!good) {
+//             number_rejected_models++;
+//          }
+//         delta_estimated = delta * (number_rejected_models-1.0f) / number_rejected_models +
+//                 float(tested_inliers)/(float(points_size) * number_rejected_models);
+
+//         std::cout << "delta estimated " << delta_estimated << "\n";
 
          if (good) {
              /*
@@ -216,10 +228,16 @@ public:
               */
              if (tested_inliers > maximum_score) {
                  SPRT_history * new_sprt_history = new SPRT_history;
+//                 std::cout << "UPDATE. GOOD MODEL\n";
 
                  new_sprt_history->epsilon = (float) tested_inliers / points_size;
-                 new_sprt_history->delta = delta_estimated;
-                 new_sprt_history->A = estimateThresholdA (new_sprt_history->epsilon, delta_estimated);
+
+                 new_sprt_history->delta = delta;
+                 new_sprt_history->A = estimateThresholdA (new_sprt_history->epsilon, delta);
+
+//                 new_sprt_history->delta = delta_estimated;
+//                 new_sprt_history->A = estimateThresholdA (new_sprt_history->epsilon, delta_estimated);
+
                  new_sprt_history->k = current_hypothese - last_sprt_update;
                  last_sprt_update = current_hypothese;
                  current_sprt_idx++;
@@ -227,8 +245,9 @@ public:
              }
 
          } else {
-             if (delta_estimated > 0 && fabsf(delta - delta_estimated) / delta > 0.1) {
+             if (delta_estimated > 0 && fabsf(delta - delta_estimated) / delta > 0.05) {
                  SPRT_history * new_sprt_history = new SPRT_history;
+//                std::cout << "UPDATE. BAD MODEL\n";
 
                  /*
                  * Model rejected: re-estimate δ. If the estimate δ_ differs
@@ -243,8 +262,8 @@ public:
                  current_sprt_idx++;
                  sprt_histories.push_back(new_sprt_history);
              }
-             
          }
+         return good;
      }
 
 
@@ -260,16 +279,16 @@ public:
      * C = p(0|Hb) log (---------) + p(1|Hb) log (---------)
      *                   p (0|Hg)                  p (1|Hg)
      */
-     float estimateThresholdA (float epsilon, float delta) {
+     double estimateThresholdA (double epsilon, double delta) {
 
-         float C = (1 - delta) * log ((1 - delta)/(1-epsilon)) + delta * (log(delta/epsilon));
+         double C = (1 - delta) * log ((1 - delta)/(1-epsilon)) + delta * (log(delta/epsilon));
          // K = K1/K2 + 1 = (t_M / P_g) / (m_S / (C * P_g)) + 1= (t_M * S)/m_S + 1
-         float K = (t_M * C)/m_S + 1;
-         float An_1 = K;
+         double K = (t_M * C)/m_S + 1;
+         double An_1 = K;
 
          // compute A using a recursive relation
          // A* = lim(n->inf)(An), the series typically converges within 4 iterations
-         float An;
+         double An;
          for (unsigned int i = 0; i < 10; ++i) {
              An = K + log(An_1);
              if (An - An_1 < 1.5e-8) {
@@ -288,51 +307,33 @@ public:
       *        log (n0) - log (n(l-1))
       * k(l) = -----------------------
       *          log (1 - Pg*A(l)^-1)
+      *
+      * n0 is typically set to 0.05
+      * this equation does not have to be evaluated before nR < n0
+      * nR = (1 - P_g)^k
       */
-     int getMaximumIterations (int inliers_size) {
-         // debug
-         // for (int t = 0; t <= current_sprt_idx; t++) {
-         //     std::cout << "test " << t << "\n";
-         //     std::cout << "e = " <<  sprt_histories[t]->epsilon << "\n";
-         //     std::cout << "d = " << sprt_histories[t]->delta << "\n";
-         //     std::cout << "A = " << sprt_histories[t]->A << "\n";
-         //     std::cout << "----\n";
-         // }
-
-
-         double n_inliers = 1.0;
-         double n_pts = 1.0;
-         double h, k = 0, prob_reject_good_model, log_eta = 0;
-         double new_eps = (double) inliers_size / points_size;
-
-         for (unsigned int i = 0; i < sample_size; ++i) {
-             n_inliers *= inliers_size - i;
-             n_pts *= points_size - i;
+     unsigned int getUpperBoundIterations (int inliers_size) {
+         double epsilon = (double) inliers_size / points_size;
+         double P_g = pow (epsilon, sample_size);
+         double log_n_l_1 = 0;
+         double h;
+         for (unsigned int test = 0; test < current_sprt_idx; test++) {
+             h = computeExponentH(sprt_histories[test]->epsilon, epsilon, sprt_histories[test]->delta);
+             log_n_l_1 += log (1 - P_g * (1 - pow (sprt_histories[test]->A, -h))) * sprt_histories[test]->k;
          }
-
-         double prob_good_model = n_inliers / n_pts;
-         // std::cout << "prob_good_model " << prob_good_model << '\n';
-
-         if (prob_good_model < std::numeric_limits<double>::epsilon() ) {
+//         std::cout << n_l_1 << "\n";
+         double numerator = log (0.05) - log_n_l_1;
+//         std::cout << numerator << " = numerator\n";
+         if (numerator >= 0) return 0;
+         double denumerator = log (1 - P_g * (1 - 1/sprt_histories[current_sprt_idx]->A));
+//         std::cout << denumerator << " = denumerator\n";
+         if (std::isnan(denumerator) || fabs (denumerator) < 0.00001)
              return max_iterations;
-         } else if (1 - prob_good_model < std::numeric_limits<double>::epsilon() ) {
-             return 1;
-         }
 
-         for (int test = 0; test < current_sprt_idx; test++) {
-             k += sprt_histories[test]->k;
-             h = computeExponentH(sprt_histories[test]->epsilon, new_eps, sprt_histories[test]->delta);
-             prob_reject_good_model = 1/(exp( h*log(sprt_histories[test]->A) ));
-
-             // std::cout << "k = " << k << '\n';
-             // std::cout << "h = " << h << '\n';
-             // std::cout << "prob reject good model " << prob_reject_good_model << "\n";
-
-             log_eta += sprt_histories[test]->k * log( 1 - prob_good_model*(1-prob_reject_good_model) );
-         }
-
-         double nusample_s = k + ( log(1-prob_threshold) - log_eta ) / log (1-prob_good_model * (1-(1/sprt_histories[current_sprt_idx]->A)) );
-         return nusample_s > max_iterations ? max_iterations : (unsigned int) ceil(nusample_s);
+//         std::cout << log (1 - P_g/sprt_histories[current_sprt_idx]->A) << " down\n";
+         double kl = numerator / denumerator;
+//         std::cout << kl << " = kl\n";
+         return (unsigned int) std::min ((int)kl , max_iterations);
      }
 
      /*
@@ -342,24 +343,56 @@ public:
       * ε (-----)^h(i) + (1 - ε) (-------)^h(i) = 1
       *     ε(i)                  1 - ε
       *
+      * ε * a^h + (1 - ε) * b^h = 1
+      * f (h) = ε * a^h + (1 - ε) * b^h - 1, h = ? => f(h) = 0 (roots searching)
+      * f'(h) = ε * a^h + (1 - ε) * b^h
+      * Leads to numerical solution (bisection, newton, taylor, ...)
+      * Newton: h(k+1) = h(k) - f(h(k))/f'(h(k))
       */
-     float computeExponentH (float epsilon, float epsilon_new, float delta) {
+     double computeExponentH (double epsilon, double epsilon_new, double delta) {
 
-         float al, be, x0, x1, v0, v1;
+         double a, b, x0, x1, v0, v1;
 
-         al = log(delta/epsilon);
-         be = log( (1-delta)/(1-epsilon) );
+         a = log(delta/epsilon);
+         b = log ((1-delta)/(1-epsilon));
 
-         x0 = log( 1/(1-epsilon_new) )/be;
-         v0 = epsilon_new * exp(x0 *al);
-         x1 = log( (1-2*v0) / (1-epsilon_new) )/be;
-         v1 = epsilon_new * exp(x1 * al) + (1-epsilon_new) * exp(x1 * be);
+         x0 = log (1/(1-epsilon_new))/b;
+         v0 = epsilon_new * exp(x0 * a);
+         x1 = log ((1-2*v0) / (1-epsilon_new))/b;
+         v1 = epsilon_new * exp(x1 * a) + (1 - epsilon_new) * exp(x1 * b);
+         double h = x0 - (x0 - x1)/(1+v0 - v1)*v0;
+
+         // OR:
+//         a = delta / epsilon;
+//         b = (1 - delta) / (1 - epsilon);
+//         auto fh = [&] (double h) { return epsilon_new * pow (a, h) + (1 - epsilon_new) * pow (b, h) - 1; };
+//         auto dfh = [&] (double h) { return epsilon_new * pow (a, h) + (1 - epsilon_new) * pow (b, h); };
+//         unsigned int iter = 0;
+//         double hn = 0, hn_1 = 2;
+//         while (abs (fh (hn_1)) > 0.0001 || iter < 100) {
+//             hn = hn_1 - fh (hn_1) / dfh(hn_1);
+//             hn_1 = hn;
+//             iter++;
+//         }
+
+//         std::cout << "h = " << h << "\n";
+//         std::cout << "hn = " << hn << "\n";
+
+         if (std::isnan(h)) {
+             // The equation always has solution for h = 0
+             // ε * a^0 + (1 - ε) * b^0 = 1
+             // ε + 1 - ε = 1 -> 1 = 1
+             return 0;
+         }
+
+
 
          // std::cout << "------compute h--------\n";
-         // std::cout << "epsilon " << epsilon << '\n';
-         // std::cout << "epsilon_new " << epsilon_new << '\n';
-         // std::cout << "delta " << delta << '\n';
-         // std::cout << "al " << al << '\n';
+//          std::cout << "epsilon " << epsilon << '\n';
+//          std::cout << "epsilon_new " << epsilon_new << '\n';
+//          std::cout << "delta " << delta << '\n';
+//          std::cout << "al " << al << '\n';
+//            std::cout << "h = " << (x0 - (x0 - x1)/(1+v0 - v1)*v0) << "\n";
          // std::cout << "be " << be << '\n';
          // std::cout << "v0 " << v0 << '\n';
          // std::cout << "v1 " << v1 << '\n';
@@ -367,7 +400,7 @@ public:
          // std::cout << "x1 " << x1 << '\n';
          // std::cout << "------------------------------------------\n";
 
-         return x0 - (x0 - x1)/(1+v0 - v1)*v0; // h
+         return h;
      }
 
 
