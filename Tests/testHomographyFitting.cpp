@@ -70,7 +70,7 @@ void Tests::testHomographyFitting() {
 
     unsigned int points_size = (unsigned int) points.rows;
     std::cout << "points size " << points_size << "\n";
-
+    // std::cout << "points = \n" << points << "\n\n";
     int knn = 7;
 
     cv::Mat_<float> neighbors, neighbors_dists;
@@ -115,7 +115,7 @@ void Tests::testHomographyFitting() {
     model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
     model->setStandardRansacLO(0);
     model->setGraphCutLO(0);
-    model->setSprtLO(1);
+    model->setSprtLO(0);
 
     sampler = new UniformSampler;
     initUniform(sampler, model->sample_number, points_size);
@@ -155,7 +155,7 @@ void Tests::testHomographyFitting() {
 //                          quality, neighbors, 100, true, false, gt_inliers, nullptr);
 
 
-//     storeResults();
+    // storeResults();
 }
 
 

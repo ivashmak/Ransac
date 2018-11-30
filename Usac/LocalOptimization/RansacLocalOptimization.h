@@ -39,27 +39,18 @@ public:
         quality = quality_;
     }
     
-    int GetLOModelScore  (Model *best_lo_model,
+    void GetLOModelScore  (Model *best_lo_model,
                           Score *best_lo_score,
                           Score *kth_ransac_score,
                           cv::InputArray input_points,
                           unsigned int points_size,
                           unsigned int kth_step,
-                          const int * const inliers,
-                          bool *can_finish) override {
-
-        /*
-         * Could happen, that predicted number of iterations is reached
-         * in Local Optimization, so we should not run standart Ransac
-         * after this
-         */ 
-        *can_finish = false;
-            
+                          const int * const inliers) override {
         /*
          * Do not do local optimization for small number of inliers
          */
         if (kth_ransac_score->inlier_number < 2 * model->lo_sample_size) {
-            return 0;
+            return;
         }
 
         /*
@@ -105,15 +96,7 @@ public:
          * Inner Local Optimization Ransac
          */
 
-        unsigned int max_iters = termination_criteria->getUpBoundIterations(kth_ransac_score->inlier_number, points_size);        
-        unsigned int total_iters = kth_step;
-        unsigned int lo_iters = 0;
         for (int iters = 0; iters < lo_max_iterations; iters++) {
-            if (total_iters > max_iters) {
-                *can_finish = true;
-                break;
-            }
-
             /*
              * Generate sample of lo_sample_size from inliers from best model of standart 
              * Ransac or from inliers of best LO model.
@@ -151,7 +134,6 @@ public:
                 std::copy (lo_inliers, lo_inliers+lo_score->inlier_number, max_lo_inliers);
                 sampler->setPointsSize(lo_score->inlier_number);
                 sampler->initRandomGenerator();
-                max_iters = termination_criteria->getUpBoundIterations(best_lo_score->inlier_number, points_size);
             }
 
             // std::cout << "lo inner score = " << lo_score->score << '\n';
@@ -212,11 +194,7 @@ public:
                 std::copy (lo_inliers, lo_inliers+lo_score->inlier_number, max_lo_inliers);
                 sampler->setPointsSize(lo_score->inlier_number);
                 sampler->initRandomGenerator();
-                max_iters = termination_criteria->getUpBoundIterations(best_lo_score->inlier_number, points_size);
-                // std::cout << "lo max iters prediction " << max_iters << '\n';
             }
-            lo_iters++;
-            total_iters++;
         }
 
         // reinit sampler back
@@ -225,7 +203,6 @@ public:
         sampler->initRandomGenerator();
 
         delete lo_score, lo_model, lo_sample, lo_inliers;
-        return lo_iters;
     }
 };
 

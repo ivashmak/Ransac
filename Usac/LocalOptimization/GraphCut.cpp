@@ -83,7 +83,6 @@ void GraphCut::labeling (const cv::Mat& model, Score * score, bool get_inliers, 
             // l > 0 => (e01 - e00 + e10 - e11) >= 0
             // e01 + e10 >= e00 + e11
             if (e00 + e11 > e01 + e10 || std::isnan (e00)) {
-//            if (e00 + e11 - e01 - e10 > 0.00001) {
 //                std::cout << "\033[1;31m"
 //                             "Non-submodular expansion term detected;"
 //                             "smooth costs must be a metric for expansion  \033[0m\n";
