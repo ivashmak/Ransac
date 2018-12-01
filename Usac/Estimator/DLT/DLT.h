@@ -9,8 +9,10 @@
 // Direct Linear Transformation
 bool DLT (const float * const points, int sample_number, cv::Mat &H);
 bool DLT (const float * const points, const int * const sample, int sample_number, cv::Mat &H);
+bool DLTLeastSquares (const float * const points, int sample_number, cv::Mat &H);
 
 bool NormalizedDLT (const float * const points, const int * const sample, int sample_number, cv::Mat &H);
+bool NormalizedDLTLeastSquares (const float * const points, const int * const sample, int sample_number, cv::Mat &H);
 
 void GetNormalizingTransformation (const float * const pts, cv::Mat& norm_points,
                                    const int * const sample, int sample_number, cv::Mat &T1, cv::Mat &T2);

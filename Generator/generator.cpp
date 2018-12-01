@@ -3,6 +3,68 @@
 void Generate2DLinePoints(float noise, int inlier_number, int outlier_number,
                              int border_x, int border_y, std::vector<cv::Point2f> &points);
 
+void generate_syntectic_dataset () {
+    std::vector<int> widths;
+    widths.push_back(1000);
+    widths.push_back(1200);
+
+    std::vector<int> heights;
+    heights.push_back(1000);
+    heights.push_back(1200);
+
+    std::vector<float> percents_of_inliers;
+    percents_of_inliers.push_back(0.02);
+    percents_of_inliers.push_back(0.05);
+//    percents_of_inliers.push_back(0.1);
+
+    std::vector<float> outliers_v;
+//    outliers_v.push_back(5000);
+//    outliers_v.push_back(7000);
+    outliers_v.push_back(10000);
+
+    std::vector<float> noises;
+    noises.push_back(3);
+//    noises.push_back(6);
+
+    std::ofstream dataset_file;
+    dataset_file.open ("../dataset/line2d/dataset.txt");
+
+    for (auto width : widths) {
+        for (auto height : heights) {
+            for (auto outliers : outliers_v) {
+                for (auto percent_of_inliers : percents_of_inliers) {
+                    for (auto noise : noises) {
+                        int inliers = outliers * percent_of_inliers;
+                        int N = outliers + inliers;
+                        std::vector<cv::Point2f> points(N);
+                        Generate2DLinePoints(noise, inliers, outliers, width, height, points);
+
+                        std::string folder = "../dataset/line2d/";
+                        std::string filename = "w="+std::to_string(width)+"_h="+std::to_string(height)+"_n="+
+                                    std::to_string(noise)+"_I="+std::to_string(inliers)+"_N="+std::to_string(N);
+                        std::ofstream file;
+                        cv::Mat image(height, width, CV_8UC3, cv::Scalar(255, 255, 255));
+
+                        file.open (folder+filename+".txt");
+                        std::cout << folder+filename << "\n";
+                        file << width << "\n";
+                        file << height << "\n";
+                        file << noise << "\n";
+                        file << inliers << "\n";
+                        file << N << "\n";
+                        for (auto &pt : points) {
+                            file << pt.x << " " << pt.y << "\n";
+                            cv::circle(image, pt, 3, cv::Scalar(0, 0, 0), -1);
+                        }
+                        cv::imwrite ("../dataset/line2d/"+filename+".png", image);
+                        dataset_file << filename << "\n";
+                    }
+                }
+            }
+        }
+    }
+}
+
 void generate (std::vector<cv::Point2f> &points_out, bool reset_time, bool getGT,  int * gt_inliers) {
     if (reset_time) srand (time(NULL));
 

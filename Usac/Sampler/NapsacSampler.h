@@ -62,15 +62,14 @@ public:
 
 //        std::cout << sample[0] << " ";
         for (int i = 1; i < sample_size; i++) {
-            // get the farthest neighbor
-//            sample[i] = neighbors[(knn * initial_point) + next_neighbors[initial_point] + knn-1];
+            // Get the farthest neighbor
+            sample[i] = neighbors[(knn * initial_point) + next_neighbors[initial_point] + knn-1];
 //            // move next neighbor
 //            next_neighbors[initial_point] = (next_neighbors[initial_point] - 1) % -knn;
-
-            sample[i] = neighbors[(knn * initial_point) + next_neighbors[initial_point]];
-            next_neighbors[initial_point] = (next_neighbors[initial_point] + 1) % knn;
-
-
+            next_neighbors[initial_point]--;
+            if (next_neighbors[initial_point] == -knn) {
+                next_neighbors[initial_point] = 0;
+            }
 //            std::cout << sample[i] << " ";
         }
 //        std::cout << '\n';

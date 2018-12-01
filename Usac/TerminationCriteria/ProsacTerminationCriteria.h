@@ -33,13 +33,12 @@ private:
 
     unsigned int * growth_function;
 
-    unsigned int stopping_length;
-    const unsigned int min_stopping_length = 20;
+    unsigned int termination_length;
+    const unsigned int min_termination_length = 20;
 
     unsigned int points_size;
     unsigned int sample_size;
 
-    float desired_prob;
     StandardTerminationCriteria * standart_termination_criteria;
 public:
 
@@ -63,9 +62,7 @@ public:
         sample_size = model->sample_number;
         points_size = points_size_;
 
-        desired_prob = model->desired_prob;
-
-        stopping_length = points_size;
+        termination_length = points_size;
     
         // ------------------------------------------------------------------------
         // initialize the data structures that determine stopping
@@ -122,19 +119,31 @@ public:
     }
 
     unsigned int getStoppingLength () {
-        return stopping_length;
+        return termination_length;
     }
 
     inline unsigned int getUpBoundIterations (unsigned int inlier_size) override {
         return standart_termination_criteria->getUpBoundIterations(inlier_size);
     }
+
     inline unsigned int getUpBoundIterations (unsigned int inlier_size, unsigned int points_size) override {
         return standart_termination_criteria->getUpBoundIterations(inlier_size, points_size);
     }
 
+
     /*
-            Returns predicted maximum iterations
-         */
+     * Returns predicted maximum iterations
+     * The PROSAC algorithm terminates if the number of inliers In∗
+     * within the set Un∗ satisfies the following conditions:
+     *
+     * • non-randomness – the probability that In∗ out of n∗ (termination_length)
+     * data points are by chance inliers to an arbitrary incorrect model
+     * is smaller than Ψ (typically set to 5%)
+     *
+     * •maximality – the probability that a solution with more than
+     * In∗ inliers in Un∗ exists and was not found after k
+     * samples is smaller than η0 (typically set to 5%).
+     */
     unsigned int getUpBoundIterations(unsigned int hypCount, unsigned int largest_sample_size,
                                     const int * const inliers, unsigned int inliers_size) {
 
@@ -143,18 +152,18 @@ public:
             inlier_flags[inliers[i]] = 1;
         }
 
-        unsigned int max_samples = maximality_samples[stopping_length-1];
+        unsigned int max_samples = maximality_samples[termination_length-1];
 
         // go through sorted points and track inlier counts
         unsigned int inlier_count = 0;
 
-        // just accumulate the count for the first min_stopping_length points
-        for (unsigned int i = 0; i < min_stopping_length; ++i) {
+        // just accumulate the count for the first min_termination_length points
+        for (unsigned int i = 0; i < min_termination_length; ++i) {
             inlier_count += inlier_flags[i];
         }
 
         // after this initial subset, try to update the stopping length if possible
-        for (unsigned int i = min_stopping_length; i < points_size; ++i) {
+        for (unsigned int i = min_termination_length; i < points_size; ++i) {
             inlier_count += inlier_flags[i];
 
             if (non_random_inliers[i] < inlier_count) {
@@ -173,8 +182,8 @@ public:
                     if (new_samples < maximality_samples[i]) {
                         // if number of samples can be lowered, store values and update stopping length
                         maximality_samples[i] = new_samples;
-                        if ((new_samples < max_samples) || ((new_samples == max_samples) && (i+1 >= stopping_length))) {
-                            stopping_length = i+1;
+                        if ((new_samples < max_samples) || ((new_samples == max_samples) && (i+1 >= termination_length))) {
+                            termination_length = i+1;
                             max_samples = new_samples;
                         }
                     }

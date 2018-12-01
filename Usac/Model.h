@@ -6,11 +6,11 @@ enum SAMPLER  { NullS, Uniform, GradualNapsac, Napsac, Prosac, Evsac };
 
 class Model {
 public:
-	float threshold = 3;
-	int sample_number = 4;
+	float threshold = 5;
+	int sample_number;
 	float desired_prob = 0.95;
 	int max_iterations = 10000;
-	int k_nearest_neighbors = 7;
+	int k_nearest_neighbors = 5;
 
 	/*
 	 * |expected number of inliers|
@@ -24,7 +24,7 @@ public:
 	 */
 	unsigned int lo_sample_size = 14;
 	unsigned int lo_iterative_iterations = 4;
-    unsigned int lo_max_iterations = 5;
+    unsigned int lo_inner_iterations = 5;
     float lo_threshold = 10.0;
     unsigned int lo_threshold_multiplier = 15;
 
@@ -68,21 +68,20 @@ public:
 		SprtLO = SprtLO_;
 	}
 
-	void setLOParametres (unsigned int lo_iterative_iters, unsigned int lo_max_iters, float lo_thresh, unsigned int lo_thresh_mult) {
+	void setLOParametres (unsigned int lo_iterative_iters, unsigned int lo_inner_iters, float lo_thresh, unsigned int lo_thresh_mult) {
 	    lo_iterative_iterations = lo_iterative_iters;
-	    lo_max_iterations = lo_max_iters;
+	    lo_inner_iterations = lo_inner_iters;
 	    lo_threshold = lo_thresh;
         lo_threshold_multiplier = lo_thresh_mult;
 	}
 
     void setDescriptor(cv::Mat _desc) { 
-    	descriptor = _desc;
+//    	descriptor = _desc;
+        descriptor = _desc.clone();
     }
 
     void getDescriptor(cv::Mat &_desc) { 
-//    	_desc = descriptor;
-		_desc = descriptor.clone();
-
+    	_desc = descriptor;
 	}
 
     cv::Mat returnDescriptor () {
@@ -115,7 +114,7 @@ public:
         estimated_inliers_ratio = model->estimated_inliers_ratio;
         lo_sample_size = model->lo_sample_size;
         lo_iterative_iterations = model->lo_iterative_iterations;
-        lo_max_iterations = model->lo_max_iterations;
+        lo_inner_iterations = model->lo_inner_iterations;
         lo_threshold = model->lo_threshold;
         lo_threshold_multiplier = model->lo_threshold_multiplier;
 //        descriptor = model->descriptor;

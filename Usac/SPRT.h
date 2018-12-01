@@ -23,6 +23,7 @@
 #include "Utils/Math.h"
 #include "Estimator/Estimator.h"
 
+#define LOG_ETA_0 log(0.05)
 /*
  * Sequential Probability Ratio Test
  *
@@ -303,6 +304,8 @@ public:
      /*
       * Termination criteria
       * n(l) = Product from i = 0 to l ( 1 - Pg (1 - A(i)^(-h(i)))^k(i) )
+      * log n(l) = sum from i = 0 to l k(i) * ( 1 - Pg (1 - A(i)^(-h(i))) )
+      *
       *
       *        log (n0) - log (n(l-1))
       * k(l) = -----------------------
@@ -322,7 +325,7 @@ public:
              log_n_l_1 += log (1 - P_g * (1 - pow (sprt_histories[test]->A, -h))) * sprt_histories[test]->k;
          }
 //         std::cout << n_l_1 << "\n";
-         double numerator = log (0.05) - log_n_l_1;
+         double numerator = LOG_ETA_0 - log_n_l_1;
 //         std::cout << numerator << " = numerator\n";
          if (numerator >= 0) return 0;
          double denumerator = log (1 - P_g * (1 - 1/sprt_histories[current_sprt_idx]->A));

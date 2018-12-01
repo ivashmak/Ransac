@@ -25,15 +25,15 @@ void read_points (cv::Mat &pts1, cv::Mat &pts2, const std::string &filename) {
          * Skip repeated points
          */
 //        for (int i = 0; i < pts1.rows; i++) {
-//            if ((pts1_ptr[2*i] <= x1+eps) && (pts1_ptr[2*i] >= x1-eps)){
-//                if ((pts1_ptr[2*i+1] <= y1+eps) && (pts1_ptr[2*i+1] >= y1-eps)){
+//            if (fabsf(pts1_ptr[2*i] - x1) <= eps) {
+//                if (fabsf(pts1_ptr[2*i+1] - y1) <= eps) {
 //                    cont = true;
 //                    break;
 //                }
 //            }
 //
-//            if ((pts2_ptr[2*i] <= x2+eps) && (pts2_ptr[2*i] >= x2-eps)){
-//                if ((pts2_ptr[2*i+1] <= y2+eps) && (pts2_ptr[2*i+1] >= y2-eps)){
+//            if (fabsf(pts2_ptr[2*i] - x2) <= eps) {
+//                if (fabsf(pts2_ptr[2*i+1] - y2) <= eps) {
 //                    cont = true;
 //                    break;
 //                }
@@ -78,15 +78,15 @@ void getInliers (const std::string &filename, std::vector<int> &inliers) {
          * Skip repeated points
          */
 //        for (int i = 0; i < pts1.rows; i++) {
-//            if ((pts1_ptr[2*i] <= x1+eps) && (pts1_ptr[2*i] >= x1-eps)){
-//                if ((pts1_ptr[2*i+1] <= y1+eps) && (pts1_ptr[2*i+1] >= y1-eps)){
+//            if (fabsf(pts1_ptr[2*i] - x1) <= eps) {
+//                if (fabsf(pts1_ptr[2*i+1] - y1) <= eps) {
 //                    cont = true;
 //                    break;
 //                }
 //            }
 //
-//            if ((pts2_ptr[2*i] <= x2+eps) && (pts2_ptr[2*i] >= x2-eps)){
-//                if ((pts2_ptr[2*i+1] <= y2+eps) && (pts2_ptr[2*i+1] >= y2-eps)){
+//            if (fabsf(pts2_ptr[2*i] - x2) <= eps) {
+//                if (fabsf(pts2_ptr[2*i+1] - y2) <= eps) {
 //                    cont = true;
 //                    break;
 //                }

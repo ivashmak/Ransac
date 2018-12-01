@@ -20,12 +20,13 @@
 #include "../dataset/Dataset.h"
 #include "../Usac/Utils/NearestNeighbors.h"
 #include "../Usac/TerminationCriteria/ProsacTerminationCriteria.h"
+#include "../Usac/Sampler/NapsacSampler.h"
 
 void storeResults ();
 int getGTNumInliers (const std::string &filename, float threshold);
 
 void Tests::testHomographyFitting() {
-    std::string img_name = "adam";
+    std::string img_name = "LePoint1";
     cv::Mat points, points1, points2;
     read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
 
@@ -65,16 +66,19 @@ void Tests::testHomographyFitting() {
 
      */
     cv::hconcat(points1, points2, points);
-
+    double min, max;
+    cv::minMaxLoc(points1, &min, &max);
+    std::cout << min << " min\n";
+    std::cout << max << " max\n";
 //    std::cout << cv::findHomography(points1, points2) << '\n';
 
     unsigned int points_size = (unsigned int) points.rows;
     std::cout << "points size " << points_size << "\n";
-    // std::cout << "points = \n" << points << "\n\n";
-    int knn = 7;
+    int knn = 10;
 
     cv::Mat_<float> neighbors, neighbors_dists;
     NearestNeighbors nn;
+    // get nearest neighbors by first correspondence?
     nn.getNearestNeighbors_nanoflann(points1, knn, neighbors, true, neighbors_dists);
     std::vector<int> sorted_idx (points_size);
     std::iota(sorted_idx.begin(), sorted_idx.end(), 0);
@@ -89,12 +93,13 @@ void Tests::testHomographyFitting() {
     std::sort(sorted_idx.begin(), sorted_idx.end(), [&] (int a, int b) {
         sum1 = 0, sum2 = 0;
         idxa = knn*a, idxb = knn*b;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
             sum1 += neighbors_dists_ptr[idxa + i];
             sum2 += neighbors_dists_ptr[idxb + i];
         }
         return sum1 < sum2;
     });
+
 
     cv::Mat_<float> sorted_points;
     for (int i = 0; i < points_size; i++) {
@@ -107,7 +112,6 @@ void Tests::testHomographyFitting() {
     TerminationCriteria *termination_criteria = new StandardTerminationCriteria;
     Quality *quality = new Quality;
     int gt_inliers = getGTNumInliers (img_name, 3 /*model->threshold*/);
-
 
     nn.getNearestNeighbors_flann(points1, knn, neighbors);
 
@@ -128,12 +132,28 @@ void Tests::testHomographyFitting() {
 
 
 
+//     ---------------------- napsac ----------------------------------
+    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Napsac);
+    model->setStandardRansacLO(0);
+    model->setGraphCutLO(0);
+    model->setSprtLO(0);
+
+    initNapsac(sampler, neighbors, model->k_nearest_neighbors, model->sample_number);
+
+    estimator = new HomographyEstimator (points);
+
+    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
+          img_name, gt_inliers);
+    // --------------------------------------------------------------
+
+
+
 
 // ------------------ prosac ---------------------
 //    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Prosac);
-//    model->setStandardRansacLO(true);
-//    model->setGraphCutLO(true);
-//    model->setSprtLO(true);
+//    model->setStandardRansacLO(0);
+//    model->setGraphCutLO(0);
+//    model->setSprtLO(0);
 //    initProsac(sampler, model->sample_number, points_size);
 //    ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
 //
@@ -154,8 +174,7 @@ void Tests::testHomographyFitting() {
 //    getStatisticalResults(points, estimator, model, sampler, termination_criteria,
 //                          quality, neighbors, 100, true, false, gt_inliers, nullptr);
 
-
-    // storeResults();
+//     storeResults();
 }
 
 
@@ -166,7 +185,7 @@ void storeResults () {
     std::vector<std::string> points_filename = getHomographyDatasetPoints();
     Tests tests;
 
-    int N_runs = 50;
+    int N_runs = 60;
     NearestNeighbors nn;
 
     std::vector<SAMPLER> samplers;
@@ -277,26 +296,31 @@ void storeResults () {
 int getGTNumInliers (const std::string &filename, float threshold) {
     cv::Mat_<float> H;
     getMatrix3x3 ("../dataset/homography/"+filename+"_model.txt", H);
+
     Quality * quality = new Quality;
     cv::Mat points, points1, points2;
     read_points (points1, points2, "../dataset/homography/"+filename+"_pts.txt");
+
     cv::hconcat(points1, points2, points);
+
+    Model * model = new Model (threshold, 4, 0.99, 5, ESTIMATOR::Homography, SAMPLER::Uniform);
     Score * score = new Score;
     Estimator * estimator = new HomographyEstimator(points);
-    Model * model = new Model (threshold, 4, 0.99, 0, ESTIMATOR::Homography, SAMPLER::Uniform);
 
-    quality->init(points.rows, model->threshold, estimator);
+    quality->init(points.rows, 3, estimator);
 
     // In some ground truth model, the correct homography matrix is inverse.
     model->setDescriptor (H.inv());
-    quality->getNumberInliers (score, model->returnDescriptor(), false, nullptr);
+    quality->getNumberInliers (score, model, false, nullptr);
 
     int score1 = score->inlier_number;
+//    std::cout << score1 << " = score 1 \n";
 
     model->setDescriptor (H);
-    quality->getNumberInliers (score, model->returnDescriptor(), false, nullptr);
+    quality->getNumberInliers (score, model, false, nullptr);
 
     int score2 = score->inlier_number;
+//    std::cout << score2 << " = score 2 \n";
 
     delete score, model, quality, estimator;
     return std::max (score1, score2);

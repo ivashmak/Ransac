@@ -86,8 +86,8 @@ public:
 
         // other initializations
         largest_sample_size = sample_size;       // largest set sampled in PROSAC
-        subset_size = sample_size;		// size of the current sampling pool
-        hypCount = 1;
+        subset_size = sample_size;		// n,  size of the current sampling pool
+        hypCount = 1; // t
 
         initialized = true;
     }
@@ -96,8 +96,9 @@ public:
     void generateSample (int * sample) override {
     }
     
-    void generateSampleProsac (int * sample, unsigned int stopping_length) {
-//        std::cout << "stopping length " << stopping_length << "\n";
+    void generateSampleProsac (int * sample, unsigned int termination_length) {
+//        std::cout << "subset size " << subset_size << "\n";
+//        std::cout << "stopping length " << termination_length << "\n";
 
         // revert to RANSAC-style sampling if maximum number of PROSAC samples have been tested
         if (hypCount > growth_max_samples) {
@@ -105,14 +106,33 @@ public:
             return;
         }
 
+/*
+        // Choice of the hypothesis generation set
+        // if (t = T'_n) & (n < n*) then n = n + 1 (eqn. 4)
+        if (hypCount == growth_function[subset_size] && subset_size < termination_length) {
+            subset_size++;
+        }
+
+        // Semi-random sample M_t of size m
+        if (growth_function[subset_size] < hypCount) {
+            // The sample contains m-1 points selected from U_(n-1) at random and u_n
+            randomGenerator->generateUniqueRandomSet(sample, sample_size-1, subset_size-2);
+            sample[sample_size-1] = subset_size-1;
+        } else {
+            // Select m points from U_n at random.
+            randomGenerator->generateUniqueRandomSet(sample, sample_size, subset_size-1);
+        }
+*/
+
         // if current stopping length is less than size of current pool, use only points up to the stopping length
-        if (subset_size > stopping_length) {
-            randomGenerator->generateUniqueRandomSet(sample, sample_size, stopping_length);
+        if (subset_size > termination_length) {
+            randomGenerator->generateUniqueRandomSet(sample, sample_size, termination_length);
+            return;
         }
 
         // increment the size of the sampling pool if required
         if (hypCount > growth_function[subset_size-1]) {
-            ++subset_size;
+            ++subset_size; // n = n + 1
             if (subset_size > points_size) {
                 subset_size = points_size;
             }
@@ -121,11 +141,11 @@ public:
             }
         }
 
-        // generate PROSAC sample
-        randomGenerator->generateUniqueRandomSet(sample, sample_size-1, subset_size-1);
+        // generate PROSAC sample in range <0, subset_size-2>
+        randomGenerator->generateUniqueRandomSet(sample, sample_size-1, subset_size-2);
         sample[sample_size-1] = subset_size-1;
 
-        hypCount++;
+        hypCount++; // t = t + 1
     }
 
     bool isInit () override {

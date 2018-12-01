@@ -36,33 +36,34 @@ for a = 1:num_algs
     alg{a} = n;
 end
  
-% save_results (inliers, images, algorithms, alg, 'Average number of inliers', [folder_res 'inliers'])
-% save_results (time, images, algorithms, alg, 'Average time (mcs)', [folder_res 'time'])
-% save_results (iters, images, algorithms, alg, 'Average number of iterations', [folder_res 'iters'])
-% save_results (fails, images, algorithms, alg, 'Number of fails', [folder_res 'fails'])
+save_results (inliers, images, algorithms, alg, 'Average number of inliers', [folder_res 'inliers'])
+save_results (time, images, algorithms, alg, 'Average time (mcs)', [folder_res 'time'])
+save_results (iters, images, algorithms, alg, 'Average number of iterations', [folder_res 'iters'])
+save_results (fails, images, algorithms, alg, 'Number of fails', [folder_res 'fails'])
 
 criteria = {'inliers', 'std inliers', 'iters', 'std iters', 'time', 'std time', 'fails'};
 
-for img = 1:numel (images)
-    for cr = 1:numel(criteria) 
-        subplot (numel(criteria), 1, cr);
-        data = [uniform000(img,cr) uniform100(img,cr) uniform010(img,cr) uniform001(img,cr) uniform111(img,cr)];
-        if (cr == numel(criteria))
-            h = heatmap(algorithms, criteria{cr}, data);
-        else
-            h = heatmap(alg, criteria{cr}, data);
-        end
-        if (cr == 1)
-            h.title(images{img});
-        end
-    end
-    print('-fillpage',[folder_res images{img}],'-dpdf', '-r300')
-    close
-end
+% for img = 1:numel (images)
+%     for cr = 1:numel(criteria) 
+%         subplot (numel(criteria), 1, cr);
+%         data = [uniform000(img,cr) uniform100(img,cr) uniform010(img,cr) uniform001(img,cr) uniform111(img,cr)];
+%         if (cr == numel(criteria))
+%             h = heatmap(algorithms, criteria{cr}, data);
+%         else
+%             h = heatmap(alg, criteria{cr}, data);
+%         end
+%         if (cr == 1)
+%             h.title(images{img});
+%         end
+%     end
+%     print('-fillpage',[folder_res images{img}],'-dpdf', '-r300')
+%     close
+% end
 
 function save_results (data, images, algorithms, alg, titl, save)
+    figure('units','normalized','outerposition',[0 0 1 1])
     for img = 1:numel (images)
-        subplot (numel(images), 1, img);
+        subplot (numel (images), 1, img);
         if (img == numel(images))
             h = heatmap(algorithms, images{img}, data(img,:));
         else
@@ -73,6 +74,8 @@ function save_results (data, images, algorithms, alg, titl, save)
         end
     end
     xlabel('Algorithms');
-    print('-fillpage',save,'-dpdf', '-r300')
+    print (gcf, [save '.png'], '-dpng', '-r300');
+    
+%     print('-fillpage',save,'-dpdf', '-r300')
     close;
 end

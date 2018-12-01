@@ -70,10 +70,11 @@ public:
      * Here score = inlier number.
      * To get real score use getScore
      */
-    inline void getNumberInliers (Score * score, const cv::Mat& model, bool get_inliers=false,
+    inline void getNumberInliers (Score * score, Model * model, bool get_inliers=false,
                                   int * inliers= nullptr, bool parallel=false) {
+        float threshold = model->threshold;
+        estimator->setModelParameters(model->returnDescriptor());
 
-        estimator->setModelParameters(model);
         score->inlier_number = 0;
 
         if (parallel) {

@@ -115,12 +115,12 @@ public:
             times[i] = ransacOutput->getTimeMicroSeconds();
             num_inlierss[i] = ransacOutput->getNumberOfInliers();
             avg_errorss[i] = ransacOutput->getAverageError();
-            num_iterss[i] = ransacOutput->getNumberOfIterations();
+            num_iterss[i] = ransacOutput->getTotalIters();
 
             time += ransacOutput->getTimeMicroSeconds();
             num_inliers += ransacOutput->getNumberOfInliers();
             avg_errors += ransacOutput->getAverageError();
-            num_iters += ransacOutput->getNumberOfIterations();
+            num_iters += ransacOutput->getTotalIters();
 
             if (GT) {
                 /* 

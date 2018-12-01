@@ -13,8 +13,9 @@ private:
     float average_error;
     unsigned int number_inliers;
     unsigned int number_iterations;
-    unsigned int number_lo_iterations;
-    unsigned int lo_runs;
+
+    unsigned int lo_inner_iters;
+    unsigned int lo_iterative_iters;
 
 public:
 
@@ -28,8 +29,8 @@ public:
                   float average_error_,
                   unsigned int number_inliers_,
                   unsigned int number_iterations_,
-                  unsigned int number_lo_iterations_,
-                  unsigned int lo_runs_) {
+                  unsigned int lo_inner_iters_,
+                  unsigned int lo_iterative_iters_) {
 
         /*
          * Let's make a deep copy to avoid changing variables from origin input.
@@ -42,8 +43,9 @@ public:
         average_error = average_error_;
         number_inliers = number_inliers_;
         number_iterations = number_iterations_;
-        number_lo_iterations = number_lo_iterations_;
-        lo_runs = lo_runs_;
+
+        lo_inner_iters = lo_inner_iters_;
+        lo_iterative_iters = lo_iterative_iters_;
 
         time = new Time;
         splitTime (time, time_mcs);
@@ -74,13 +76,17 @@ public:
         return number_iterations;
     }
 
-    unsigned int getNumberOfLOIterations () {
+    unsigned int getTotalIters () {
         // number_iterations > number_lo_iterations
-        return number_lo_iterations;
+        return number_iterations + lo_inner_iters + lo_iterative_iters;
     }
     
-    unsigned int getLORuns () {
-        return lo_runs;
+    unsigned int getLOInnerIters () {
+        return lo_inner_iters;
+    }
+
+    unsigned int getLOIterativeIters () {
+        return lo_iterative_iters;
     }
 
     Time* getTime () {

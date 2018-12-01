@@ -26,6 +26,7 @@ public:
 
     void setModelParameters (const cv::Mat& model) override {
         H = cv::Mat_<float>(model); // clone
+//        H = model.clone();
         H_inv = H.inv();
 
         /*
@@ -49,18 +50,35 @@ public:
 
     bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
         cv::Mat H;
-        if (NormalizedDLT(points, sample, sample_size, H) == false) {
+        if (! NormalizedDLT(points, sample, sample_size, H)) {
             std::cout << "Normalized DLT failed\n";
             return false;
         }
         // normalize H by last h33
         H = H / H.at<float>(2,2);
-//        std::cout << "NDLT H =\n" << H << "\n\n";
 
         model.setDescriptor(H);
         return true;
     }
 
+    bool LeastSquaresFitting (const int * const sample, int sample_size, Model &model) override {
+        return EstimateModelNonMinimalSample(sample, sample_size, model);
+
+        EstimateModelNonMinimalSample(sample, sample_size, model);
+//        std::cout << "H pca " << model.returnDescriptor() << "\n\n";
+
+        cv::Mat H;
+        if (! NormalizedDLTLeastSquares(points, sample, sample_size, H)) {
+            return false;
+        }
+        // normalize H by last h33
+        H = H / H.at<float>(2,2);
+
+//        std::cout << "H lsq " << H << "\n\n";
+
+        model.setDescriptor(H);
+        return true;
+    }
     /*
      * Error = distance (pt(i)H, pt'(i)) + distance (pt(i), pt'(i)H^-1)
      */

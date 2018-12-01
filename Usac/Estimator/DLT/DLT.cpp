@@ -142,3 +142,59 @@ bool DLT (const float * const points, int sample_number, cv::Mat &H) {
     return true;
 }
 
+
+bool DLTLeastSquares (const float * const points, int sample_number, cv::Mat &H) {
+    /*
+     * A is 2N x 8
+     * b is 2N x 1
+     *
+     * A h = b
+     * h = A^(+) b
+     * h = (A^T A) ^(-1) * A^T * b
+     */
+    cv::Mat_<float> b (2*sample_number, 1);
+    cv::Mat_<float> A (2*sample_number, 8);
+    float * A_ptr = (float *) A.data;
+    float * b_ptr = (float *) b.data;
+    unsigned int smpl;
+    float x1, y1, x2, y2;
+
+    for (unsigned int i = 0; i < sample_number; i++) {
+        smpl = 4*i;
+        x1 = points[smpl];
+        y1 = points[smpl+1];
+
+        x2 = points[smpl+2];
+        y2 = points[smpl+3];
+
+        (*A_ptr++) = x1;
+        (*A_ptr++) = y1;
+        (*A_ptr++) = 1;
+        (*A_ptr++) = 0;
+        (*A_ptr++) = 0;
+        (*A_ptr++) = 0;
+        (*A_ptr++) = -x2*x1;
+        (*A_ptr++) = -x2*y1;
+
+        (*A_ptr++) = 0;
+        (*A_ptr++) = 0;
+        (*A_ptr++) = 0;
+        (*A_ptr++) = x1;
+        (*A_ptr++) = y1;
+        (*A_ptr++) = 1;
+        (*A_ptr++) = -y2*x1;
+        (*A_ptr++) = -y2*y1;
+
+        (*b_ptr) = x2;
+        (*b_ptr) = y2;
+    }
+
+    // 8 x 1
+    std::cout << sample_number << "\n";
+    H = (A.t() * A).inv() * A.t() * b;
+    H = (cv::Mat_<float>(3,3) <<
+            H.at<float>(0), H.at<float>(1), H.at<float>(2),
+            H.at<float>(3), H.at<float>(4), H.at<float>(5),
+            H.at<float>(6), H.at<float>(7), 1);
+    return true;
+}
