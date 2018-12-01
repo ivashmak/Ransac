@@ -25,7 +25,7 @@ void storeResults ();
 int getGTNumInliers (const std::string &filename, float threshold);
 
 void Tests::testHomographyFitting() {
-    std::string img_name = "LePoint3";
+    std::string img_name = "adam";
     cv::Mat points, points1, points2;
     read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
 
