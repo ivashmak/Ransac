@@ -55,3 +55,6 @@ Use termination criteria/srpt/gc in LO?
 
 
 Repeated point?
+
+
+Inner and Iterative ransac LO is not good for Line fitting.

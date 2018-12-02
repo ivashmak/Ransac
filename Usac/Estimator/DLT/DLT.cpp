@@ -185,12 +185,11 @@ bool DLTLeastSquares (const float * const points, int sample_number, cv::Mat &H)
         (*A_ptr++) = -y2*x1;
         (*A_ptr++) = -y2*y1;
 
-        (*b_ptr) = x2;
-        (*b_ptr) = y2;
+        (*b_ptr++) = x2;
+        (*b_ptr++) = y2;
     }
 
     // 8 x 1
-    std::cout << sample_number << "\n";
     H = (A.t() * A).inv() * A.t() * b;
     H = (cv::Mat_<float>(3,3) <<
             H.at<float>(0), H.at<float>(1), H.at<float>(2),

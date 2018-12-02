@@ -23,16 +23,38 @@
 void store_results_line2d ();
 
 void Tests::testLineFitting() {
-
-    std::vector<cv::Point_<float>> points;
+    // std::string img_name = "../dataset/image1";
+    // std::vector<cv::Point_<float>> points;
     int gt_inliers;
     // change false to true to reset time for random points generator
     // get number of ground truth inliers too.
-    generate(points, false, true, &gt_inliers);
+    // generate(points, false, true, &gt_inliers);
+    
+    // another generated data 
+    std::string img_name = "../dataset/line2d/w=1000_h=1000_n=3.000000_I=500_N=10500";
+    std::ifstream read_data_file;
+    read_data_file.open (img_name+".txt");
+    int width, height, noise, N;
+    read_data_file >> width;
+    read_data_file >> height;
+    read_data_file >> noise;
+    read_data_file >> gt_inliers;
+    read_data_file >> N;
+    std::vector<cv::Point_<float>> points;
+    float x, y;
+    for (int p = 0; p < N; p++) {
+        read_data_file >> x >> y;
+        cv::Point_<float> pt (x, y);
+        points.push_back (pt);
+    }
+    // 
+
     std::cout << "generated points\n";
+
+
     unsigned int points_size = points.size();
 
-    int knn = 7;
+    int knn = 3;
     cv::Mat_<float> pts = cv::Mat (points);
 
     cv::Mat_<float> neighbors, neighbors_dists;
@@ -75,37 +97,39 @@ void Tests::testLineFitting() {
 
 
     // ---------------- uniform -------------------
-    model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Uniform);
+    // model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Uniform);
 
-    model->setSprtLO(false);
-    model->setGraphCutLO(false);
-    model->setStandardRansacLO(false);
+    // model->setStandardRansacLO(1);
+    // model->setGraphCutLO(1);
+    // model->setSprtLO(1);
 
-    initUniform(sampler, model->sample_number, points_size);
-    test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, "", gt_inliers);
+    // initUniform(sampler, model->sample_number, points_size);
+    // test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, img_name, gt_inliers);
     //------------------------------------------
 
 
 
-
-
     // --------------  prosac ---------------------
-//    model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Prosac);
-//    initProsac(sampler, model->sample_number, points.size());
-//    ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
-//
-//    ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
-//    prosac_termination_criteria_->initProsacTerminationCriteria (prosac_sampler_->getGrowthFunction(),
-//                                                model, points_size);
-//
-//    TerminationCriteria * prosac_termination_criteria = prosac_termination_criteria_;
-//    cv::Mat sorted_pts (sorted_points);
-//    estimator = new Line2DEstimator (sorted_points);
-//
-//    test (sorted_pts, estimator, sampler, model, quality, prosac_termination_criteria, neighbors, "", gt_inliers);
-//
-//    // switch to unsorted points back (not necessary, just for testing)
-//    estimator = new Line2DEstimator (points);
+    // model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Prosac);
+    // model->setStandardRansacLO(1);
+    // model->setGraphCutLO(1);
+    // model->setSprtLO(1);
+    
+    // initProsac(sampler, model->sample_number, points.size());
+    // ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
+
+    // ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
+    // prosac_termination_criteria_->initProsacTerminationCriteria (prosac_sampler_->getGrowthFunction(),
+    //                                            model, points_size);
+
+    // TerminationCriteria * prosac_termination_criteria = prosac_termination_criteria_;
+    // cv::Mat sorted_pts (sorted_points);
+    // estimator = new Line2DEstimator (sorted_points);
+
+    // test (sorted_pts, estimator, sampler, model, quality, prosac_termination_criteria, neighbors, img_name, gt_inliers);
+
+    // // switch to unsorted points back (not necessary, just for testing)
+    // estimator = new Line2DEstimator (points);
     // ------------------------------------------------
 
 
@@ -113,11 +137,13 @@ void Tests::testLineFitting() {
 
 
     // ---------------- napsac -------------------------------
-//    knn = 7;
-//    model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Napsac);
-//    initNapsac(sampler, neighbors, model->k_nearest_neighbors, model->sample_number);
-//
-//     test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, "", gt_inliers);
+    // model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Napsac);
+    // model->setSprtLO(1);
+    // model->setGraphCutLO(1);
+    // model->setStandardRansacLO(1);
+
+    // initNapsac(sampler, neighbors, model->k_nearest_neighbors, model->sample_number);
+    // test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, img_name, gt_inliers);
     // ---------------------------------------------------------------------
 
 
@@ -127,7 +153,7 @@ void Tests::testLineFitting() {
 //    model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Evsac);
 //    sampler = new EvsacSampler(points, points.size(), evsac_model->k_nearest_neighbors, evsac_model->sample_number);
 //
-//     test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, "", gt_inliers);
+//     test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, img_name, gt_inliers);
     // ------------------------------------------------------------
 
 
@@ -138,7 +164,7 @@ void Tests::testLineFitting() {
 //    model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::GradualNapsac);
 //    sampler = new GradualNapsacSampler(points, gradual_napsac_model->sample_number);
 //
-//     test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, "", gt_inliers);
+//     test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, img_name, gt_inliers);
     // --------------------------------------------------------
 
 
@@ -148,7 +174,7 @@ void Tests::testLineFitting() {
 
 
 
-//    store_results_line2d();
+   store_results_line2d();
 }
 
 // problem for 111
@@ -196,7 +222,7 @@ void store_results_line2d () {
     NearestNeighbors nn;
 
     std::vector<SAMPLER> samplers;
-    samplers.push_back(SAMPLER::Uniform);
+    // samplers.push_back(SAMPLER::Uniform);
     samplers.push_back(SAMPLER::Prosac);
     samplers.push_back(SAMPLER::Napsac);
 
@@ -244,6 +270,8 @@ void store_results_line2d () {
             int img = 0;
 
             std::cout << tests.sampler2string(smplr) << "\n";
+            std::cout << lo[l][0] << " " << lo[l][1] << " " << lo[l][2] << "\n";
+            
             for (auto &points : dataset_points) {
                 std::cout << dataset[img] << "\n";
                 unsigned int points_size = points.rows;
@@ -252,32 +280,47 @@ void store_results_line2d () {
                 std::vector<int> sorted_idx(points_size);
                 std::iota(sorted_idx.begin(), sorted_idx.end(), 0);
 
-                float sum1, sum2;
-                int idxa, idxb;
-                float *neighbors_dists_ptr = (float *) neighbors_dists.data;
-                std::sort(sorted_idx.begin(), sorted_idx.end(), [&](int a, int b) {
-                    sum1 = 0, sum2 = 0;
-                    idxa = knn * a, idxb = knn * b;
-                    for (int i = 0; i < 3; i++) {
-                        sum1 += neighbors_dists_ptr[idxa + i];
-                        sum2 += neighbors_dists_ptr[idxb + i];
-                    }
-                    return sum1 < sum2;
-                });
-
                 cv::Mat_<float> sorted_points;
-                for (int i = 0; i < points_size; i++) {
-                    sorted_points.push_back(points.row(sorted_idx[i]));
-                }
+                if (smplr == SAMPLER::Prosac) {
+                    float sum1, sum2;
+                    int idxa, idxb;
+                    float *neighbors_dists_ptr = (float *) neighbors_dists.data;
+                    std::sort(sorted_idx.begin(), sorted_idx.end(), [&](int a, int b) {
+                        sum1 = 0, sum2 = 0;
+                        idxa = knn * a, idxb = knn * b;
+                        for (int i = 0; i < 3; i++) {
+                            sum1 += neighbors_dists_ptr[idxa + i];
+                            sum2 += neighbors_dists_ptr[idxb + i];
+                        }
+                        return sum1 < sum2;
+                    });
 
+                    for (int i = 0; i < points_size; i++) {
+                        sorted_points.push_back(points.row(sorted_idx[i]));
+                    }
+                }
 
                 TerminationCriteria *termination_criteria = new StandardTerminationCriteria;
                 Quality *quality = new Quality;
-                Estimator *estimator = new Line2DEstimator(points);
+                Estimator *estimator;
                 Sampler *sampler;
 
                 tests.initSampler(sampler, model, points.rows, points, neighbors);
 
+                ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
+                    
+                if (smplr == SAMPLER::Prosac) {
+                    estimator = new Line2DEstimator(sorted_points);
+                    ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
+
+                    prosac_termination_criteria_->initProsacTerminationCriteria (prosac_sampler_->getGrowthFunction(),
+                                                               model, points_size);
+
+                    termination_criteria = prosac_termination_criteria_;                    
+                } else {
+                    estimator = new Line2DEstimator(points);
+                }
+                
 
                 StatisticalResults *statistical_results = new StatisticalResults;
                 tests.getStatisticalResults(points, estimator, model, sampler, termination_criteria,

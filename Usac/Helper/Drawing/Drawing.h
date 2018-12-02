@@ -113,8 +113,9 @@ public:
      * Show inliers of non minimal best model.
      * To show threshold lines change false to true.
      */
-    void draw (cv::InputArray inliers, Model * const model, cv::InputArray points) {
-        cv::Mat image  = cv::imread("../dataset/image1.jpg");
+    void draw (cv::InputArray inliers, Model * const model, cv::InputArray points, std::string img_name) {
+        cv::Mat image  = cv::imread(img_name);
+
         showInliers(points, inliers, image);
         draw_line_model(model, cv::Scalar(255, 0, 0), image, true);
         imshow("Inliers", image);

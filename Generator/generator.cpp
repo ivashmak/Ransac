@@ -88,7 +88,7 @@ void generate (std::vector<cv::Point2f> &points_out, bool reset_time, bool getGT
     for (int i = 0; i < N; ++i) {
         cv::circle(image, points[i], 3, cv::Scalar(0, 0, 0), -1);
     }
-    cv::imwrite ("../dataset/image1.jpg", image);
+    cv::imwrite ("../dataset/image1.png", image);
     
     // cv::imshow("Image", image);
     // cv::waitKey(0);

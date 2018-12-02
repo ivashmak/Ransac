@@ -51,7 +51,7 @@ void Tests::test (cv::InputArray points,
         drawing.drawEpipolarLines(img_name, pts.colRange(0,2), pts.colRange(2,4), ransacOutput->getModel()->returnDescriptor());
     } else
     if (model->estimator == ESTIMATOR::Line2d) {
-        drawing.draw(ransacOutput->getInliers(), ransacOutput->getModel(), points);
+        drawing.draw(ransacOutput->getInliers(), ransacOutput->getModel(), points, img_name+".png");
     } else
     if (model->estimator == ESTIMATOR::Essential) {
 

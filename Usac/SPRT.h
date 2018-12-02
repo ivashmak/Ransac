@@ -67,12 +67,10 @@ public:
      bool is_init = false;
      int points_size, sample_size, max_iterations;
      std::vector<SPRT_history*> sprt_histories;
-     double number_points_product;
 
      Estimator * estimator;
 
      int number_rejected_models;
-     int data_points;
  public:
 
      ~SPRT() {
@@ -93,19 +91,14 @@ public:
             t_M = 200;
             // Let m_S be the number of models that are verified per sample
             m_S = 1;
-            // K1 = 200 / 0.1^4 = 2 000 000
-            // C = (1 - delta) * log ((1 - delta)/(1 - eps)) + delta * log (delta / eps)
-            // C = 0.99 * log (0.99 / 0.9) + 0.01 * log (0.01 / 0.1) = 0.0713
-            // K2 = 1 / (0.1^4 * 0.0713) = 140252.45
-            // A = K1 + K2
         } else if (model->estimator == ESTIMATOR::Fundamental) {
             // t_M = 200, m_S = 2.48, delta0 = 0.05, epsilon0 = 0.2;
             sprt_histories[0]->delta = 0.05;
             sprt_histories[0]->epsilon = 0.2;
             t_M = 200;
             m_S = 2.48;
-        } else {
-            t_M = 200;
+        } else if (model->estimator == ESTIMATOR::Line2d){
+            t_M = 100;
             m_S = 1;
             /*
              * The initial estimate δ0 is obtained by geometric considerations,
@@ -115,14 +108,17 @@ public:
              * the search window). Alternatively, a few models can be evaluated
              * without applying SPRT in order to obtain an initial estimate of δ.
              */
-            sprt_histories[0]->delta = 0.01; // ???
+            sprt_histories[0]->delta = 0.0001; // ???
 
             /*
              * The initial value of ε0 can be derived from the maximal time the
              * user is willing to allocate to the algorithm.
              */
-            sprt_histories[0]->epsilon = 0.1; // ???
+            sprt_histories[0]->epsilon = 0.001; // ???
 
+        } else {
+            std::cout << "UNDEFINED ESTIMATOR\n";
+            exit (111);
         }
 
          current_sprt_idx = 0;
@@ -134,18 +130,12 @@ public:
          max_iterations = model->max_iterations;
          points_size = points_size_;
 
-         number_points_product = 1;
-         for (int i = 0; i < sample_size; i++) {
-             number_points_product *= points_size - i;
-         }
-
          sprt_histories[0]->A = estimateThresholdA(sprt_histories[0]->epsilon, sprt_histories[0]->delta);
          sprt_histories[0]->k = 0;
 
          is_init = true;
 
          number_rejected_models = 0;
-         data_points = 0;
      }
 
      /*
@@ -188,7 +178,7 @@ public:
              } else {
                  lambda_new = lambda * ((1 - delta) / (1 - epsilon));
              }
-
+             // std::cout << "lambda = " << lambda_new << " vs A = " << A << "\n"; 
              if (lambda_new > A) {
                  good = false;
                  tested_point++;
