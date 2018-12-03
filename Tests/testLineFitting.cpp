@@ -218,11 +218,11 @@ void store_results_line2d () {
 
     Tests tests;
 
-    int N_runs = 10;
+    int N_runs = 50;
     NearestNeighbors nn;
 
     std::vector<SAMPLER> samplers;
-    // samplers.push_back(SAMPLER::Uniform);
+     samplers.push_back(SAMPLER::Uniform);
     samplers.push_back(SAMPLER::Prosac);
     samplers.push_back(SAMPLER::Napsac);
 

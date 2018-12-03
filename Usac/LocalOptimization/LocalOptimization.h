@@ -14,10 +14,8 @@ public:
 	 * and iterative ransac.
 	 * Returns also best lo model and best lo score.
 	 */
-    virtual void GetLOModelScore  (Model *best_lo_model,
-                                  Score *lo_score,
-                                  Score *kth_ransac_score,
-                                  const int * const inliers) {}
+    virtual void GetLOModelScore  (Model * best_model,
+                                   Score * best_score) {}
 
 };
 

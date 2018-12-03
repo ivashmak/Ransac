@@ -26,7 +26,7 @@ void storeResults ();
 int getGTNumInliers (const std::string &filename, float threshold);
 
 void Tests::testHomographyFitting() {
-    std::string img_name = "LePoint1";
+    std::string img_name = "CapitalRegion";
     cv::Mat points, points1, points2;
     read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
 
@@ -66,10 +66,6 @@ void Tests::testHomographyFitting() {
 
      */
     cv::hconcat(points1, points2, points);
-    double min, max;
-    cv::minMaxLoc(points1, &min, &max);
-    std::cout << min << " min\n";
-    std::cout << max << " max\n";
 //    std::cout << cv::findHomography(points1, points2) << '\n';
 
     unsigned int points_size = (unsigned int) points.rows;
@@ -116,34 +112,34 @@ void Tests::testHomographyFitting() {
     nn.getNearestNeighbors_flann(points1, knn, neighbors);
 
 //     ---------------------- uniform ----------------------------------
-    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
-    model->setStandardRansacLO(0);
-    model->setGraphCutLO(0);
-    model->setSprtLO(0);
-
-    sampler = new UniformSampler;
-    initUniform(sampler, model->sample_number, points_size);
-
-    estimator = new HomographyEstimator (points);
-
-    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
-            img_name, gt_inliers);
+//    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
+//    model->setStandardRansacLO(0);
+//    model->setGraphCutLO(0);
+//    model->setSprtLO(1);
+//
+//    sampler = new UniformSampler;
+//    initUniform(sampler, model->sample_number, points_size);
+//
+//    estimator = new HomographyEstimator (points);
+//
+//    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
+//            img_name, gt_inliers);
     // --------------------------------------------------------------
 
 
 
 //     ---------------------- napsac ----------------------------------
-    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Napsac);
-    model->setStandardRansacLO(0);
-    model->setGraphCutLO(0);
-    model->setSprtLO(0);
-
-    initNapsac(sampler, neighbors, model->k_nearest_neighbors, model->sample_number);
-
-    estimator = new HomographyEstimator (points);
-
-    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
-          img_name, gt_inliers);
+//    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Napsac);
+//    model->setStandardRansacLO(1);
+//    model->setGraphCutLO(0);
+//    model->setSprtLO(0);
+//
+//    initNapsac(sampler, neighbors, model->k_nearest_neighbors, model->sample_number);
+//
+//    estimator = new HomographyEstimator (points);
+//
+//    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
+//          img_name, gt_inliers);
     // --------------------------------------------------------------
 
 
@@ -174,7 +170,7 @@ void Tests::testHomographyFitting() {
 //    getStatisticalResults(points, estimator, model, sampler, termination_criteria,
 //                          quality, neighbors, 100, true, false, gt_inliers, nullptr);
 
-//     storeResults();
+     storeResults();
 }
 
 
@@ -185,7 +181,7 @@ void storeResults () {
     std::vector<std::string> points_filename = getHomographyDatasetPoints();
     Tests tests;
 
-    int N_runs = 60;
+    int N_runs = 100;
     NearestNeighbors nn;
 
     std::vector<SAMPLER> samplers;
@@ -230,6 +226,9 @@ void storeResults () {
                              "Avg num iters,Std dev num iters,Med num iters,"
                              "Avg time (mcs),Std dev time,Med time,"
                              "Num fails\n";
+
+            std::cout << tests.sampler2string(smplr) << "\n";
+            std::cout << lo[l][0] << " " << lo[l][1] << " " << lo[l][2] << "\n";
 
             for (std::string img_name : points_filename) {
                 std::cout << img_name << '\n';

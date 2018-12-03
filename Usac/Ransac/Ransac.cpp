@@ -91,11 +91,7 @@ void Ransac::run(cv::InputArray input_points) {
     unsigned int number_of_models;
 
     LocalOptimization * lo_ransac;
-    Score *lo_score;
-    Model *lo_model;   
     if (LO) {
-        lo_score = new Score;
-        lo_model = new Model; lo_model->copyFrom(model);
         lo_ransac = new RansacLocalOptimization (model, sampler, termination_criteria, quality, estimator, points_size);
     }
 
@@ -112,14 +108,17 @@ void Ransac::run(cv::InputArray input_points) {
     GraphCut * graphCut;
     if (GraphCutLO) {
         graphCut = new GraphCut;
-        graphCut->init(points_size, model, estimator, getNeighbors());
+        graphCut->init(points_size, model, estimator, quality, getNeighbors());
     }
+
+    int min_inlier_count_for_LO = 2 * model->sample_number;
+    int gc_runs = 0;
 
     int iters = 0;
     int max_iters = model->max_iterations;
 
     // delete, just for test
-    int * best_sample = new int[4];
+//    int * best_sample = new int[4];
 
     while (iters < max_iters) {
 
@@ -171,32 +170,34 @@ void Ransac::run(cv::InputArray input_points) {
             if (current_score->bigger(best_score)) {
 
 //                  std::cout << "current score = " << current_score->score << '\n';
-                if (get_inliers) {
-                    quality->getInliers(models[i]->returnDescriptor(), inliers);
+
+                // update current model and current score by inner and iterative local optimization
+                // if inlier number is too small, do not update
+                if (LO && current_score->inlier_number > min_inlier_count_for_LO) {
+//                    std::cout << "score before LO " << current_score->inlier_number << "\n";
+                    lo_ransac->GetLOModelScore (models[i], current_score);
+//                    std::cout << "score after LO " << current_score->inlier_number << "\n";
                 }
 
-                if (LO) {
-                    lo_ransac->GetLOModelScore (lo_model, lo_score, current_score, inliers);
-//                     std::cout << "lo score " << lo_score->inlier_number << '\n';
-                    if (lo_score->bigger(current_score)) {
-                        // std::cout << "LO score is better than current score\n";
-                        best_score->copyFrom(lo_score);
-                        best_model->setDescriptor(lo_model->returnDescriptor());
-//                        std::cout << "best model " << best_model->returnDescriptor() << "\n";
-                    } else{
-                        best_score->copyFrom(current_score);
-                        best_model->setDescriptor(models[i]->returnDescriptor());
-                    }
-                } else {
-                    // copy current score to best score
-                    best_score->copyFrom(current_score);
+               // todo: termination conditions at first
 
-//                     std::cout << "best score inlier number " << best_score->inlier_number << '\n';
-//                     std::cout << "best score " << best_score->score << '\n';
-
-                    // remember best model
-                    best_model->setDescriptor (models[i]->returnDescriptor());
+                // update current model and current score by graph cut local optimization
+                // if inlier number is too small, do not update
+                if (GraphCutLO && current_score->inlier_number > min_inlier_count_for_LO) {
+//                    std::cout << "score before GC LO " << current_score->inlier_number << "\n";
+                    graphCut->GraphCutLO(models[i], current_score);
+//                    std::cout << "score after GC LO " << current_score->inlier_number << "\n";
+                    gc_runs++;
                 }
+
+                // copy current score to best score
+                best_score->copyFrom(current_score);
+
+                // remember best model
+                best_model->setDescriptor (models[i]->returnDescriptor());
+
+                // std::cout << "best score inlier number " << best_score->inlier_number << '\n';
+                // std::cout << "best score " << best_score->score << '\n';
 
                 // only for debug
 //                best_sample[0] = sample[0];
@@ -205,29 +206,24 @@ void Ransac::run(cv::InputArray input_points) {
 //                best_sample[3] = sample[3];
                 //
 
-                unsigned int inlier_number;
-                /*
-                 * If we use graph cut local optimization, so number of inliers is score (?).
-                 */
-                if (GraphCutLO) {
-                    graphCut->labeling(best_model->returnDescriptor(), current_score);
-                    inlier_number = std::max ((int) best_score->inlier_number, (int) current_score->score);
-                } else {
-                    inlier_number = best_score->inlier_number;
-                }
-
+                // Termination conditions:
                 if (is_prosac) {
+                    // get inliers for prosac termination criteria
+                    quality->getInliers(best_model->returnDescriptor(), inliers);
                     max_iters = prosac_termination_criteria->
                             getUpBoundIterations(iters, prosac_sampler->getLargestSampleSize(),
-                                                 inliers, inlier_number);
+                                                 inliers, best_score->inlier_number);
                 } else {
-                     max_iters = termination_criteria->getUpBoundIterations (inlier_number);
+                    max_iters = termination_criteria->getUpBoundIterations (best_score->inlier_number);
+                }
+                if (SprtLO) {
+//                     std::cout << "SPRT " << max_iters << " vs " << sprt->getUpperBoundIterations(best_score->inlier_number) << "\n";
+                    max_iters = std::min (max_iters, (int)sprt->getUpperBoundIterations(best_score->inlier_number));
                 }
 
-                if (SprtLO) {
-//                    std::cout << "SPRT stop\n";
-                    // std::cout << max_iters << " vs " << sprt->getUpperBoundIterations(inlier_number) << "\n";
-                    max_iters = std::min (max_iters, (int)sprt->getUpperBoundIterations(inlier_number));
+                // if maximum iterations reached then break loop of number of models
+                if (iters > max_iters) {
+                    break;
                 }
 
                 // std::cout << "max iters prediction = " << max_iters << '\n';
@@ -237,7 +233,11 @@ void Ransac::run(cv::InputArray input_points) {
         }
     }
 
-    end:
+    // Graph Cut lo was set, but did not run, run it
+    if (GraphCutLO && gc_runs == 0) {
+        // update best model and best score
+        graphCut->GraphCutLO(best_model, best_score);
+    }
 
     int * max_inliers = new int[points_size];
 //    std::cout << "Calculate Non minimal model\n";
@@ -248,7 +248,7 @@ void Ransac::run(cv::InputArray input_points) {
 //    std::cout << "end best inl num " << best_score->inlier_number << '\n';
 //    std::cout << "end best score " << best_score->score << '\n';
 
-    // usually converges in 4-5 iterations
+    // usually 4-5 iterations are enough
     unsigned int normalizations = 10;
     unsigned int previous_non_minimal_num_inlier = 0;
 
@@ -302,13 +302,17 @@ void Ransac::run(cv::InputArray input_points) {
         lo_inner_iters = lo_r->lo_inner_iters;
         lo_iterative_iters = lo_r->lo_iterative_iters;
     }
-
+    unsigned int gc_iters = 0;
+    if (GraphCutLO) {
+        gc_iters = graphCut->gc_iterations;
+    }
     // Store results
     ransac_output = new RansacOutput (best_model, max_inliers,
-            std::chrono::duration_cast<std::chrono::microseconds>(fs).count(), average_error, best_score->inlier_number, iters, lo_inner_iters, lo_iterative_iters);
+            std::chrono::duration_cast<std::chrono::microseconds>(fs).count(), average_error,
+                                      best_score->inlier_number, iters, lo_inner_iters, lo_iterative_iters, gc_iters);
 
     if (LO) {
-        delete lo_ransac, lo_model, lo_score;
+        delete lo_ransac;
     }
     if (GraphCutLO) {
         delete graphCut;

@@ -4,7 +4,7 @@
  * In expirements I found that for less k nearest neighbors
  * the number inliers is more. For 2d line fitting.
  */
-void GraphCut::labeling (const cv::Mat& model, Score * score, bool get_inliers, int * inliers) {
+void GraphCut::labeling (const cv::Mat& model, Score * score, int * inliers) {
 
     estimator->setModelParameters(model);
 
@@ -20,32 +20,14 @@ void GraphCut::labeling (const cv::Mat& model, Score * score, bool get_inliers, 
 
     score->inlier_number = 0;
 
-    if (get_inliers) {
-        for (int point = 0; point < points_size; ++point) {
-            distance = estimator->GetError(point);
-            if (distance < threshold) {
-                inliers[score->inlier_number++] = point;
-            }
-            // save errors to avoid next error calculating
-            errors[point] = distance;
+    for (int i = 0; i < points_size; ++i) {
+        distance = estimator->GetError(i);
+        // save errors to avoid next error calculating
+        errors[i] = distance;
 
-            energy = exp(-(distance * distance) / sqr_thr);
+        energy = exp(-(distance * distance) / sqr_thr);
 
-            e->add_term1(point, energy, 0);
-        }
-    } else {
-        for (int i = 0; i < points_size; ++i) {
-            distance = estimator->GetError(i);
-            if (distance < threshold) {
-                score->inlier_number++;
-            }
-            // save errors to avoid next error calculating
-            errors[i] = distance;
-
-            energy = exp(-(distance * distance) / sqr_thr);
-
-            e->add_term1(i, energy, 0);
-        }
+        e->add_term1(i, energy, 0);
     }
 
 
@@ -94,12 +76,13 @@ void GraphCut::labeling (const cv::Mat& model, Score * score, bool get_inliers, 
 
     e->minimize();
 
-    score->score = 0;
+    score->inlier_number = 0;
     for (int i = 0; i < points_size; ++i) {
         if (e->what_segment(i) == Graph<float, float, float>::SINK) {
-            score->score++;
+            inliers[score->inlier_number++] = i;
         }
     }
+    score->score = score->inlier_number;
 
     delete e;
 }

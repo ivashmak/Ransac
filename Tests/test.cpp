@@ -23,7 +23,8 @@ void Tests::test (cv::InputArray points,
     std::cout << "\ttime: ";
     ransacOutput->printTime();
     std::cout << "\titerations: " << ransacOutput->getTotalIters() <<
-              " (where " << ransacOutput->getLOInnerIters () << " (inner iters) and " << ransacOutput->getLOIterativeIters() << " (iterative iters)) \n";
+              " (where " << ransacOutput->getLOInnerIters () << " (inner iters) and " <<
+              ransacOutput->getLOIterativeIters() << " (iterative iters)) and " << ransacOutput->getGCIters() << " (GC iters)\n";
 
     std::cout << "\tpoints under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
     std::cout << "\tAverage error " << ransacOutput->getAverageError() << "\n";

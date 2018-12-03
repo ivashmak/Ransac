@@ -180,6 +180,7 @@ public:
              }
              // std::cout << "lambda = " << lambda_new << " vs A = " << A << "\n"; 
              if (lambda_new > A) {
+//                 std::cout << "BAD MODEL IN " << tested_point << "/" << points_size << "\n";
                  good = false;
                  tested_point++;
                  break;
