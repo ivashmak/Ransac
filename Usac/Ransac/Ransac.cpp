@@ -153,8 +153,10 @@ void Ransac::run(cv::InputArray input_points) {
 //             std::cout << i << "-th model\n";
 
             if (SprtLO) {
+//                std::cout << "sprt verify\n";
                 is_good_model = sprt->verifyModelAndGetModelScore(models[i], iters,
                         std::max (best_score->inlier_number, current_score->inlier_number), true, current_score);
+//                std::cout << "sprt verified\n";
                 if (!is_good_model) {
                     iters++;
                     continue;
@@ -219,6 +221,7 @@ void Ransac::run(cv::InputArray input_points) {
                 if (SprtLO) {
 //                     std::cout << "SPRT " << max_iters << " vs " << sprt->getUpperBoundIterations(best_score->inlier_number) << "\n";
                     max_iters = std::min (max_iters, (int)sprt->getUpperBoundIterations(best_score->inlier_number));
+//                    std::cout << "got max iters \n";
                 }
 
                 // if maximum iterations reached then break loop of number of models
@@ -286,9 +289,9 @@ void Ransac::run(cv::InputArray input_points) {
 
     auto end_time = std::chrono::steady_clock::now();
     std::chrono::duration<float> fs = end_time - begin_time;
-    // here is ending ransac main implementation
+    // ================= here is ending ransac main implementation ===========================
 
-    // get final inliers of the best model
+    // get final inliers from the best model
     quality->getInliers(best_model->returnDescriptor(), max_inliers);
 //    std::cout << "FINAL best inl num " << best_score->inlier_number << '\n';
 //    std::cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";

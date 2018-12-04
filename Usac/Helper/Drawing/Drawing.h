@@ -25,7 +25,7 @@ public:
      *                                              w
      */
     void drawing_resize (cv::Mat &image) {
-        float nS = 480000; // 600 x 800
+        float nS = 880000; // 600 x 800
         cv::resize(image, image, cv::Size(sqrt ((image.cols * nS)/image.rows), sqrt ((image.rows * nS)/image.cols)));
     }
 
@@ -197,9 +197,9 @@ public:
         cv::vconcat(img1_inl, opencv_img1_inl, img1_inl);
 
 //        cv::resize(img2_inl, img2_inl, cv::Size (0.75 * img2_inl.cols, 0.5 * img2_inl.rows));
-//        drawing_resize(img2_inl);
-//        cv::imshow ("estimated points on correspondence images vs grand truth estimated points vs opencv", img2_inl);
-        cv::imwrite("../results/homography/"+img_name+".png", img1_inl);
+        drawing_resize(img1_inl);
+        cv::imshow ("estimated points on correspondence images vs grand truth estimated points vs opencv", img1_inl);
+//        cv::imwrite("../results/homography/"+img_name+".png", img1_inl);
 
         // draw panorama
         cv::Mat panorama_opencv, panorama_gt, panorama;

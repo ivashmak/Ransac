@@ -72,7 +72,7 @@ public:
      * Display average results such as computational time,
      * number of inliers of N runs of Ransac.
      */
-    void getStatisticalResults (cv::InputArray points,
+    void getStatisticalResults (const cv::Mat& points,
                     Estimator *const estimator,
                     Model *const model,
                     Sampler * sampler,
@@ -102,10 +102,19 @@ public:
         // time and average error.
         // If we have GT number of inliers, then find number of fails model.
         for (int i = 0; i < N; i++) {
+            // re init sampler
+            initSampler(sampler, model, points.rows, points, neighbors);
+
             if (model->sampler == SAMPLER::Prosac) {
-                sampler = new ProsacSampler (*(ProsacSampler *)sampler);
-                termination_criteria = new ProsacTerminationCriteria(*(ProsacTerminationCriteria *)termination_criteria);
+                // re init termination criteria for prosac
+                ProsacTerminationCriteria *  prosac_termination_criteria_ = new ProsacTerminationCriteria;
+                prosac_termination_criteria_->initProsacTerminationCriteria
+                        (((ProsacSampler *) sampler)->getGrowthFunction(), model, points.rows);
+
+                termination_criteria = prosac_termination_criteria_;
             }
+
+
 
             Ransac ransac (model, sampler, termination_criteria, quality, estimator);
             ransac.setNeighbors(neighbors);
@@ -174,7 +183,7 @@ public:
         
 
 //        std::cout << N << " runs of Ransac for " << model->getName() << " with points size " << points.size().width << '\n';
-//        std::cout << results << "\n";
+        std::cout << results << "\n";
 
         if (get_results) {
             statistical_results->copyFrom(results);

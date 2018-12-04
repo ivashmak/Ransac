@@ -1,0 +1,30 @@
+RAM 15.6 GB
+Intel Core i7
+OS type 64 bit
+8 CPUs
+Homography_estimator_Prosac_sampler
+Runs for each image = 100
+Threshold for each image = 3
+Desired probability for each image = 0.99
+Standard LO = 1
+Graph Cut LO = 0
+SPRT = 0
+
+
+Filename,Avg num inl/gt,Std dev num inl,Med num inl,Avg num iters,Std dev num iters,Med num iters,Avg time (mcs),Std dev time,Med time,Num fails
+adam,27 / 27,0,27,711.97,34.7625,696.5,8963,681,8770,0
+Brussels,431 / 370,0,431,29.56,2.84736,29,4163,252,4148,0
+LePoint1,116.17 / 70,8.3,117,32.29,4.08074,32,2050,223,2028,1
+boat,77 / 68,0,77,32.69,4.13825,31,1849,256,1761,0
+CapitalRegion,73.94 / 64,0.6,74,36.68,14.2332,34,2114,631,1967,0
+LePoint2,91 / 82,0,91,35.51,12.8256,30,1976,548,1739,0
+BostonLib,58 / 58,0,58,30.24,1.03592,30,1735,168,1697,0
+city,21.77 / 25,6.70271,25,229.33,28.6201,228,3732,355,3658,19
+LePoint3,43 / 35,0,43,37.86,2.34422,37,1509,41,1500,0
+Boston,316 / 316,0,316,27.05,1.68999,27,3207,161,3212,0
+Eiffel,85.52 / 76,2.74315,86,35.79,0.795123,36,2186,94,2171,0
+WhiteBoard,182 / 178,0,182,28.66,5.33754,28,2497,506,2388,0
+BruggeSquare,29 / 23,0,29,30.52,6.27723,30,1271,219,1298,0
+ExtremeZoom,12.14 / 14,3.91067,11,3267.3,1323.14,3818,46898,18745,54057,0
+BruggeTower,59 / 55,0,59,29.16,0.563539,29,1511,38,1504,0
+graf,212.95 / 207,20.8037,215,29.56,11.926,29,2857,946,2714,1

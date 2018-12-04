@@ -58,3 +58,5 @@ Repeated point?
 
 
 Inner and Iterative ransac LO is not good for Line fitting.
+
+How sample in Local Optimization (by current sampler or always uniformly)?

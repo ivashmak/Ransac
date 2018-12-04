@@ -52,9 +52,9 @@ alg = {'1' '2' '3' '4' '5' '6' '7' '8' '9' 'A'};
 
  
 save_results (inliers, images, algorithms, alg, 'Average number of inliers', [folder_res 'inliers'])
-save_results (time, images, algorithms, alg, 'Average time (mcs)', [folder_res 'time'])
-save_results (iters, images, algorithms, alg, 'Average number of iterations', [folder_res 'iters'])
-save_results (fails, images, algorithms, alg, 'Number of fails', [folder_res 'fails'])
+% save_results (time, images, algorithms, alg, 'Average time (mcs)', [folder_res 'time'])
+% save_results (iters, images, algorithms, alg, 'Average number of iterations', [folder_res 'iters'])
+% save_results (fails, images, algorithms, alg, 'Number of fails', [folder_res 'fails'])
 
 
 
@@ -92,7 +92,9 @@ function save_results (data, images, algorithms, alg, titl, save)
     subplot (numel (images)+2, 1, numel(images)+2)
     h = heatmap(algorithms, 'i', zeros (size(data(1,:))));
     
-    print (gcf, [save '.png'], '-dpng', '-r300');
-%     print('-fillpage',save,'-dpdf', '-r300')
-    close;
+    xlabel('Algorithms');
+%     print (gcf, [save '.png'], '-dpng', '-r300');
+%       saveas (gcf, [save '.png']);
+    print('-fillpage',save,'-dpdf', '-r300')
+% %     close;
 end
