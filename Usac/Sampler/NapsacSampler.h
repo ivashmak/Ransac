@@ -56,7 +56,6 @@ public:
      * Take (sample_size-1) points from initial point neighborhood.
      */
     void generateSample (int *sample) override {
-
         int initial_point = random_generator->getRandomNumber();
         sample[0] = initial_point;
 

@@ -7,6 +7,7 @@
 #include "../Sampler/ProsacSampler.h"
 #include "../TerminationCriteria/ProsacTerminationCriteria.h"
 #include "../Estimator/HomographyEstimator.h"
+#include "../LocalOptimization/GreedyLocalOptimization.h"
 
 int getPointsSize (cv::InputArray points) {
 //    std::cout << points.getMat(0).total() << '\n';
@@ -79,8 +80,6 @@ void Ransac::run(cv::InputArray input_points) {
         prosac_termination_criteria = (ProsacTerminationCriteria *) termination_criteria;
     }
     //
-    // we want inliers in case using prosac sampler or local optimization
-    bool get_inliers = LO || is_prosac;
 
     /*
      * Allocate inliers of points_size, to avoid reallocation in getModelScore()
@@ -111,7 +110,9 @@ void Ransac::run(cv::InputArray input_points) {
         graphCut->init(points_size, model, estimator, quality, getNeighbors());
     }
 
-    int min_inlier_count_for_LO = 2 * model->sample_number;
+    // if we have small number of data points, so LO will run with quarter of them,
+    // otherwise it requires at least 3 sample size.
+    int min_inlier_count_for_LO = std::min ((int) points_size/4, (int) 3 * model->sample_number);
     int gc_runs = 0;
 
     int iters = 0;
@@ -129,15 +130,16 @@ void Ransac::run(cv::InputArray input_points) {
         }
 
 //      debug
-       // for (int s = 0; s < model->sample_number; s++) {
-       //     for (int j = 0; j < model->sample_number; j++) {
-       //         if (s == j) continue;
-       //         if (sample[s] == sample[j]) {
-       //             std::cout << "SAMPLE EQUAL\n";
-       //         }
-       //     }
-       // }
-
+        for (int s = 0; s < model->sample_number; s++) {
+            std::cout << sample[s] << " ";
+            for (int j = 0; j < model->sample_number; j++) {
+                if (s == j) continue;
+                if (sample[s] == sample[j]) {
+                    std::cout << "SAMPLE EQUAL\n";
+                }
+            }
+        }
+        std::cout << "\n";
 //        sample[0] = 124;
 //        sample[1] = 119;
 //        sample[2] = 53;
@@ -165,11 +167,13 @@ void Ransac::run(cv::InputArray input_points) {
                 quality->getNumberInliers(current_score, models[i]);
             }
 
-           // std::cout << "current num inl " << current_score->inlier_number << "\n";
-           // std::cout << "current score " << current_score->score << "\n";
+            std::cout << "current num inl " << current_score->inlier_number << "\n";
 //            std::cout << models[i]->returnDescriptor() << "\n\n";
 
             if (current_score->bigger(best_score)) {
+
+//                GreedyLO * greedyLO = new GreedyLO;
+//                greedyLO->getLOScore(current_score, models[i], quality, estimator, points_size);
 
 //                  std::cout << "current score = " << current_score->score << '\n';
 
@@ -198,8 +202,7 @@ void Ransac::run(cv::InputArray input_points) {
                 // remember best model
                 best_model->setDescriptor (models[i]->returnDescriptor());
 
-                // std::cout << "best score inlier number " << best_score->inlier_number << '\n';
-                // std::cout << "best score " << best_score->score << '\n';
+                 std::cout << "best score inlier number " << best_score->inlier_number << '\n';
 
                 // only for debug
 //                best_sample[0] = sample[0];
@@ -229,12 +232,12 @@ void Ransac::run(cv::InputArray input_points) {
                     break;
                 }
 
-                // std::cout << "max iters prediction = " << max_iters << '\n';
-            }
-//             std::cout << "current iteration = " << iters << '\n';
+                 std::cout << "max iters prediction = " << max_iters << '\n';
+            } // end of if so far the best score
+             std::cout << "current iteration = " << iters << '\n';
             iters++;
-        }
-    }
+        } // end loop of number of models
+    } // end main while loop
 
     // Graph Cut lo was set, but did not run, run it
     if (GraphCutLO && gc_runs == 0) {
@@ -242,14 +245,37 @@ void Ransac::run(cv::InputArray input_points) {
         graphCut->GraphCutLO(best_model, best_score);
     }
 
+            Drawing drawing;
+            cv::Mat img1 = cv::imread ("../dataset/homography/LePoint1A.png");
+            cv::Mat img2 = cv::imread ("../dataset/homography/LePoint1B.png");
+            cv::Mat pts1 = input_points.getMat().colRange (0, 2);
+            cv::Mat pts2 = input_points.getMat().colRange (2, 4);
+            cv::hconcat (pts1, cv::Mat_<float>::ones(points_size, 1), pts1);
+            cv::hconcat (pts2, cv::Mat_<float>::ones(points_size, 1), pts2);
+            drawing.drawErrors (img1, img2, pts1, pts2, best_model->returnDescriptor());
+
+        quality->getInliers(best_model->returnDescriptor(), inliers);
+        for (int i = 0; i < best_score->inlier_number; i++) {
+           cv::circle (img1, cv::Point_<float>(pts1.at<float>(inliers[i], 0), pts1.at<float>(inliers[i], 1)), 4, cv::Scalar(255, 255, 255), -1);
+        }
+        cv::hconcat (img1, img2, img1);
+            cv::imshow ("homography", img1);
+            cv::imwrite("../results/homography/lepoint1.png", img1);
+            cv::waitKey(0);
+
+
+
+    GreedyLO * greedyLO = new GreedyLO;
+    greedyLO->getLOScore(best_score, best_model, quality, estimator, points_size);
+
+
     int * max_inliers = new int[points_size];
 //    std::cout << "Calculate Non minimal model\n";
 
     Model *non_minimal_model = new Model;
     non_minimal_model->copyFrom (model);
 
-//    std::cout << "end best inl num " << best_score->inlier_number << '\n';
-//    std::cout << "end best score " << best_score->score << '\n';
+    std::cout << "end best inl num " << best_score->inlier_number << '\n';
 
     // usually 4-5 iterations are enough
     unsigned int normalizations = 10;
@@ -265,7 +291,7 @@ void Ransac::run(cv::InputArray input_points) {
             quality->getNumberInliers(current_score, non_minimal_model, true, max_inliers);
 
             // Priority is for non minimal model estimation
-//            std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
+            std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
 
             if ((float) current_score->inlier_number / best_score->inlier_number < 0.5) {
 //                std::cout << "|I|best = " << best_score->inlier_number << "\n";

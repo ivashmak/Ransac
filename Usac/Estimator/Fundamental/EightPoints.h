@@ -109,7 +109,7 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, in
 
 //    std::cout << T2 << "\n\n";
 
-   // Something crazy is going on here.
+   // Something crazy is going on here, if I uncomment simple transpose.
 
 //    t2[6] = t2[2];
 //    t2[7] = t2[5];

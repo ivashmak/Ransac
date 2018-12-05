@@ -29,7 +29,7 @@ private:
 
     unsigned int * maximality_samples;
     unsigned int * non_random_inliers;
-    unsigned int * inlier_flags;
+    bool * inlier_flags;
 
     unsigned int * growth_function;
 
@@ -71,6 +71,11 @@ public:
         const unsigned int max_hypotheses = 10000; // max iterations
         
         // non-randomness constraint
+        // The non-randomness requirement prevents PROSAC
+        // from selecting a solution supported by outliers that are
+        // by chance consistent with it.  The constraint is typically
+        // checked ex-post in standard approaches [1]. The distribution
+        // of the cardinalities of sets of random ‘inliers’ is binomial
         // i-th entry - inlier counts for termination up to i-th point (term length = i+1)
         non_random_inliers = (unsigned int *) calloc (points_size, sizeof (unsigned int));
         double pn_i = 1.0;    // prob(i inliers) with subset size n
@@ -109,7 +114,9 @@ public:
             non_random_inliers[n-1] = i_min;
         }
 
-        // maximality constraint
+        // maximality constraint defines how many samples are
+        // needed to be drawn to ensure the confidence in the solution
+        // and is the (only) termination criterion of RANSAC
         // i-th entry - number of samples for pool [0...i] (pool length = i+1)
         maximality_samples = new unsigned int[points_size];
         for (size_t i = 0; i < points_size; ++i) {
@@ -147,7 +154,7 @@ public:
     unsigned int getUpBoundIterations(unsigned int hypCount, unsigned int largest_sample_size,
                                     const int * const inliers, unsigned int inliers_size) {
 
-        inlier_flags = (unsigned int *) calloc (points_size, sizeof(unsigned int));
+        inlier_flags = (bool *) calloc (points_size, sizeof(bool));
         for (int i = 0; i < inliers_size; i++) {
             inlier_flags[inliers[i]] = 1;
         }
@@ -173,7 +180,7 @@ public:
                 if ((i == points_size-1) || (inlier_flags[i] && !inlier_flags[i+1])) {
                     unsigned int new_samples = standart_termination_criteria->
                                             getUpBoundIterations(inlier_count, i+1);
-
+//                    std::cout << new_samples << "\n";
                     if (i+1 < largest_sample_size) {
                         // correct for number of samples that have points in [i+1, largest_sample_size-1]
                         new_samples += hypCount - growth_function[i];

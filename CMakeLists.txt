@@ -60,6 +60,7 @@ add_executable(
         Usac/LocalOptimization/LocalOptimization.h
         Usac/LocalOptimization/RansacLocalOptimization.h
         Usac/LocalOptimization/GraphCut.cpp Usac/LocalOptimization/GraphCut.h
+        Usac/LocalOptimization/GreedyLocalOptimization.h
 
         Usac/SPRT.h
 

@@ -83,10 +83,6 @@ public:
                     bool GT = false, bool get_results = false,
                     int gt_num_inliers=0, StatisticalResults * statistical_results=0) {
 
-
-
-        int bad_models_counter = 0;
-
         long * times = new long[N];
         float * num_inlierss = new float[N];
         float * num_iterss = new float[N];
@@ -114,8 +110,6 @@ public:
                 termination_criteria = prosac_termination_criteria_;
             }
 
-
-
             Ransac ransac (model, sampler, termination_criteria, quality, estimator);
             ransac.setNeighbors(neighbors);
             ransac.run(points);
@@ -139,8 +133,11 @@ public:
                  */  
                 if (num_inlierss[i]/gt_num_inliers < 0.5) {
                     fails++;
+                    std::cout << "FAIL\n";
+                    exit (111);
                 }
             }
+            std::cout << "----------------------------------------------------------------\n";
         }
         
         StatisticalResults * results = new StatisticalResults;

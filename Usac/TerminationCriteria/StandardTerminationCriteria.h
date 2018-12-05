@@ -69,19 +69,6 @@ public:
         if (inl_prob < EPSILON) return max_iterations;
         return log_1_p/log(1 - inl_prob);
     }
-
-    static inline unsigned int getUpBoundIterations (unsigned int inlier_size, unsigned int points_size, unsigned int sample_size, float desired_prob) {
-        float inl_ratio = (float) inlier_size/points_size;
-        float inl_prob = inl_ratio * inl_ratio;
-        int k = sample_size;
-        while (k > 2) {
-            inl_prob *= inl_ratio;
-            k--;
-        }
-        if (inl_prob < 0.00001) return 10000;
-        return log (1 - desired_prob)/log(1 - inl_prob);
-    }
-
 };
 
 

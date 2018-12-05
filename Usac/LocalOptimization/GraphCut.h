@@ -27,7 +27,7 @@ protected:
 
     int num_sample;
     int sample_size;
-
+    unsigned int lo_inner_iterations;
 public:
     int gc_iterations;
 
@@ -58,58 +58,97 @@ public:
         // comment to debug
         uniform_random_generator->resetTime();
 
+        lo_inner_iterations = model->lo_inner_iterations;
+
         gc_iterations = 0;
     }
 
 	void labeling (const cv::Mat& model, Score * score, int * inliers = nullptr);
 
     void GraphCutLO (Model * best_model, Score * best_score) {
-//        std::cout << "best score " << best_score->inlier_number << "\n";
+//        std::cout << "begin best score " << best_score->inlier_number << "\n";
 
         gc_model->setDescriptor(best_model->returnDescriptor());
-
+        bool is_best_model_updated;
         while (true) {
             // build graph problem
             // apply graph cut to G
             labeling(gc_model->returnDescriptor(), gc_score, inliers);
 //            std::cout << "virtual inliers " << gc_score->inlier_number << "\n";
 
-            // if number of "virtual" inliers is too small then break
-            if (gc_score->inlier_number <= 2 * sample_size) break;
+//             if number of "virtual" inliers is too small then break
+            if (gc_score->inlier_number <= sample_size) break;
+            is_best_model_updated = false;
 
             // sample to generate min (|I_7m|, |I|)
-            int generate_sample = std::min (num_sample, gc_score->inlier_number);
+            unsigned int gc_sample_size = std::min (num_sample, gc_score->inlier_number);
 
             // reset random generator
-            uniform_random_generator->setSubsetSize(generate_sample);
+            uniform_random_generator->setSubsetSize(gc_sample_size);
             // generate random subset in range <0; |I|>
             uniform_random_generator->resetGenerator(0, gc_score->inlier_number-1);
-            uniform_random_generator->generateUniqueRandomSet(sample);
 
-            // set sample as inliers from labeling
-            for (int smpl = 0; smpl < generate_sample; smpl++) {
-                sample[smpl] = inliers[sample[smpl]];
-//                std::cout << sample[smpl] << " ";
+            unsigned int inner_inliers_size = gc_score->inlier_number;
+
+            for (int iter = 0; iter < lo_inner_iterations; iter++) {
+                if (gc_sample_size < inner_inliers_size) {
+
+                    uniform_random_generator->generateUniqueRandomSet(sample);
+                    // set sample as inliers from labeling
+                    for (int smpl = 0; smpl < gc_sample_size; smpl++) {
+                        sample[smpl] = inliers[sample[smpl]];
+//                         std::cout << sample[smpl] << " ";
+                    }
+//                     std::cout << "\n";
+                    if (! estimator->EstimateModelNonMinimalSample(sample, gc_sample_size, *gc_model)) {
+                        continue;
+                    }
+                } else {
+                    if (! estimator->EstimateModelNonMinimalSample(inliers, inner_inliers_size, *gc_model)) {
+                        continue;
+                    }
+                }
+
+                quality->getNumberInliers(gc_score, gc_model, false, nullptr);
+
+//                std::cout << "gc score " << gc_score->inlier_number << "\n";
+
+                if (gc_score->bigger(best_score)) {
+//                    std::cout << "UPDATE best score " << gc_score->inlier_number << "\n";
+                    is_best_model_updated = true;
+                    best_score->copyFrom(gc_score);
+                    best_model->setDescriptor(gc_model->returnDescriptor());
+                }
+
+                /*
+                 * Assume that number of inliers from labeling is less than I_7m
+                 * If we found new best model, where inliers number is bigger than inliers number from
+                 * labeling, so use inliers from there.
+                 */
+                if (best_score->inlier_number > inner_inliers_size && inner_inliers_size < gc_sample_size) {
+//                    std::cout << "APPLY MY CHANGES\n";
+                    std::cout << inner_inliers_size << "\n";
+                    std::cout << best_score->inlier_number << "\n";
+                    quality->getInliers(best_model->returnDescriptor(), inliers);
+                    inner_inliers_size = best_score->inlier_number;
+                } else {
+                    // If we best model not better than labeling, so we don't need to estimate model
+                    // with same inliers. So break;
+                    break;
+                }
+
+                // only for test
+                gc_iterations++;
+                //
             }
-//            std::cout << "\n";
-            estimator->EstimateModelNonMinimalSample(sample, generate_sample, *gc_model);
-            quality->getNumberInliers(gc_score, gc_model);
 
-//            std::cout << "gc score " << gc_score->inlier_number << "\n";
-
-            // only for test
-            gc_iterations++;
-            //
-
-            if (gc_score->bigger(best_score)) {
-                best_score->copyFrom(gc_score);
-                best_model->setDescriptor(gc_model->returnDescriptor());
-            } else {
+            // break if best score was not updated
+            if (! is_best_model_updated) {
                 break;
             }
         }
 
-//        std::cout << "best gc score " << best_score->inlier_number << "\n";
+//        std::cout << "end best score " << best_score->inlier_number << "\n";
     }
 
 };

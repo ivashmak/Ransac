@@ -38,6 +38,13 @@ public:
         return largest_sample_size;
     }
 
+    /*
+     * Quality sort (Chum, Matas):
+     * Matching based on SIFT descriptors [5] was used to obtain
+     * tentative correspondences in PLANT and MUG experiments 2.
+     * The similarity was defined as the ratio of the distances in
+     * the SIFT space of the best and second match.
+     */
     void initProsacSampler (unsigned int sample_size_, unsigned int points_size_, bool reset_time = true) {
         sample_size = sample_size_;
         points_size = points_size_;
@@ -106,7 +113,9 @@ public:
             return;
         }
 
+
 /*
+        //-----------------------------------------------------------------------
         // Choice of the hypothesis generation set
         // if (t = T'_n) & (n < n*) then n = n + 1 (eqn. 4)
         if (hypCount == growth_function[subset_size] && subset_size < termination_length) {
@@ -122,6 +131,9 @@ public:
             // Select m points from U_n at random.
             randomGenerator->generateUniqueRandomSet(sample, sample_size, subset_size-1);
         }
+        hypCount++;
+        return;
+        //-----------------------------------------------------------------------
 */
 
         // if current stopping length is less than size of current pool, use only points up to the stopping length

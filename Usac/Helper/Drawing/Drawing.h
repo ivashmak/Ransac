@@ -193,8 +193,8 @@ public:
         cv::hconcat(gt_img1_inl, gt_img2_inl, gt_img1_inl);
         cv::hconcat(opencv_img1_inl, opencv_img2_inl, opencv_img1_inl);
 
-        cv::vconcat(img1_inl, gt_img1_inl, img1_inl);
-        cv::vconcat(img1_inl, opencv_img1_inl, img1_inl);
+//        cv::vconcat(img1_inl, gt_img1_inl, img1_inl);
+//        cv::vconcat(img1_inl, opencv_img1_inl, img1_inl);
 
 //        cv::resize(img2_inl, img2_inl, cv::Size (0.75 * img2_inl.cols, 0.5 * img2_inl.rows));
         drawing_resize(img1_inl);

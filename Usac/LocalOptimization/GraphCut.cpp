@@ -1,9 +1,6 @@
 #include "GraphCut.h"
 #include <math.h>
-/*
- * In expirements I found that for less k nearest neighbors
- * the number inliers is more. For 2d line fitting.
- */
+
 void GraphCut::labeling (const cv::Mat& model, Score * score, int * inliers) {
 
     estimator->setModelParameters(model);

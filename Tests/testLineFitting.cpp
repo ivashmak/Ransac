@@ -97,40 +97,42 @@ void Tests::testLineFitting() {
 
 
     // ---------------- uniform -------------------
-    // model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Uniform);
-
-    // model->setStandardRansacLO(1);
-    // model->setGraphCutLO(1);
-    // model->setSprtLO(1);
-
-    // initUniform(sampler, model->sample_number, points_size);
-    // test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, img_name, gt_inliers);
+//     model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Uniform);
+//
+//     model->setStandardRansacLO(0);
+//     model->setGraphCutLO(0);
+//     model->setSprtLO(0);
+//
+//     initUniform(sampler, model->sample_number, points_size);
+//     test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, img_name, gt_inliers);
     //------------------------------------------
 
 
 
     // --------------  prosac ---------------------
-    // model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Prosac);
-    // model->setStandardRansacLO(1);
-    // model->setGraphCutLO(1);
-    // model->setSprtLO(1);
-    
-    // initProsac(sampler, model->sample_number, points.size());
-    // ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
+     model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Prosac);
+     model->setStandardRansacLO(0);
+     model->setGraphCutLO(0);
+     model->setSprtLO(0);
 
-    // ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
-    // prosac_termination_criteria_->initProsacTerminationCriteria (prosac_sampler_->getGrowthFunction(),
-    //                                            model, points_size);
+     initProsac(sampler, model->sample_number, points.size());
+     ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
 
-    // TerminationCriteria * prosac_termination_criteria = prosac_termination_criteria_;
-    // cv::Mat sorted_pts (sorted_points);
-    // estimator = new Line2DEstimator (sorted_points);
+     ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
+     prosac_termination_criteria_->initProsacTerminationCriteria (prosac_sampler_->getGrowthFunction(),
+                                                model, points_size);
 
-    // test (sorted_pts, estimator, sampler, model, quality, prosac_termination_criteria, neighbors, img_name, gt_inliers);
+     termination_criteria = prosac_termination_criteria_;
 
-    // // switch to unsorted points back (not necessary, just for testing)
-    // estimator = new Line2DEstimator (points);
-    // ------------------------------------------------
+     cv::Mat sorted_pts (sorted_points);
+     estimator = new Line2DEstimator (sorted_points);
+
+     test (sorted_pts, estimator, sampler, model, quality, termination_criteria, neighbors, img_name, gt_inliers);
+
+     // switch to unsorted points back (not necessary, just for testing)
+     estimator = new Line2DEstimator (points);
+     termination_criteria = new StandardTerminationCriteria;
+     // ------------------------------------------------
 
 
 
@@ -174,7 +176,7 @@ void Tests::testLineFitting() {
 
 
 
-   store_results_line2d();
+//   store_results_line2d();
 }
 
 // problem for 111
