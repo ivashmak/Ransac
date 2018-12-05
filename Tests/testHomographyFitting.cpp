@@ -26,7 +26,7 @@ void storeResults ();
 int getGTNumInliers (const std::string &filename, float threshold);
 
 void Tests::testHomographyFitting() {
-    std::string img_name = "LePoint1";
+    std::string img_name = "boat";
     cv::Mat points, points1, points2;
     read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
 
@@ -111,18 +111,18 @@ void Tests::testHomographyFitting() {
     int gt_inliers = getGTNumInliers (img_name, 3 /*model->threshold*/);
 
 //     ---------------------- uniform ----------------------------------
-//    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
-//    model->setStandardRansacLO(1);
-//    model->setGraphCutLO(1);
-//    model->setSprtLO(1);
-//
-//    sampler = new UniformSampler;
-//    initUniform(sampler, model->sample_number, points_size);
-//
-//    estimator = new HomographyEstimator (points);
+   model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
+   model->setStandardRansacLO(0);
+   model->setGraphCutLO(0);
+   model->setSprtLO(0);
 
-//    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
-//            img_name, gt_inliers);
+   sampler = new UniformSampler;
+   initUniform(sampler, model->sample_number, points_size);
+
+   estimator = new HomographyEstimator (points);
+
+   // test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
+   //         img_name, gt_inliers);
     // --------------------------------------------------------------
 
 
@@ -144,19 +144,20 @@ void Tests::testHomographyFitting() {
 
 
 // ------------------ prosac ---------------------
-    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Prosac);
-    model->setStandardRansacLO(0);
-    model->setGraphCutLO(0);
-    model->setSprtLO(0);
-//    initProsac(sampler, model->sample_number, points_size);
-    initSampler(sampler, model, points_size, points, neighbors);
+//     model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Prosac);
+//     model->setStandardRansacLO(0);
+//     model->setGraphCutLO(0);
+//     model->setSprtLO(0);
+   //     estimator = new HomographyEstimator (sorted_points);
 
-    ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
-    prosac_termination_criteria_->initProsacTerminationCriteria (((ProsacSampler *)sampler)->getGrowthFunction(),
-                                                                 model, points_size);
-    termination_criteria = prosac_termination_criteria_;
+// //    initProsac(sampler, model->sample_number, points_size);
+//     initSampler(sampler, model, points_size, points, neighbors);
 
-    estimator = new HomographyEstimator (sorted_points);
+//     ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
+//     prosac_termination_criteria_->initProsacTerminationCriteria (((ProsacSampler *)sampler)->getGrowthFunction(),
+//                                                                  model, points_size, estimator);
+//     termination_criteria = prosac_termination_criteria_;
+
 //    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
 //          img_name, gt_inliers);
 //     -------------------------------------------------

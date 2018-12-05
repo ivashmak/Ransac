@@ -172,8 +172,8 @@ void Ransac::run(cv::InputArray input_points) {
 
             if (current_score->bigger(best_score)) {
 
-//                GreedyLO * greedyLO = new GreedyLO;
-//                greedyLO->getLOScore(current_score, models[i], quality, estimator, points_size);
+               // GreedyLO * greedyLO = new GreedyLO;
+               // greedyLO->getLOScore(current_score, models[i], quality, estimator, points_size);
 
 //                  std::cout << "current score = " << current_score->score << '\n';
 
@@ -202,7 +202,7 @@ void Ransac::run(cv::InputArray input_points) {
                 // remember best model
                 best_model->setDescriptor (models[i]->returnDescriptor());
 
-                 std::cout << "best score inlier number " << best_score->inlier_number << '\n';
+                 // std::cout << "best score inlier number " << best_score->inlier_number << '\n';
 
                 // only for debug
 //                best_sample[0] = sample[0];
@@ -213,11 +213,9 @@ void Ransac::run(cv::InputArray input_points) {
 
                 // Termination conditions:
                 if (is_prosac) {
-                    // get inliers for prosac termination criteria
-                    quality->getInliers(best_model->returnDescriptor(), inliers);
                     max_iters = prosac_termination_criteria->
                             getUpBoundIterations(iters, prosac_sampler->getLargestSampleSize(),
-                                                 inliers, best_score->inlier_number);
+                                                 best_model->returnDescriptor());
                 } else {
                     max_iters = termination_criteria->getUpBoundIterations (best_score->inlier_number);
                 }
@@ -245,28 +243,28 @@ void Ransac::run(cv::InputArray input_points) {
         graphCut->GraphCutLO(best_model, best_score);
     }
 
-            Drawing drawing;
-            cv::Mat img1 = cv::imread ("../dataset/homography/LePoint1A.png");
-            cv::Mat img2 = cv::imread ("../dataset/homography/LePoint1B.png");
-            cv::Mat pts1 = input_points.getMat().colRange (0, 2);
-            cv::Mat pts2 = input_points.getMat().colRange (2, 4);
-            cv::hconcat (pts1, cv::Mat_<float>::ones(points_size, 1), pts1);
-            cv::hconcat (pts2, cv::Mat_<float>::ones(points_size, 1), pts2);
-            drawing.drawErrors (img1, img2, pts1, pts2, best_model->returnDescriptor());
+        //     Drawing drawing;
+        //     cv::Mat img1 = cv::imread ("../dataset/homography/LePoint1A.png");
+        //     cv::Mat img2 = cv::imread ("../dataset/homography/LePoint1B.png");
+        //     cv::Mat pts1 = input_points.getMat().colRange (0, 2);
+        //     cv::Mat pts2 = input_points.getMat().colRange (2, 4);
+        //     cv::hconcat (pts1, cv::Mat_<float>::ones(points_size, 1), pts1);
+        //     cv::hconcat (pts2, cv::Mat_<float>::ones(points_size, 1), pts2);
+        //     drawing.drawErrors (img1, img2, pts1, pts2, best_model->returnDescriptor());
 
-        quality->getInliers(best_model->returnDescriptor(), inliers);
-        for (int i = 0; i < best_score->inlier_number; i++) {
-           cv::circle (img1, cv::Point_<float>(pts1.at<float>(inliers[i], 0), pts1.at<float>(inliers[i], 1)), 4, cv::Scalar(255, 255, 255), -1);
-        }
-        cv::hconcat (img1, img2, img1);
-            cv::imshow ("homography", img1);
-            cv::imwrite("../results/homography/lepoint1.png", img1);
-            cv::waitKey(0);
+        // quality->getInliers(best_model->returnDescriptor(), inliers);
+        // for (int i = 0; i < best_score->inlier_number; i++) {
+        //    cv::circle (img1, cv::Point_<float>(pts1.at<float>(inliers[i], 0), pts1.at<float>(inliers[i], 1)), 4, cv::Scalar(255, 255, 255), -1);
+        // }
+        // cv::hconcat (img1, img2, img1);
+        //     cv::imshow ("homography", img1);
+        //     cv::imwrite("../results/homography/lepoint1.png", img1);
+        //     cv::waitKey(0);
 
 
 
-    GreedyLO * greedyLO = new GreedyLO;
-    greedyLO->getLOScore(best_score, best_model, quality, estimator, points_size);
+    // GreedyLO * greedyLO = new GreedyLO;
+    // greedyLO->getLOScore(best_score, best_model, quality, estimator, points_size);
 
 
     int * max_inliers = new int[points_size];
@@ -293,7 +291,8 @@ void Ransac::run(cv::InputArray input_points) {
             // Priority is for non minimal model estimation
             std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
 
-            if ((float) current_score->inlier_number / best_score->inlier_number < 0.5) {
+            if ((float) current_score->inlier_number / best_score->inlier_number < 0.8) {
+                break;
 //                std::cout << "|I|best = " << best_score->inlier_number << "\n";
 //                std::cout << "|I|non minimal = " << current_score->inlier_number << "\n";
 //                std::cout << "\033[1;31mNON minimal model has less than 50% of inliers to compare with best score!\033[0m \n";

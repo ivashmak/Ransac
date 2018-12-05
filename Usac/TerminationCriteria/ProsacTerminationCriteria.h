@@ -30,7 +30,6 @@ private:
     unsigned int * maximality_samples;
     unsigned int * non_random_inliers;
     bool * inlier_flags;
-
     unsigned int * growth_function;
 
     unsigned int termination_length;
@@ -40,6 +39,9 @@ private:
     unsigned int sample_size;
 
     StandardTerminationCriteria * standart_termination_criteria;
+    Estimator * estimator;
+
+    float threshold;
 public:
 
     ~ProsacTerminationCriteria () {
@@ -47,17 +49,20 @@ public:
     }
 
     /*
-        All arrays have been initialized in Prosac Sampler,
-        so termination criteria have only pointer to them.
+        Remember to initialize estimator with sorted points and Prosac sampler before.
     */
     void initProsacTerminationCriteria (unsigned int * growth_function_,
                                         const Model * const model,
-                                        unsigned int points_size_) {
+                                        unsigned int points_size_,
+                                        Estimator * estimator_) {
 
         standart_termination_criteria = new StandardTerminationCriteria;
         standart_termination_criteria->init (model, points_size_);
 
+        estimator = estimator_;
         growth_function = growth_function_;
+        
+        threshold = model->threshold;
 
         sample_size = model->sample_number;
         points_size = points_size_;
@@ -122,7 +127,8 @@ public:
         for (size_t i = 0; i < points_size; ++i) {
             maximality_samples[i] = max_hypotheses;
         }
-        
+
+        inlier_flags = new bool[points_size];   
     }
 
     unsigned int getStoppingLength () {
@@ -152,13 +158,12 @@ public:
      * samples is smaller than η0 (typically set to 5%).
      */
     unsigned int getUpBoundIterations(unsigned int hypCount, unsigned int largest_sample_size,
-                                    const int * const inliers, unsigned int inliers_size) {
+                                    const cv::Mat& model) {
+        estimator->setModelParameters(model);
 
-        inlier_flags = (bool *) calloc (points_size, sizeof(bool));
-        for (int i = 0; i < inliers_size; i++) {
-            inlier_flags[inliers[i]] = 1;
+        for (int i = 0; i < points_size; i++) {
+            inlier_flags[i] = estimator->GetError(i) < threshold;
         }
-
         unsigned int max_samples = maximality_samples[termination_length-1];
 
         // go through sorted points and track inlier counts

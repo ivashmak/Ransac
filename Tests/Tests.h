@@ -105,7 +105,7 @@ public:
                 // re init termination criteria for prosac
                 ProsacTerminationCriteria *  prosac_termination_criteria_ = new ProsacTerminationCriteria;
                 prosac_termination_criteria_->initProsacTerminationCriteria
-                        (((ProsacSampler *) sampler)->getGrowthFunction(), model, points.rows);
+                        (((ProsacSampler *) sampler)->getGrowthFunction(), model, points.rows, estimator);
 
                 termination_criteria = prosac_termination_criteria_;
             }

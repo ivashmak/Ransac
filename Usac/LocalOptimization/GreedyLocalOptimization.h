@@ -13,6 +13,22 @@ public:
 
     }
 
+    /*
+        If model is so far the best.
+        While (true)
+            Estimate non minimal model with all inliers of the best model.
+            Get model score of the new model.
+            if model score is better than best score
+                Update best score and best model.
+            else
+                Two options
+                1. break.
+                2. 1. Make relaxation, e.g. increase threshold like in iterative ransac LO.
+                2. 2. Or get subset of inliers of best model and estimate new model with them like
+                      in inner ransac.
+                Do small finite number of relaxtions if it is not help then break.
+                         
+     */
     void getLOScore (Score * best_score, Model * best_model, Quality * quality, Estimator * estimator, int points_size) {
         if (best_score->inlier_number <= best_model->sample_number)
             return;
@@ -48,7 +64,7 @@ public:
                 std::cout << "threshold relaxation\n";
 //                threshold_relaxation(model, num_relaxations);
                 if (last_update == 3) {
-                    model->threshold *= 4;
+                    model->threshold *= 3;
                 } else {
                     model->threshold = std::max (best_model->threshold, (float)(model->threshold-0.15));
                 }
@@ -88,9 +104,6 @@ public:
                 std::copy (inliers, inliers + score->inlier_number, max_inliers);
 
                 if (! same_threshold) {
-                    model->threshold = best_model->threshold;
-                    num_relaxations = 0;
-                    same_threshold = true;
                     continue;
                 }
 
@@ -105,12 +118,6 @@ public:
 
 
 private:
-    /*
-     * Two options of relaxation:
-     * 1. Increase threshold like in iterative Ransac LO.
-     * 2. Decrease inlier number
-     */
-
     void inliers_relaxation (const int * const inliers, int inliers_size, int * new_inliers) {
         UniformRandomGenerator * uniformRandomGenerator = new UniformRandomGenerator;
         uniformRandomGenerator->resetTime();

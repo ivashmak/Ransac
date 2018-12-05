@@ -118,15 +118,15 @@ void Tests::testLineFitting() {
      initProsac(sampler, model->sample_number, points.size());
      ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
 
+     estimator = new Line2DEstimator (sorted_points);
      ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
      prosac_termination_criteria_->initProsacTerminationCriteria (prosac_sampler_->getGrowthFunction(),
-                                                model, points_size);
+                                                model, points_size, estimator);
 
      termination_criteria = prosac_termination_criteria_;
 
      cv::Mat sorted_pts (sorted_points);
-     estimator = new Line2DEstimator (sorted_points);
-
+     
      test (sorted_pts, estimator, sampler, model, quality, termination_criteria, neighbors, img_name, gt_inliers);
 
      // switch to unsorted points back (not necessary, just for testing)
@@ -316,7 +316,7 @@ void store_results_line2d () {
                     ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
 
                     prosac_termination_criteria_->initProsacTerminationCriteria (prosac_sampler_->getGrowthFunction(),
-                                                               model, points_size);
+                                                               model, points_size, estimator);
 
                     termination_criteria = prosac_termination_criteria_;                    
                 } else {
