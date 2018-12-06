@@ -26,7 +26,7 @@ void storeResults ();
 int getGTNumInliers (const std::string &filename, float threshold);
 
 void Tests::testHomographyFitting() {
-    std::string img_name = "graf";
+    std::string img_name = "CapitalRegion";
     cv::Mat points, points1, points2;
     read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
 
@@ -70,7 +70,8 @@ void Tests::testHomographyFitting() {
 
     unsigned int points_size = (unsigned int) points.rows;
     std::cout << "points size " << points_size << "\n";
-    int knn = 40;
+    int knn = 2;
+    float threshold = 2;
 
     cv::Mat_<float> neighbors, neighbors_dists;
     NearestNeighbors nn;
@@ -108,18 +109,18 @@ void Tests::testHomographyFitting() {
     Estimator * estimator;
     TerminationCriteria *termination_criteria = new StandardTerminationCriteria;
     Quality *quality = new Quality;
-    int gt_inliers = getGTNumInliers (img_name, 3 /*model->threshold*/);
+    int gt_inliers = getGTNumInliers (img_name, threshold /*model->threshold*/);
 
 //     ---------------------- uniform ----------------------------------
-//   model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
-//   model->setStandardRansacLO(0);
-//   model->setGraphCutLO(0);
-//   model->setSprtLO(0);
-//
-//   sampler = new UniformSampler;
-//   initUniform(sampler, model->sample_number, points_size);
-//
-//   estimator = new HomographyEstimator (points);
+   model = new Model (threshold, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
+   model->setStandardRansacLO(0);
+   model->setGraphCutLO(1);
+   model->setSprtLO(0);
+
+   sampler = new UniformSampler;
+   initUniform(sampler, model->sample_number, points_size);
+
+   estimator = new HomographyEstimator (points);
 
 //    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
 //            img_name, gt_inliers);
@@ -128,7 +129,7 @@ void Tests::testHomographyFitting() {
 
 
 //     ---------------------- napsac ----------------------------------
-//    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Napsac);
+//    model = new Model (threshold, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Napsac);
 //    model->setStandardRansacLO(0);
 //    model->setGraphCutLO(0);
 //    model->setSprtLO(0);
@@ -146,7 +147,7 @@ void Tests::testHomographyFitting() {
 
 
 // ------------------ prosac ---------------------
-//     model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Prosac);
+//     model = new Model (threshold, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Prosac);
 //     model->setStandardRansacLO(0);
 //     model->setGraphCutLO(0);
 //     model->setSprtLO(0);
@@ -166,10 +167,10 @@ void Tests::testHomographyFitting() {
 //          img_name, gt_inliers);
 //     -------------------------------------------------
 //
-//    getStatisticalResults(points, estimator, model, sampler, termination_criteria,
-//                          quality, neighbors, 500, true, false, gt_inliers, nullptr);
-//
-     storeResults();
+    getStatisticalResults(points, estimator, model, sampler, termination_criteria,
+                          quality, neighbors, 100, true, false, gt_inliers, nullptr);
+
+//     storeResults();
 
 }
 
@@ -209,8 +210,8 @@ void storeResults () {
             results_matlab.open (mfname);
             results_total.open (fname);
             int knn = 7;
-
-            Model *model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, smplr);
+            float threshold = 2;
+            Model *model = new Model (threshold, 4, 0.99, knn, ESTIMATOR::Homography, smplr);
             model->setStandardRansacLO(lo[l][0]);
             model->setGraphCutLO(lo[l][1]);
             model->setSprtLO(lo[l][2]);

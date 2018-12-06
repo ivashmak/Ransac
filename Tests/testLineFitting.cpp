@@ -54,7 +54,7 @@ void Tests::testLineFitting() {
 
     unsigned int points_size = points.size();
 
-    int knn = 3;
+    int knn = 13;
     cv::Mat_<float> pts = cv::Mat (points);
 
     cv::Mat_<float> neighbors, neighbors_dists;

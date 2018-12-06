@@ -6,7 +6,7 @@ enum SAMPLER  { NullS, Uniform, GradualNapsac, Napsac, Prosac, Evsac };
 
 class Model {
 public:
-	float threshold = 5;
+	float threshold = 2;
 	int sample_number;
 	float desired_prob = 0.95;
 	int max_iterations = 10000;
