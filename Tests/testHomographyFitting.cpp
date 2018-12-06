@@ -26,7 +26,7 @@ void storeResults ();
 int getGTNumInliers (const std::string &filename, float threshold);
 
 void Tests::testHomographyFitting() {
-    std::string img_name = "boat";
+    std::string img_name = "graf";
     cv::Mat points, points1, points2;
     read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
 
@@ -70,7 +70,7 @@ void Tests::testHomographyFitting() {
 
     unsigned int points_size = (unsigned int) points.rows;
     std::cout << "points size " << points_size << "\n";
-    int knn = 7;
+    int knn = 40;
 
     cv::Mat_<float> neighbors, neighbors_dists;
     NearestNeighbors nn;
@@ -111,32 +111,34 @@ void Tests::testHomographyFitting() {
     int gt_inliers = getGTNumInliers (img_name, 3 /*model->threshold*/);
 
 //     ---------------------- uniform ----------------------------------
-   model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
-   model->setStandardRansacLO(0);
-   model->setGraphCutLO(0);
-   model->setSprtLO(0);
+//   model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
+//   model->setStandardRansacLO(0);
+//   model->setGraphCutLO(0);
+//   model->setSprtLO(0);
+//
+//   sampler = new UniformSampler;
+//   initUniform(sampler, model->sample_number, points_size);
+//
+//   estimator = new HomographyEstimator (points);
 
-   sampler = new UniformSampler;
-   initUniform(sampler, model->sample_number, points_size);
-
-   estimator = new HomographyEstimator (points);
-
-   // test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
-   //         img_name, gt_inliers);
+//    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
+//            img_name, gt_inliers);
     // --------------------------------------------------------------
 
 
 
 //     ---------------------- napsac ----------------------------------
-//    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Napsac);
-//    model->setStandardRansacLO(0);
-//    model->setGraphCutLO(0);
-//    model->setSprtLO(0);
-//
-//    initNapsac(sampler, neighbors, model->k_nearest_neighbors, model->sample_number);
-//
-//    estimator = new HomographyEstimator (points);
-//
+    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Napsac);
+    model->setStandardRansacLO(0);
+    model->setGraphCutLO(0);
+    model->setSprtLO(0);
+
+//    std::cout << neighbors << "\n";
+
+    initNapsac(sampler, neighbors, model->k_nearest_neighbors, model->sample_number);
+
+    estimator = new HomographyEstimator (points);
+
 //    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
 //          img_name, gt_inliers);
     // --------------------------------------------------------------
@@ -148,6 +150,8 @@ void Tests::testHomographyFitting() {
 //     model->setStandardRansacLO(0);
 //     model->setGraphCutLO(0);
 //     model->setSprtLO(0);
+//        // get neigbors for sorted points
+//        nn.getNearestNeighbors_nanoflann(sorted_points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
    //     estimator = new HomographyEstimator (sorted_points);
 
 // //    initProsac(sampler, model->sample_number, points_size);
@@ -163,7 +167,7 @@ void Tests::testHomographyFitting() {
 //     -------------------------------------------------
 //
     getStatisticalResults(points, estimator, model, sampler, termination_criteria,
-                          quality, neighbors, 100, true, false, gt_inliers, nullptr);
+                          quality, neighbors, 500, true, false, gt_inliers, nullptr);
 //
 //     storeResults();
 
@@ -176,9 +180,9 @@ void Tests::testHomographyFitting() {
 void storeResults () {
     std::vector<std::string> points_filename = getHomographyDatasetPoints();
     Tests tests;
+    NearestNeighbors nn;
 
     int N_runs = 100;
-    NearestNeighbors nn;
 
     std::vector<SAMPLER> samplers;
     samplers.push_back(SAMPLER::Uniform);
@@ -242,9 +246,8 @@ void storeResults () {
                 // get neighbors
                 cv::Mat neighbors, neighbors_dists;
                 nn.getNearestNeighbors_nanoflann(points, knn, neighbors, true, neighbors_dists);
-
                 //
-                cv::Mat_<float> sorted_points;
+
                 if (smplr == SAMPLER::Prosac) {
                     std::vector<int> sorted_idx(points_size);
                     std::iota(sorted_idx.begin(), sorted_idx.end(), 0);
@@ -261,6 +264,7 @@ void storeResults () {
                         return sum1 < sum2;
                     });
 
+                    cv::Mat_<float> sorted_points;
                     for (int i = 0; i < points_size; i++) {
                         sorted_points.push_back(points.row(sorted_idx[i]));
                     }

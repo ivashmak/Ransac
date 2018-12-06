@@ -2,7 +2,7 @@
 #define USAC_FUNDAMENTALESTIMATOR_H
 
 #include "Estimator.h"
-#include "Fundamental/EightPoints.h"
+#include "Fundamental/FundemantalSolver.h"
 
 class FundamentalEstimator : public Estimator {
 private:

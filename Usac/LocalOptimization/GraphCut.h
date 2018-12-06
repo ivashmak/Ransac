@@ -105,7 +105,8 @@ public:
                     }
                 } else {
                     if (! estimator->EstimateModelNonMinimalSample(inliers, inner_inliers_size, *gc_model)) {
-                        continue;
+                        // break loop of inner iterations if inliers are bad.
+                        break;
                     }
                 }
 

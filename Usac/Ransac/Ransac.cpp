@@ -130,16 +130,19 @@ void Ransac::run(cv::InputArray input_points) {
         }
 
 //      debug
-        for (int s = 0; s < model->sample_number; s++) {
-            std::cout << sample[s] << " ";
-            for (int j = 0; j < model->sample_number; j++) {
-                if (s == j) continue;
-                if (sample[s] == sample[j]) {
-                    std::cout << "SAMPLE EQUAL\n";
-                }
-            }
-        }
-        std::cout << "\n";
+//        bool eq = false;
+//        for (int s = 0; s < model->sample_number; s++) {
+//            std::cout << sample[s] << " ";
+//            for (int j = 0; j < model->sample_number; j++) {
+//                if (s == j) continue;
+//                if (sample[s] == sample[j]) {
+//                    eq = true;
+//                }
+//            }
+//        }
+//        std::cout << "\n";
+//        if (eq) std::cout << "SAMPLE EQUAL\n";
+
 //        sample[0] = 124;
 //        sample[1] = 119;
 //        sample[2] = 53;
@@ -167,7 +170,7 @@ void Ransac::run(cv::InputArray input_points) {
                 quality->getNumberInliers(current_score, models[i]);
             }
 
-            std::cout << "current num inl " << current_score->inlier_number << "\n";
+//            std::cout << "current num inl " << current_score->inlier_number << "\n";
 //            std::cout << models[i]->returnDescriptor() << "\n\n";
 
             if (current_score->bigger(best_score)) {
@@ -230,9 +233,9 @@ void Ransac::run(cv::InputArray input_points) {
                     break;
                 }
 
-                 std::cout << "max iters prediction = " << max_iters << '\n';
+//                 std::cout << "max iters prediction = " << max_iters << '\n';
             } // end of if so far the best score
-             std::cout << "current iteration = " << iters << '\n';
+//             std::cout << "current iteration = " << iters << '\n';
             iters++;
         } // end loop of number of models
     } // end main while loop
@@ -263,17 +266,13 @@ void Ransac::run(cv::InputArray input_points) {
 
 
 
-    // GreedyLO * greedyLO = new GreedyLO;
-    // greedyLO->getLOScore(best_score, best_model, quality, estimator, points_size);
-
-
     int * max_inliers = new int[points_size];
 //    std::cout << "Calculate Non minimal model\n";
 
     Model *non_minimal_model = new Model;
     non_minimal_model->copyFrom (model);
 
-    std::cout << "end best inl num " << best_score->inlier_number << '\n';
+//    std::cout << "end best inl num " << best_score->inlier_number << '\n';
 
     // usually 4-5 iterations are enough
     unsigned int normalizations = 10;
@@ -289,7 +288,7 @@ void Ransac::run(cv::InputArray input_points) {
             quality->getNumberInliers(current_score, non_minimal_model, true, max_inliers);
 
             // Priority is for non minimal model estimation
-            std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
+//            std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
 
             if ((float) current_score->inlier_number / best_score->inlier_number < 0.8) {
                 break;

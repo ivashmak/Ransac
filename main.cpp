@@ -22,8 +22,8 @@ int main (int args, char ** argv) {
 //    generate_syntectic_dataset();
 
 //     run tests
-   tests.testLineFitting();
-    // tests.testHomographyFitting();
+//   tests.testLineFitting();
+     tests.testHomographyFitting();
 //    tests.testFundamentalFitting();
 //    tests.testEssentialFitting();
 

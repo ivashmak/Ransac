@@ -41,7 +41,13 @@ public:
         this->knn = knn_;
         this->sample_size = sample_size_;
         this->points_size = points_size_;
-        
+
+        /* check if sample number minus 1 (initial point) is less or equal than k nearest neighbors
+         * so for line is enough 1 neighbor.
+         * for homography at least 3 neighbors are required.
+         */
+        assert(sample_size-1 <= knn);
+
         random_generator = new ArrayRandomGenerator;
         random_generator->resetGenerator(0, points_size-1);
 
@@ -63,14 +69,19 @@ public:
         for (int i = 1; i < sample_size; i++) {
             // Get the farthest neighbor
             sample[i] = neighbors[(knn * initial_point) + next_neighbors[initial_point] + knn-1];
-//            // move next neighbor
 //            next_neighbors[initial_point] = (next_neighbors[initial_point] - 1) % -knn;
+//            std::cout << sample[i] << " ";
+
+            // move next neighbor
             next_neighbors[initial_point]--;
             if (next_neighbors[initial_point] == -knn) {
                 next_neighbors[initial_point] = 0;
             }
-//            std::cout << sample[i] << " ";
         }
+        // n1 n2 ... nk
+        // first sample is nk nk-1 ... nk-m, m is sample_size
+        // next sample is nk-1 nk2-2 ... nk-1-m
+//        next_neighbors[initial_point] += sample_size-2;
 //        std::cout << '\n';
     }
 

@@ -18,7 +18,13 @@ public:
     void testFundamentalFitting ();
     void testEssentialFitting ();
 
-    void initProsac (Sampler *& sampler, unsigned int sample_number, unsigned int points_size);
+    void initLine2D (Estimator *& estimator, const cv::Mat& points);
+    void initHomography (Estimator *& estimator, const cv::Mat& points);
+    void initFundamental (Estimator *& estimator, const cv::Mat& points);
+    void initEssential (Estimator *& estimator, const cv::Mat& points);
+    void initEstimator (Estimator *& estimator, Model * model, const cv::Mat& points);
+
+        void initProsac (Sampler *& sampler, unsigned int sample_number, unsigned int points_size);
     void initUniform (Sampler *& sampler, unsigned int sample_number, unsigned int points_size);
     void initNapsac (Sampler *& sampler, const cv::Mat &neighbors, unsigned int k_nearest_neighbors,
                             unsigned int sample_number);
@@ -133,11 +139,11 @@ public:
                  */  
                 if (num_inlierss[i]/gt_num_inliers < 0.5) {
                     fails++;
-                    std::cout << "FAIL\n";
-                    exit (111);
+//                    std::cout << "FAIL\n";
+//                    exit (111);
                 }
             }
-            std::cout << "----------------------------------------------------------------\n";
+//            std::cout << "----------------------------------------------------------------\n";
         }
         
         StatisticalResults * results = new StatisticalResults;

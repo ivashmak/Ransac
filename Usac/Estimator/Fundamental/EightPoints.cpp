@@ -1,7 +1,4 @@
-#ifndef USAC_EIGHTPOINTSALGORITHM_H
-#define USAC_EIGHTPOINTSALGORITHM_H
-
-#include <opencv2/core/mat.hpp>
+#include "FundemantalSolver.h"
 #include "../DLT/DLT.h"
 
 bool EightPointsAlgorithm (const float * const pts, const int * const sample, int sample_number, cv::Mat &F) {
@@ -20,7 +17,7 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, in
     unsigned int norm_points_idx;
     float a[9];
 
-    for (int i = 0; i < sample_number; i++) {
+    for (unsigned int i = 0; i < sample_number; i++) {
         norm_points_idx = 4*i;
         x1 = norm_points_ptr[norm_points_idx];
         y1 = norm_points_ptr[norm_points_idx+1];
@@ -128,6 +125,3 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, in
 
     return true;
 }
-
-
-#endif //USAC_EIGHTPOINTSALGORITHM_H

@@ -1,6 +1,5 @@
 #include "Tests.h"
 
-#include "../Usac/Estimator/Fundamental/SevenPoints.h"
 #include "../Detector/ReadPoints.h"
 #include "../Usac/Helper/Drawing/Drawing.h"
 #include "../Usac/Helper/Logging.h"

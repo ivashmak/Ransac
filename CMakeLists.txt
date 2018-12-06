@@ -54,8 +54,9 @@ add_executable(
         Usac/Estimator/DLT/NormalizingTransformation.cpp
 
         Usac/Estimator/Essential/FivePoints.h
-        Usac/Estimator/Fundamental/SevenPoints.h
-        Usac/Estimator/Fundamental/EightPoints.h
+        Usac/Estimator/Fundamental/SevenPoints.cpp
+        Usac/Estimator/Fundamental/EightPoints.cpp
+        Usac/Estimator/Fundamental/FundemantalSolver.h
 
         Usac/LocalOptimization/LocalOptimization.h
         Usac/LocalOptimization/RansacLocalOptimization.h
@@ -72,6 +73,7 @@ add_executable(
         Tests/test.cpp
         Tests/StatisticalResults.h
         Tests/samplerInitialization.cpp
+        Tests/estimatorInitialization.cpp
 
         RandomGenerator/RandomGenerator.h
         RandomGenerator/ArrayRandomGenerator.h

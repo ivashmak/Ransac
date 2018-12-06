@@ -60,3 +60,18 @@ Repeated point?
 Inner and Iterative ransac LO is not good for Line fitting.
 
 How sample in Local Optimization (by current sampler or always uniformly)?
+
+New optimization:
+While Not Termination Criteria
+Get model
+If current model differs in at most epsilon for every element with one of the previous model, then go to 2.
+Otherwise save model.
+E.g. Hi is homography matrix in i-th step
+If for any Hj, j < i: abs(Hi - Hj) <= eps = (1 1 1; 1 1 1; 1 1 1), where 1 means true and i.e. eps = 1e-3, then continue;
+      4.   Evaluate model.
+
+Proof.
+If we found model that is very similar to previous one, then model score is similar too. And we don’t need to evaluate this model again. On the other side the disadvantage is saving different model.
+
+-----------------------------------------
+I found that if estimate by non minimal model in the end more than 1 time, the number of inliers can be up to 2-3 times more.

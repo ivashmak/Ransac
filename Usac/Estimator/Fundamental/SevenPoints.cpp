@@ -1,5 +1,3 @@
-#ifndef USAC_SEVENPOINTSALGORITHM_H
-#define USAC_SEVENPOINTSALGORITHM_H
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
 //  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
@@ -46,8 +44,7 @@
 // http://cvrs.whu.edu.cn/downloads/ebooks/Multiple%20View%20Geometry%20in%20Computer%20Vision%20(Second%20Edition).pdf
 // page 279
 
-#include <opencv2/core/mat.hpp>
-#include <iostream>
+#include "FundemantalSolver.h"
 
 unsigned int SevenPointsAlgorithm (const float * const pts, const int * const sample, cv::Mat &F) {
     float w[7], u[9*9], v[9*9], c[4], r[3];
@@ -157,6 +154,3 @@ unsigned int SevenPointsAlgorithm (const float * const pts, const int * const sa
     }
     return nroots;
 }
-
-
-#endif //USAC_SEVENPOINTSALGORITHM_H
