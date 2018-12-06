@@ -128,16 +128,16 @@ void Tests::testHomographyFitting() {
 
 
 //     ---------------------- napsac ----------------------------------
-    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Napsac);
-    model->setStandardRansacLO(0);
-    model->setGraphCutLO(0);
-    model->setSprtLO(0);
-
-//    std::cout << neighbors << "\n";
-
-    initNapsac(sampler, neighbors, model->k_nearest_neighbors, model->sample_number);
-
-    estimator = new HomographyEstimator (points);
+//    model = new Model (3, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Napsac);
+//    model->setStandardRansacLO(0);
+//    model->setGraphCutLO(0);
+//    model->setSprtLO(0);
+//
+////    std::cout << neighbors << "\n";
+//
+//    initNapsac(sampler, neighbors, model->k_nearest_neighbors, model->sample_number);
+//
+//    estimator = new HomographyEstimator (points);
 
 //    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
 //          img_name, gt_inliers);
@@ -166,10 +166,10 @@ void Tests::testHomographyFitting() {
 //          img_name, gt_inliers);
 //     -------------------------------------------------
 //
-    getStatisticalResults(points, estimator, model, sampler, termination_criteria,
-                          quality, neighbors, 500, true, false, gt_inliers, nullptr);
+//    getStatisticalResults(points, estimator, model, sampler, termination_criteria,
+//                          quality, neighbors, 500, true, false, gt_inliers, nullptr);
 //
-//     storeResults();
+     storeResults();
 
 }
 
@@ -186,7 +186,7 @@ void storeResults () {
 
     std::vector<SAMPLER> samplers;
     samplers.push_back(SAMPLER::Uniform);
-    samplers.push_back(SAMPLER::Prosac);
+//    samplers.push_back(SAMPLER::Prosac);
 
     int lo_combinations = 5;
     bool lo[lo_combinations][3] = {
