@@ -59,7 +59,7 @@ void Ransac::run(cv::InputArray input_points) {
         models.push_back (new Model(*model));
     }
 
-    Model *best_model = new Model;
+    Model *best_model = new Model (model);
     best_model->copyFrom (model);
 
     // get information from model about LO
@@ -175,8 +175,8 @@ void Ransac::run(cv::InputArray input_points) {
 
             if (current_score->bigger(best_score)) {
 
-               // GreedyLO * greedyLO = new GreedyLO;
-               // greedyLO->getLOScore(current_score, models[i], quality, estimator, points_size);
+//                GreedyLO * greedyLO = new GreedyLO;
+//                greedyLO->getLOScore(current_score, models[i], quality, estimator, points_size);
 
 //                  std::cout << "current score = " << current_score->score << '\n';
 
@@ -269,8 +269,7 @@ void Ransac::run(cv::InputArray input_points) {
     int * max_inliers = new int[points_size];
 //    std::cout << "Calculate Non minimal model\n";
 
-    Model *non_minimal_model = new Model;
-    non_minimal_model->copyFrom (model);
+    Model *non_minimal_model = new Model (model);
 
 //    std::cout << "end best inl num " << best_score->inlier_number << '\n';
 

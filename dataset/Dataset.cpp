@@ -62,7 +62,7 @@ std::vector<std::string> getHomographyDatasetPoints (bool reset_files) {
 
 
 std::vector<std::string> getFundamentalDatasetPoints (bool reset_files) {
-    std::vector<std::string> fnames = {"barrsmith_annot.txt", "barrsmith_pts.txt", "bonhall_pts.txt",
+    std::vector<std::string> fnames = {"barrsmith_pts.txt", "bonhall_pts.txt",
                                        "bonython_pts.txt", "elderhalla_pts.txt", "elderhallb_pts.txt",
                                        "hartley_pts.txt", "johnssona_pts.txt", "johnssonb_pts.txt",
                                        "ladysymon_pts.txt", "library_pts.txt", "napiera_pts.txt",

@@ -80,7 +80,7 @@ void Tests::testLineFitting() {
         return sum1 < sum2;
     });
 
-    std::vector<cv::Point_<float>> sorted_points;
+    cv::Mat_<float> sorted_points;
     for (int i = 0; i < points_size; i++) {
         sorted_points.push_back(points[sorted_idx[i]]);
     }
@@ -110,28 +110,27 @@ void Tests::testLineFitting() {
 
 
     // --------------  prosac ---------------------
-     model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Prosac);
-     model->setStandardRansacLO(0);
-     model->setGraphCutLO(0);
-     model->setSprtLO(0);
+    model = new Model (10, 4, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Prosac);
+    model->setStandardRansacLO(0);
+    model->setGraphCutLO(0);
+    model->setSprtLO(0);
+    // get neigbors for sorted points
+//    nn.getNearestNeighbors_nanoflann(cv::Mat(sorted_points), model->k_nearest_neighbors, neighbors, false, neighbors_dists);
 
-     initProsac(sampler, model->sample_number, points.size());
-     ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
+    estimator = new Line2DEstimator (sorted_points);
 
-     estimator = new Line2DEstimator (sorted_points);
-     ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
-     prosac_termination_criteria_->initProsacTerminationCriteria (prosac_sampler_->getGrowthFunction(),
-                                                model, points_size, estimator);
+    initSampler(sampler, model, points_size, points, neighbors);
 
-     termination_criteria = prosac_termination_criteria_;
+    termination_criteria = new ProsacTerminationCriteria;
 
-     cv::Mat sorted_pts (sorted_points);
-     
-     test (sorted_pts, estimator, sampler, model, quality, termination_criteria, neighbors, img_name, gt_inliers);
+    ((ProsacTerminationCriteria *) termination_criteria)->initProsacTerminationCriteria (((ProsacSampler *)sampler)->getGrowthFunction(),
+                                                                                         model, points_size, estimator);
 
-     // switch to unsorted points back (not necessary, just for testing)
-     estimator = new Line2DEstimator (points);
-     termination_criteria = new StandardTerminationCriteria;
+    test (sorted_points, estimator, sampler, model, quality, termination_criteria, neighbors,
+          img_name, gt_inliers);
+    // get back
+    estimator = new Line2DEstimator(points);
+    termination_criteria = new StandardTerminationCriteria;
      // ------------------------------------------------
 
 

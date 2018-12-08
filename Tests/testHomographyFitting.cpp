@@ -21,16 +21,45 @@
 #include "../Usac/Utils/NearestNeighbors.h"
 #include "../Usac/TerminationCriteria/ProsacTerminationCriteria.h"
 #include "../Usac/Sampler/NapsacSampler.h"
+#include "../Detector/detector.h"
 
 void storeResults ();
 int getGTNumInliers (const std::string &filename, float threshold);
 
-void Tests::testHomographyFitting() {
-    std::string img_name = "CapitalRegion";
-    cv::Mat points, points1, points2;
-    read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
+void detectAndSaveFeatures (const std::vector<std::string>& dataset) {
+    for (const std::string &name : dataset) {
+        std::cout << name << "\n";
+        cv::Mat points;
 
-   // points1 = (cv::Mat_<float> (10, 2) << 0.616188105841203, 0.511878887258433,
+        cv::Mat image2, image1 = cv::imread ("../dataset/homography/"+name+"A.png");
+        if (image1.empty()) {
+            image1 = cv::imread ("../dataset/homography/"+name+"A.jpg");
+            if (image1.empty()) {
+                std::cout << "invalid image name!\n";
+                exit (111);
+            }
+            image2 = cv::imread ("../dataset/homography/"+name+"B.jpg");
+        } else {
+            image2 = cv::imread ("../dataset/homography/"+name+"B.png");
+        }
+
+        DetectFeatures("../dataset/homography/sift_update/"+name+"_pts.txt", image1, image2, points);
+        return;
+    }
+}
+
+void Tests::testHomographyFitting() {
+
+    detectAndSaveFeatures(getHomographyDatasetPoints());
+
+    std::string img_name = "adam";
+    cv::Mat points, points1, points2;
+//    read_points (points1, points2, "../dataset/homography/sift_update/"+img_name+"_pts.txt");
+//    cv::hconcat(points1, points2, points);
+
+    LoadPointsFromFile(points, ("../dataset/homography/sift_update/"+img_name+"_spts.txt").c_str());
+
+    // points1 = (cv::Mat_<float> (10, 2) << 0.616188105841203, 0.511878887258433,
    //           -1.235108941720951,   0.298181899685778,
    //           -0.602445781444621, 0.395316341521395,
    //            0.638537560775656  , 0.476360331650075,
@@ -65,13 +94,14 @@ void Tests::testHomographyFitting() {
   -0.000014881986801   0.000066358177039   0.010000000000000]
 
      */
-    cv::hconcat(points1, points2, points);
 //    std::cout << cv::findHomography(points1, points2) << '\n';
 
     unsigned int points_size = (unsigned int) points.rows;
     std::cout << "points size " << points_size << "\n";
-    int knn = 2;
+
+    int knn = 4;
     float threshold = 2;
+    float confidence = 0.95;
 
     cv::Mat_<float> neighbors, neighbors_dists;
     NearestNeighbors nn;
@@ -112,16 +142,16 @@ void Tests::testHomographyFitting() {
     int gt_inliers = getGTNumInliers (img_name, threshold /*model->threshold*/);
 
 //     ---------------------- uniform ----------------------------------
-   model = new Model (threshold, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
-   model->setStandardRansacLO(0);
-   model->setGraphCutLO(1);
-   model->setSprtLO(0);
-
-   sampler = new UniformSampler;
-   initUniform(sampler, model->sample_number, points_size);
-
-   estimator = new HomographyEstimator (points);
-
+//   model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
+//   model->setStandardRansacLO(0);
+//   model->setGraphCutLO(0);
+//   model->setSprtLO(0);
+//
+//   sampler = new UniformSampler;
+//   initUniform(sampler, model->sample_number, points_size);
+//
+//   estimator = new HomographyEstimator (points);
+//
 //    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
 //            img_name, gt_inliers);
     // --------------------------------------------------------------
@@ -129,7 +159,7 @@ void Tests::testHomographyFitting() {
 
 
 //     ---------------------- napsac ----------------------------------
-//    model = new Model (threshold, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Napsac);
+//    model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Napsac);
 //    model->setStandardRansacLO(0);
 //    model->setGraphCutLO(0);
 //    model->setSprtLO(0);
@@ -147,28 +177,30 @@ void Tests::testHomographyFitting() {
 
 
 // ------------------ prosac ---------------------
-//     model = new Model (threshold, 4, 0.99, knn, ESTIMATOR::Homography, SAMPLER::Prosac);
-//     model->setStandardRansacLO(0);
-//     model->setGraphCutLO(0);
-//     model->setSprtLO(0);
-//        // get neigbors for sorted points
-//        nn.getNearestNeighbors_nanoflann(sorted_points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
-   //     estimator = new HomographyEstimator (sorted_points);
+     model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Prosac);
+     model->setStandardRansacLO(0);
+     model->setGraphCutLO(0);
+     model->setSprtLO(0);
+        // get neigbors for sorted points
+        nn.getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
+        estimator = new HomographyEstimator (points);
 
-// //    initProsac(sampler, model->sample_number, points_size);
-//     initSampler(sampler, model, points_size, points, neighbors);
+     initSampler(sampler, model, points_size, points, neighbors);
 
-//     ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
-//     prosac_termination_criteria_->initProsacTerminationCriteria (((ProsacSampler *)sampler)->getGrowthFunction(),
-//                                                                  model, points_size, estimator);
-//     termination_criteria = prosac_termination_criteria_;
+    termination_criteria = new ProsacTerminationCriteria;
 
-//    test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
-//          img_name, gt_inliers);
+    ((ProsacTerminationCriteria *) termination_criteria)->initProsacTerminationCriteria (((ProsacSampler *)sampler)->getGrowthFunction(),
+                                                                  model, points_size, estimator);
+
+     test (points, estimator, sampler, model, quality, termination_criteria, neighbors,
+          img_name, gt_inliers);
+     // get back
+     estimator = new HomographyEstimator(points);
+     termination_criteria = new StandardTerminationCriteria;
 //     -------------------------------------------------
 //
-    getStatisticalResults(points, estimator, model, sampler, termination_criteria,
-                          quality, neighbors, 100, true, false, gt_inliers, nullptr);
+//    getStatisticalResults(points, estimator, model, sampler, termination_criteria,
+//                          quality, neighbors, 100, true, false, gt_inliers, nullptr);
 
 //     storeResults();
 
@@ -233,7 +265,7 @@ void storeResults () {
             std::cout << tests.sampler2string(smplr) << "\n";
             std::cout << lo[l][0] << " " << lo[l][1] << " " << lo[l][2] << "\n";
 
-            for (std::string img_name : points_filename) {
+            for (const std::string &img_name : points_filename) {
                 std::cout << img_name << '\n';
 
                 cv::Mat points1, points2, points;

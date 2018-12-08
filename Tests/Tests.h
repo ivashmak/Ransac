@@ -37,7 +37,7 @@ public:
 
     void initSampler (Sampler *& sampler, Model * model, unsigned int points_size, cv::InputArray points, const cv::Mat& neighbors);
 
-    void test (cv::InputArray points,
+    void test (cv::Mat points,
                Estimator * estimator,
                Sampler * sampler,
                Model * model,

@@ -1,4 +1,5 @@
 #include "NearestNeighbors.h"
+#include "../../Detector/ReadPoints.h"
 
 #include <Eigen/Dense>
 #include <opencv2/core/eigen.hpp>
@@ -150,26 +151,97 @@ void NearestNeighbors::getNearestNeighbors_flann (const cv::Mat& points, int k_n
 //    std::cout << dists << "\n\n";
 }
 
+
+void NearestNeighbors::getGridNearestNeighbors (const cv::Mat& points, int k_nearest_neighbors, std::vector<std::vector<int>> &neighbors) {
+    std::vector<std::vector<std::vector<int>>> cell1, cell2;
+    for (int i = 0; i < 50; i++) {
+        cell1.push_back(std::vector<std::vector<int>>());
+        cell2.push_back(std::vector<std::vector<int>>());
+        for (int j = 0; j < 50; j++) {
+            cell1[i].push_back(std::vector<int>());
+            cell2[i].push_back(std::vector<int>());
+        }
+    }
+
+    float * points_p = (float *) points.data;
+    unsigned int idx, points_size = points.rows;
+    for (unsigned int i = 0; i < points_size; i++) {
+        idx = 4 * i;
+//        std::cout << points_p[idx] << " " << points_p[idx+1] << " " << points_p[idx+2] << " " << points_p[idx+3] << "\n";
+
+        cell1[(int)points_p[idx] % 50][(int)points_p[idx+1] % 50].push_back(i);
+        cell2[(int)points_p[idx+2] % 50][(int)points_p[idx+3] % 50].push_back(i);
+
+//        cell1[points_p[idx] / 50][points_p[idx+1] / 50].push_back(i);
+//        cell2[points_p[idx+2] / 50][points_p[idx+3] / 50].push_back(i);
+    }
+
+    for (int i = 0; i < points_size; i++) {
+        neighbors.push_back(std::vector<int>());
+    }
+
+    for (int i = 0; i < cell1.size(); i++) {
+        for (int j = 0; j < cell1[i].size(); j++) {
+            for (int n1 = 0; n1 < cell1[i][j].size(); n1++) {
+                std::cout << cell1[i][j][n1] << " ";
+//                for (int n2 = 0; n2 < cell2[i][j].size(); n2++) {
+//                    neighbors[cell1[i][j][n1]].push_back(cell2[i][j][n2]);
+//                }
+            }
+            std::cout << "\n";
+
+            for (int n2 = 0; n2 < cell2[i][j].size(); n2++) {
+                std::cout << cell2[i][j][n2] << " ";
+//                neighbors[cell1[i][j][n1]].push_back(cell2[i][j][n2]);
+            }
+            std::cout << "\n";
+
+            std::cout << "----------------------------\n";
+        }
+    }
+}
+
 void NearestNeighbors::test (int knn) {
-    std::vector<cv::Point_<float>> points;
-    generate(points, false);
-    cv::Mat_<int> nearest_neighbors_flann, nearest_neighbors_nanoflann;
 
-    cv::Mat_<float> points_mat = cv::Mat (points);
+    std::string img_name = "LePoint1";
+    cv::Mat points, points1, points2;
+    read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
+    cv::hconcat(points1, points2, points);
+    std::vector<std::vector<int>> neighbors;
+    getGridNearestNeighbors(points, 7, neighbors);
+    cv::Mat img1 = cv::imread ("../dataset/homography/"+img_name+"A.png");
+    cv::Mat img2 = cv::imread ("../dataset/homography/"+img_name+"B.png");
+    for (int i = 0; i < points.rows; i++) {
+        cv::Scalar color (random() % 255, random() % 255, random() % 255);
+        if (neighbors[i].size() != 0)
+            cv::circle (img1, cv::Point_<float>(points1.at<float>(i, 0), points1.at<float>(i, 1)), 3, color, -1);
+        for (int n = 0; n < neighbors[i].size(); i++) {
+            cv::circle (img2, cv::Point_<float>(points1.at<float>(neighbors[i][n], 0), points1.at<float>(neighbors[i][n], 1)), 3, color, -1);
+        }
+    }
+    cv::hconcat(img1, img2, img1);
+    cv::imshow("neighbors", img1);
+    cv::waitKey(0);
 
-    std::clock_t start;
-    double duration;
-
-    start = std::clock();
-    getNearestNeighbors_flann(points_mat, knn, nearest_neighbors_flann);
-    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-    std::cout << "duration flann: "<< duration <<'\n';
-
-    start = std::clock();
-    cv::Mat neighbors_distances;
-    getNearestNeighbors_nanoflann(points_mat, knn, nearest_neighbors_nanoflann, false, neighbors_distances);
-    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-    std::cout << "duration nanoflann: "<< duration <<'\n';
+//    std::vector<cv::Point_<float>> points;
+//    generate(points, false);
+//    cv::Mat_<int> nearest_neighbors_flann, nearest_neighbors_nanoflann;
+//
+//    cv::Mat_<float> points_mat = cv::Mat (points);
+//
+//    std::clock_t start;
+//    double duration;
+//
+//    start = std::clock();
+//    getNearestNeighbors_flann(points_mat, knn, nearest_neighbors_flann);
+//    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+//    std::cout << "duration flann: "<< duration <<'\n';
+//
+//    start = std::clock();
+//    cv::Mat neighbors_distances;
+//    getNearestNeighbors_nanoflann(points_mat, knn, nearest_neighbors_nanoflann, false, neighbors_distances);
+//    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+//    std::cout << "duration nanoflann: "<< duration <<'\n';
 
     // points size 3300
     // flann 0.33 mcs

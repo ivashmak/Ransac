@@ -1,4 +1,98 @@
 #include "detector.h"
+#include "ReadPoints.h"
+
+void DetectFeatures(const std::string &name, const cv::Mat &image1, const cv::Mat &image2, cv::Mat &points)
+{
+
+    if (LoadPointsFromFile(points, name.c_str()))
+    {
+        printf("Match number: %d\n", points.rows);
+        return;
+    }
+
+    printf("Detect SIFT features\n");
+    cv::Mat descriptors1, descriptors2;
+    std::vector<cv::KeyPoint> keypoints1, keypoints2;
+
+    cv::Ptr<cv::xfeatures2d::SIFT> detector = cv::xfeatures2d::SIFT::create();
+    detector->detect(image1, keypoints1);
+    detector->compute(image1, keypoints1, descriptors1);
+    printf("Features found in the first image: %d\n", static_cast<int>(keypoints1.size()));
+
+    detector->detect(image2, keypoints2);
+    detector->compute(image2, keypoints2, descriptors2);
+    printf("Features found in the second image: %d\n", static_cast<int>(keypoints2.size()));
+
+    std::vector<std::vector< cv::DMatch >> matches_vector;
+    cv::FlannBasedMatcher matcher(new cv::flann::KDTreeIndexParams(5), new cv::flann::SearchParams(32));
+    matcher.knnMatch(descriptors1, descriptors2, matches_vector, 2);
+
+    std::vector<cv::Point2f> src_points, dst_points;
+    std::vector<std::vector< cv::DMatch >> good_matches_vector;
+
+    std::ofstream save_score;
+    std::string img_name = name.substr (0, name.length()-7); // name = dir/*_pts.txt
+    save_score.open(img_name+"score.txt");
+
+    for (auto m : matches_vector)
+    {
+        if (m.size() == 2 && m[0].distance < m[1].distance * 0.7) // 0.8?
+        {
+            auto& kp1 = keypoints1[m[0].queryIdx];
+            auto& kp2 = keypoints2[m[0].trainIdx];
+            src_points.push_back(kp1.pt);
+            dst_points.push_back(kp2.pt);
+            good_matches_vector.push_back(m);
+            // save score
+            save_score << (m[0].distance / m[1].distance) << "\n";
+        }
+    }
+    save_score.close();
+
+    points = cv::Mat(static_cast<int>(src_points.size()), 4, CV_32F);
+    float *points_ptr = reinterpret_cast<float*>(points.data);
+
+    for (int i = 0; i < src_points.size(); ++i)
+    {
+        *(points_ptr++) = src_points[i].x;
+        *(points_ptr++) = src_points[i].y;
+        *(points_ptr++) = dst_points[i].x;
+        *(points_ptr++) = dst_points[i].y;
+    }
+
+
+    SavePointsToFile(points, name.c_str(), NULL);
+    printf("Match number: %d\n", static_cast<int>(dst_points.size()));
+
+    // sort points by ratio of distances in ascending order.
+    std::sort (good_matches_vector.begin(), good_matches_vector.end(), [&] (const std::vector<cv::DMatch>& m1, const std::vector<cv::DMatch>& m2) {
+        return m1[0].distance / m1[1].distance < m2[0].distance / m2[1].distance;
+    });
+
+
+    src_points.clear();
+    dst_points.clear();
+    for (auto m : good_matches_vector) {
+//        std::cout << (m[0].distance / m[1].distance) << "\n";
+        auto& kp1 = keypoints1[m[0].queryIdx];
+        auto& kp2 = keypoints2[m[0].trainIdx];
+        src_points.push_back(kp1.pt);
+        dst_points.push_back(kp2.pt);
+//        std::cout << kp1.pt << " " << kp2.pt << "\n";
+    }
+    cv::Mat sorted_points = cv::Mat(static_cast<int>(src_points.size()), 4, CV_32F);
+    float *sorted_points_ptr = reinterpret_cast<float*>(sorted_points.data);
+
+    for (int i = 0; i < src_points.size(); ++i) {
+        *(sorted_points_ptr++) = src_points[i].x;
+        *(sorted_points_ptr++) = src_points[i].y;
+        *(sorted_points_ptr++) = dst_points[i].x;
+        *(sorted_points_ptr++) = dst_points[i].y;
+    }
+    std::string sort_points_name = img_name+"spts.txt";
+    SavePointsToFile(sorted_points, sort_points_name.c_str(), NULL);
+}
+
 
 /*
  * Get points from image with name "filename".
@@ -66,3 +160,5 @@ std::vector<cv::KeyPoint> detect(std::string filename, std::string detector_name
 	
 	return keypoints;
 }
+
+

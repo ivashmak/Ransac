@@ -46,8 +46,7 @@ public:
 
         gc_score = new Score;
 
-        gc_model = new Model;
-        gc_model->copyFrom(model);
+        gc_model = new Model (model);
 
         num_sample = 7 * model->sample_number;
         sample_size = model->sample_number;

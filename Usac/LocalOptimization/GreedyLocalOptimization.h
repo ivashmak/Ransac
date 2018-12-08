@@ -42,9 +42,8 @@ public:
         quality->getInliers(best_model->returnDescriptor(), max_inliers);
 
 
-        Model * model = new Model;
+        Model * model = new Model (best_model);
         Score * score = new Score;
-        model->copyFrom(best_model);
         model->setDescriptor(best_model->returnDescriptor());
         unsigned int num_relaxations = 0;
         unsigned int num_inl_relaxations = 0;

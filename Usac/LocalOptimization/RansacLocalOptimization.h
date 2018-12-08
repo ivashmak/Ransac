@@ -68,9 +68,7 @@ public:
         lo_sample = new int [lo_sample_size];
 
         lo_score = new Score;
-        lo_model = new Model;
-        lo_model->copyFrom(model);
-
+        lo_model = new Model (model);
         uniform_random_generator = new UniformRandomGenerator;
 
         // comment to debug

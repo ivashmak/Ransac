@@ -1,6 +1,6 @@
 #include "Tests.h"
 
-void Tests::test (cv::InputArray points,
+void Tests::test (cv::Mat points,
            Estimator * estimator,
            Sampler * sampler,
            Model * model,
@@ -40,16 +40,10 @@ void Tests::test (cv::InputArray points,
 
 
     if (model->estimator == ESTIMATOR::Homography) {
-        std::string points_filename = "../dataset/homography/"+img_name+"_pts.txt";
-        std::vector<std::string> images_filename;
-        images_filename.push_back("../dataset/homography/"+img_name+"A.png");
-        images_filename.push_back("../dataset/homography/"+img_name+"B.png");
-
-        drawing.drawHomographies(img_name, ransacOutput->getInliers(), ransacOutput->getModel()->returnDescriptor());
+        drawing.drawHomographies(img_name, points, ransacOutput->getInliers(), ransacOutput->getModel()->returnDescriptor());
     } else
     if (model->estimator == ESTIMATOR::Fundamental) {
-        cv::Mat pts = points.getMat();
-        drawing.drawEpipolarLines(img_name, pts.colRange(0,2), pts.colRange(2,4), ransacOutput->getModel()->returnDescriptor());
+        drawing.drawEpipolarLines(img_name, points.colRange(0,2), points.colRange(2,4), ransacOutput->getModel()->returnDescriptor());
     } else
     if (model->estimator == ESTIMATOR::Line2d) {
         drawing.draw(ransacOutput->getInliers(), ransacOutput->getModel(), points, img_name+".png");

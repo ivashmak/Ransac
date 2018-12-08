@@ -9,15 +9,10 @@ public:
 	float threshold = 2;
 	int sample_number;
 	float desired_prob = 0.95;
-	int max_iterations = 10000;
-	int k_nearest_neighbors = 5;
 
-	/*
-	 * |expected number of inliers|
-	 * -----------------------------
-	 *          |points size|
-	 */
-	float estimated_inliers_ratio = 1; // 0.8
+    int min_iterations = 20;
+    int max_iterations = 10000;
+	int k_nearest_neighbors = 5;
 
 	/*
 	 * Local Optimization parameters
@@ -43,8 +38,11 @@ private:
 	
 public:
 	~Model () {}
-	Model () {}
-	
+
+    Model (const Model * const model) {
+	    copyFrom(model);
+	}
+
 	Model (float threshold_, int sample_number_, float desired_prob_, int knn,
             ESTIMATOR estimator_, SAMPLER sampler_) {
 		threshold = threshold_;
@@ -111,7 +109,6 @@ public:
         estimator = model->estimator;
         sampler = model->sampler;
         k_nearest_neighbors = model->k_nearest_neighbors;
-        estimated_inliers_ratio = model->estimated_inliers_ratio;
         lo_sample_size = model->lo_sample_size;
         lo_iterative_iterations = model->lo_iterative_iterations;
         lo_inner_iterations = model->lo_inner_iterations;

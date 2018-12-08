@@ -113,3 +113,72 @@ void getMatrix3x3 (const std::string &filename, cv::Mat &model) {
     }
 
 }
+
+
+
+bool SavePointsToFile(const cv::Mat &points, const char* file, std::vector<int> *inliers)
+{
+    std::ofstream outfile(file, std::ios::out);
+
+    float *points_ptr = reinterpret_cast<float*>(points.data);
+    const int M = points.cols;
+
+    if (inliers == NULL)
+    {
+        outfile << points.rows << std::endl;
+        for (auto i = 0; i < points.rows; ++i)
+        {
+            for (auto j = 0; j < M; ++j)
+                outfile << *(points_ptr++) << " ";
+            outfile << std::endl;
+        }
+    }
+    else
+    {
+        outfile << inliers->size() << std::endl;
+        for (auto i = 0; i < inliers->size(); ++i)
+        {
+            const int offset = inliers->at(i) * M;
+            for (auto j = 0; j < M; ++j)
+                outfile << *(points_ptr + offset + j) << " ";
+            outfile << std::endl;
+        }
+    }
+
+    outfile.close();
+
+    return true;
+}
+
+bool LoadPointsFromFile(cv::Mat &points, const char* file)
+{
+    std::ifstream infile(file);
+
+    if (!infile.is_open())
+        return false;
+
+    int N;
+    std::string line;
+    int line_idx = 0;
+    float *points_ptr = NULL;
+
+    while (getline(infile, line))
+    {
+        if (line_idx++ == 0)
+        {
+            N = atoi(line.c_str());
+            points = cv::Mat(N, 4, CV_32F);
+            points_ptr = reinterpret_cast<float*>(points.data);
+            continue;
+        }
+
+        std::istringstream split(line);
+        split >> *(points_ptr++);
+        split >> *(points_ptr++);
+        split >> *(points_ptr++);
+        split >> *(points_ptr++);
+    }
+
+    infile.close();
+    return true;
+}
