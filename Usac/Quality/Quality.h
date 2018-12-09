@@ -129,22 +129,50 @@ public:
     }
 
     /*
-     * Calculate average error for any inliers (e.g. GT inliers or output inliers).
+     * Calculate sum of errors to Ground Truth inliers.
+     * And get number of gt inliers.
      */
-    float getAverageError (const cv::Mat& model,
-                           const int * const inliers,
-                           int inliers_size) {
-        assert(isinit);
+    static float getErrorGT (Estimator * estimator,
+                             Model * model,
+                             int points_size,
+                             const cv::Mat& gt_model,
+                             int * num_gt_inliers) {
 
-        estimator->setModelParameters(model);
-        float sum_errors = 0;
-
-        for (int point = 0; point < inliers_size; point++) {
-            sum_errors += estimator->GetError(inliers[point]);
+        // get inliers of gt model:
+        estimator->setModelParameters(gt_model);
+        int * inliers = new int [points_size];
+        int inliers_size = 0;
+        for (int point = 0; point < points_size; point++) {
+            if (estimator->GetError(point) < model->threshold) {
+                inliers[inliers_size++] = point;
+            }
         }
-        return sum_errors/inliers_size;
+
+        *num_gt_inliers = inliers_size;
+
+        // calculate sum of errors to inliers of gt model
+        float sum_errors = 0;
+        estimator->setModelParameters(model->returnDescriptor());
+        for (int i = 0; i < inliers_size; i++) {
+            sum_errors += estimator->GetError(inliers[i]);
+        }
+        return sum_errors;
     }
 
+    static float getErrorGT_inl (Estimator * estimator,
+                                Model * model,
+                                int points_size,
+                                const int * const gt_inliers,
+                                int gt_inliers_size) {
+
+        // calculate sum of errors to inliers of gt model
+        float sum_errors = 0;
+        estimator->setModelParameters(model->returnDescriptor());
+        for (int i = 0; i < gt_inliers_size; i++) {
+            sum_errors += estimator->GetError(gt_inliers[i]);
+        }
+        return sum_errors;
+    }
 };
 
 

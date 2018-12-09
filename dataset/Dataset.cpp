@@ -61,7 +61,7 @@ std::vector<std::string> getHomographyDatasetPoints (bool reset_files) {
 };
 
 
-std::vector<std::string> getFundamentalDatasetPoints (bool reset_files) {
+std::vector<std::string> getFundamentalDatasetPoints () {
     std::vector<std::string> fnames = {"barrsmith_pts.txt", "bonhall_pts.txt",
                                        "bonython_pts.txt", "elderhalla_pts.txt", "elderhallb_pts.txt",
                                        "hartley_pts.txt", "johnssona_pts.txt", "johnssonb_pts.txt",
@@ -69,5 +69,15 @@ std::vector<std::string> getFundamentalDatasetPoints (bool reset_files) {
                                        "napierb_pts.txt", "neem_pts.txt", "unihouse_pts.txt",
                                        "oldclassicswing_pts.txt", "physics_pts.txt", "sene_pts.txt",
                                        "unionhouse_pts.txt"};
+    return fnames;
+};
+
+std::vector<std::string> getKusvod2Dataset () {
+    std::vector<std::string> fnames = {"booksh", "box",
+                                       "castle", "corr", "graff",
+                                       "head", "kampa", "Kyoto",
+                                       "leafs", "plant", "rotunda",
+                                       "shout", "valbonne", "wall",
+                                       "wash", "zoom"};
     return fnames;
 };

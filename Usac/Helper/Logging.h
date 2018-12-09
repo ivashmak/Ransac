@@ -17,7 +17,7 @@ public:
         std::string filename = "../results/" + model->getName() +".txt";
         write_log.open (filename);
         write_log << ransacOutput->getTimeMicroSeconds() <<"\n";
-        write_log << ransacOutput->getNumberOfIterations() <<"\n";
+        write_log << (ransacOutput->getNumberOfMainIterations() + ransacOutput->getLOIters()) <<"\n";
         write_log << ransacOutput->getNumberOfInliers() <<"\n";
         write_log.close();
     }
@@ -36,7 +36,7 @@ public:
         read_log >> points_under_treshold;
 
         std::cout << "speedup: " << time/ransacOutput->getTimeMicroSeconds() << "\n";
-        std::cout << "iterations more on " << ((int)ransacOutput->getNumberOfIterations() - iters) << "\n";
+        std::cout << "iterations more on " << ((int)(ransacOutput->getNumberOfMainIterations() + ransacOutput->getLOIters()) - iters) << "\n";
         std::cout << "points under threshold more on " << ((int)ransacOutput->getNumberOfInliers() - points_under_treshold) << "\n";
     }
 };

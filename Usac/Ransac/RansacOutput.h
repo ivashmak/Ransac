@@ -10,7 +10,6 @@ private:
     Time * time;
     std::vector<int> inliers;
     long time_mcs;
-    float average_error;
     unsigned int number_inliers;
     unsigned int number_iterations;
 
@@ -26,7 +25,6 @@ public:
     RansacOutput (const Model * const model_,
                   const int * const inliers_,
                   long time_mcs_,
-                  float average_error_,
                   unsigned int number_inliers_,
                   unsigned int number_iterations_,
                   unsigned int lo_inner_iters_,
@@ -41,7 +39,6 @@ public:
         model = new Model (*model_);        
         inliers.assign (inliers_, inliers_ + number_inliers_);
         time_mcs = time_mcs_;
-        average_error = average_error_;
         number_inliers = number_inliers_;
         number_iterations = number_iterations_;
 
@@ -65,22 +62,18 @@ public:
         return time_mcs;
     }
 
-    float getAverageError () {
-        return average_error;
-   }
-
     unsigned int getNumberOfInliers () {
         return number_inliers;
     }
 
-    unsigned int getNumberOfIterations () {
+    unsigned int getNumberOfMainIterations () {
         // number_iterations > number_lo_iterations
         return number_iterations;
     }
 
-    unsigned int getTotalIters () {
+    unsigned int getLOIters () {
         // number_iterations > number_lo_iterations
-        return number_iterations + lo_inner_iters + lo_iterative_iters + gc_iters;
+        return lo_inner_iters + lo_iterative_iters + gc_iters;
     }
     
     unsigned int getLOInnerIters () {

@@ -21,32 +21,34 @@
 #include "../Usac/Sampler/ProsacSampler.h"
 
 void store_results_line2d ();
+int getGTInliers (const cv::Mat& points, const cv::Mat& gt_model, float threshold);
 
 void Tests::testLineFitting() {
-    // std::string img_name = "../dataset/image1";
-    // std::vector<cv::Point_<float>> points;
-    int gt_inliers;
+     std::string img_name = "../dataset/image1";
+     std::vector<cv::Point_<float>> points;
+     cv::Mat_<float> gt_model;
+
     // change false to true to reset time for random points generator
     // get number of ground truth inliers too.
-    // generate(points, false, true, &gt_inliers);
+     generate(points, false, true, gt_model);
     
     // another generated data 
-    std::string img_name = "../dataset/line2d/w=1000_h=1000_n=3.000000_I=500_N=10500";
-    std::ifstream read_data_file;
-    read_data_file.open (img_name+".txt");
-    int width, height, noise, N;
-    read_data_file >> width;
-    read_data_file >> height;
-    read_data_file >> noise;
-    read_data_file >> gt_inliers;
-    read_data_file >> N;
-    std::vector<cv::Point_<float>> points;
-    float x, y;
-    for (int p = 0; p < N; p++) {
-        read_data_file >> x >> y;
-        cv::Point_<float> pt (x, y);
-        points.push_back (pt);
-    }
+//    std::string img_name = "../dataset/line2d/w=1000_h=1000_n=3.000000_I=500_N=10500";
+//    std::ifstream read_data_file;
+//    read_data_file.open (img_name+".txt");
+//    int width, height, noise, N;
+//    read_data_file >> width;
+//    read_data_file >> height;
+//    read_data_file >> noise;
+//    read_data_file >> gt_inliers;
+//    read_data_file >> N;
+//    std::vector<cv::Point_<float>> points;
+//    float x, y;
+//    for (int p = 0; p < N; p++) {
+//        read_data_file >> x >> y;
+//        cv::Point_<float> pt (x, y);
+//        points.push_back (pt);
+//    }
     // 
 
     std::cout << "generated points\n";
@@ -85,16 +87,9 @@ void Tests::testLineFitting() {
         sorted_points.push_back(points[sorted_idx[i]]);
     }
 
+    cv::Mat_<float> sorted_pts = cv::Mat (sorted_points);
 
-    // Main Ransac components
-    Estimator *estimator = new Line2DEstimator (points);
-    TerminationCriteria * termination_criteria = new StandardTerminationCriteria;
-    Quality *quality = new Quality;
     Model * model;
-    Sampler * sampler;
-    //
-
-
 
     // ---------------- uniform -------------------
 //     model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Uniform);
@@ -114,23 +109,8 @@ void Tests::testLineFitting() {
     model->setStandardRansacLO(0);
     model->setGraphCutLO(0);
     model->setSprtLO(0);
-    // get neigbors for sorted points
-//    nn.getNearestNeighbors_nanoflann(cv::Mat(sorted_points), model->k_nearest_neighbors, neighbors, false, neighbors_dists);
 
-    estimator = new Line2DEstimator (sorted_points);
-
-    initSampler(sampler, model, points_size, points, neighbors);
-
-    termination_criteria = new ProsacTerminationCriteria;
-
-    ((ProsacTerminationCriteria *) termination_criteria)->initProsacTerminationCriteria (((ProsacSampler *)sampler)->getGrowthFunction(),
-                                                                                         model, points_size, estimator);
-
-    test (sorted_points, estimator, sampler, model, quality, termination_criteria, neighbors,
-          img_name, gt_inliers);
-    // get back
-    estimator = new Line2DEstimator(points);
-    termination_criteria = new StandardTerminationCriteria;
+    test (sorted_pts, model, img_name, true, gt_model);
      // ------------------------------------------------
 
 
@@ -143,8 +123,7 @@ void Tests::testLineFitting() {
     // model->setGraphCutLO(1);
     // model->setStandardRansacLO(1);
 
-    // initNapsac(sampler, neighbors, model->k_nearest_neighbors, model->sample_number);
-    // test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, img_name, gt_inliers);
+//     test (pts, model, img_name, true, gt_model);
     // ---------------------------------------------------------------------
 
 
@@ -152,9 +131,8 @@ void Tests::testLineFitting() {
 
     // ----------------- evsac ------------------------------
 //    model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Evsac);
-//    sampler = new EvsacSampler(points, points.size(), evsac_model->k_nearest_neighbors, evsac_model->sample_number);
 //
-//     test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, img_name, gt_inliers);
+//     test (pts, model, img_name, true, gt_model);
     // ------------------------------------------------------------
 
 
@@ -163,16 +141,12 @@ void Tests::testLineFitting() {
 
     // ------------------ gradually increasing ransac ----------------------
 //    model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::GradualNapsac);
-//    sampler = new GradualNapsacSampler(points, gradual_napsac_model->sample_number);
 //
-//     test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, img_name, gt_inliers);
+//     test (pts, model, img_name, true, gt_model);
     // --------------------------------------------------------
 
 
-
-//     getStatisticalResults(pts, estimator, model, sampler, termination_criteria, quality, neighbors,
-//                           1000, true, false, gt_inliers);
-
+//     getStatisticalResults(pts, model, 1000, true, false, gt_model, nullptr);
 
 
 //   store_results_line2d();
@@ -183,7 +157,7 @@ void store_results_line2d () {
 
     std::vector<std::string> dataset;
     std::vector<cv::Mat_<float>> dataset_points;
-    std::vector<int> gt_inliers;
+    std::vector<cv::Mat_<float>> gt_models;
 
     std::ifstream read_dataset;
     read_dataset.open("../dataset/line2d/dataset.txt");
@@ -196,11 +170,20 @@ void store_results_line2d () {
             std::cout << "file not open\n";
             exit (0);
         }
-        int width, height, inliers, noise, N;
+        int width, height, noise, N;
+
         read_data_file >> width;
         read_data_file >> height;
         read_data_file >> noise;
-        read_data_file >> inliers;
+        float a, b, c;
+        read_data_file >> a;
+        read_data_file >> b;
+        read_data_file >> c;
+
+        cv::Mat gt_model;
+        gt_model = (cv::Mat_<float> (1,3) << a, b, c);
+        gt_models.push_back(gt_model);
+
         read_data_file >> N;
         cv::Mat_<float> points(N, 2);
         float *pts = (float *) points.data;
@@ -213,7 +196,6 @@ void store_results_line2d () {
         }
         dataset_points.push_back(points);
         dataset.push_back(data_file);
-        gt_inliers.push_back(inliers);
     }
     std::cout << "Got data files\n";
 
@@ -223,7 +205,7 @@ void store_results_line2d () {
     NearestNeighbors nn;
 
     std::vector<SAMPLER> samplers;
-     samplers.push_back(SAMPLER::Uniform);
+    samplers.push_back(SAMPLER::Uniform);
     samplers.push_back(SAMPLER::Prosac);
     samplers.push_back(SAMPLER::Napsac);
 
@@ -274,6 +256,7 @@ void store_results_line2d () {
             std::cout << lo[l][0] << " " << lo[l][1] << " " << lo[l][2] << "\n";
             
             for (auto &points : dataset_points) {
+
                 std::cout << dataset[img] << "\n";
                 unsigned int points_size = points.rows;
                 cv::Mat_<float> neighbors, neighbors_dists;
@@ -299,37 +282,17 @@ void store_results_line2d () {
                     for (int i = 0; i < points_size; i++) {
                         sorted_points.push_back(points.row(sorted_idx[i]));
                     }
+                    sorted_points.copyTo(points);
                 }
 
-                TerminationCriteria *termination_criteria = new StandardTerminationCriteria;
-                Quality *quality = new Quality;
-                Estimator *estimator;
-                Sampler *sampler;
-
-                tests.initSampler(sampler, model, points.rows, points, neighbors);
-
-                ProsacTerminationCriteria * prosac_termination_criteria_ = new ProsacTerminationCriteria;
-                    
-                if (smplr == SAMPLER::Prosac) {
-                    estimator = new Line2DEstimator(sorted_points);
-                    ProsacSampler *prosac_sampler_ = (ProsacSampler *) sampler;
-
-                    prosac_termination_criteria_->initProsacTerminationCriteria (prosac_sampler_->getGrowthFunction(),
-                                                               model, points_size, estimator);
-
-                    termination_criteria = prosac_termination_criteria_;                    
-                } else {
-                    estimator = new Line2DEstimator(points);
-                }
-                
+                int gt_inliers = getGTInliers (points, gt_models[img], model->threshold);
 
                 StatisticalResults *statistical_results = new StatisticalResults;
-                tests.getStatisticalResults(points, estimator, model, sampler, termination_criteria,
-                                            quality, neighbors, N_runs, true, true, gt_inliers[img], statistical_results);
+                tests.getStatisticalResults(points, model, N_runs, true, true, gt_models[img], statistical_results);
 
                 // save to csv file
                 results_total << dataset[img] << ",";
-                results_total << statistical_results->avg_num_inliers << " / " << gt_inliers[img] << ",";
+                results_total << statistical_results->avg_num_inliers << " / " << gt_inliers << ",";
                 results_total << statistical_results->std_dev_num_inliers << ",";
                 results_total << statistical_results->median_num_inliers << ",";
 
@@ -361,4 +324,13 @@ void store_results_line2d () {
             results_matlab.close();
         }
     }
+}
+
+int getGTInliers (const cv::Mat& points, const cv::Mat& gt_model, float threshold) {
+    Estimator * estimator = new Line2DEstimator(points);
+    int inliers_size = 0;
+    for (int i = 0; i < points.rows; i++) {
+        inliers_size += (estimator->GetError(i) < threshold);
+    }
+    return inliers_size;
 }

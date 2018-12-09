@@ -1,7 +1,7 @@
 #include "generator.h"
 
 void Generate2DLinePoints(float noise, int inlier_number, int outlier_number,
-                             int border_x, int border_y, std::vector<cv::Point2f> &points);
+                             int border_x, int border_y, std::vector<cv::Point2f> &points, cv::Mat &gt_model);
 
 void generate_syntectic_dataset () {
     std::vector<int> widths;
@@ -37,7 +37,8 @@ void generate_syntectic_dataset () {
                         int inliers = outliers * percent_of_inliers;
                         int N = outliers + inliers;
                         std::vector<cv::Point2f> points(N);
-                        Generate2DLinePoints(noise, inliers, outliers, width, height, points);
+                        cv::Mat_<float> gt_model;
+                        Generate2DLinePoints(noise, inliers, outliers, width, height, points, gt_model);
 
                         std::string folder = "../dataset/line2d/";
                         std::string filename = "w="+std::to_string(width)+"_h="+std::to_string(height)+"_n="+
@@ -50,7 +51,7 @@ void generate_syntectic_dataset () {
                         file << width << "\n";
                         file << height << "\n";
                         file << noise << "\n";
-                        file << inliers << "\n";
+                        file << gt_model.at<float>(0) << " " << gt_model.at<float>(1) << " " << gt_model.at<float>(2) << "\n";
                         file << N << "\n";
                         for (auto &pt : points) {
                             file << pt.x << " " << pt.y << "\n";
@@ -65,7 +66,7 @@ void generate_syntectic_dataset () {
     }
 }
 
-void generate (std::vector<cv::Point2f> &points_out, bool reset_time, bool getGT,  int * gt_inliers) {
+void generate (std::vector<cv::Point2f> &points_out, bool reset_time, bool getGT, cv::Mat &gt_model) {
     if (reset_time) srand (time(NULL));
 
     int width = 600; // Width of the image
@@ -74,13 +75,9 @@ void generate (std::vector<cv::Point2f> &points_out, bool reset_time, bool getGT
     int outlier_number = 3000; // 1500; // Number of points not lying on the line
     int inlier_number = 300; //1500; // Number of points from the line
 
-    if (getGT) {
-        *gt_inliers = inlier_number;
-    }
-
     int N = outlier_number + inlier_number;
     std::vector<cv::Point2f> points(N);
-    Generate2DLinePoints(noise, inlier_number, outlier_number, width, height, points);
+    Generate2DLinePoints(noise, inlier_number, outlier_number, width, height, points, gt_model);
 
     // Do some clever things, e.g. draw the points
     cv::Mat image(height, width, CV_8UC3, cv::Scalar(255, 255, 255)); // Create a 600*600 image
@@ -99,7 +96,7 @@ void generate (std::vector<cv::Point2f> &points_out, bool reset_time, bool getGT
 }
 
 void Generate2DLinePoints(float noise, int inlier_number, int outlier_number,
-                             int border_x, int border_y, std::vector<cv::Point2f> &points) {   
+                             int border_x, int border_y, std::vector<cv::Point2f> &points, cv::Mat& gt_model) {
     // Generate random line
     float alpha = M_PI * static_cast<float>(rand()) / RAND_MAX; // A random orientation
     float normal_x = sin(alpha);
@@ -110,6 +107,9 @@ void Generate2DLinePoints(float noise, int inlier_number, int outlier_number,
     float center_x = border_x / 2; // A point from the line, it's now just the center of the image
     float center_y = border_y / 2;
     float c = -(normal_x * center_x + normal_y * center_y); // From implicit line equation, a * x + b * y + c = 0
+
+//    std::cout << "a = " << normal_x << " b = " << normal_y << " " << "c = " << c << "\n";
+    gt_model = (cv::Mat_<float>(1,3) << normal_x, normal_y, c);
 
     // Add outliers
     for (int i = 0; i < outlier_number; ++i)

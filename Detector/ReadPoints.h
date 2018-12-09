@@ -8,5 +8,6 @@ void getInliers (const std::string &filename, std::vector<int> &inliers);
 void getMatrix3x3 (const std::string &filename, cv::Mat &model);
 bool LoadPointsFromFile(cv::Mat &points, const char* file);
 bool SavePointsToFile(const cv::Mat &points, const char* file, std::vector<int> *inliers);
+void getPointsNby6 (const std::string& filename, cv::Mat &points);
 
 #endif //READPOINTS_READPOINTS_H

@@ -42,7 +42,9 @@ void Drawing::drawEpipolarLines (const std::string& img_name, cv::InputArray poi
     cv::computeCorrespondEpilines(pts2, 2, F, lines1);
     cv::computeCorrespondEpilines(pts1, 1, F, lines2);
 
-    std::string folder = "../dataset/fundamental/";
+//    std::string folder = "../dataset/fundamental/";
+    std::string folder = "../dataset/Lebeda/kusvod2/";
+
     cv::Mat img1 = cv::imread(folder + img_name + "A.png"),
             img2 = cv::imread(folder + img_name + "B.png");
 

@@ -319,8 +319,6 @@ void Ransac::run(cv::InputArray input_points) {
 //    std::cout << "FINAL best inl num " << best_score->inlier_number << '\n';
 //    std::cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
 
-    float average_error = quality->getAverageError (best_model->returnDescriptor(), max_inliers, best_score->inlier_number);
-
     unsigned int lo_inner_iters = 0;
     unsigned int lo_iterative_iters = 0;
     if (LO) {
@@ -334,7 +332,7 @@ void Ransac::run(cv::InputArray input_points) {
     }
     // Store results
     ransac_output = new RansacOutput (best_model, max_inliers,
-            std::chrono::duration_cast<std::chrono::microseconds>(fs).count(), average_error,
+            std::chrono::duration_cast<std::chrono::microseconds>(fs).count(),
                                       best_score->inlier_number, iters, lo_inner_iters, lo_iterative_iters, gc_iters);
 
     if (LO) {

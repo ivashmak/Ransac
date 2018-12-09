@@ -65,7 +65,7 @@ public:
 	void labeling (const cv::Mat& model, Score * score, int * inliers = nullptr);
 
     void GraphCutLO (Model * best_model, Score * best_score) {
-        std::cout << "begin best score " << best_score->inlier_number << "\n";
+//        std::cout << "begin best score " << best_score->inlier_number << "\n";
 
         gc_model->setDescriptor(best_model->returnDescriptor());
         bool is_best_model_updated;
@@ -73,7 +73,7 @@ public:
             // build graph problem
             // apply graph cut to G
             labeling(best_model->returnDescriptor(), gc_score, inliers);
-            std::cout << "virtual inliers " << gc_score->inlier_number << "\n";
+//            std::cout << "virtual inliers " << gc_score->inlier_number << "\n";
 
 //             if number of "virtual" inliers is too small then break
             if (gc_score->inlier_number <= sample_size) break;
@@ -88,7 +88,7 @@ public:
             uniform_random_generator->resetGenerator(0, gc_score->inlier_number-1);
 
             unsigned int inner_inliers_size = gc_score->inlier_number;
-            std::cout << gc_sample_size << " vs " << inner_inliers_size << "\n";
+//            std::cout << gc_sample_size << " vs " << inner_inliers_size << "\n";
             for (int iter = 0; iter < lo_inner_iterations; iter++) {
                 if (gc_sample_size < inner_inliers_size) {
 
@@ -114,7 +114,7 @@ public:
 
                 quality->getNumberInliers(gc_score, gc_model, false, nullptr);
 
-                std::cout << "gc score " << gc_score->inlier_number << "\n";
+//                std::cout << "gc score " << gc_score->inlier_number << "\n";
 
                 if (gc_score->bigger(best_score)) {
 //                    std::cout << "UPDATE best score " << gc_score->inlier_number << "\n";
@@ -134,7 +134,7 @@ public:
             }
         }
 
-        std::cout << "end best score " << best_score->inlier_number << "\n";
+//        std::cout << "end best score " << best_score->inlier_number << "\n";
     }
 
 };

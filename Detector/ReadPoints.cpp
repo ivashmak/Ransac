@@ -48,6 +48,25 @@ void read_points (cv::Mat &pts1, cv::Mat &pts2, const std::string &filename) {
 }
 
 /*
+ * Format of file
+ * x1i y1i 1 x2i y2i 1
+ *
+ * Return points:
+ * x1i y1i x2i y2i
+ */
+
+void getPointsNby6 (const std::string& filename, cv::Mat &points) {
+    std::fstream file(filename, std::ios_base::in);
+
+    float x1, y1, z1, x2, y2, z2;
+    cv::Mat tmp;
+    while (file >> x1 >> y1 >> z1 >> x2 >> y2 >> z2) {
+        tmp = (cv::Mat_<float>(1, 4) << x1, y1, x2, y2);
+        points.push_back(tmp);
+    }
+}
+
+/*
  * Get inliers (isinlier1, ..., isinlierN) from file with syntax
  * x1 y1 z1 x2 y2 z2 isinlier1
  * ...

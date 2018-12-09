@@ -11,8 +11,8 @@
 void saveDatasetToFiles ();
 std::vector<std::vector<std::string>> getEVDfilenames (bool reset_files=false);
 std::vector<std::string> getHomographyDatasetPoints (bool reset_files=false);
-std::vector<std::string> getFundamentalDatasetPoints (bool reset_files=false);
-
+std::vector<std::string> getFundamentalDatasetPoints ();
+std::vector<std::string> getKusvod2Dataset ();
 
 
 #endif //USAC_DATASET_H

@@ -84,6 +84,8 @@ add_executable(
 
         Usac/Utils/Math.cpp Usac/Utils/Math.h
         Usac/Utils/NearestNeighbors.cpp Usac/Utils/NearestNeighbors.h
+        Usac/Utils/Utils.h
+        Usac/Utils/Utils.cpp
 
         Usac/Verbose.h
 )
