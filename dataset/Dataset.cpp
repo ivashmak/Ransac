@@ -81,3 +81,39 @@ std::vector<std::string> getKusvod2Dataset () {
                                        "wash", "zoom"};
     return fnames;
 };
+
+std::vector<std::string> getAdelaidermfDataset () {
+    std::vector<std::string> fnames = {
+            "barrsmith",
+            "biscuitbookbox",
+            "biscuitbook",
+            "biscuit",
+            "boardgame",
+            "bonython",
+            "book",
+            "breadcartoychips",
+            "breadtoycar",
+            "breadtoy",
+            "carchipscube",
+            "cubebreadtoychips",
+            "cubetoy",
+            "elderhallb",
+            "gamebiscuit",
+            "game",
+            "hartley",
+            "johnsona",
+            "johnsonb",
+            "ladysymon",
+            "library",
+            "napiera",
+            "napierb",
+            "neem",
+            "nese",
+            "oldclassicswing",
+            "physics",
+            "sene",
+            "toycubecar",
+            "unihouse",
+            "unionhouse"};
+    return fnames;
+};

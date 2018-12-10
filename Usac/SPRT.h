@@ -94,9 +94,9 @@ public:
         } else if (model->estimator == ESTIMATOR::Fundamental) {
             // t_M = 200, m_S = 2.48, delta0 = 0.05, epsilon0 = 0.2;
             sprt_histories[0]->delta = 0.05;
-            sprt_histories[0]->epsilon = 0.2;
-            t_M = 200;
-            m_S = 2.48;
+            sprt_histories[0]->epsilon = 0.15;
+            t_M = 350;
+            m_S = 1.5; //2.48;
         } else if (model->estimator == ESTIMATOR::Line2d){
             t_M = 100;
             m_S = 1;

@@ -3,6 +3,7 @@
 
 #include "../Model.h"
 #include "../Quality/Quality.h"
+#include "../../Tests/StatisticalResults.h"
 
 #include <fstream>
 
@@ -39,6 +40,45 @@ public:
         std::cout << "iterations more on " << ((int)(ransacOutput->getNumberOfMainIterations() + ransacOutput->getLOIters()) - iters) << "\n";
         std::cout << "points under threshold more on " << ((int)ransacOutput->getNumberOfInliers() - points_under_treshold) << "\n";
     }
+
+    void saveResultsCSV (std::ofstream &file, const StatisticalResults * const statistical_results) {
+        file << statistical_results->avg_num_inliers << ",";
+        file << statistical_results->std_dev_num_inliers << ",";
+        file << statistical_results->median_num_inliers << ",";
+
+        file << statistical_results->avg_num_iters << ",";
+        file << statistical_results->std_dev_num_iters << ",";
+        file << statistical_results->median_num_iters << ",";
+
+        file << statistical_results->avg_num_lo_iters << ",";
+        file << statistical_results->std_dev_num_lo_iters << ",";
+        file << statistical_results->median_num_lo_iters << ",";
+
+        file << statistical_results->avg_time_mcs << ",";
+        file << statistical_results->std_dev_time_mcs << ",";
+        file << statistical_results->median_time_mcs << ",";
+
+        file << statistical_results->avg_error << ",";
+        file << statistical_results->std_dev_error << ",";
+        file << statistical_results->median_error << ",";
+
+        file << statistical_results->worst_case_num_inliers << ",";
+        file << statistical_results->worst_case_error << ",";
+
+        file << statistical_results->num_fails << "\n";
+    }
+
+    void saveResultsMatlab (std::ofstream &file, const StatisticalResults * const statistical_results) {
+        // save results for matlab
+        file << statistical_results->avg_num_inliers << ",";
+        file << statistical_results->avg_num_iters << ",";
+        file << statistical_results->avg_num_lo_iters << ",";
+        file << statistical_results->avg_time_mcs << ",";
+        file << statistical_results->avg_error << ",";
+        file << statistical_results->num_fails << "\n";
+    }
+
+
 };
 
 #endif //USAC_LOGGING_H

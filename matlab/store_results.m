@@ -7,6 +7,8 @@
 folder = '../results/kusvod2/';
 folder_res = '../results/kusvod2/';
 
+folder = '../results/adelaidermf/';
+folder_res = '../results/adelaidermf/';
 
 fileID = fopen([folder 'uniform_000_m.csv']);
 t = textscan(fileID,'%s');

@@ -39,10 +39,10 @@ public:
     void initSampler (Sampler *& sampler, Model * model, unsigned int points_size, cv::InputArray points, const cv::Mat& neighbors);
 
     void test (cv::Mat points,
-                Model * model,
-                const std::string &img_name,
-                bool gt,
-                const cv::Mat& gt_model);
+                      Model * model,
+                      const std::string &img_name,
+                      bool gt,
+                      const std::vector<int>& gt_inliers);
 
     void getSortedPoints (const cv::Mat& neighbors_dists) {
     }
@@ -77,8 +77,9 @@ public:
     void getStatisticalResults (const cv::Mat& points,
                                 Model * const model,
                                 int N,
-                                bool GT, bool get_results,
-                                const cv::Mat& gt_model, StatisticalResults * statistical_results) {
+                                bool GT,
+                                const std::vector<int>& gt_inliers, bool get_results,
+                                StatisticalResults * statistical_results) {
 
         long * times = new long[N];
         float * num_inlierss = new float[N];
@@ -151,19 +152,21 @@ public:
             num_lo_iters = ransacOutput->getLOIters();
 
             if (GT) {
-                int gt_num_inliers;
-                float error = Quality::getErrorGT(estimator, ransacOutput->getModel(), points.rows, gt_model, &gt_num_inliers);
+                float error = Quality::getErrorGT_inl(estimator, ransacOutput->getModel(), points.rows, &gt_inliers[0],
+                                                      gt_inliers.size());
+
                 errors += error;
                 errorss[i] = error;
+
                 /*
                  * If ratio of number of inliers and number of
                  * Ground Truth inliers is less than 50% then
                  * it is fail.
-                 */  
-                if (num_inlierss[i]/gt_num_inliers < 0.5) {
+                 */
+                if (num_inlierss[i] / gt_inliers.size() < 0.5) {
                     fails++;
-//                    std::cout << "FAIL\n";
-//                    exit (111);
+                    //                    std::cout << "FAIL\n";
+                    //                    exit (111);
                 }
             }
 //            std::cout << "----------------------------------------------------------------\n";

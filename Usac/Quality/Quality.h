@@ -128,6 +128,16 @@ public:
         }
     }
 
+    static void getInliers (Estimator * estimator, const cv::Mat &model, float threshold, int points_size, std::vector<int> &inliers) {
+        estimator->setModelParameters(model);
+        inliers.clear();
+        for (int p = 0; p < points_size; p++) {
+            if (estimator->GetError(p) < threshold) {
+                inliers.push_back(p);
+            }
+        }
+    }
+
     /*
      * Calculate sum of errors to Ground Truth inliers.
      * And get number of gt inliers.

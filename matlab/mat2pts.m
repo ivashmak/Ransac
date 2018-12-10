@@ -11,8 +11,15 @@ function kusvod2 ()
         model = validation.model;
 
         [~,name,~] = fileparts (files(i).name);
-        save ([dataset name '_pts.txt'], 'pts', '-ascii');
-        save ([dataset name '_model.txt'], 'model', '-ascii');
+%         save ([dataset name '_pts.txt'], 'pts', '-ascii');
+%         save ([dataset name '_model.txt'], 'model', '-ascii');        
+        fid1 = fopen([dataset name '_pts.txt'], 'w');
+        fid2 = fopen([dataset name '_model.txt'], 'w');
+        
+        fprintf(fid1, '%f %f %d %f %f %d\n', pts');
+        fprintf(fid1, model');
+        fclose(fid1);
+        fclose(fid2);
     end
 end
 
@@ -26,6 +33,9 @@ function adelaidermf ()
         [~,name,~] = fileparts (files(i).name);
         imwrite (img1, [dataset name 'A.png']);
         imwrite (img2, [dataset name 'B.png']);
-        save ([dataset name '_pts.txt'], 'pts', '-ascii');
+%         save ([dataset name '_pts.txt'], 'pts', '-ascii');
+        fid = fopen([dataset name '_pts.txt'], 'w');
+        fprintf(fid,'%f %f %d %f %f %d %d\n', pts');
+        fclose(fid);
     end
 end

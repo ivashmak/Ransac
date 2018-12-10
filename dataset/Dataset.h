@@ -13,6 +13,6 @@ std::vector<std::vector<std::string>> getEVDfilenames (bool reset_files=false);
 std::vector<std::string> getHomographyDatasetPoints (bool reset_files=false);
 std::vector<std::string> getFundamentalDatasetPoints ();
 std::vector<std::string> getKusvod2Dataset ();
-
+std::vector<std::string> getAdelaidermfDataset ();
 
 #endif //USAC_DATASET_H

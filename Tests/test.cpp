@@ -4,7 +4,7 @@ void Tests::test (cv::Mat points,
                    Model * model,
                    const std::string &img_name,
                    bool gt,
-                   const cv::Mat& gt_model) {
+                   const std::vector<int>& gt_inliers) {
 
     NearestNeighbors nn;
     cv::Mat neighbors, neighbors_dists;
@@ -71,20 +71,9 @@ void Tests::test (cv::Mat points,
     std::cout << "Best model = ...\n" << ransacOutput->getModel ()->returnDescriptor() << "\n";
 
     if (gt) {
-        int GT_num_inliers;
-        float error = Quality::getErrorGT(estimator, ransacOutput->getModel(), points.rows, gt_model, &GT_num_inliers);
-        if (model->estimator == ESTIMATOR::Homography) {
-            float error2;
-            int GT_num_inliers2;
-            error2 = Quality::getErrorGT(estimator, ransacOutput->getModel(), points.rows, gt_model.inv(), &GT_num_inliers2);
-            if (GT_num_inliers2 > GT_num_inliers) {
-                GT_num_inliers = GT_num_inliers2;
-                error = error2;
-            }
-        }
-        std::cout << "Ground Truth nu mber of inliers for same model parametres is " << GT_num_inliers << "\n";
+        float error = Quality::getErrorGT_inl(estimator, ransacOutput->getModel(), points.rows, &gt_inliers[0], gt_inliers.size());
+        std::cout << "Ground Truth number of inliers for same model parametres is " << gt_inliers.size() << "\n";
         std::cout << "Error to GT inliers " << error << "\n";
-        std::cout << "GT model = ... \n" << gt_model << "\n";
     }
 
     // save result and compare with last run

@@ -97,7 +97,13 @@ void getInliers (const std::string &filename, std::vector<int> &inliers) {
 //        }
 //        if (cont) continue;
 
-        if (inl) inliers.push_back(p);
+//        std::cout <<  x1 << " " << y1 << " " << " " << z1 << " " << x2 << " " << y2 << " " << z2 << " " << inl << "\n";
+
+        if (inl > 0) {
+//            std::cout << x1 << " " << y1 << " " << x2 << " " << y2 << "\n";
+//            std::cout << p << "\n";
+            inliers.push_back(p);
+        }
         p++;
 
         tmp.at<float>(0) = x1;
