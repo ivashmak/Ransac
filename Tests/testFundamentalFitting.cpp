@@ -13,41 +13,42 @@ void storeResultsFundamental ();
 void getGTInliersFromGTModelFundamental (const std::string& filename, const cv::Mat& points, float threshold, std::vector<int> &gt_inliers);
 
 void Tests::testFundamentalFitting() {
-    std::string img_name = "gamebiscuit";
+    std::string img_name = "bonython";
     cv::Mat_<float> points1, points2, points;
 //    getPointsNby6("../dataset/Lebeda/kusvod2/"+img_name+"_vpts_pts.txt", points);
 //    read_points(points1, points2, "../dataset/adelaidermf/"+img_name+"_pts.txt");
+    read_points(points1, points2, "../dataset/fundamental/"+img_name+"_pts.txt");
 
-    points1 = (cv::Mat_<float> (10, 2) <<
-            3.020519301751723,   2.596786959172094,
-            2.621351894036264,   2.757951047738636,
-            3.605800286632482,   3.791987038121546,
-            2.475761663001728,   2.340303837863212,
-            2.746552415058527,   3.013370222948234,
-            2.683418010219510,   1.691394650172999,
-            3.812414245722914,   2.044879731424070,
-            1.948319539540133,   3.429684834622727,
-            3.176411253015324,   1.827122055282097,
-            3.182138632063733,   2.429665766838721);
-
-    points2 = (cv::Mat_<float> (10, 2) <<
-            1.920459921166140,   3.034291347636251,
-            1.533733195053770,   3.180365190371057,
-            2.456364070816144,   4.151752011453615,
-            1.399696530725253,   2.783069240578678,
-            1.650942479317877,   3.423627688352502,
-            1.613597545828692,   2.186102119417673,
-            2.654105419292067,   2.549231570092227,
-            0.841556026244410,   3.830470840421660,
-            2.076636085082961,   2.330698186038357,
-            2.074849087666451,   2.882361072224565);
-
-    points1 = 100 * points1;
-    points2 = 100 * points2;
-
+//    points1 = (cv::Mat_<float> (10, 2) <<
+//            3.020519301751723,   2.596786959172094,
+//            2.621351894036264,   2.757951047738636,
+//            3.605800286632482,   3.791987038121546,
+//            2.475761663001728,   2.340303837863212,
+//            2.746552415058527,   3.013370222948234,
+//            2.683418010219510,   1.691394650172999,
+//            3.812414245722914,   2.044879731424070,
+//            1.948319539540133,   3.429684834622727,
+//            3.176411253015324,   1.827122055282097,
+//            3.182138632063733,   2.429665766838721);
+//
+//    points2 = (cv::Mat_<float> (10, 2) <<
+//            1.920459921166140,   3.034291347636251,
+//            1.533733195053770,   3.180365190371057,
+//            2.456364070816144,   4.151752011453615,
+//            1.399696530725253,   2.783069240578678,
+//            1.650942479317877,   3.423627688352502,
+//            1.613597545828692,   2.186102119417673,
+//            2.654105419292067,   2.549231570092227,
+//            0.841556026244410,   3.830470840421660,
+//            2.076636085082961,   2.330698186038357,
+//            2.074849087666451,   2.882361072224565);
+//
+//    points1 = 100 * points1;
+//    points2 = 100 * points2;
+//
     cv::hconcat(points1, points2, points);
 
-        std::cout << "opencv " << cv::findFundamentalMat(points1, points2) << "\n\n";
+//        std::cout << "opencv " << cv::findFundamentalMat(points1, points2) << "\n\n";
     // GT F =
 //    -0.000000837710510  -0.000022207792842   0.004660634536193
 //    0.000020754689916   0.000000443452588  -0.012405343594436
@@ -58,14 +59,15 @@ void Tests::testFundamentalFitting() {
 
     std::cout << "points size = " << points.rows << "\n";
 
-    float threshold = 3;
+    float threshold = 5;
     float confidence = 0.95;
     int knn = 7;
 
     // ------------ get Ground truth inliers and model ----------------------
     std::vector<int> gt_inliers;
 //    getGTInliersFromGTModelFundamental (img_name, points, threshold, gt_inliers);
-    getInliers("../dataset/adelaidermf/"+img_name+"_pts.txt", gt_inliers);
+//    getInliers("../dataset/adelaidermf/"+img_name+"_pts.txt", gt_inliers);
+    getInliers("../dataset/fundamental/"+img_name+"_pts.txt", gt_inliers);
     // -------------------------------------------
 
     Model * model;
@@ -84,12 +86,12 @@ void Tests::testFundamentalFitting() {
     model->setSprtLO(0);
 
 
-    test (points, model, img_name, true, gt_inliers);
+//    test (points, model, img_name, true, gt_inliers);
 //    test (points, model, img_name, false, std::vector<int>());
 
 //    getStatisticalResults(points, model, 400, true, gt_inliers, false, nullptr);
 
-//     storeResultsFundamental ();
+     storeResultsFundamental ();
 }
  
 /*
@@ -107,8 +109,8 @@ void storeResultsFundamental () {
     std::vector<std::vector<int>> gt_inliers;
 
     int N_runs = 50;
-    int knn = 7;
-    float threshold = 6;
+    int knn = 4;
+    float threshold = 3;
     float confidence = 0.95;
 
     for (const std::string &img_name : points_filename) {

@@ -19,6 +19,9 @@ public:
      * img1_xN img1_yN img2_xN img2_yN
      */
 
+    /*
+     * x^T F x = 0
+     */
     FundamentalEstimator(cv::InputArray input_points) : points((float *)input_points.getMat().data) {
         assert(!input_points.empty());
     }

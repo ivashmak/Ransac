@@ -126,7 +126,7 @@ public:
     /*
      * Draw epipolar lines by Fundamental Matrix
      */
-    void drawEpipolarLines (const std::string& img_name, cv::InputArray points1, cv::InputArray points2, const cv::Mat& F);
+    void drawEpipolarLines (const std::string& img_name, const std::vector<int>& inliers, cv::InputArray points1, cv::InputArray points2, const cv::Mat& F);
 
     void drawHomographies (const std::string& img_name, const cv::Mat& points, cv::InputArray in_inliers, const cv::Mat &H) {
         int * inliers =  (int *) in_inliers.getMat().data;

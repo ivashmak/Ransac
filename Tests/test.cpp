@@ -86,7 +86,7 @@ void Tests::test (cv::Mat points,
         drawing.drawHomographies(img_name, points, ransacOutput->getInliers(), ransacOutput->getModel()->returnDescriptor());
     } else
     if (model->estimator == ESTIMATOR::Fundamental) {
-        drawing.drawEpipolarLines(img_name, points.colRange(0,2), points.colRange(2,4), ransacOutput->getModel()->returnDescriptor());
+        drawing.drawEpipolarLines(img_name, ransacOutput->getInliers(), points.colRange(0,2), points.colRange(2,4), ransacOutput->getModel()->returnDescriptor());
     } else
     if (model->estimator == ESTIMATOR::Line2d) {
         drawing.draw(ransacOutput->getInliers(), ransacOutput->getModel(), points, img_name+".png");
