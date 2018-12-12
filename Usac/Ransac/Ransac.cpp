@@ -122,6 +122,7 @@ void Ransac::run(cv::InputArray input_points) {
 //    int * best_sample = new int[4];
 
     while (iters < max_iters) {
+//        std::cout << "current iteration = " << iters << '\n';
 
         if (is_prosac) {
             prosac_sampler->generateSampleProsac (sample, prosac_termination_criteria->getStoppingLength());
@@ -231,7 +232,6 @@ void Ransac::run(cv::InputArray input_points) {
                 }
 //                 std::cout << "max iters prediction = " << max_iters << '\n';
             } // end of if so far the best score
-//             std::cout << "current iteration = " << iters << '\n';
         } // end loop of number of models
         iters++;
     } // end main while loop

@@ -53,7 +53,7 @@ void Tests::testHomographyFitting() {
 
 //    detectAndSaveFeatures(getHomographyDatasetPoints());
 
-    std::string img_name = "graf";
+    std::string img_name = "adam";
     cv::Mat points, points1, points2;
     read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
     cv::hconcat(points1, points2, points);
@@ -110,7 +110,7 @@ void Tests::testHomographyFitting() {
 
 // ------------ get Ground truth inliers and model ----------------------
     std::vector<int> gt_inliers;
-    getGTInliersFromGTModelHomography (img_name, points, threshold, gt_inliers);
+    getGTInliersFromGTModelHomography ("../dataset/homography/"+img_name+"_model.txt", points, threshold, gt_inliers);
     // -------------------------------------------
 
     Model * model;
@@ -131,19 +131,18 @@ void Tests::testHomographyFitting() {
 
 
      model->setStandardRansacLO(0);
-     model->setGraphCutLO(0);
+     model->setGraphCutLO(1);
      model->setSprtLO(0);
 
-    if (model->sampler == SAMPLER::Prosac) {
-        test (sorted_points, model, img_name, true, gt_inliers);
-    } else {
-        test (points, model, img_name, true, gt_inliers);
-    }
+//    if (model->sampler == SAMPLER::Prosac) {
+//        test (sorted_points, model, img_name, true, gt_inliers);
+//    } else {
+//        test (points, model, img_name, true, gt_inliers);
+//    }
 
 //    getStatisticalResults(points, model, 100, true, gt_inliers, false, nullptr);
 
-//     storeResults();
-
+     storeResults();
 }
 
 
@@ -176,7 +175,7 @@ void storeResults () {
 
         // ------------ get Ground truth inliers and model ----------------------
         std::vector<int> gt_inliers_;
-        getGTInliersFromGTModelHomography (img_name, points, threshold, gt_inliers_);
+        getGTInliersFromGTModelHomography ("../dataset/homography/"+img_name+"_model.txt", points, threshold, gt_inliers_);
         // -------------------------------------------
 
         gt_inliers.push_back(gt_inliers_);

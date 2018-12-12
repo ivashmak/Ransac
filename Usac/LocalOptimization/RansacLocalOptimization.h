@@ -191,9 +191,11 @@ public:
             // get original threshold back in case lo iterative ransac had break.
             lo_model->threshold = model->threshold;
 
+//            std::cout << "LO score " << lo_score->inlier_number << "\n";
+
             // update best model
             if (lo_score->bigger(best_score)) {
-//                std::cout << "update model\n";
+//                std::cout << "Update best score\n";
                 best_model->setDescriptor(lo_model->returnDescriptor());
                 best_score->copyFrom(lo_score);
                 lo_better_than_kth_ransac = true;

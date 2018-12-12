@@ -14,7 +14,9 @@ public:
     }
 
     /*
-        If model is so far the best.
+        Greedy LO:
+
+        If model is so far the best, then:
         While (true)
             Estimate non minimal model with all inliers of the best model.
             Get model score of the new model.
@@ -26,7 +28,7 @@ public:
                 2. 1. Make relaxation, e.g. increase threshold like in iterative ransac LO.
                 2. 2. Or get subset of inliers of best model and estimate new model with them like
                       in inner ransac.
-                Do small finite number of relaxtions if it is not help then break.
+                Do small finite number of relaxations if it is not help (e.g. last update > k iters) then break.
                          
      */
     void getLOScore (Score * best_score, Model * best_model, Quality * quality, Estimator * estimator, int points_size) {
@@ -48,27 +50,26 @@ public:
         unsigned int num_relaxations = 0;
         unsigned int num_inl_relaxations = 0;
 
-        std::cout << "begin best score " << best_score->inlier_number << "\n";
+//        std::cout << "begin best score " << best_score->inlier_number << "\n";
         bool same_threshold = true;
         bool inlier_relaxation = false;
         bool last_inlier_relax = false;
         unsigned int last_update = 0;
         while (true) {
             last_update++;
-            if (last_update > 10) {
+            if (last_update > 5) {
                 break;
             }
 
-            if (last_update > 2) {
-                std::cout << "threshold relaxation\n";
-//                threshold_relaxation(model, num_relaxations);
-                if (last_update == 3) {
+            if (last_update > 6) {
+//                std::cout << "threshold relaxation\n";
+                if (last_update == 5) {
                     model->threshold *= 3;
                 } else {
-                    model->threshold = std::max (best_model->threshold, (float)(model->threshold-0.15));
+                    // t = 3 * t - iters * x, x = 2t / iters
+                    model->threshold = std::max (best_model->threshold, (float)(model->threshold - 2*model->threshold/5));
                 }
                 same_threshold = false;
-//                num_relaxations++;
             } else
             if (last_update > 1) {
                 inlier_relaxation = true;
@@ -96,7 +97,7 @@ public:
 
             quality->getNumberInliers(score, model, true, inliers);
 
-            std::cout << "loop score " << score->inlier_number << "\n";
+            std::cout << "Greedy LO score " << score->inlier_number << "\n";
 //            std::cout << "num relaxations " << num_relaxations << "\n";
 
             if (score->bigger(best_score)) {
@@ -106,13 +107,13 @@ public:
                     continue;
                 }
 
-                std::cout << "UPDATE best score " << score->inlier_number << "\n";
+                std::cout << "Update best score\n";
                 best_score->copyFrom(score);
                 best_model->setDescriptor(model->returnDescriptor());
                 last_update = 0;
             }
         }
-         std::cout << "end best score " << best_score->inlier_number << "\n";
+//         std::cout << "end best score " << best_score->inlier_number << "\n";
     }
 
 

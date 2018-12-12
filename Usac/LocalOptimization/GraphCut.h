@@ -28,11 +28,12 @@ protected:
     int num_sample;
     int sample_size;
     unsigned int lo_inner_iterations;
+    float * errors;
 public:
     int gc_iterations;
 
     ~GraphCut() {
-        delete gc_score, gc_model, inliers, sample, uniform_random_generator;
+        delete errors, gc_score, gc_model, inliers, sample, uniform_random_generator;
     }
     void init (unsigned int points_size_, Model * model, Estimator * estimator_, Quality * quality_, const int * const neighbors_) {
         lambda = model->lambda_graph_cut;
@@ -48,8 +49,18 @@ public:
 
         gc_model = new Model (model);
 
-        num_sample = 7 * model->sample_number;
+        if (points_size < 50) {
+            num_sample = 2 * model->sample_number;
+        } else if (points_size < 100) {
+            num_sample = 3 * model->sample_number;
+        } else if (points_size < 300) {
+            num_sample = 4 * model->sample_number;
+        } else {
+            num_sample = 7 * model->sample_number;
+        }
         sample_size = model->sample_number;
+
+        errors = new float[points_size];
 
         inliers = new int [points_size];
         sample = new int [num_sample];
@@ -103,7 +114,7 @@ public:
                         continue;
                     }
                 } else {
-                    if (inner_inliers_size >= gc_sample_size && iter > 0) {
+                    if (iter > 0) {
                         break;
                     }
                     if (! estimator->EstimateModelNonMinimalSample(inliers, inner_inliers_size, *gc_model)) {
@@ -114,10 +125,11 @@ public:
 
                 quality->getNumberInliers(gc_score, gc_model, false, nullptr);
 
-//                std::cout << "gc score " << gc_score->inlier_number << "\n";
+//                std::cout << "GC score " << gc_score->inlier_number << "\n";
 
                 if (gc_score->bigger(best_score)) {
-//                    std::cout << "UPDATE best score " << gc_score->inlier_number << "\n";
+//                    std::cout << "Update best score\n";
+                    // std::cout << "UPDATE best score " << gc_score->inlier_number << "\n";
                     is_best_model_updated = true;
                     best_score->copyFrom(gc_score);
                     best_model->setDescriptor(gc_model->returnDescriptor());

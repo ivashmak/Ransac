@@ -5,13 +5,11 @@ void GraphCut::labeling (const cv::Mat& model, Score * score, int * inliers) {
 
     estimator->setModelParameters(model);
 
-    Energy<float, float, float> *e = new Energy<float, float, float>(points_size, knn * points_size, NULL);
+    Energy<float, float, float> * e = new Energy<float, float, float>(points_size, knn * points_size, NULL);
 
     for (auto i = 0; i < points_size; ++i) {
         e->add_node();
     }
-
-    float * errors = new float [points_size];
 
     float energy, distance;
 
