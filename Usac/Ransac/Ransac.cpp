@@ -65,11 +65,11 @@ void Ransac::run(cv::InputArray input_points) {
     // get information from model about LO
     bool LO = model->LO;
     bool GraphCutLO = model->GraphCutLO;
-    bool SprtLO = model->SprtLO;
+    bool SprtLO = model->Sprt;
     
 //    std::cout << "General ransac Local Optimization " << LO << "\n";
 //    std::cout << "graphCut Local Optimization " << GraphCutLO << "\n";
-//    std::cout << "Sprt Local Optimization " << SprtLO << "\n";
+//    std::cout << "Sprt Local Optimization " << Sprt << "\n";
 
     // prosac
     ProsacTerminationCriteria * prosac_termination_criteria;
@@ -165,10 +165,10 @@ void Ransac::run(cv::InputArray input_points) {
 //                std::cout << "sprt verified\n";
                 if (!is_good_model) {
                     iters++;
-//                    std::cout << "model is bad\n";
+                    std::cout << "model is bad\n";
                     continue;
                 }
-//                std::cout << "model is good\n";
+                std::cout << "model is good\n";
             } else {
                 quality->getNumberInliers(current_score, models[i]);
             }
@@ -208,7 +208,7 @@ void Ransac::run(cv::InputArray input_points) {
                 // remember best model
                 best_model->setDescriptor (models[i]->returnDescriptor());
 
-//                  std::cout << "best score inlier number " << best_score->inlier_number << '\n';
+                  std::cout << "best score inlier number " << best_score->inlier_number << '\n';
 
                 // only for debug
 //                best_sample[0] = sample[0];
@@ -315,6 +315,7 @@ void Ransac::run(cv::InputArray input_points) {
             best_model->setDescriptor(non_minimal_model->returnDescriptor());
         } else {
             std::cout << "\033[1;31mNON minimal model completely failed!\033[0m \n";
+            break;
         }
     }
 

@@ -36,7 +36,7 @@ void DetectFeatures(const std::string &name, const cv::Mat &image1, const cv::Ma
 
     for (auto m : matches_vector)
     {
-        if (m.size() == 2 && m[0].distance < m[1].distance * 0.7) // 0.8?
+        if (m.size() == 2 && m[0].distance < m[1].distance * 0.7) // 0.8
         {
             auto& kp1 = keypoints1[m[0].queryIdx];
             auto& kp2 = keypoints2[m[0].trainIdx];

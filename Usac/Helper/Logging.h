@@ -58,14 +58,16 @@ public:
         file << statistical_results->std_dev_time_mcs << ",";
         file << statistical_results->median_time_mcs << ",";
 
-        file << statistical_results->avg_error << ",";
-        file << statistical_results->std_dev_error << ",";
-        file << statistical_results->median_error << ",";
+        file << statistical_results->avg_avg_error << ",";
+        file << statistical_results->std_dev_avg_error << ",";
+        file << statistical_results->median_avg_error << ",";
 
         file << statistical_results->worst_case_num_inliers << ",";
         file << statistical_results->worst_case_error << ",";
 
-        file << statistical_results->num_fails << "\n";
+        file << statistical_results->num_fails_10 << ",";
+        file << statistical_results->num_fails_25 << ",";
+        file << statistical_results->num_fails_50 << "\n";
     }
 
     void saveResultsMatlab (std::ofstream &file, const StatisticalResults * const statistical_results) {
@@ -74,8 +76,10 @@ public:
         file << statistical_results->avg_num_iters << ",";
         file << statistical_results->avg_num_lo_iters << ",";
         file << statistical_results->avg_time_mcs << ",";
-        file << statistical_results->avg_error << ",";
-        file << statistical_results->num_fails << "\n";
+        file << statistical_results->avg_avg_error << ",";
+        file << statistical_results->num_fails_10 << ",";
+        file << statistical_results->num_fails_25 << ",";
+        file << statistical_results->num_fails_50 << "\n";
     }
 
 

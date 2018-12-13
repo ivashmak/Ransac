@@ -11,7 +11,7 @@ public:
 	float desired_prob = 0.95;
 
     int min_iterations = 20;
-    int max_iterations = 15000;
+    int max_iterations = 10000;
 	int k_nearest_neighbors = 5;
 
 	/*
@@ -32,7 +32,7 @@ public:
 
     bool LO = false;
     bool GraphCutLO = false;
-    bool SprtLO = false;
+    bool Sprt = false;
 private:
     cv::Mat descriptor;
 	
@@ -63,7 +63,7 @@ public:
 	}
 	
 	void setSprtLO (bool SprtLO_) {
-		SprtLO = SprtLO_;
+		Sprt = SprtLO_;
 	}
 
 	void setLOParametres (unsigned int lo_iterative_iters, unsigned int lo_inner_iters, float lo_thresh, unsigned int lo_thresh_mult) {

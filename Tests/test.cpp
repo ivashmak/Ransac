@@ -71,7 +71,7 @@ void Tests::test (cv::Mat points,
     std::cout << "Best model = ...\n" << ransacOutput->getModel ()->returnDescriptor() << "\n";
 
     if (gt) {
-        float error = Quality::getErrorGT_inl(estimator, ransacOutput->getModel(), points.rows, &gt_inliers[0], gt_inliers.size());
+        float error = Quality::getErrorGT_inl(estimator, ransacOutput->getModel(), gt_inliers);
         std::cout << "Ground Truth number of inliers for same model parametres is " << gt_inliers.size() << "\n";
         std::cout << "Error to GT inliers " << error << "\n";
     }

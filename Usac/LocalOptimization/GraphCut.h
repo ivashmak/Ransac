@@ -49,15 +49,18 @@ public:
 
         gc_model = new Model (model);
 
-        if (points_size < 50) {
-            num_sample = 2 * model->sample_number;
-        } else if (points_size < 100) {
-            num_sample = 3 * model->sample_number;
-        } else if (points_size < 300) {
-            num_sample = 4 * model->sample_number;
-        } else {
-            num_sample = 7 * model->sample_number;
-        }
+//        if (points_size < 50) {
+//            num_sample = 2 * model->sample_number;
+//        } else if (points_size < 100) {
+//            num_sample = 3 * model->sample_number;
+//        } else if (points_size < 300) {
+//            num_sample = 4 * model->sample_number;
+//        } else {
+//            num_sample = 7 * model->sample_number;
+//        }
+
+        num_sample = 7 * model->sample_number;
+
         sample_size = model->sample_number;
 
         errors = new float[points_size];

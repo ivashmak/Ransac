@@ -171,7 +171,7 @@ void storeResultsFundamental () {
             results_total << "Desired probability for each image = " << model->desired_prob << "\n";
             results_total << "Standard LO = " << (bool) model->LO << "\n";
             results_total << "Graph Cut LO = " << (bool) model->GraphCutLO << "\n";
-            results_total << "SPRT = " << (bool) model->SprtLO << "\n\n\n";
+            results_total << "SPRT = " << (bool) model->Sprt << "\n\n\n";
 
             results_total << "Filename,GT Inl,Avg num inl/gt,Std dev num inl,Med num inl,"
                              "Avg num iters,Std dev num iters,Med num iters,"
@@ -179,7 +179,7 @@ void storeResultsFundamental () {
                              "Avg time (mcs),Std dev time,Med time,"
                              "Avg err,Std dev err,Med err,"
                              "Worst case num Inl,Worst case Err,"
-                             "Num fails\n";
+                             "Num fails (<10%),Num fails (<25%),Num fails (<50%)\n";
 
             std::cout << tests.sampler2string(smplr) << "\n";
             std::cout << lo[l][0] << " " << lo[l][1] << " " << lo[l][2] << "\n";

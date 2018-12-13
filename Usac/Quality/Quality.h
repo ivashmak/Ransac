@@ -158,6 +158,9 @@ public:
             }
         }
 
+        if (inliers_size == 0)
+            return -1;
+
         *num_gt_inliers = inliers_size;
 
         // calculate sum of errors to inliers of gt model
@@ -166,22 +169,23 @@ public:
         for (int i = 0; i < inliers_size; i++) {
             sum_errors += estimator->GetError(inliers[i]);
         }
-        return sum_errors;
+        return sum_errors / inliers_size;
     }
 
     static float getErrorGT_inl (Estimator * estimator,
                                 Model * model,
-                                int points_size,
-                                const int * const gt_inliers,
-                                int gt_inliers_size) {
+                                const std::vector<int>& gt_inliers) {
+
+        if (gt_inliers.size() == 0)
+            return -1;
 
         // calculate sum of errors to inliers of gt model
         float sum_errors = 0;
         estimator->setModelParameters(model->returnDescriptor());
-        for (int i = 0; i < gt_inliers_size; i++) {
+        for (int i = 0; i < gt_inliers.size(); i++) {
             sum_errors += estimator->GetError(gt_inliers[i]);
         }
-        return sum_errors;
+        return sum_errors / gt_inliers.size();
     }
 };
 

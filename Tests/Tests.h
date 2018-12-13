@@ -92,7 +92,10 @@ public:
         float errors = 0;
         float num_iters = 0;
         float num_lo_iters = 0;
-        float fails = 0;
+
+        int fails_10 = 0;
+        int fails_25 = 0;
+        int fails_50 = 0;
 
         NearestNeighbors nn;
         cv::Mat neighbors, neighbors_dists;
@@ -120,11 +123,9 @@ public:
 
             if (model->sampler == SAMPLER::Prosac) {
                 // re init termination criteria for prosac
-                ProsacTerminationCriteria *  prosac_termination_criteria_ = new ProsacTerminationCriteria;
-                prosac_termination_criteria_->initProsacTerminationCriteria
+                termination_criteria = new ProsacTerminationCriteria;
+                ((ProsacTerminationCriteria *)termination_criteria)->initProsacTerminationCriteria
                         (((ProsacSampler *) sampler)->getGrowthFunction(), model, points.rows, estimator);
-
-                termination_criteria = prosac_termination_criteria_;
             } else {
                 termination_criteria = new StandardTerminationCriteria;
             }
@@ -152,8 +153,7 @@ public:
             num_lo_iters = ransacOutput->getLOIters();
 
             if (GT) {
-                float error = Quality::getErrorGT_inl(estimator, ransacOutput->getModel(), points.rows, &gt_inliers[0],
-                                                      gt_inliers.size());
+                float error = Quality::getErrorGT_inl(estimator, ransacOutput->getModel(), gt_inliers);
 
                 errors += error;
                 errorss[i] = error;
@@ -163,19 +163,26 @@ public:
                  * Ground Truth inliers is less than 50% then
                  * it is fail.
                  */
-                if (num_inlierss[i] / gt_inliers.size() < 0.5) {
-                    fails++;
-                    //                    std::cout << "FAIL\n";
-                    //                    exit (111);
+                if (num_inlierss[i] / gt_inliers.size() < 0.10) {
+                    fails_10++;
+                    fails_25++;
+                    fails_50++;
+                } else if (num_inlierss[i] / gt_inliers.size() < 0.25) {
+                    fails_25++;
+                    fails_50++;
+                } else if (num_inlierss[i] / gt_inliers.size() < 0.50) {
+                    fails_50++;
                 }
-            }
 //            std::cout << "----------------------------------------------------------------\n";
+            }
         }
         
         StatisticalResults * results = new StatisticalResults;
         if (GT) {
-            results->num_fails = fails;
-            results->avg_error = errors/N;
+            results->num_fails_10 = fails_10;
+            results->num_fails_25 = fails_25;
+            results->num_fails_50 = fails_50;
+            results->avg_avg_error = errors/N;
         }
 
         results->avg_time_mcs = time/N;
@@ -183,14 +190,15 @@ public:
         results->avg_num_iters = num_iters/N;
         results->avg_num_lo_iters = num_lo_iters/N;
 
+
         long time_ = 0; float iters_ = 0, lo_iters_ = 0, inl_ = 0, err_ = 0;
-        // Calculate sum ((xi - x)^2)
-        for (int i = 0; i < N; i++) {
-            time_ += pow (results->avg_time_mcs - times[i], 2);
-            inl_ += pow (results->avg_num_inliers - num_inlierss[i], 2);
-            err_ += pow (results->avg_error - errorss[i], 2);
-            iters_ += pow (results->avg_num_iters - num_iterss[i], 2);
-            lo_iters_ += pow (results->avg_num_lo_iters - num_lo_iterss[i], 2);
+        // Calculate sum ((xj - x)^2)
+        for (int j = 0; j < N; j++) {
+            time_ += pow (results->avg_time_mcs - times[j], 2);
+            inl_ += pow (results->avg_num_inliers - num_inlierss[j], 2);
+            err_ += pow (results->avg_avg_error - errorss[j], 2);
+            iters_ += pow (results->avg_num_iters - num_iterss[j], 2);
+            lo_iters_ += pow (results->avg_num_lo_iters - num_lo_iterss[j], 2);
         }
 
         // Calculate standart deviation
@@ -201,7 +209,7 @@ public:
         results->std_dev_num_lo_iters = sqrt (lo_iters_/(N-biased));
 
         if (GT) {
-            results->std_dev_error = sqrt (err_/(N-biased));
+            results->std_dev_avg_error = sqrt (err_/(N-biased));
         }
 
         // Sort results for median
@@ -222,7 +230,7 @@ public:
         results->median_num_iters = (num_iterss[N/2-1] + num_iterss[N/2])/2;
         results->median_num_lo_iters = (num_lo_iterss[N/2-1] + num_lo_iterss[N/2])/2;
         if (GT) {
-            results->median_error = (errorss[N/2-1] + errorss[N/2])/2;
+            results->median_avg_error = (errorss[N/2-1] + errorss[N/2])/2;
         }
 
 //        std::cout << N << " runs of Ransac for " << model->getName() << " with points size " << points.size().width << '\n';

@@ -153,6 +153,7 @@ void NearestNeighbors::getNearestNeighbors_flann (const cv::Mat& points, int k_n
 
 
 void NearestNeighbors::getGridNearestNeighbors (const cv::Mat& points, int k_nearest_neighbors, std::vector<std::vector<int>> &neighbors) {
+    // cell size 25, 50, 100
     std::vector<std::vector<std::vector<int>>> cell1, cell2;
     for (int i = 0; i < 50; i++) {
         cell1.push_back(std::vector<std::vector<int>>());
@@ -169,12 +170,11 @@ void NearestNeighbors::getGridNearestNeighbors (const cv::Mat& points, int k_nea
         idx = 4 * i;
 //        std::cout << points_p[idx] << " " << points_p[idx+1] << " " << points_p[idx+2] << " " << points_p[idx+3] << "\n";
 
-        cell1[(int)points_p[idx] % 50][(int)points_p[idx+1] % 50].push_back(i);
-        cell2[(int)points_p[idx+2] % 50][(int)points_p[idx+3] % 50].push_back(i);
-
-//        cell1[points_p[idx] / 50][points_p[idx+1] / 50].push_back(i);
-//        cell2[points_p[idx+2] / 50][points_p[idx+3] / 50].push_back(i);
+        cell1[points_p[idx] / 50][points_p[idx+1] / 50].push_back(i);
+        cell2[points_p[idx+2] / 50][points_p[idx+3] / 50].push_back(i);
     }
+
+    // Hash Map
 
     for (int i = 0; i < points_size; i++) {
         neighbors.push_back(std::vector<int>());

@@ -15,9 +15,9 @@ public:
     float median_num_inliers = 0;
     float std_dev_num_inliers = 0;
 
-    float avg_error = -1;
-    float median_error = -1;
-    float std_dev_error = -1;
+    float avg_avg_error = -1;
+    float median_avg_error = -1;
+    float std_dev_avg_error = -1;
 
     float avg_num_iters = 0;
     float median_num_iters = 0;
@@ -30,7 +30,9 @@ public:
     float worst_case_error = -1;
     float worst_case_num_inliers = -1;
 
-    int num_fails = -1;
+    int num_fails_10 = -1;
+    int num_fails_25 = -1;
+    int num_fails_50 = -1;
 
     friend std::ostream& operator<< (std::ostream& stream, const StatisticalResults * res) {
         return stream
@@ -38,9 +40,9 @@ public:
                 << "Standard deviation of time " << res->std_dev_time_mcs << "\n"
                 << "Median of time " << res->median_time_mcs << "\n"
                 << "-----------------\n"
-                << "Average average error " << res->avg_error << "\n"
-                << "Standard deviation of average error " << res->std_dev_error << "\n"
-                << "Median of average error " << res->median_error << "\n"
+                << "Average average error " << res->avg_avg_error << "\n"
+                << "Standard deviation of average error " << res->std_dev_avg_error << "\n"
+                << "Median of average error " << res->median_avg_error << "\n"
                 << "-----------------\n"
                 << "Average number of inliers " << res->avg_num_inliers << "\n"
                 << "Standard deviation of number of inliers " << res->std_dev_num_inliers << "\n"
@@ -56,7 +58,9 @@ public:
                 << "-----------------\n"
                 << "Worst number of inliers " << res->worst_case_num_inliers << "\n"
                 << "Worst case error " << res->worst_case_error << "\n"
-                << res->num_fails << " failed models\n";
+                << res->num_fails_10 << " failed models (< 10% inliers ratio) \n"
+                << res->num_fails_25 << " failed models (< 25% inliers ratio) \n"
+                << res->num_fails_50 << " failed models (< 50% inliers ratio) \n";
     }
 
     void copyFrom (StatisticalResults * statisticalResults) {
@@ -68,9 +72,9 @@ public:
         median_num_inliers = statisticalResults->median_num_inliers;
         std_dev_num_inliers = statisticalResults->std_dev_num_inliers;
 
-        avg_error = statisticalResults->avg_error;
-        median_error = statisticalResults->median_error;
-        std_dev_error = statisticalResults->std_dev_error;
+        avg_avg_error = statisticalResults->avg_avg_error;
+        median_avg_error = statisticalResults->median_avg_error;
+        std_dev_avg_error = statisticalResults->std_dev_avg_error;
 
         avg_num_iters = statisticalResults->avg_num_iters;
         median_num_iters = statisticalResults->median_num_iters;
@@ -83,7 +87,9 @@ public:
         worst_case_num_inliers = statisticalResults->worst_case_num_inliers;
         worst_case_error = statisticalResults->worst_case_error;
 
-        num_fails = statisticalResults->num_fails;
+        num_fails_10 = statisticalResults->num_fails_10;
+        num_fails_25 = statisticalResults->num_fails_25;
+        num_fails_50 = statisticalResults->num_fails_50;
     }
 };
 

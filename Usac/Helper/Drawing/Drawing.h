@@ -128,24 +128,14 @@ public:
      */
     void drawEpipolarLines (const std::string& img_name, const std::vector<int>& inliers, cv::InputArray points1, cv::InputArray points2, const cv::Mat& F);
 
-    void drawHomographies (const std::string& img_name, const cv::Mat& points, cv::InputArray in_inliers, const cv::Mat &H) {
-        int * inliers =  (int *) in_inliers.getMat().data;
-        int inliers_size = in_inliers.size().width;
-
-        std::vector<int> gt_inliers;
+    void drawHomographies (const std::string& img_name, const cv::Mat& points, const std::vector<int>& inliers, const cv::Mat &H) {
         std::string folder = "../dataset/homography/";
-        std::string points_filename = "../dataset/homography/" + img_name + "_pts.txt";
 
         cv::Mat points1 = points.colRange(0, 2);
         cv::Mat points2 = points.colRange(2, 4);
         cv::Mat ones = cv::Mat_<float>::ones(points1.rows, 1);
         cv::hconcat(points1, ones, points1);
         cv::hconcat(points2, ones, points2);
-
-        getInliers(points_filename, gt_inliers);
-
-        std::cout << "gt inliers " << gt_inliers.size() << '\n';
-        std::cout << "inliers_size " << inliers_size << '\n';
 
         cv::Mat img1 = cv::imread(folder + img_name + "A.png");
         cv::Mat img2 = cv::imread(folder + img_name + "B.png");
@@ -169,16 +159,16 @@ public:
 
 
         // draw matches
-        cv::Mat img_matches, gt_img_matches;
-        drawMatches(img_matches, img1, img2, points1, points2, inliers, inliers_size);
-        drawMatches(gt_img_matches, img1, img2, points1, points2, &gt_inliers[0], gt_inliers.size());
-        cv::vconcat(img_matches, gt_img_matches, img_matches);
+//        cv::Mat img_matches, gt_img_matches;
+//        drawMatches(img_matches, img1, img2, points1, points2, inliers, inliers_size);
+//        drawMatches(gt_img_matches, img1, img2, points1, points2, &gt_inliers[0], gt_inliers.size());
+//        cv::vconcat(img_matches, gt_img_matches, img_matches);
         // ----------------------
 
 
         cv::Mat H_opencv = cv::Mat_<float>(cv::findHomography(points1, points2));
-        cv::Mat H_gt;
-        getMatrix3x3 (points_filename.substr(0, points_filename.find('_'))+"_model.txt", H_gt);
+        cv::Mat_<float> H_gt;
+        getMatrix3x3 (folder+img_name+"_model.txt", H_gt);
 
         drawErrors(img1_inl, img2_inl, points1, points2, H);
 
@@ -191,7 +181,7 @@ public:
         cv::hconcat(gt_img1_inl, gt_img2_inl, gt_img1_inl);
         cv::hconcat(opencv_img1_inl, opencv_img2_inl, opencv_img1_inl);
 
-//        cv::vconcat(img1_inl, gt_img1_inl, img1_inl);
+        cv::vconcat(img1_inl, gt_img1_inl, img1_inl);
 //        cv::vconcat(img1_inl, opencv_img1_inl, img1_inl);
 
 //        cv::resize(img2_inl, img2_inl, cv::Size (0.75 * img2_inl.cols, 0.5 * img2_inl.rows));
@@ -207,7 +197,7 @@ public:
         drawPanorama(images, panorama_gt, H_gt);
         drawPanorama(images, panorama_opencv, H_opencv.inv());
 
-        drawing_resize(img_matches);
+//        drawing_resize(img_matches);
 
         cv::vconcat(panorama, panorama_gt, panorama);
         cv::vconcat(panorama, panorama_opencv, panorama);

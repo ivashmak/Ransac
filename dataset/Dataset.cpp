@@ -50,12 +50,13 @@ std::vector<std::vector<std::string>> getEVDfilenames (bool reset_files) {
 };
 
 std::vector<std::string> getHomographyDatasetPoints (bool reset_files) {
-    std::vector<std::string> fnames = {"adam", "Brussels", "LePoint1",
-                                       "boat",          "CapitalRegion",  "LePoint2",
-                                       "BostonLib",     "city",           "LePoint3",
+    std::vector<std::string> fnames = {"adam", "Brussels",
+                                       "boat",          "CapitalRegion",
+                                       "BostonLib",     "city",
                                        "Boston",        "Eiffel",         "WhiteBoard",
                                        "BruggeSquare",  "ExtremeZoom",
                                        "BruggeTower",   "graf"};
+    // add LePoint1, LePoint2, LePoint3
 
     return fnames;
 };
