@@ -163,12 +163,16 @@ void Ransac::run(cv::InputArray input_points) {
                 is_good_model = sprt->verifyModelAndGetModelScore(models[i], iters,
                         std::max (best_score->inlier_number, current_score->inlier_number), true, current_score);
 //                std::cout << "sprt verified\n";
-                if (!is_good_model) {
-                    iters++;
-                    std::cout << "model is bad\n";
-                    continue;
+                if (iters < 10) {
+                    quality->getNumberInliers(current_score, models[i]);
+                } else {
+                    if (!is_good_model) {
+                        iters++;
+//                        std::cout << "model is bad\n";
+                        continue;
+                    }
+//                    std::cout << "model is good\n";
                 }
-                std::cout << "model is good\n";
             } else {
                 quality->getNumberInliers(current_score, models[i]);
             }
@@ -208,7 +212,7 @@ void Ransac::run(cv::InputArray input_points) {
                 // remember best model
                 best_model->setDescriptor (models[i]->returnDescriptor());
 
-                  std::cout << "best score inlier number " << best_score->inlier_number << '\n';
+//                  std::cout << "best score inlier number " << best_score->inlier_number << '\n';
 
                 // only for debug
 //                best_sample[0] = sample[0];

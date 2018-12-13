@@ -72,6 +72,7 @@ public:
 
      int number_rejected_models;
      int sum_fraction_data_points = 0;
+     int * array;
  public:
 
      ~SPRT() {
@@ -79,6 +80,11 @@ public:
      }
 
      void initialize (Estimator * estimator_, Model * model, int points_size_) {
+         array = new int [points_size_];
+         for (int i = 0; i < points_size_; i++) {
+             array[i] = i;
+         }
+
          sprt_histories = std::vector<SPRT_history*>();
          sprt_histories.push_back(new SPRT_history);
          estimator = estimator_;
@@ -86,7 +92,7 @@ public:
         if (model->estimator == ESTIMATOR::Homography) {
             // t_M = 200, m_S = 1, delta0 = 0.01, epsilon0 = 0.1;
             sprt_histories[0]->delta = 0.01;
-            sprt_histories[0]->epsilon = 0.05;
+            sprt_histories[0]->epsilon = 0.1;
 
             // time t_M needed to instantiate a model hypotheses given a sample
             t_M = 200;
@@ -162,9 +168,9 @@ public:
          double delta = sprt_histories[current_sprt_idx]->delta;
          double A = sprt_histories[current_sprt_idx]->A;
 
-         std::cout << "epsilon = " << epsilon << "\n";
-         std::cout << "delta =  " << delta << "\n";
-         std::cout << "A =  " << A << "\n";
+//         std::cout << "epsilon = " << epsilon << "\n";
+//         std::cout << "delta =  " << delta << "\n";
+//         std::cout << "A =  " << A << "\n";
 
          double lambda_new, lambda = 1;
 
@@ -172,8 +178,16 @@ public:
          int tested_point = 0;
          
          bool good = true;
+         int max = points_size;
          for (tested_point = 0; tested_point < points_size; tested_point++) {
-             if (estimator->GetError(tested_point) < threshold) {
+
+             unsigned int array_random_index = (unsigned int) random () % max;
+             int point = array[array_random_index];
+             max--;
+             array[array_random_index] = array[max];
+             array[max] = point;
+
+             if (estimator->GetError(point) < threshold) {
                  tested_inliers++;
                  lambda_new = lambda * (delta / epsilon);
              } else {
@@ -228,21 +242,20 @@ public:
              * in rejected models.
              * ???????????????????
              */
-            //          float delta_estimated;
-            //          delta_estimated = (float) tested_inliers / tested_point;
+//              float delta_estimated;
+//              delta_estimated = (float) tested_inliers / tested_point;
+              number_rejected_models++;
 
-            //          delta_estimated = delta * (number_rejected_models-1.0f) / number_rejected_models +
-            //                 float(tested_inliers)/(float(points_size) * number_rejected_models);
-
+//              delta_estimated = delta * (number_rejected_models-1.0f) / number_rejected_models +
+//                     float(tested_inliers)/(float(points_size) * number_rejected_models);
 
             //         std::cout << "delta estimated " << delta_estimated << "\n";
 
              sum_fraction_data_points += (float) tested_inliers / (float) points_size;
-             number_rejected_models++;
              std::cout << sum_fraction_data_points << "sum fraction\n";
              float delta_estimated = (float) sum_fraction_data_points / (float) number_rejected_models;
 
-             std::cout << delta_estimated << " = delta est\n";
+//             std::cout << delta_estimated << " = delta est\n";
              if (delta_estimated > 0 && fabsf(delta - delta_estimated) / delta > 0.05) {
                  SPRT_history * new_sprt_history = new SPRT_history;
 //                std::cout << "UPDATE. BAD MODEL\n";
@@ -283,16 +296,16 @@ public:
          // K = K1/K2 + 1 = (t_M / P_g) / (m_S / (C * P_g)) + 1= (t_M * S)/m_S + 1
          double K = (t_M * C) / m_S + 1;
          double An_1 = K;
-         std::cout << "C = " << C << "\n";
-         std::cout << "K = " << K << "\n";
-         std::cout << An_1 << " An 1\n";
+//         std::cout << "C = " << C << "\n";
+//         std::cout << "K = " << K << "\n";
+//         std::cout << An_1 << " An 1\n";
          // compute A using a recursive relation
          // A* = lim(n->inf)(An), the series typically converges within 4 iterations
          double An;
          for (unsigned int i = 0; i < 10; ++i) {
              An = K + log(An_1);
 
-             std::cout << An_1 << " An\n";
+//             std::cout << An_1 << " An\n";
              if (An - An_1 < 1.5e-8) {
                  break;
              }
