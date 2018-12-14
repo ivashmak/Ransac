@@ -73,6 +73,8 @@ public:
      int number_rejected_models;
      int sum_fraction_data_points = 0;
      int * array;
+
+     int max_hypothesis_test_before_sprt;
  public:
 
      ~SPRT() {
@@ -139,10 +141,11 @@ public:
 
          sprt_histories[0]->A = estimateThresholdA(sprt_histories[0]->epsilon, sprt_histories[0]->delta);
          sprt_histories[0]->k = 0;
-
          is_init = true;
 
          number_rejected_models = 0;
+
+         max_hypothesis_test_before_sprt = model->max_hypothesis_test_before_sprt;
      }
 
      /*
@@ -160,7 +163,7 @@ public:
       * Verifies model and returns model score.
       */
      bool verifyModelAndGetModelScore (Model * model, int current_hypothese,
-                    int maximum_score, bool get_score, Score *score) {
+                    int maximum_score, Score *score) {
 
          estimator->setModelParameters(model->returnDescriptor());
 
@@ -186,7 +189,7 @@ public:
              max--;
              array[array_random_index] = array[max];
              array[max] = point;
-
+//            std::cout << point << " ";
              if (estimator->GetError(point) < threshold) {
                  tested_inliers++;
                  lambda_new = lambda * (delta / epsilon);
@@ -202,12 +205,18 @@ public:
              }
              lambda = lambda_new;   
          }
+//        std::cout << "\n";
 
-         if (get_score) {
-             // Assume that model is good.
+         if (good || current_hypothese < max_hypothesis_test_before_sprt) {
+             int inliers_after_test = 0;
+             // if model is good max should be equal 0.
+             for (int p = 0; p < max; p++) {
+                 if (estimator->GetError(array[p]) < threshold) inliers_after_test++;
+             }
+             // Assume that model is good or current iteration is less than threshold of tested hypothesis before applying sprt.
              // Otherwise we don't need model score, because model is bad.
-             score->inlier_number = tested_inliers;
-             score->score = tested_inliers;
+             score->inlier_number = tested_inliers + inliers_after_test;
+             score->score = score->inlier_number;
          }
 
 
@@ -242,18 +251,12 @@ public:
              * in rejected models.
              * ???????????????????
              */
-//              float delta_estimated;
-//              delta_estimated = (float) tested_inliers / tested_point;
-              number_rejected_models++;
+//             std::cout << "Reject model\n";
+              float delta_estimated = (float) tested_inliers / tested_point;
 
-//              delta_estimated = delta * (number_rejected_models-1.0f) / number_rejected_models +
-//                     float(tested_inliers)/(float(points_size) * number_rejected_models);
-
-            //         std::cout << "delta estimated " << delta_estimated << "\n";
-
-             sum_fraction_data_points += (float) tested_inliers / (float) points_size;
-             std::cout << sum_fraction_data_points << "sum fraction\n";
-             float delta_estimated = (float) sum_fraction_data_points / (float) number_rejected_models;
+              // number_rejected_models++;
+//              sum_fraction_data_points += (float) tested_inliers / (float) tested_point;
+//             float delta_estimated = (float) sum_fraction_data_points / (float) number_rejected_models;
 
 //             std::cout << delta_estimated << " = delta est\n";
              if (delta_estimated > 0 && fabsf(delta - delta_estimated) / delta > 0.05) {
@@ -306,7 +309,7 @@ public:
              An = K + log(An_1);
 
 //             std::cout << An_1 << " An\n";
-             if (An - An_1 < 1.5e-8) {
+             if (fabs(An - An_1) < 1.5e-8) {
                  break;
              }
              An_1 = An;
@@ -332,14 +335,14 @@ public:
      unsigned int getUpperBoundIterations (int inliers_size) {
          double epsilon = (double) inliers_size / points_size;
          double P_g = pow (epsilon, sample_size);
-         double log_n_l_1 = 0;
+         double log_eta_l_1 = 0;
          double h;
          for (unsigned int test = 0; test < current_sprt_idx; test++) {
              h = computeExponentH(sprt_histories[test]->epsilon, epsilon, sprt_histories[test]->delta);
-             log_n_l_1 += log (1 - P_g * (1 - pow (sprt_histories[test]->A, -h))) * sprt_histories[test]->k;
+             log_eta_l_1 += log (1 - P_g * (1 - pow (sprt_histories[test]->A, -h))) * sprt_histories[test]->k;
          }
 //         std::cout << n_l_1 << "\n";
-         double numerator = LOG_ETA_0 - log_n_l_1;
+         double numerator = LOG_ETA_0 - log_eta_l_1;
 //         std::cout << numerator << " = numerator\n";
          if (numerator >= 0) return 0;
          double denumerator = log (1 - P_g * (1 - 1/sprt_histories[current_sprt_idx]->A));

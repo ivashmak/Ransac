@@ -25,7 +25,7 @@ public:
      *                                              w
      */
     void drawing_resize (cv::Mat &image) {
-        float nS = 880000; // 600 x 800
+        float nS = 900000; // 600 x 800
         cv::resize(image, image, cv::Size(sqrt ((image.cols * nS)/image.rows), sqrt ((image.rows * nS)/image.cols)));
     }
 
@@ -200,11 +200,11 @@ public:
 //        drawing_resize(img_matches);
 
         cv::vconcat(panorama, panorama_gt, panorama);
-        cv::vconcat(panorama, panorama_opencv, panorama);
+//        cv::vconcat(panorama, panorama_opencv, panorama);
 
         drawing_resize(panorama);
-//        cv::imshow("panorama", panorama);
-        // -------------------------------------
+        cv::imshow("panorama", panorama);
+        // ---------------->---------------------
 
 //        cv::imshow("imgs ", img_matches);
 

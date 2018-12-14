@@ -13,7 +13,7 @@ void storeResultsFundamental ();
 void getGTInliersFromGTModelFundamental (const std::string& filename, const cv::Mat& points, float threshold, std::vector<int> &gt_inliers);
 
 void Tests::testFundamentalFitting() {
-    std::string img_name = "napiera";
+    std::string img_name = "bonython";
     cv::Mat_<float> points1, points2, points;
 //    getPointsNby6("../dataset/Lebeda/kusvod2/"+img_name+"_vpts_pts.txt", points);
 //    read_points(points1, points2, "../dataset/adelaidermf/"+img_name+"_pts.txt");

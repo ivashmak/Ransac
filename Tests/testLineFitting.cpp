@@ -25,7 +25,7 @@ void store_results_line2d ();
 void getGTInliers (const cv::Mat& points, const cv::Mat& gt_model, float threshold, std::vector<int> &gt_inliers);
 
 void Tests::testLineFitting() {
-     std::string img_name = "../dataset/image1";
+//     std::string img_name = "../dataset/image1";
      std::vector<cv::Point_<float>> points;
      cv::Mat_<float> gt_model;
 
@@ -34,22 +34,25 @@ void Tests::testLineFitting() {
      generate(points, false, true, gt_model);
     
     // another generated data 
-//    std::string img_name = "../dataset/line2d/w=1000_h=1000_n=3.000000_I=500_N=10500";
-//    std::ifstream read_data_file;
-//    read_data_file.open (img_name+".txt");
-//    int width, height, noise, N;
-//    read_data_file >> width;
-//    read_data_file >> height;
-//    read_data_file >> noise;
-//    read_data_file >> gt_inliers;
-//    read_data_file >> N;
-//    std::vector<cv::Point_<float>> points;
-//    float x, y;
-//    for (int p = 0; p < N; p++) {
-//        read_data_file >> x >> y;
-//        cv::Point_<float> pt (x, y);
-//        points.push_back (pt);
-//    }
+    std::string img_name = "../dataset/line2d/w=1000_h=1000_n=3.000000_I=500_N=10500";
+    std::ifstream read_data_file;
+    read_data_file.open (img_name+".txt");
+    int width, height, noise, N;
+    float a,b,c;
+    read_data_file >> width;
+    read_data_file >> height;
+    read_data_file >> noise;
+    read_data_file >> a;
+    read_data_file >> b;
+    read_data_file >> c;
+    gt_model = (cv::Mat_<float>(1,3) << a,b,c);
+    read_data_file >> N;
+    float x, y;
+    for (int p = 0; p < N; p++) {
+        read_data_file >> x >> y;
+        cv::Point_<float> pt (x, y);
+        points.push_back (pt);
+    }
     // 
 
     std::cout << "generated points\n";
@@ -94,61 +97,35 @@ void Tests::testLineFitting() {
 
     // ---------------- uniform -------------------
 //     model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Uniform);
-//
-//     model->setStandardRansacLO(0);
-//     model->setGraphCutLO(0);
-//     model->setSprtLO(0);
-//
-//     initUniform(sampler, model->sample_number, points_size);
-//     test (pts, estimator, sampler, model, quality, termination_criteria, neighbors, img_name, gt_inliers);
-    //------------------------------------------
-
+//------------------------------------------
 
 
     // --------------  prosac ---------------------
     model = new Model (10, 4, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Prosac);
-    model->setStandardRansacLO(0);
-    model->setGraphCutLO(0);
-    model->setSprtLO(0);
-
-    test (sorted_pts, model, img_name, true, gt_model);
      // ------------------------------------------------
-
-
-
 
 
     // ---------------- napsac -------------------------------
     // model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Napsac);
-    // model->setSprtLO(1);
-    // model->setGraphCutLO(1);
-    // model->setStandardRansacLO(1);
-
-//     test (pts, model, img_name, true, gt_model);
     // ---------------------------------------------------------------------
-
-
 
 
     // ----------------- evsac ------------------------------
 //    model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Evsac);
-//
-//     test (pts, model, img_name, true, gt_model);
-    // ------------------------------------------------------------
-
-
-
+// ------------------------------------------------------------
 
 
     // ------------------ gradually increasing ransac ----------------------
 //    model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::GradualNapsac);
-//
-//     test (pts, model, img_name, true, gt_model);
-    // --------------------------------------------------------
+// --------------------------------------------------------
 
+     model->setStandardRansacLO(0);
+     model->setGraphCutLO(0);
+     model->setSprtLO(0);
+
+    test (sorted_pts, model, img_name, true, gt_model);
 
 //     getStatisticalResults(pts, model, 1000, true, false, gt_model, nullptr);
-
 
 //   store_results_line2d();
 }

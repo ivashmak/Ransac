@@ -33,6 +33,8 @@ public:
     bool LO = false;
     bool GraphCutLO = false;
     bool Sprt = false;
+
+    int max_hypothesis_test_before_sprt = 20;
 private:
     cv::Mat descriptor;
 	

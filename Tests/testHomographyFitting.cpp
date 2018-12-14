@@ -96,7 +96,7 @@ void Tests::testHomographyFitting() {
 
      model->setStandardRansacLO(0);
      model->setGraphCutLO(0);
-     model->setSprtLO(1);
+     model->setSprtLO(0);
 
      test (points, model, img_name, true, gt_inliers);
 
