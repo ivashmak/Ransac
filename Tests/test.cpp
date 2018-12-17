@@ -1,4 +1,5 @@
 #include "Tests.h"
+#include "../Usac/Helper/Logging.h"
 
 void Tests::test (cv::Mat points,
                    Model * model,
@@ -10,10 +11,15 @@ void Tests::test (cv::Mat points,
     cv::Mat neighbors, neighbors_dists;
 
 //    std::cout << "get neighbors\n";
+    std::vector<std::vector<int>> neighbors_v;
 
     // calculate time of nearest neighbor calculating
     auto begin_time = std::chrono::steady_clock::now();
-    nn.getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
+    if (model->neighborsType == NeighborsSearch::Nanoflann) {
+        nn.getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
+    } else {
+        nn.getGridNearestNeighbors(points, model->cell_size, neighbors_v);
+    }
     auto end_time = std::chrono::steady_clock::now();
     std::chrono::duration<float> fs = end_time - begin_time;
     long nn_time = std::chrono::duration_cast<std::chrono::microseconds>(fs).count();
@@ -42,12 +48,15 @@ void Tests::test (cv::Mat points,
     // -------------- end of initialization -------------------
 
 
-
     Drawing drawing;
     Logging logResult;
 
     Ransac ransac (model, sampler, termination_criteria, quality, estimator);
-    ransac.setNeighbors(neighbors);
+    if (model->neighborsType == NeighborsSearch::Nanoflann) {
+        ransac.setNeighbors(neighbors);
+    } else {
+        ransac.setNeighbors(neighbors_v);
+    }
     ransac.run(points);
 
     RansacOutput * ransacOutput = ransac.getRansacOutput();

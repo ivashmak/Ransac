@@ -21,8 +21,8 @@ protected:
     RansacOutput * ransac_output;
     Estimator * estimator;
 
-    cv::Mat knn_neighbors;
     int * neighbors = nullptr;
+    std::vector<std::vector<int>> neighbors_v;
 public:
     
     ~Ransac () {}
@@ -53,9 +53,9 @@ public:
         neighbors = (int *) neighbors_.data;
     }
 
-    const int * getNeighbors () const {
-        assert(neighbors != nullptr);
-        return neighbors;
+    void setNeighbors (const std::vector<std::vector<int>>& neighbors_) {
+        assert(!neighbors_.empty());
+        neighbors_v = neighbors_;
     }
 
     void run (cv::InputArray input_points);

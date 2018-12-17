@@ -203,8 +203,8 @@ public:
 //        cv::vconcat(panorama, panorama_opencv, panorama);
 
         drawing_resize(panorama);
-        cv::imshow("panorama", panorama);
-        // ---------------->---------------------
+//        cv::imshow("panorama", panorama);
+        // -------------------------------------
 
 //        cv::imshow("imgs ", img_matches);
 

@@ -15,7 +15,7 @@ public:
     void getNearestNeighbors_nanoflann (const cv::Mat& points, int k_nearest_neighbors,
                                                           cv::Mat &nearest_neighbors, bool get_distances,
                                                           cv::Mat &nearest_neighbors_distances);
-    void getGridNearestNeighbors (const cv::Mat& points, int k_nearest_neighbors, std::vector<std::vector<int>> &neighbors);
+    void getGridNearestNeighbors (const cv::Mat& points, int cell_sz, std::vector<std::vector<int>> &neighbors);
     void test (int knn=7);
 };
 #endif //USAC_NEARESTNEIGHBORS_H

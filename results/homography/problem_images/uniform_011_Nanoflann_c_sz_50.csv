@@ -1,0 +1,18 @@
+RAM 15.6 GB
+Intel Core i7
+OS type 64 bit
+8 CPUs
+Homography_estimator_Uniform_sampler
+Runs for each image = 100
+Threshold for each image = 2
+Desired probability for each image = 0.95
+Standard LO = 0
+Graph Cut LO = 1
+SPRT = 1
+
+
+Filename,GT Inl,Avg num inl/gt,Std dev num inl,Med num inl,Avg num iters,Std dev num iters,Med num iters,Avg num LO iters,Std dev num LO iters,Med num LO iters,Avg time (mcs),Std dev time,Med time,Avg err,Std dev err,Med err,Worst case num Inl,Worst case Err,Num fails (<10%),Num fails (<25%),Num fails (<50%)
+LePoint1,48,89.91,4.682,91,35.3,6.33334,33,1,98.026,100,6980,1556,6874,2.6336,0.60656,2.46589,75,4.87312,0,0,0
+LePoint2,56,67.95,2.56777,68,29.38,19.0919,48,1.01,85.8372,81,5289,1080,5217,1.07132,0.175524,0.995863,60,1.80676,0,0,0
+LePoint3,19,38.56,0.624743,39,134,0,134,0.42,46.1334,42,3952,503,3768,2.59335,0.0483042,2.59673,37,2.67266,0,0,0
+CapitalRegion,33,23.22,2.89402,23,6067.26,1745.98,6836,0.82,31.2956,21,45967,12268,50638,23.3406,16.0385,17.0026,20,54.3565,0,0,0

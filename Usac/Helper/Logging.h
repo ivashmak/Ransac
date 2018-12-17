@@ -4,6 +4,7 @@
 #include "../Model.h"
 #include "../Quality/Quality.h"
 #include "../../Tests/StatisticalResults.h"
+#include "../../Tests/Tests.h"
 
 #include <fstream>
 
@@ -39,6 +40,26 @@ public:
         std::cout << "speedup: " << time/ransacOutput->getTimeMicroSeconds() << "\n";
         std::cout << "iterations more on " << ((int)(ransacOutput->getNumberOfMainIterations() + ransacOutput->getLOIters()) - iters) << "\n";
         std::cout << "points under threshold more on " << ((int)ransacOutput->getNumberOfInliers() - points_under_treshold) << "\n";
+    }
+
+    void saveHeadOfCSV (std::ofstream &file, Model * model, int N_runs) {
+        file << Tests::getComputerInfo();
+        file << model->getName() << "\n";
+        file << "Runs for each image = " << N_runs << "\n";
+        file << "Threshold for each image = " << model->threshold << "\n";
+        file << "Desired probability for each image = " << model->desired_prob << "\n";
+        file << "Standard LO = " << (bool) model->LO << "\n";
+        file << "Graph Cut LO = " << (bool) model->GraphCutLO << "\n";
+        file << "SPRT = " << (bool) model->Sprt << "\n\n\n";
+
+        file << "Filename,GT Inl,Avg num inl/gt,Std dev num inl,Med num inl,"
+                         "Avg num iters,Std dev num iters,Med num iters,"
+                         "Avg num LO iters,Std dev num LO iters,Med num LO iters,"
+                         "Avg time (mcs),Std dev time,Med time,"
+                         "Avg err,Std dev err,Med err,"
+                         "Worst case num Inl,Worst case Err,"
+                         "Num fails (<10%),Num fails (<25%),Num fails (<50%)\n";
+
     }
 
     void saveResultsCSV (std::ofstream &file, const StatisticalResults * const statistical_results) {

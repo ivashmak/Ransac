@@ -11,6 +11,7 @@
 void saveDatasetToFiles ();
 std::vector<std::vector<std::string>> getEVDfilenames (bool reset_files=false);
 std::vector<std::string> getHomographyDatasetPoints (bool reset_files=false);
+std::vector<std::string> getProblemHomographyDatasetPoints ();
 std::vector<std::string> getFundamentalDatasetPoints ();
 std::vector<std::string> getKusvod2Dataset ();
 std::vector<std::string> getAdelaidermfDataset ();

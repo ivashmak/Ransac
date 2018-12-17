@@ -8,6 +8,7 @@
 #include "../Sampler/UniformSampler.h"
 #include "../../RandomGenerator/UniformRandomGenerator.h"
 
+
 class GraphCut : public LocalOptimization {
 protected:
     float threshold;
@@ -29,13 +30,18 @@ protected:
     int sample_size;
     unsigned int lo_inner_iterations;
     float * errors;
+
+    std::vector<std::vector<int>> neighbors_v;
+    NeighborsSearch neighborsType = NeighborsSearch::NullN;
 public:
     int gc_iterations;
 
     ~GraphCut() {
         delete errors, gc_score, gc_model, inliers, sample, uniform_random_generator;
     }
-    void init (unsigned int points_size_, Model * model, Estimator * estimator_, Quality * quality_, const int * const neighbors_) {
+    void init (unsigned int points_size_, Model * model, Estimator * estimator_, Quality * quality_, NeighborsSearch neighborsType_) {
+        neighborsType = neighborsType_;
+
         lambda = model->lambda_graph_cut;
         knn = model->k_nearest_neighbors;
         threshold = model->threshold;
@@ -43,7 +49,6 @@ public:
         quality = quality_;
         sqr_thr = 2 * threshold * threshold;
         points_size = points_size_;
-        neighbors = const_cast<int *>(neighbors_);
 
         gc_score = new Score;
 
@@ -76,7 +81,15 @@ public:
         gc_iterations = 0;
     }
 
-	void labeling (const cv::Mat& model, Score * score, int * inliers = nullptr);
+    void setNeighbors (const std::vector<std::vector<int>>& neighbors_v_) {
+        neighbors_v = neighbors_v_;
+    }
+
+    void setNeighbors (const int * const neighbors_) {
+        neighbors = const_cast<int *>(neighbors_);
+    }
+
+	void labeling (const cv::Mat& model, Score * score, int * inliers);
 
     void GraphCutLO (Model * best_model, Score * best_score) {
 //        std::cout << "begin best score " << best_score->inlier_number << "\n";

@@ -3,6 +3,7 @@
 
 enum ESTIMATOR  { NullE, Line2d, Homography, Fundamental, Essential };
 enum SAMPLER  { NullS, Uniform, GradualNapsac, Napsac, Prosac, Evsac };
+enum NeighborsSearch {NullN, Nanoflann, Grid};
 
 class Model {
 public:
@@ -35,6 +36,8 @@ public:
     bool Sprt = false;
 
     int max_hypothesis_test_before_sprt = 20;
+    NeighborsSearch neighborsType = NeighborsSearch::NullN;
+    int cell_size = 50; // for grid neighbors searching
 private:
     cv::Mat descriptor;
 	
@@ -54,6 +57,14 @@ public:
 		k_nearest_neighbors = knn;
 		estimator = estimator_;
 		sampler = sampler_;
+	}
+
+	void setNeighborsType (NeighborsSearch neighborsType_) {
+        neighborsType = neighborsType_;
+    }
+
+    void setCellSize (int cell_size_) {
+		cell_size = cell_size_;
 	}
 
 	void setStandardRansacLO (bool LO_) {

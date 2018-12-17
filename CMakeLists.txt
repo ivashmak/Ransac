@@ -24,11 +24,6 @@ add_executable(
         Usac/TerminationCriteria/ProsacTerminationCriteria.h
         Usac/TerminationCriteria/TerminationCriteria.h
 
-        Usac/Helper/Logging.h
-        Usac/Helper/Drawing/Drawing.h
-        Usac/Helper/Drawing/DrawPanorama.cpp
-        Usac/Helper/Drawing/DrawEpipolarLines.cpp
-
         Usac/Sampler/Sampler.h
         Usac/Sampler/UniformSampler.h
         Usac/Sampler/NapsacSampler.h
@@ -74,6 +69,11 @@ add_executable(
         Tests/StatisticalResults.h
         Tests/samplerInitialization.cpp
         Tests/estimatorInitialization.cpp
+
+        Usac/Helper/Logging.h
+        Usac/Helper/Drawing/Drawing.h
+        Usac/Helper/Drawing/DrawPanorama.cpp
+        Usac/Helper/Drawing/DrawEpipolarLines.cpp
 
         RandomGenerator/RandomGenerator.h
         RandomGenerator/ArrayRandomGenerator.h

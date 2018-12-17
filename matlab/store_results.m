@@ -1,5 +1,5 @@
-folder = '../results/homography/';
-folder_res = '../results/homography/';
+folder = '../results/homography/problem_images/';
+folder_res = '../results/homography/problem_images/';
 
 % folder = '../results/line2d/';
 % folder_res = '../results/line2d/';
@@ -10,81 +10,68 @@ folder_res = '../results/homography/';
 % folder = '../results/adelaidermf/';
 % folder_res = '../results/adelaidermf/';
 
-fileID = fopen([folder 'uniform_010_m.csv']);
+fileID = fopen([folder 'uniform_010_Grid_c_sz_50_m.csv']);
 t = textscan(fileID,'%s');
 images = split (t{:}, ',');
 images = images(:,1);
 
 % read from 2 column
-% uniform000 = csvread([folder 'uniform_000_m.csv'], 0, 1);
-% uniform100 = csvread([folder 'uniform_100_m.csv'], 0, 1);
-uniform010 = csvread([folder 'uniform_010_m.csv'], 0, 1);
-uniform011 = csvread([folder 'uniform_011_m.csv'], 0, 1);
-% uniform001 = csvread([folder 'uniform_001_m.csv'], 0, 1);
-% uniform111 = csvread([folder 'uniform_111_m.csv'], 0, 1);
+uniform010g50 = csvread([folder 'uniform_010_Grid_c_sz_50_m.csv'], 0, 1);
+uniform011g50 = csvread([folder 'uniform_011_Grid_c_sz_50_m.csv'], 0, 1);
+uniform010f = csvread([folder 'uniform_010_Nanoflann_c_sz_50_m.csv'], 0, 1);
+uniform011f = csvread([folder 'uniform_011_Nanoflann_c_sz_50_m.csv'], 0, 1);
 
-% prosac000 = csvread([folder 'prosac_000_m.csv'], 0, 1);
-% prosac100 = csvread([folder 'prosac_100_m.csv'], 0, 1);
-prosac010 = csvread([folder 'prosac_010_m.csv'], 0, 1);
-prosac011 = csvread([folder 'prosac_011_m.csv'], 0, 1);
-% prosac001 = csvread([folder 'prosac_001_m.csv'], 0, 1);
-% prosac111 = csvread([folder 'prosac_111_m.csv'], 0, 1);
-
-% napsac000 = csvread([folder 'napsac_000_m.csv'], 0, 1);
-% napsac100 = csvread([folder 'napsac_100_m.csv'], 0, 1);
-% napsac010 = csvread([folder 'napsac_010_m.csv'], 0, 1);
-% napsac001 = csvread([folder 'napsac_001_m.csv'], 0, 1);
-% napsac111 = csvread([folder 'napsac_111_m.csv'], 0, 1);
+% prosac010g50 = csvread([folder 'prosac_010_Grid_c_sz_50_m.csv'], 0, 1);
+% prosac011g50 = csvread([folder 'prosac_011_Grid_c_sz_50_m.csv'], 0, 1);
+% prosac010f = csvread([folder 'prosac_010_Nanoflann_c_sz_50_m.csv'], 0, 1);
+% prosac011f = csvread([folder 'prosac_011_Nanoflann_c_sz_50_m.csv'], 0, 1);
 
 
 algorithms = {
-            'uniform_gc', ...
-            'uniform_gc_sprt', ...
-            'prosac_gc', ...
-            'prosac_gc_sprt'};
-%             'prosac_sprt', ...
-%             'prosac_lo_gc_sprt'};
-%             'napsac', ...
-%             'napsac_lo', ...
-%             'napsac_gc', ...
-%             'napsac_sprt', ...
-%             'napsac_lo_gc_sprt'};
-
+            'uniform_gc_grid_50', ...
+            'uniform_gc_sprt_grid50', ...
+            'uniform_gc_nanoflann', ...
+            'uniform_gc_sprt_nanoflann'}; %, ...
+%             'prosac_gc_grid_50', ...
+%             'prosac_gc_sprt_grid50', ...
+%             'prosac_gc_nanoflann', ...
+%             'prosac_gc_sprt_nanoflann'};
+        
 inl = 1;
 it = 2;
 lo_it = 3;
 tm = 4;
 er = 5;
 fl = 6;
-        
-inliers = [uniform010(:,inl) uniform011(:,inl) ...
-           prosac010(:,inl) prosac011(:,inl)];
 
-iters =  [uniform010(:,it) uniform011(:,it) ...
-          prosac010(:,it) prosac011(:,it)];
+inliers = [uniform010g50(:,inl) uniform011g50(:,inl) uniform010f(:,inl) uniform011f(:,inl)];% ...
+%            prosac010g50(:,inl) prosac011g50(:,inl) prosac010f(:,inl) prosac011f(:,inl)];
+
+iters = [uniform010g50(:,it) uniform011g50(:,it) uniform010f(:,it) uniform011f(:,it) ];%...
+%            prosac010g50(:,it) prosac011g50(:,it) prosac010f(:,it) prosac011f(:,it)];
        
-lo_iters =  [uniform010(:,lo_it) uniform010(:,lo_it) ...
-             prosac011(:,lo_it) prosac011(:,lo_it)];
+lo_iters = [uniform010g50(:,lo_it) uniform011g50(:,lo_it) uniform010f(:,lo_it) uniform011f(:,lo_it)];% ...
+%            prosac010g50(:,lo_it) prosac011g50(:,lo_it) prosac010f(:,lo_it) prosac011f(:,lo_it)];
 
-time = [uniform010(:,tm) uniform011(:,tm) ...
-         prosac010(:,tm)  prosac011(:,tm)]; 
-
-fails = [uniform010(:,fl) uniform011(:,fl) ...
-          prosac010(:,fl)  prosac011(:,fl)];
-
-fails2 = [uniform010(:,fl+1) uniform011(:,fl+1) ...
-           prosac010(:,fl+1)  prosac011(:,fl+1)];
-
-fails3 = [uniform010(:,fl+2) uniform011(:,fl+2) ...
-           prosac010(:,fl+2)  prosac011(:,fl+2)];
-
-errors = [uniform010(:,er) uniform011(:,er) ...
-         prosac010(:,er) prosac011(:,er)];
-
+time = [uniform010g50(:,tm) uniform011g50(:,tm) uniform010f(:,tm) uniform011f(:,tm)];% ...
+%            prosac010g50(:,tm) prosac011g50(:,tm) prosac010f(:,tm) prosac011f(:,tm)];     
+       
+fails = [uniform010g50(:,fl) uniform011g50(:,fl) uniform010f(:,fl) uniform011f(:,fl)];% ...
+%            prosac010g50(:,fl) prosac011g50(:,fl) prosac010f(:,fl) prosac011f(:,fl)];
+   
+fails2 = [uniform010g50(:,fl+1) uniform011g50(:,fl+1) uniform010f(:,fl+1) uniform011f(:,fl+1)];% ...
+%            prosac010g50(:,fl+1) prosac011g50(:,fl+1) prosac010f(:,fl+1) prosac011f(:,fl+1)];
+   
+fails3 = [uniform010g50(:,fl+2) uniform011g50(:,fl+2) uniform010f(:,fl+2) uniform011f(:,fl+2)];% ...
+%            prosac010g50(:,fl+2) prosac011g50(:,fl+2) prosac010f(:,fl+2) prosac011f(:,fl+2)];
+   
+errors = [uniform010g50(:,er) uniform011g50(:,er) uniform010f(:,er) uniform011f(:,er)];% ...
+%            prosac010g50(:,er) prosac011g50(:,er) prosac010f(:,er) prosac011f(:,er)];
+   
 
 num_images = numel (images);
 num_algs = numel (algorithms);
-alg = {'1' '2' '3' '4'}; %  '5' '6' '7' '8' '9' 'A'};
+alg = {'1' '2' '3' '4'};% '5' '6' '7' '8'};
 
  
 save_results (inliers, images, algorithms, alg, 'Average number of inliers', [folder_res 'inliers'])
@@ -95,46 +82,3 @@ save_results (fails, images, algorithms, alg, 'Number of fails < 10%', [folder_r
 save_results (fails2, images, algorithms, alg, 'Number of fails < 25%', [folder_res 'fails2'])
 save_results (fails3, images, algorithms, alg, 'Number of fails < 50%', [folder_res 'fails3'])
 save_results (errors, images, algorithms, alg, 'Average Error', [folder_res 'errors'])
-
-
-% criteria = {'inliers', 'std inliers', 'iters', 'std iters', 'time', 'std time', 'fails'};
-% for img = 1:numel (images)
-%     for cr = 1:numel(criteria) 
-%         subplot (numel(criteria), 1, cr);
-%         data = [uniform000(img,cr) uniform100(img,cr) uniform010(img,cr) uniform001(img,cr) uniform111(img,cr)];
-%         if (cr == numel(criteria))
-%             h = heatmap(algorithms, criteria{cr}, data);
-%         else
-%             h = heatmap(alg, criteria{cr}, data);
-%         end
-%         if (cr == 1)
-%             h.title(images{img});
-%         end
-%     end
-%     print('-fillpage',[folder_res images{img}],'-dpdf', '-r300')
-%     close
-% end
-
-function save_results (data, images, algorithms, alg, titl, save)
-    figure('units','normalized','outerposition',[0 0 1 1])
-    title ('asdad')
-
-    subplot (numel (images)+3, 1, 1);
-    h = heatmap(alg, 'title show', ones (size(data(1,:))));
-    h.title(titl);
-
-    for img = 1:numel (images)
-        subplot (numel (images)+3, 1, img+1);
-        h = heatmap(alg, images{img}, data(img,:));
-    end
-    
-    subplot (numel (images)+3, 1, numel(images)+2)
-    h = heatmap (alg, 'Average (all)', mean (data));
-    
-    subplot (numel (images)+3, 1, numel(images)+3)
-    h = heatmap(algorithms, 'i', ones (size(data(1,:))));
-    
-    print (gcf, [save '.png'], '-dpng', '-r300');
-%     print('-fillpage',save,'-dpdf', '-r300')
-    close;
-end

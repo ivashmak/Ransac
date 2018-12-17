@@ -2,7 +2,6 @@
 #define TESTS_TESTS_H
 
 #include "../Usac/Helper/Drawing/Drawing.h"
-#include "../Usac/Helper/Logging.h"
 #include "../Usac/Estimator/Estimator.h"
 #include "../Usac/Quality/Quality.h"
 #include "../Usac/Ransac/Ransac.h"
@@ -10,7 +9,6 @@
 #include "../Usac/Sampler/ProsacSampler.h"
 #include "../Usac/TerminationCriteria/ProsacTerminationCriteria.h"
 #include "../Usac/Utils/NearestNeighbors.h"
-
 
 class Tests {
 public:
@@ -47,7 +45,7 @@ public:
     void getSortedPoints (const cv::Mat& neighbors_dists) {
     }
 
-    std::string sampler2string (SAMPLER sampler) {
+    static std::string sampler2string (SAMPLER sampler) {
         if (sampler == SAMPLER::Prosac) return "prosac";
         if (sampler == SAMPLER::Uniform) return "uniform";
         if (sampler == SAMPLER::Napsac) return "napsac";
@@ -55,7 +53,7 @@ public:
         return "";
     }
 
-    std::string estimator2string (ESTIMATOR estimator) {
+    static std::string estimator2string (ESTIMATOR estimator) {
         if (estimator == ESTIMATOR::Line2d) return "line2d";
         if (estimator == ESTIMATOR::Homography) return "homography";
         if (estimator == ESTIMATOR::Fundamental) return "fundamental";
@@ -63,8 +61,13 @@ public:
         return "";
     }
 
+    static std::string nearestNeighbors2string (NeighborsSearch nn) {
+        if (nn == NeighborsSearch::Grid) return "Grid";
+        if (nn == NeighborsSearch::Nanoflann) return "Nanoflann";
+        return "";
+    }
 
-    std::string getComputerInfo () {
+    static std::string getComputerInfo () {
         return "RAM 15.6 GB\n"
                "Intel Core i7\n"
                "OS type 64 bit\n"
@@ -80,6 +83,16 @@ public:
                                 bool GT,
                                 const std::vector<int>& gt_inliers, bool get_results,
                                 StatisticalResults * statistical_results) {
+
+        std::cout << "Testing " << estimator2string(model->estimator) << "\n";
+        std::cout << "with " << sampler2string(model->sampler) << " sampler\n";
+        std::cout << "with " << nearestNeighbors2string(model->neighborsType) << " neighbors searching\n";
+        std::cout << "with cell size = " << model->cell_size << "\n";
+        std::cout << "LO " << model->LO << "\n";
+        std::cout << "GC " << model->GraphCutLO << "\n";
+        std::cout << "SPRT " << model->Sprt << "\n";
+        std::cout << N << " times \n";
+
 
         long * times = new long[N];
         float * num_inlierss = new float[N];
@@ -99,10 +112,15 @@ public:
 
         NearestNeighbors nn;
         cv::Mat neighbors, neighbors_dists;
+        std::vector<std::vector<int>> neighbors_v;
 
         // calculate time of nearest neighbor calculating
         auto begin_time = std::chrono::steady_clock::now();
-        nn.getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
+        if (model->neighborsType == NeighborsSearch::Nanoflann) {
+            nn.getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
+        } else {
+            nn.getGridNearestNeighbors(points, model->cell_size, neighbors_v);
+        }
         auto end_time = std::chrono::steady_clock::now();
         std::chrono::duration<float> fs = end_time - begin_time;
         long nn_time = std::chrono::duration_cast<std::chrono::microseconds>(fs).count();
@@ -133,7 +151,11 @@ public:
 
 
             Ransac ransac (model, sampler, termination_criteria, quality, estimator);
-            ransac.setNeighbors(neighbors);
+            if (model->neighborsType == NeighborsSearch::Nanoflann) {
+                ransac.setNeighbors(neighbors);
+            } else {
+                ransac.setNeighbors(neighbors_v);
+            }
             ransac.run(points);
             RansacOutput *ransacOutput = ransac.getRansacOutput();
 
@@ -234,7 +256,7 @@ public:
         }
 
 //        std::cout << N << " runs of Ransac for " << model->getName() << " with points size " << points.size().width << '\n';
-        std::cout << results << "\n";
+//        std::cout << results << "\n";
 
         if (get_results) {
             statistical_results->copyFrom(results);

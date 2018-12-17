@@ -1,8 +1,9 @@
 #include "NearestNeighbors.h"
 #include "../../Detector/ReadPoints.h"
+#include "Math.h"
 
 #include <Eigen/Dense>
-#include <opencv2/core/eigen.hpp>
+#include <opencv/cxeigen.hpp>
 
 
 /*
@@ -151,98 +152,149 @@ void NearestNeighbors::getNearestNeighbors_flann (const cv::Mat& points, int k_n
 //    std::cout << dists << "\n\n";
 }
 
+struct CellCoord {
+    int c1x, c1y, c2x, c2y;
+    CellCoord() {};
+    void init (int c1x_, int c1y_, int c2x_, int c2y_) {
+        c1x = c1x_;
+        c1y = c1y_;
+        c2x = c2x_;
+        c2y = c2y_;
+    }
+    bool operator==(const CellCoord &o) const {
+        return c1x == o.c1x && c1y == o.c1y && c2x == o.c2x && c2y == o.c2y;
+    }
 
-void NearestNeighbors::getGridNearestNeighbors (const cv::Mat& points, int k_nearest_neighbors, std::vector<std::vector<int>> &neighbors) {
+    bool operator<(const CellCoord &o) const {
+        if (c1x < o.c1x) return true;
+        if (c1x == o.c1x && c1y < o.c1y) return true;
+        if (c1x == o.c1x && c1y == o.c1y && c2x < o.c2x) return true;
+        if (c1x == o.c1x && c1y == o.c1y && c2x == o.c2x && c2y < o.c2y) return true;
+        else return false;
+    }
+};
+
+struct hash_fn {
+    std::size_t operator() (const CellCoord &coord) const {
+        std::size_t h1 = std::hash<int>()(coord.c1x);
+        std::size_t h2 = std::hash<int>()(coord.c1y);
+        std::size_t h3 = std::hash<int>()(coord.c2x);
+        std::size_t h4 = std::hash<int>()(coord.c2y);
+        return h1 ^ h2 ^ h3 ^ h4;
+    }
+};
+
+#include <unordered_map>
+void NearestNeighbors::getGridNearestNeighbors (const cv::Mat& points, int cell_sz, std::vector<std::vector<int>> &neighbors) {
     // cell size 25, 50, 100
-    std::vector<std::vector<std::vector<int>>> cell1, cell2;
-    for (int i = 0; i < 50; i++) {
-        cell1.push_back(std::vector<std::vector<int>>());
-        cell2.push_back(std::vector<std::vector<int>>());
-        for (int j = 0; j < 50; j++) {
-            cell1[i].push_back(std::vector<int>());
-            cell2[i].push_back(std::vector<int>());
-        }
-    }
+    std::map<CellCoord, std::vector<int>> neighbors_map;
+//    std::unordered_map<CellCoord, std::vector<int>, hash_fn> neighbors_umap;
 
-    float * points_p = (float *) points.data;
+    float *points_p = (float *) points.data;
     unsigned int idx, points_size = points.rows;
+    CellCoord c;
     for (unsigned int i = 0; i < points_size; i++) {
+        neighbors.emplace_back(std::vector<int>());
+        neighbors[i].reserve(10); // reserve estimated neighbors size
+
         idx = 4 * i;
-//        std::cout << points_p[idx] << " " << points_p[idx+1] << " " << points_p[idx+2] << " " << points_p[idx+3] << "\n";
+        c.init(points_p[idx] / cell_sz, points_p[idx + 1] / cell_sz, points_p[idx + 2] / cell_sz,
+               points_p[idx + 3] / cell_sz);
+        neighbors_map[c].push_back(i);
 
-        cell1[points_p[idx] / 50][points_p[idx+1] / 50].push_back(i);
-        cell2[points_p[idx+2] / 50][points_p[idx+3] / 50].push_back(i);
     }
 
-    // Hash Map
+    // debug
+//    for (auto cells : neighbors_map) {
+//        std::cout << "key = (" << cells.first.c1x << " " << cells.first.c1y << " " << cells.first.c2x << " "
+//                  << cells.first.c2y <<
+//                  ") values = ";
+//        for (auto v : cells.second) {
+//            std::cout << v << " ";
+//        }
+//        std::cout << "\n";
+//    }
+//    std::cout << "--------------------------\n";
+//    for (auto cells : neighbors_umap) {
+//        std::cout << "key = (" << cells.first.c1x << " " << cells.first.c1y << " " << cells.first.c2x << " "
+//                  << cells.first.c2y <<
+//                  ") values = ";
+//        for (auto v : cells.second) {
+//            std::cout << v << " ";
+//        }
+//        std::cout << "\n";
+//    }
+    unsigned long neighbors_in_cell;
+    for (auto cells : neighbors_map) {
+        neighbors_in_cell = cells.second.size();
+        if (neighbors_in_cell < 2) continue;
 
-    for (int i = 0; i < points_size; i++) {
-        neighbors.push_back(std::vector<int>());
-    }
-
-    for (int i = 0; i < cell1.size(); i++) {
-        for (int j = 0; j < cell1[i].size(); j++) {
-            for (int n1 = 0; n1 < cell1[i][j].size(); n1++) {
-                std::cout << cell1[i][j][n1] << " ";
-//                for (int n2 = 0; n2 < cell2[i][j].size(); n2++) {
-//                    neighbors[cell1[i][j][n1]].push_back(cell2[i][j][n2]);
-//                }
+        for (unsigned int n1 = 0; n1 < neighbors_in_cell; n1++) {
+            for (unsigned int n2 = n1+1; n2 < neighbors_in_cell; n2++) {
+                neighbors[cells.second[n1]].push_back(cells.second[n2]);
+                neighbors[cells.second[n2]].push_back(cells.second[n1]);
             }
-            std::cout << "\n";
-
-            for (int n2 = 0; n2 < cell2[i][j].size(); n2++) {
-                std::cout << cell2[i][j][n2] << " ";
-//                neighbors[cell1[i][j][n1]].push_back(cell2[i][j][n2]);
-            }
-            std::cout << "\n";
-
-            std::cout << "----------------------------\n";
         }
     }
 }
 
 void NearestNeighbors::test (int knn) {
 
-    std::string img_name = "LePoint1";
+    std::clock_t start;
+    double duration;
+
+    std::string img_name = "Brussels";
     cv::Mat points, points1, points2;
     read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
     cv::hconcat(points1, points2, points);
     std::vector<std::vector<int>> neighbors;
-    getGridNearestNeighbors(points, 7, neighbors);
-    cv::Mat img1 = cv::imread ("../dataset/homography/"+img_name+"A.png");
-    cv::Mat img2 = cv::imread ("../dataset/homography/"+img_name+"B.png");
-    for (int i = 0; i < points.rows; i++) {
-        cv::Scalar color (random() % 255, random() % 255, random() % 255);
-        if (neighbors[i].size() != 0)
-            cv::circle (img1, cv::Point_<float>(points1.at<float>(i, 0), points1.at<float>(i, 1)), 3, color, -1);
-        for (int n = 0; n < neighbors[i].size(); i++) {
-            cv::circle (img2, cv::Point_<float>(points1.at<float>(neighbors[i][n], 0), points1.at<float>(neighbors[i][n], 1)), 3, color, -1);
-        }
-    }
-    cv::hconcat(img1, img2, img1);
-    cv::imshow("neighbors", img1);
-    cv::waitKey(0);
+    start = std::clock();
+    getGridNearestNeighbors(points, 50, neighbors);
+    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    std::cout << "duration grid: "<< duration <<'\n';
 
-//    std::vector<cv::Point_<float>> points;
-//    generate(points, false);
-//    cv::Mat_<int> nearest_neighbors_flann, nearest_neighbors_nanoflann;
-//
+    //  debug
+//    for (int i = 0; i < neighbors.size(); i++) {
+//        std::cout << "point " << i << ", neighbors: ";
+//        for (int j = 0; j < neighbors[i].size(); j++) {
+//            std::cout << neighbors[i][j] << " ";
+//        }
+//        std::cout << "\n";
+//    }
+
+//    for (int i = 0; i < points.rows; i++) {
+//        if (neighbors[i].size() < 2) continue;
+////        cv::Scalar color (random() % 255, random() % 255, random() % 255);
+//        cv::Scalar color (255, 255, 255);
+//        cv::Mat img1 = cv::imread ("../dataset/homography/"+img_name+"A.png");
+//        cv::Mat img2 = cv::imread ("../dataset/homography/"+img_name+"B.png");
+//        for (int n = 0; n < neighbors[i].size(); n++) {
+//            cv::circle (img1, cv::Point_<float>(points1.at<float>(neighbors[i][n], 0), points1.at<float>(neighbors[i][n], 1)), 3, color, -1);
+//            cv::circle (img2, cv::Point_<float>(points2.at<float>(neighbors[i][n], 0), points2.at<float>(neighbors[i][n], 1)), 3, color, -1);
+//        }
+//        cv::hconcat(img1, img2, img1);
+//        cv::imshow("neighbors", img1);
+//        cv::waitKey(0);
+//    }
+
+//    std::vector<cv::Point_<float>> points_v;
+//    generate(points_v, false);
+    cv::Mat_<int> nearest_neighbors_flann, nearest_neighbors_nanoflann;
+
 //    cv::Mat_<float> points_mat = cv::Mat (points);
 //
-//    std::clock_t start;
-//    double duration;
 //
 //    start = std::clock();
 //    getNearestNeighbors_flann(points_mat, knn, nearest_neighbors_flann);
 //    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
 //    std::cout << "duration flann: "<< duration <<'\n';
 //
-//    start = std::clock();
-//    cv::Mat neighbors_distances;
-//    getNearestNeighbors_nanoflann(points_mat, knn, nearest_neighbors_nanoflann, false, neighbors_distances);
-//    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-//    std::cout << "duration nanoflann: "<< duration <<'\n';
-
+    start = std::clock();
+    cv::Mat neighbors_distances;
+    getNearestNeighbors_nanoflann(points, knn, nearest_neighbors_nanoflann, false, neighbors_distances);
+    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    std::cout << "duration nanoflann: "<< duration <<'\n';
+//    std::cout << nearest_neighbors_nanoflann << "\n";
     // points size 3300
     // flann 0.33 mcs
     // nanoflann 0.014

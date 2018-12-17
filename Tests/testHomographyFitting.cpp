@@ -95,14 +95,16 @@ void Tests::testHomographyFitting() {
 
 
      model->setStandardRansacLO(0);
-     model->setGraphCutLO(0);
+     model->setGraphCutLO(1);
      model->setSprtLO(0);
 
-     test (points, model, img_name, true, gt_inliers);
+     model->setNeighborsType(NeighborsSearch::Grid);
+
+//     test (points, model, img_name, true, gt_inliers);
 
 //    getStatisticalResults(points, model, 100, true, gt_inliers, false, nullptr);
 
-//     storeResults();
+     storeResults();
 }
 
 
@@ -110,7 +112,9 @@ void Tests::testHomographyFitting() {
 // * Store results from dataset to csv file.
  */
 void storeResults () {
-    std::vector<std::string> points_filename = getHomographyDatasetPoints();
+//    std::vector<std::string> points_filename = getHomographyDatasetPoints();
+    std::vector<std::string> points_filename = getProblemHomographyDatasetPoints();
+
     Tests tests;
     Logging log;
 
@@ -127,14 +131,13 @@ void storeResults () {
     for (const std::string &img_name : points_filename) {
         std::cout << "get points for " << img_name << "\n";
         cv::Mat_<float> points1, points2, points;
-//        read_points (points1, points2, "../dataset/homography/sift_update/"+img_name+"_pts.txt");
-        LoadPointsFromFile(points, ("../dataset/homography/sift_update/"+img_name+"_pts.txt").c_str());
-        // read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
-        // cv::hconcat(points1, points2, points);
+//        LoadPointsFromFile(points, ("../dataset/homography/sift_update/"+img_name+"_pts.txt").c_str());
+         read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
+         cv::hconcat(points1, points2, points);
 
         cv::Mat_<float> sorted_points;
-//        densitySort (points, 3, sorted_points);
-        LoadPointsFromFile(sorted_points, ("../dataset/homography/sift_update/"+img_name+"_spts.txt").c_str());
+        densitySort (points, 3, sorted_points);
+//        LoadPointsFromFile(sorted_points, ("../dataset/homography/sift_update/"+img_name+"_spts.txt").c_str());
 
         // ------------ get Ground truth inliers and model ----------------------
         std::vector<int> gt_inliers_;
@@ -149,9 +152,19 @@ void storeResults () {
         sorted_points_imgs.push_back(sorted_points);
     }
 
+
     std::vector<SAMPLER> samplers;
     samplers.push_back(SAMPLER::Uniform);
-    samplers.push_back(SAMPLER::Prosac);
+//    samplers.push_back(SAMPLER::Prosac);
+
+    std::vector<NeighborsSearch> neighbors_searching;
+    neighbors_searching.push_back(NeighborsSearch::Grid);
+    neighbors_searching.push_back(NeighborsSearch::Nanoflann);
+
+    std::vector<int> cell_sizes;
+//    cell_sizes.push_back(25);
+    cell_sizes.push_back(50);
+//    cell_sizes.push_back(100);
 
     int lo_combinations = 2;
     bool lo[lo_combinations][3] = {
@@ -160,70 +173,63 @@ void storeResults () {
     };
 
     for (SAMPLER smplr : samplers) {
-        for (int l = 0; l < lo_combinations; l++) {
-            std::ofstream results_total;
-            std::ofstream results_matlab;
-            std::string mfname = "../results/homography/"+tests.sampler2string(smplr)+ "_"+
-                    std::to_string(lo[l][0])+std::to_string(lo[l][1])+std::to_string(lo[l][2])+"_m.csv";
-            std::string fname = "../results/homography/"+tests.sampler2string(smplr)+"_"+
-                    std::to_string(lo[l][0])+std::to_string(lo[l][1])+std::to_string(lo[l][2])+".csv";
+        for (NeighborsSearch neighbors_search : neighbors_searching) {
+            for (auto cell_size : cell_sizes) {
+                for (int l = 0; l < lo_combinations; l++) {
+                    std::ofstream results_total;
+                    std::ofstream results_matlab;
+                    std::string name = "../results/homography/problem_images/"+tests.sampler2string(smplr)+ "_"+
+                           std::to_string(lo[l][0])+std::to_string(lo[l][1])+std::to_string(lo[l][2]) +"_"+
+                           tests.nearestNeighbors2string(neighbors_search) + "_"+"c_sz_"+std::to_string(cell_size);
 
-            results_matlab.open (mfname);
-            results_total.open (fname);
+                    std::string mfname = name+"_m.csv";
+                    std::string fname = name+".csv";
 
-            Model *model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, smplr);
-            model->setStandardRansacLO(lo[l][0]);
-            model->setGraphCutLO(lo[l][1]);
-            model->setSprtLO(lo[l][2]);
+                    Model *model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, smplr);
+                    model->setStandardRansacLO(lo[l][0]);
+                    model->setGraphCutLO(lo[l][1]);
+                    model->setSprtLO(lo[l][2]);
+                    model->setNeighborsType(neighbors_search);
+                    model->setCellSize(cell_size);
 
-            results_total << tests.getComputerInfo();
-            results_total << model->getName() << "\n";
-            results_total << "Runs for each image = " << N_runs << "\n";
-            results_total << "Threshold for each image = " << model->threshold << "\n";
-            results_total << "Desired probability for each image = " << model->desired_prob << "\n";
-            results_total << "Standard LO = " << (bool) model->LO << "\n";
-            results_total << "Graph Cut LO = " << (bool) model->GraphCutLO << "\n";
-            results_total << "SPRT = " << (bool) model->Sprt << "\n\n\n";
+                    results_matlab.open (mfname);
+                    results_total.open (fname);
 
-            results_total << "Filename,GT Inl,Avg num inl/gt,Std dev num inl,Med num inl,"
-                             "Avg num iters,Std dev num iters,Med num iters,"
-                             "Avg num LO iters,Std dev num LO iters,Med num LO iters,"
-                             "Avg time (mcs),Std dev time,Med time,"
-                             "Avg err,Std dev err,Med err,"
-                             "Worst case num Inl,Worst case Err,"
-                             "Num fails (<10%),Num fails (<25%),Num fails (<50%)\n";
+                    log.saveHeadOfCSV (results_total, model, N_runs);
 
-            std::cout << tests.sampler2string(smplr) << "\n";
-            std::cout << lo[l][0] << " " << lo[l][1] << " " << lo[l][2] << "\n";
+                    int img = 0;
+                    for (const std::string &img_name : points_filename) {
 
-            int img = 0;
-            for (const std::string &img_name : points_filename) {
+                        std::cout << img_name << "\n";
 
-                std::cout << img_name << "\n";
+                        StatisticalResults * statistical_results = new StatisticalResults;
+                        if (smplr == SAMPLER::Prosac) {
+                            tests.getStatisticalResults(sorted_points_imgs[img], model, N_runs,
+                                                        true, gt_inliers_sorted[img], true, statistical_results);
+                        } else {
+                            tests.getStatisticalResults(points_imgs[img], model, N_runs,
+                                                        true, gt_inliers[img], true, statistical_results);
+                        }
 
-                StatisticalResults * statistical_results = new StatisticalResults;
-                if (smplr == SAMPLER::Prosac) {
-                    tests.getStatisticalResults(sorted_points_imgs[img], model, N_runs,
-                                                true, gt_inliers_sorted[img], true, statistical_results);
-                } else {
-                    tests.getStatisticalResults(points_imgs[img], model, N_runs,
-                                                true, gt_inliers[img], true, statistical_results);
+                        // save to csv file
+                        results_total << img_name << ",";
+                        results_total << gt_inliers[img].size() << ",";
+                        log.saveResultsCSV(results_total, statistical_results);
+
+                        // save results for matlab
+                        results_matlab << img_name << ",";
+                        log.saveResultsMatlab(results_matlab, statistical_results);
+
+                        img++;
+                    }
+                    std::cout << "------------------------------------------------\n";
+
+                    results_total.close();
+                    results_matlab.close();
                 }
 
-                // save to csv file
-                results_total << img_name << ",";
-                results_total << gt_inliers[img].size() << ",";
-                log.saveResultsCSV(results_total, statistical_results);
-
-                // save results for matlab
-                results_matlab << img_name << ",";
-                log.saveResultsMatlab(results_matlab, statistical_results);
-
-                img++;
+                if (neighbors_search == NeighborsSearch::Nanoflann) break;
             }
-
-            results_total.close();
-            results_matlab.close();
         }
     }
 }

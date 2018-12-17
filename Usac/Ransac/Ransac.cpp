@@ -34,6 +34,7 @@ void Ransac::run(cv::InputArray input_points) {
     assert(sampler != nullptr);
     assert(termination_criteria != nullptr);
     assert(sampler->isInit());
+    assert(model->neighborsType != NullN);
 
     auto begin_time = std::chrono::steady_clock::now();
 
@@ -107,7 +108,12 @@ void Ransac::run(cv::InputArray input_points) {
     GraphCut * graphCut;
     if (GraphCutLO) {
         graphCut = new GraphCut;
-        graphCut->init(points_size, model, estimator, quality, getNeighbors());
+        graphCut->init(points_size, model, estimator, quality, model->neighborsType);
+        if (model->neighborsType == NeighborsSearch::Nanoflann) {
+            graphCut->setNeighbors(neighbors);
+        } else {
+            graphCut->setNeighbors(neighbors_v);
+        }
     }
 
     // if we have small number of data points, so LO will run with quarter of them,
