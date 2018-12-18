@@ -63,7 +63,7 @@ private:
     int current_sprt_idx;
     int last_sprt_update;
 
-    double t_M, m_S, threshold, prob_threshold;
+    double t_M, m_S, threshold, confidence;
     bool is_init = false;
     int points_size, sample_size, max_iterations;
     std::vector<SPRT_history*> sprt_histories;
@@ -135,7 +135,7 @@ public:
 
         sample_size = model->sample_number;
         threshold = model->threshold;
-        prob_threshold = model->desired_prob;
+        confidence = model->desired_prob;
         max_iterations = model->max_iterations;
         points_size = points_size_;
 
@@ -182,13 +182,15 @@ public:
 
         bool good = true;
         int max = points_size;
+        unsigned int array_random_index, point;
         for (tested_point = 0; tested_point < points_size; tested_point++) {
 
-            unsigned int array_random_index = (unsigned int) random () % max;
-            int point = array[array_random_index];
+            array_random_index = (unsigned int) random () % max;
+            point = array[array_random_index];
             max--;
             array[array_random_index] = array[max];
             array[max] = point;
+
 //            std::cout << point << " ";
             if (estimator->GetError(point) < threshold) {
                 tested_inliers++;
@@ -198,7 +200,8 @@ public:
             }
 //              std::cout << "λ = " << lambda_new << " vs A = " << A << "\n";
             if (lambda_new > A) {
-//                 std::cout << "BAD MODEL IN " << tested_point << "/" << points_size << "\n";
+//                std::cout << "\n";
+//                std::cout << "BAD MODEL IN " << tested_point << "/" << points_size << "\n";
                 good = false;
                 tested_point++;
                 break;
@@ -207,14 +210,19 @@ public:
         }
 //        std::cout << "\n";
 
-        if (good || current_hypothese < max_hypothesis_test_before_sprt) {
+        if (good) {
+            // Assume that model is good or current iteration is less than threshold of tested hypothesis before applying sprt.
+            // Otherwise we don't need model score, because model is bad.
+            score->inlier_number = tested_inliers;
+            score->score = score->inlier_number;
+        }
+
+        if (current_hypothese < max_hypothesis_test_before_sprt) {
             int inliers_after_test = 0;
-            // if model is good max should be equal 0.
+            // evaluate rest points, max must be less than points_size
             for (int p = 0; p < max; p++) {
                 if (estimator->GetError(array[p]) < threshold) inliers_after_test++;
             }
-            // Assume that model is good or current iteration is less than threshold of tested hypothesis before applying sprt.
-            // Otherwise we don't need model score, because model is bad.
             score->inlier_number = tested_inliers + inliers_after_test;
             score->score = score->inlier_number;
         }
@@ -249,17 +257,16 @@ public:
             * Since almost all tested models are ‘bad’, the probability
             * δ can be estimated as the average fraction of consistent data points
             * in rejected models.
-            * ???????????????????
             */
 //             std::cout << "Reject model\n";
             float delta_estimated = (float) tested_inliers / tested_point;
 
-            // number_rejected_models++;
-//              sum_fraction_data_points += (float) tested_inliers / (float) tested_point;
+//             number_rejected_models++;
+//             sum_fraction_data_points += (float) tested_inliers / (float) tested_point;
 //             float delta_estimated = (float) sum_fraction_data_points / (float) number_rejected_models;
 
 //             std::cout << delta_estimated << " = delta est\n";
-            if (delta_estimated > 0 && fabsf(delta - delta_estimated) / delta > 0.05) {
+            if (delta_estimated > 0 && fabs(delta - delta_estimated) / delta > 0.05) {
                 SPRT_history * new_sprt_history = new SPRT_history;
 //                std::cout << "UPDATE. BAD MODEL\n";
 
@@ -294,8 +301,12 @@ public:
     *                   p (0|Hg)                  p (1|Hg)
     */
     double estimateThresholdA (double epsilon, double delta) {
-
-        double C = (1 - delta) * log ((1 - delta)/(1-epsilon)) + delta * (log(delta/epsilon));
+        double C;
+//        if (delta == 0) {
+//            C = (1 - delta) * log ((1 - delta)/(1-epsilon));
+//        } else {
+            C = (1 - delta) * log ((1 - delta)/(1-epsilon)) + delta * (log(delta/epsilon));
+//        }
         // K = K1/K2 + 1 = (t_M / P_g) / (m_S / (C * P_g)) + 1= (t_M * S)/m_S + 1
         double K = (t_M * C) / m_S + 1;
         double An_1 = K;
@@ -356,6 +367,37 @@ public:
         return (unsigned int) std::min ((int)kl , max_iterations);
     }
 
+    // usac version
+    unsigned int updateSPRTStopping(unsigned int numInliers) {
+        double n_inliers = 1.0;
+        double n_pts = 1.0;
+        double h = 0.0, k = 0.0, prob_reject_good_model = 0.0, log_eta = 0.0;
+        double new_eps = (double)numInliers/points_size;
+
+        for (unsigned int i = 0; i < sample_size; ++i) {
+            n_inliers *= numInliers - i;
+            n_pts *= points_size - i;
+        }
+        double prob_good_model = n_inliers/n_pts;
+
+        if ( prob_good_model < std::numeric_limits<double>::epsilon() ) {
+            return max_iterations;
+        }
+        else if ( 1 - prob_good_model < std::numeric_limits<double>::epsilon() )
+        {
+            return 1;
+        }
+
+        for (unsigned int test = 0; test < current_sprt_idx; test++) {
+            k += sprt_histories[test]->k;
+            h = computeExponentH(new_eps, sprt_histories[test]->epsilon, sprt_histories[test]->delta);
+            prob_reject_good_model = 1/(exp( h*log(sprt_histories[test]->A) ));
+            log_eta += (double) sprt_histories[test]->k * log( 1 - prob_good_model*(1-prob_reject_good_model) );
+        }
+
+        double nusample_s = k + ( log(1-confidence) - log_eta ) / log( 1-prob_good_model * (1-(1/sprt_histories[current_sprt_idx]->A)) );
+        return (unsigned int) ceil(nusample_s);
+    }
     /*
      * h(i) must hold
      *
@@ -372,8 +414,11 @@ public:
     double computeExponentH (double epsilon, double epsilon_new, double delta) {
 
         double a, b, x0, x1, v0, v1;
-
-        a = log(delta/epsilon);
+//        if (delta == 0) {
+//            a = 0;
+//        } else {
+            a = log(delta/epsilon);
+//        }
         b = log ((1-delta)/(1-epsilon));
 
         x0 = log (1/(1-epsilon_new))/b;

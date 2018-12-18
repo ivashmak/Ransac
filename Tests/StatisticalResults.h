@@ -56,8 +56,8 @@ public:
                 << "Standard deviation of number of LO iterations " << res->std_dev_num_lo_iters << "\n"
                 << "Median of number of LO iterations " << res->median_num_lo_iters << "\n"
                 << "-----------------\n"
-                << "Worst number of inliers " << res->worst_case_num_inliers << "\n"
-                << "Worst case error " << res->worst_case_error << "\n"
+                << "Worst case number of inliers " << res->worst_case_num_inliers << "\n"
+                << "Worst case average error " << res->worst_case_error << "\n"
                 << res->num_fails_10 << " failed models (< 10% inliers ratio) \n"
                 << res->num_fails_25 << " failed models (< 25% inliers ratio) \n"
                 << res->num_fails_50 << " failed models (< 50% inliers ratio) \n";

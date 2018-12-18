@@ -139,6 +139,9 @@ public:
 
         cv::Mat img1 = cv::imread(folder + img_name + "A.png");
         cv::Mat img2 = cv::imread(folder + img_name + "B.png");
+//        cv::Mat img1 = cv::imread("../dataset/EVD/1/" + img_name + ".png");
+//        cv::Mat img2 = cv::imread("../dataset/EVD/2/" + img_name + ".png");
+
         if (img1.empty()) {
             img1 = cv::imread(folder + img_name + "A.jpg");
             img2 = cv::imread(folder + img_name + "B.jpg");
@@ -169,6 +172,7 @@ public:
         cv::Mat H_opencv = cv::Mat_<float>(cv::findHomography(points1, points2));
         cv::Mat_<float> H_gt;
         getMatrix3x3 (folder+img_name+"_model.txt", H_gt);
+//        getMatrix3x3 ("../dataset/EVD/h/"+img_name+".txt", H_gt);
 
         drawErrors(img1_inl, img2_inl, points1, points2, H);
 

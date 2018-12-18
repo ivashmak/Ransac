@@ -1,5 +1,5 @@
-adelaidermf ();
-
+% adelaidermf ();
+kusvod2 ();
 
 function kusvod2 ()
     dataset = '../dataset/Lebeda/kusvod2/';
@@ -17,7 +17,7 @@ function kusvod2 ()
         fid2 = fopen([dataset name '_model.txt'], 'w');
         
         fprintf(fid1, '%f %f %d %f %f %d\n', pts');
-        fprintf(fid1, model');
+        fprintf(fid2, '%f %f %f\n%f %f %f\n%f %f %f\n', model');
         fclose(fid1);
         fclose(fid2);
     end

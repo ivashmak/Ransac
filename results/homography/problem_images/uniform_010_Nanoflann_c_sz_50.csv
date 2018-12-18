@@ -3,7 +3,7 @@ Intel Core i7
 OS type 64 bit
 8 CPUs
 Homography_estimator_Uniform_sampler
-Runs for each image = 100
+Runs for each image = 200
 Threshold for each image = 2
 Desired probability for each image = 0.95
 Standard LO = 0
@@ -12,7 +12,7 @@ SPRT = 0
 
 
 Filename,GT Inl,Avg num inl/gt,Std dev num inl,Med num inl,Avg num iters,Std dev num iters,Med num iters,Avg num LO iters,Std dev num LO iters,Med num LO iters,Avg time (mcs),Std dev time,Med time,Avg err,Std dev err,Med err,Worst case num Inl,Worst case Err,Num fails (<10%),Num fails (<25%),Num fails (<50%)
-LePoint1,48,91.32,1.61983,91,25.58,37.7121,18,1.2,99.2245,80,6942,1948,6221,2.51906,0.207968,2.48413,86,3.13793,0,0,0
-LePoint2,56,67.99,1.76094,68,43.49,10.3343,46,0.61,66.4447,61,4861,1184,4665,1.07313,0.297823,0.973917,61,2.58251,0,0,0
-LePoint3,19,38.42,0.496045,38,23.47,21.0672,9,0.62,55.6063,62,3684,1273,3636,2.63164,0.114905,2.59673,38,2.76778,0,0,0
-CapitalRegion,33,30.76,7.75004,30,2326.18,1239.55,2700,0.81,47.716,41,44779,21306,49972,14.6956,9.93857,12.0113,21,33.434,0,0,0
+LePoint1,48,86.55,6.47512,90,75.23,131.332,27,0.5,126.926,120,9223,3233,8203,3.09553,0.839537,2.74398,74,4.92999,0,0,0
+LePoint2,56,66.8,3.68072,68,146.35,84.2071,82,0.505,93.852,82,7728,1518,7811,1.50657,0.612139,1.37723,50,3.61024,0,0,0
+LePoint3,19,38.47,0.566307,39,156.54,141.327,111,0.315,52.8109,52,5248,1747,5226,2.58607,0.0738308,2.59673,37,2.67266,0,0,0
+CapitalRegion,33,35.97,9.44165,32,2381.66,2428.82,1778,0.405,65.8725,61,46239,41932,34208,9.75183,12.8962,4.94631,19,70.168,0,0,0

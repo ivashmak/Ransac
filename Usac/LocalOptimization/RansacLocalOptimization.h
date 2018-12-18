@@ -188,6 +188,9 @@ public:
                     break;
                 }
             }
+            std::cout << "threshold after " << lo_model->threshold << " lo score " <<
+                      lo_score->inlier_number << " best score " << best_score->inlier_number << "\n";
+
             // get original threshold back in case lo iterative ransac had break.
             lo_model->threshold = model->threshold;
 

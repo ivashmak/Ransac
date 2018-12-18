@@ -9,6 +9,7 @@
 #include "../Usac/Sampler/ProsacSampler.h"
 #include "../Usac/TerminationCriteria/ProsacTerminationCriteria.h"
 #include "../Usac/Utils/NearestNeighbors.h"
+#include "../Detector/detector.h"
 
 class Tests {
 public:
@@ -42,7 +43,26 @@ public:
                       bool gt,
                       const std::vector<int>& gt_inliers);
 
-    void getSortedPoints (const cv::Mat& neighbors_dists) {
+
+    void detectAndSaveFeatures (const std::vector<std::string>& dataset) {
+//        std::string folder = "../dataset/homography/";
+        std::string folder = "../dataset/Lebeda/kusvod2/";
+//        std::string folder = "../dataset/adelaidermf/";
+
+        for (const std::string &name : dataset) {
+            std::cout << name << "\n";
+            cv::Mat points;
+
+            cv::Mat image1 = cv::imread (folder+name+"A.png");
+            cv::Mat image2 = cv::imread (folder+name+"B.png");
+
+            if (image1.empty()) {
+                image1 = cv::imread (folder+name+"A.jpg");
+                image2 = cv::imread (folder+name+"B.jpg");
+            }
+
+            DetectFeatures(folder+"sift_update/"+name+"_pts.txt", image1, image2, points);
+        }
     }
 
     static std::string sampler2string (SAMPLER sampler) {

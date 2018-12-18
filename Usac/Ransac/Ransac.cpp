@@ -51,17 +51,16 @@ void Ransac::run(cv::InputArray input_points) {
     Score *best_score = new Score, *current_score = new Score;
 
     std::vector<Model*> models;
-    models.push_back (new Model(*model));
+    models.push_back (new Model(model));
 
     // Allocate max size of models for fundamental matrix
     // estimation to avoid reallocation
     if (model->estimator == ESTIMATOR::Fundamental) {
-        models.push_back (new Model(*model));
-        models.push_back (new Model(*model));
+        models.push_back (new Model(model));
+        models.push_back (new Model(model));
     }
 
     Model *best_model = new Model (model);
-    best_model->copyFrom (model);
 
     // get information from model about LO
     bool LO = model->LO;
@@ -172,12 +171,17 @@ void Ransac::run(cv::InputArray input_points) {
 
                 if (!is_good_model) {
                     iters++;
-//                  std::cout << "model is bad\n";
-                    if (iters >= model->max_hypothesis_test_before_sprt)
-                        continue;
-                }
-//                    std::cout << "model is good\n";
+//                    std::cout << "model is bad\n";
 
+                    // do not skip bad model until predefined iterations reached
+                    if (iters >= model->max_hypothesis_test_before_sprt) {
+//                        std::cout << "skip bad model in iteration " << iters << "\n";
+                        continue;
+                    }
+                }
+//                else {
+//                    std::cout << "model is good\n";
+//                }
             } else {
                 quality->getNumberInliers(current_score, models[i]);
             }
@@ -235,7 +239,8 @@ void Ransac::run(cv::InputArray input_points) {
                     max_iters = termination_criteria->getUpBoundIterations (best_score->inlier_number);
                 }
                 if (SprtLO) {
-//                     std::cout << "SPRT " << max_iters << " vs " << sprt->getUpperBoundIterations(best_score->inlier_number) << "\n";
+//                     std::cout << "std = " << max_iters << " vs sprt = " << sprt->getUpperBoundIterations(best_score->inlier_number) << "\n";
+//                    std::cout << "sprt (usac) = " << sprt->updateSPRTStopping(best_score->inlier_number) << "\n";
                     max_iters = std::min (max_iters, (int)sprt->getUpperBoundIterations(best_score->inlier_number));
 //                    std::cout << "got max iters \n";
                 }
@@ -249,7 +254,7 @@ void Ransac::run(cv::InputArray input_points) {
 
     if (best_score->inlier_number == 0) {
         std::cout << "Best score is 0. Check it!\n";
-        best_model->setDescriptor(cv::Mat_<float>::zeros(3,3));
+        best_model->setDescriptor(cv::Mat_<float>::eye(3,3));
 //        exit (111);
     }
 
@@ -258,25 +263,6 @@ void Ransac::run(cv::InputArray input_points) {
         // update best model and best score
         graphCut->GraphCutLO(best_model, best_score);
     }
-
-        //     Drawing drawing;
-        //     cv::Mat img1 = cv::imread ("../dataset/homography/LePoint1A.png");
-        //     cv::Mat img2 = cv::imread ("../dataset/homography/LePoint1B.png");
-        //     cv::Mat pts1 = input_points.getMat().colRange (0, 2);
-        //     cv::Mat pts2 = input_points.getMat().colRange (2, 4);
-        //     cv::hconcat (pts1, cv::Mat_<float>::ones(points_size, 1), pts1);
-        //     cv::hconcat (pts2, cv::Mat_<float>::ones(points_size, 1), pts2);
-        //     drawing.drawErrors (img1, img2, pts1, pts2, best_model->returnDescriptor());
-
-        // quality->getInliers(best_model->returnDescriptor(), inliers);
-        // for (int i = 0; i < best_score->inlier_number; i++) {
-        //    cv::circle (img1, cv::Point_<float>(pts1.at<float>(inliers[i], 0), pts1.at<float>(inliers[i], 1)), 4, cv::Scalar(255, 255, 255), -1);
-        // }
-        // cv::hconcat (img1, img2, img1);
-        //     cv::imshow ("homography", img1);
-        //     cv::imwrite("../results/homography/lepoint1.png", img1);
-        //     cv::waitKey(0);
-
 
 
     int * max_inliers = new int[points_size];
@@ -436,3 +422,24 @@ void Ransac::run(cv::InputArray input_points) {
 //            // drawing.showInliers(input_points, inl, img);
 //            cv::imshow("H", img); cv::waitKey(0);
 // -------------------------------------------
+
+
+
+//     Drawing drawing;
+//     cv::Mat img1 = cv::imread ("../dataset/homography/LePoint1A.png");
+//     cv::Mat img2 = cv::imread ("../dataset/homography/LePoint1B.png");
+//     cv::Mat pts1 = input_points.getMat().colRange (0, 2);
+//     cv::Mat pts2 = input_points.getMat().colRange (2, 4);
+//     cv::hconcat (pts1, cv::Mat_<float>::ones(points_size, 1), pts1);
+//     cv::hconcat (pts2, cv::Mat_<float>::ones(points_size, 1), pts2);
+//     drawing.drawErrors (img1, img2, pts1, pts2, best_model->returnDescriptor());
+
+// quality->getInliers(best_model->returnDescriptor(), inliers);
+// for (int i = 0; i < best_score->inlier_number; i++) {
+//    cv::circle (img1, cv::Point_<float>(pts1.at<float>(inliers[i], 0), pts1.at<float>(inliers[i], 1)), 4, cv::Scalar(255, 255, 255), -1);
+// }
+// cv::hconcat (img1, img2, img1);
+//     cv::imshow ("homography", img1);
+//     cv::imwrite("../results/homography/lepoint1.png", img1);
+//     cv::waitKey(0);
+

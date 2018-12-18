@@ -29,35 +29,30 @@ void saveDatasetToFiles () {
     fclose(evd1); fclose(evd2);
     pclose(fp1); pclose(fp2);
 }
-/*
- * Returns image filenames
- * Vector n x 2
- * first column is first correspondence
- * second column is second correspondence
- */
-std::vector<std::vector<std::string>> getEVDfilenames (bool reset_files) {
-    if (reset_files) saveDatasetToFiles();
 
-    std::vector<std::vector<std::string>> filenames (2);
-    std::ifstream evd1 ("../dataset/evd1.txt");
-    std::ifstream evd2 ("../dataset/evd2.txt");
-    std::string fn1, fn2;
-    while (std::getline(evd1, fn1) && std::getline(evd2, fn2)) {
-        filenames[0].push_back(fn1);
-        filenames[1].push_back(fn2);
-    }
-    return filenames;
-};
+std::vector<std::string> getEVDDataset () {
+    std::vector<std::string> fnames = {"adam", "cafe",
+                                       "mag", "cat", "dum",     "face",
+                                       "fox",        "girl",         "graf",
+                                       "grand",  "index",
+                                       "pkk", "shop", "there" , "vin"};
 
-std::vector<std::string> getHomographyDatasetPoints (bool reset_files) {
+    return fnames;
+}
+
+
+std::vector<std::string> getHomographyDatasetPoints () {
     std::vector<std::string> fnames = {"adam", "Brussels",
                                        "boat",
                                        "BostonLib",     "city",
                                        "Boston",        "Eiffel",         "WhiteBoard",
                                        "BruggeSquare",  "ExtremeZoom",
                                        "BruggeTower",   "graf"};
-    // add LePoint1, LePoint2, LePoint3, CapitalRegion
 
+//    std::vector<std::string> problem_img = getProblemHomographyDatasetPoints();
+//    for (int i = 0; i < problem_img.size(); i++) {
+//        fnames.push_back(problem_img[i]);
+//    }
     return fnames;
 };
 
@@ -91,21 +86,9 @@ std::vector<std::string> getKusvod2Dataset () {
 std::vector<std::string> getAdelaidermfDataset () {
     std::vector<std::string> fnames = {
             "barrsmith",
-            "biscuitbookbox",
-            "biscuitbook",
-            "biscuit",
-            "boardgame",
+            "bonhall",
             "bonython",
-            "book",
-            "breadcartoychips",
-            "breadtoycar",
-            "breadtoy",
-            "carchipscube",
-            "cubebreadtoychips",
-            "cubetoy",
             "elderhallb",
-            "gamebiscuit",
-            "game",
             "hartley",
             "johnsona",
             "johnsonb",
@@ -118,7 +101,6 @@ std::vector<std::string> getAdelaidermfDataset () {
             "oldclassicswing",
             "physics",
             "sene",
-            "toycubecar",
             "unihouse",
             "unionhouse"};
     return fnames;

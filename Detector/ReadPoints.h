@@ -10,4 +10,6 @@ bool LoadPointsFromFile(cv::Mat &points, const char* file);
 bool SavePointsToFile(const cv::Mat &points, const char* file, std::vector<int> *inliers);
 void getPointsNby6 (const std::string& filename, cv::Mat &points);
 
+void readEVDpoints (cv::Mat &points, const std::string &filename);
+
 #endif //READPOINTS_READPOINTS_H

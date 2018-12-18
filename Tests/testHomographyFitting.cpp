@@ -27,38 +27,20 @@
 void storeResults ();
 void getGTInliersFromGTModelHomography (const std::string& filename, const cv::Mat& points, float threshold, std::vector<int> &gt_inliers);
 
-void detectAndSaveFeatures (const std::vector<std::string>& dataset) {
-    for (const std::string &name : dataset) {
-        std::cout << name << "\n";
-        cv::Mat points;
-
-        cv::Mat image2, image1 = cv::imread ("../dataset/homography/"+name+"A.png");
-        if (image1.empty()) {
-            image1 = cv::imread ("../dataset/homography/"+name+"A.jpg");
-            if (image1.empty()) {
-                std::cout << "invalid image name!\n";
-                exit (111);
-            }
-            image2 = cv::imread ("../dataset/homography/"+name+"B.jpg");
-        } else {
-            image2 = cv::imread ("../dataset/homography/"+name+"B.png");
-        }
-
-        DetectFeatures("../dataset/homography/sift_update/"+name+"_pts.txt", image1, image2, points);
-    }
-}
-
 void Tests::testHomographyFitting() {
 
 //    detectAndSaveFeatures(getHomographyDatasetPoints());
 //    exit (0);
 
-    std::string img_name = "Brussels";
+    std::string img_name = "grand";
     cv::Mat points, points1, points2;
 //    read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
 //    cv::hconcat(points1, points2, points);
 
-    LoadPointsFromFile(points, ("../dataset/homography/sift_update/"+img_name+"_pts.txt").c_str());
+    // points are already sorted
+    readEVDpoints(points, "../dataset/EVD/EVD_tentatives/"+img_name+".png_m.txt");
+
+//    LoadPointsFromFile(points, ("../dataset/homography/sift_update/"+img_name+"_spts.txt").c_str());
 
     unsigned int points_size = (unsigned int) points.rows;
     std::cout << "points size " << points_size << "\n";
@@ -67,13 +49,14 @@ void Tests::testHomographyFitting() {
     float threshold = 2;
     float confidence = 0.95;
 
-//    cv::Mat_<float> sorted_points;
-//    densitySort(points, 3, sorted_points);
+    cv::Mat_<float> sorted_points;
+    densitySort(points, 3, sorted_points);
 
 
 // ------------ get Ground truth inliers and model ----------------------
     std::vector<int> gt_inliers;
-    getGTInliersFromGTModelHomography ("../dataset/homography/"+img_name+"_model.txt", points, threshold, gt_inliers);
+//    getGTInliersFromGTModelHomography ("../dataset/homography/"+img_name+"_model.txt", points, threshold, gt_inliers);
+    getGTInliersFromGTModelHomography ("../dataset/EVD/h/"+img_name+".txt", points, threshold, gt_inliers);
     // -------------------------------------------
     std::cout << "gt inliers " << gt_inliers.size() << "\n";
 
@@ -96,15 +79,15 @@ void Tests::testHomographyFitting() {
 
      model->setStandardRansacLO(0);
      model->setGraphCutLO(1);
-     model->setSprtLO(1);
-
+     model->setSprtLO(0);
+     model->setCellSize(50);
      model->setNeighborsType(NeighborsSearch::Grid);
 
 //     test (points, model, img_name, true, gt_inliers);
 
-    getStatisticalResults(points, model, 200, true, gt_inliers, false, nullptr);
+//    getStatisticalResults(points, model, 200, true, gt_inliers, false, nullptr);
 
-//     storeResults();
+     storeResults();
 }
 
 
@@ -113,7 +96,8 @@ void Tests::testHomographyFitting() {
  */
 void storeResults () {
 //    std::vector<std::string> points_filename = getHomographyDatasetPoints();
-    std::vector<std::string> points_filename = getProblemHomographyDatasetPoints();
+    std::vector<std::string> points_filename = getEVDDataset();
+//    std::vector<std::string> points_filename = getProblemHomographyDatasetPoints();
 
     Tests tests;
     Logging log;
@@ -123,7 +107,7 @@ void storeResults () {
     std::vector<std::vector<int>> gt_inliers;
     std::vector<std::vector<int>> gt_inliers_sorted;
 
-    int N_runs = 100;
+    int N_runs = 50;
     int knn = 5;
     float threshold = 2;
     float confidence = 0.95;
@@ -132,19 +116,25 @@ void storeResults () {
         std::cout << "get points for " << img_name << "\n";
         cv::Mat_<float> points1, points2, points;
 //        LoadPointsFromFile(points, ("../dataset/homography/sift_update/"+img_name+"_pts.txt").c_str());
-         read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
-         cv::hconcat(points1, points2, points);
+        readEVDpoints(points, "../dataset/EVD/EVD_tentatives/"+img_name+".png_m.txt");
+//         read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
+//         cv::hconcat(points1, points2, points);
 
         cv::Mat_<float> sorted_points;
-        densitySort (points, 3, sorted_points);
+//        densitySort (points, 3, sorted_points);
 //        LoadPointsFromFile(sorted_points, ("../dataset/homography/sift_update/"+img_name+"_spts.txt").c_str());
+        // points are already sorted for EVD
+        sorted_points = points.clone();
 
         // ------------ get Ground truth inliers and model ----------------------
         std::vector<int> gt_inliers_;
-        getGTInliersFromGTModelHomography ("../dataset/homography/"+img_name+"_model.txt", points, threshold, gt_inliers_);
+//        getGTInliersFromGTModelHomography ("../dataset/homography/"+img_name+"_model.txt", points, threshold, gt_inliers_);
+        getGTInliersFromGTModelHomography ("../dataset/EVD/h/"+img_name+".txt", points, threshold, gt_inliers_);
         std::vector<int> gt_inliers_sorted_;
-        getGTInliersFromGTModelHomography ("../dataset/homography/"+img_name+"_model.txt", sorted_points, threshold, gt_inliers_sorted_);
+//        getGTInliersFromGTModelHomography ("../dataset/homography/"+img_name+"_model.txt", sorted_points, threshold, gt_inliers_sorted_);
+        gt_inliers_sorted_ = gt_inliers_;
         // -------------------------------------------
+        std::cout << "gt inliers size = " << gt_inliers_.size() << "\n";
 
         gt_inliers.push_back(gt_inliers_);
         gt_inliers_sorted.push_back(gt_inliers_sorted_);
@@ -152,10 +142,9 @@ void storeResults () {
         sorted_points_imgs.push_back(sorted_points);
     }
 
-
     std::vector<SAMPLER> samplers;
     samplers.push_back(SAMPLER::Uniform);
-//    samplers.push_back(SAMPLER::Prosac);
+    samplers.push_back(SAMPLER::Prosac);
 
     std::vector<NeighborsSearch> neighbors_searching;
     neighbors_searching.push_back(NeighborsSearch::Grid);
@@ -178,9 +167,12 @@ void storeResults () {
                 for (int l = 0; l < lo_combinations; l++) {
                     std::ofstream results_total;
                     std::ofstream results_matlab;
-                    std::string name = "../results/homography/problem_images/"+tests.sampler2string(smplr)+ "_"+
-                           std::to_string(lo[l][0])+std::to_string(lo[l][1])+std::to_string(lo[l][2]) +"_"+
-                           tests.nearestNeighbors2string(neighbors_search) + "_"+"c_sz_"+std::to_string(cell_size);
+                    std::string name = "../results/EVD/";
+                    name += Tests::sampler2string(smplr);
+                    if (lo[l][0] == 1) name += "_lo";
+                    if (lo[l][1] == 1) name += "_gc";
+                    if (lo[l][2] == 1) name += "_sprt";
+                    name += "_"+Tests::nearestNeighbors2string(neighbors_search) + "_c_sz_"+std::to_string(cell_size);
 
                     std::string mfname = name+"_m.csv";
                     std::string fname = name+".csv";

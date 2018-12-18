@@ -207,3 +207,51 @@ bool LoadPointsFromFile(cv::Mat &points, const char* file)
     infile.close();
     return true;
 }
+
+/*
+ * Format
+ * x1,y1,x2,y2,FGINN_ratio,SNN_ratio,detector,descriptor,is_correct
+ */
+void readEVDpoints (cv::Mat &points, const std::string &filename) {
+    std::fstream file(filename, std::ios_base::in);
+
+    float x1, y1, x2, y2;
+
+    std::string tmp_str;
+    cv::Mat tmp;
+
+    std::getline(file, tmp_str, ',');
+    std::getline(file, tmp_str, ',');
+    std::getline(file, tmp_str, ',');
+    std::getline(file, tmp_str, ',');
+    std::getline(file, tmp_str, ',');
+    std::getline(file, tmp_str, ',');
+    std::getline(file, tmp_str, ',');
+    std::getline(file, tmp_str, ',');
+    std::getline(file, tmp_str);
+
+    while (std::getline(file, tmp_str, ',')) {
+        x1 = std::stof (tmp_str);
+        std::getline(file, tmp_str, ',');
+        y1 = std::stof (tmp_str);
+        std::getline(file, tmp_str, ',');
+        x2 = std::stof (tmp_str);
+        std::getline(file, tmp_str, ',');
+        y2 = std::stof (tmp_str);
+
+        // fginn
+        std::getline(file, tmp_str, ',');
+        // snn
+        std::getline(file, tmp_str, ',');
+        // detector
+        std::getline(file, tmp_str, ',');
+        // descr
+        std::getline(file, tmp_str, ',');
+        // is correct
+        std::getline(file, tmp_str);
+
+        tmp = (cv::Mat_<float>(1, 4) << x1, y1, x2, y2);
+        points.push_back(tmp);
+    }
+    file.close();
+}

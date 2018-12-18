@@ -10,11 +10,14 @@ void DetectFeatures(const std::string &name, const cv::Mat &image1, const cv::Ma
         return;
     }
 
-    printf("Detect SIFT features\n");
+//    printf("Detect SIFT features\n");
+//    std::cout << "Detect SURF features\n";
     cv::Mat descriptors1, descriptors2;
     std::vector<cv::KeyPoint> keypoints1, keypoints2;
 
     cv::Ptr<cv::xfeatures2d::SIFT> detector = cv::xfeatures2d::SIFT::create();
+//    cv::Ptr<cv::xfeatures2d::SURF> detector = cv::xfeatures2d::SURF::create();
+
     detector->detect(image1, keypoints1);
     detector->compute(image1, keypoints1, descriptors1);
     printf("Features found in the first image: %d\n", static_cast<int>(keypoints1.size()));
@@ -66,7 +69,7 @@ void DetectFeatures(const std::string &name, const cv::Mat &image1, const cv::Ma
 
     // sort points by ratio of distances in ascending order.
     std::sort (good_matches_vector.begin(), good_matches_vector.end(), [&] (const std::vector<cv::DMatch>& m1, const std::vector<cv::DMatch>& m2) {
-        return m1[0].distance / m1[1].distance < m2[0].distance / m2[1].distance;
+        return (m1[0].distance / (m1[1].distance)) < (m2[0].distance / (m2[1].distance));
     });
 
 
