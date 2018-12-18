@@ -255,8 +255,7 @@ public:
             results->median_avg_error = (errorss[N/2-1] + errorss[N/2])/2;
         }
 
-//        std::cout << N << " runs of Ransac for " << model->getName() << " with points size " << points.size().width << '\n';
-//        std::cout << results << "\n";
+        std::cout << results << "\n";
 
         if (get_results) {
             statistical_results->copyFrom(results);

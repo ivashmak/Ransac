@@ -16,7 +16,7 @@ protected:
     Estimator * estimator;
     Quality * quality;
     int knn;
-    float lambda;
+    float spatial_coherence;
     float sqr_thr;
     int * neighbors;
     Score * gc_score;
@@ -33,6 +33,9 @@ protected:
 
     std::vector<std::vector<int>> neighbors_v;
     NeighborsSearch neighborsType = NeighborsSearch::NullN;
+
+    int neighbor_number;
+    bool isInit = false;
 public:
     int gc_iterations;
 
@@ -41,8 +44,7 @@ public:
     }
     void init (unsigned int points_size_, Model * model, Estimator * estimator_, Quality * quality_, NeighborsSearch neighborsType_) {
         neighborsType = neighborsType_;
-
-        lambda = model->lambda_graph_cut;
+        spatial_coherence = model->spatial_coherence_gc;
         knn = model->k_nearest_neighbors;
         threshold = model->threshold;
         estimator = estimator_;
@@ -51,7 +53,6 @@ public:
         points_size = points_size_;
 
         gc_score = new Score;
-
         gc_model = new Model (model);
 
 //        if (points_size < 50) {
@@ -79,10 +80,22 @@ public:
         lo_inner_iterations = model->lo_inner_iterations;
 
         gc_iterations = 0;
+
+        if (neighborsType == NeighborsSearch::Nanoflann) {
+            neighbor_number = knn * points_size;
+        }
+        isInit = true;
     }
 
     void setNeighbors (const std::vector<std::vector<int>>& neighbors_v_) {
         neighbors_v = neighbors_v_;
+        assert(isInit); // check if GC has already initialized
+        assert(neighborsType == NeighborsSearch::Grid); // check if we use grid search
+
+        neighbor_number = 0;
+        for (int i = 0; i < points_size; i++) {
+            neighbor_number += neighbors_v[i].size();
+        }
     }
 
     void setNeighbors (const int * const neighbors_) {

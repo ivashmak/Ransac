@@ -96,15 +96,15 @@ void Tests::testHomographyFitting() {
 
      model->setStandardRansacLO(0);
      model->setGraphCutLO(1);
-     model->setSprtLO(0);
+     model->setSprtLO(1);
 
      model->setNeighborsType(NeighborsSearch::Grid);
 
 //     test (points, model, img_name, true, gt_inliers);
 
-//    getStatisticalResults(points, model, 100, true, gt_inliers, false, nullptr);
+    getStatisticalResults(points, model, 200, true, gt_inliers, false, nullptr);
 
-     storeResults();
+//     storeResults();
 }
 
 

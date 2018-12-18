@@ -188,14 +188,14 @@ struct hash_fn {
 void NearestNeighbors::getGridNearestNeighbors (const cv::Mat& points, int cell_sz, std::vector<std::vector<int>> &neighbors) {
     // cell size 25, 50, 100
     std::map<CellCoord, std::vector<int>> neighbors_map;
-//    std::unordered_map<CellCoord, std::vector<int>, hash_fn> neighbors_umap;
+//    std::unordered_map<CellCoord, std::vector<int>, hash_fn> neighbors_map;
 
     float *points_p = (float *) points.data;
     unsigned int idx, points_size = points.rows;
     CellCoord c;
+    neighbors = std::vector<std::vector<int>>(points_size);
     for (unsigned int i = 0; i < points_size; i++) {
-        neighbors.emplace_back(std::vector<int>());
-        neighbors[i].reserve(10); // reserve estimated neighbors size
+        neighbors[i].reserve(10); // reserve predicted neighbors size
 
         idx = 4 * i;
         c.init(points_p[idx] / cell_sz, points_p[idx + 1] / cell_sz, points_p[idx + 2] / cell_sz,
@@ -214,16 +214,7 @@ void NearestNeighbors::getGridNearestNeighbors (const cv::Mat& points, int cell_
 //        }
 //        std::cout << "\n";
 //    }
-//    std::cout << "--------------------------\n";
-//    for (auto cells : neighbors_umap) {
-//        std::cout << "key = (" << cells.first.c1x << " " << cells.first.c1y << " " << cells.first.c2x << " "
-//                  << cells.first.c2y <<
-//                  ") values = ";
-//        for (auto v : cells.second) {
-//            std::cout << v << " ";
-//        }
-//        std::cout << "\n";
-//    }
+
     unsigned long neighbors_in_cell;
     for (auto cells : neighbors_map) {
         neighbors_in_cell = cells.second.size();
@@ -239,6 +230,7 @@ void NearestNeighbors::getGridNearestNeighbors (const cv::Mat& points, int cell_
 }
 
 void NearestNeighbors::test (int knn) {
+    knn = 7;
 
     std::clock_t start;
     double duration;

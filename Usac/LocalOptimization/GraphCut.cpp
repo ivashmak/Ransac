@@ -5,7 +5,7 @@ void GraphCut::labeling (const cv::Mat& model, Score * score, int * inliers) {
 
     estimator->setModelParameters(model);
 
-    Energy<float, float, float> * e = new Energy<float, float, float>(points_size, knn * points_size, NULL);
+    Energy<float, float, float> * e = new Energy<float, float, float>(points_size, neighbor_number, NULL);
 
     for (auto i = 0; i < points_size; ++i) {
         e->add_node();
@@ -36,14 +36,14 @@ void GraphCut::labeling (const cv::Mat& model, Score * score, int * inliers) {
             energy1 = exp(-(distance1 * distance1) / sqr_thr);
 
             neighbors_row = knn * i;
-            for (int j = 0; j < knn; ++j) { // j = 1, neighbors are reduced by first neighbor (itself)
+            for (int j = 0; j < knn; ++j) { // neighbors are reduced by first neighbor (itself)
 
                 n_idx = neighbors[neighbors_row + j];
 
                 distance2 = errors[n_idx];
 
                 if (n_idx == i) {
-                    //                std::cout << "\033[1;31mIndex of neighbor is equal to index of point. Continue.\033[0m \n";
+                    //  std::cout << "\033[1;31mIndex of neighbor is equal to index of point. Continue.\033[0m \n";
                     continue;
                 }
 
@@ -66,15 +66,17 @@ void GraphCut::labeling (const cv::Mat& model, Score * score, int * inliers) {
                     //                             "smooth costs must be a metric for expansion  \033[0m\n";
                     continue;
                 }
-                e->add_term2(i, n_idx, e00 * lambda, e01 * lambda, e10 * lambda, e11 * lambda);
+                e->add_term2(i, n_idx, e00 * spatial_coherence, e01 * spatial_coherence, e10 * spatial_coherence, e11 * spatial_coherence);
             }
         }
     } else {
+        unsigned int neighbors_i_size;
         for (int i = 0; i < points_size; ++i) {
             distance1 = errors[i];
             energy1 = exp(-(distance1 * distance1) / sqr_thr);
 //            std::cout << neighbors_v[i].size() << " = neighbors size\n";
-            for (int j = 0; j < neighbors_v[i].size(); ++j) {
+            neighbors_i_size = neighbors_v[i].size();
+            for (int j = 0; j < neighbors_i_size; ++j) {
                 n_idx = neighbors_v[i][j];
                 distance2 = errors[n_idx];
                 energy2 = exp(-(distance2 * distance2) / sqr_thr);
@@ -88,7 +90,7 @@ void GraphCut::labeling (const cv::Mat& model, Score * score, int * inliers) {
 //                             "smooth costs must be a metric for expansion  \033[0m\n";
                     continue;
                 }
-                e->add_term2(i, n_idx, e00 * lambda, e01 * lambda, e10 * lambda, e11 * lambda);
+                e->add_term2(i, n_idx, e00 * spatial_coherence, e01 * spatial_coherence, e10 * spatial_coherence, e11 * spatial_coherence);
             }
         }
     }

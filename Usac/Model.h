@@ -25,7 +25,7 @@ public:
     unsigned int lo_threshold_multiplier = 15;
 
     // Graph cut
-    float lambda_graph_cut = 0.1; // range <0; 1>
+    float spatial_coherence_gc = 0.1; // spatial coherence term
 
     // name
     ESTIMATOR estimator = NullE;
@@ -103,7 +103,7 @@ public:
 		this->threshold = threshold;
 	}
 
-	void setsample_number (float sample_number) {
+	void setSampleNumber (float sample_number) {
 		this->sample_number = sample_number;
 	}
 
