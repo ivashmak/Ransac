@@ -94,7 +94,7 @@ public:
 
         float error = (pt2_F_pt1 * pt2_F_pt1) / (F_pt1_x * F_pt1_x + F_pt1_y * F_pt1_y + F_pt2_x * F_pt2_x + F_pt2_y * F_pt2_y);
 //        std::cout << "error = " << error << '\n';
-
+        // error >= 0
         return error;
     }
 

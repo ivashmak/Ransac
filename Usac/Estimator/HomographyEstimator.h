@@ -83,7 +83,6 @@ public:
      * Error = distance (pt(i)H, pt'(i)) + distance (pt(i), pt'(i)H^-1)
      */
     float GetError(int pidx) override {
-        float error = 0;
         unsigned int smpl = 4*pidx;
         float x1 = points[smpl];
         float y1 = points[smpl+1];
@@ -104,9 +103,10 @@ public:
         est_x1 /= est_z1;
         est_y1 /= est_z1;
 
+        float error = 0;
         error += sqrt ((x2 - est_x2) * (x2 - est_x2) + (y2 - est_y2) * (y2 - est_y2));
         error += sqrt ((x1 - est_x1) * (x1 - est_x1) + (y1 - est_y1) * (y1 - est_y1));
-
+        // error >= 0
         return error/2;
     }
 
