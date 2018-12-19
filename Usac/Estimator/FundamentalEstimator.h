@@ -55,9 +55,10 @@ public:
 
     bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
         cv::Mat_<float> F;
-        EightPointsAlgorithm(points, sample, sample_size, F);
 
-        F_ptr = (float *) F.data;
+        if (! EightPointsAlgorithm(points, sample, sample_size, F)) {
+            return false;
+        }
 
         model.setDescriptor(F);
 
@@ -93,7 +94,20 @@ public:
         float pt2_F_pt1 = x2 * F_pt1_x + y2 * F_pt1_y + F_ptr[6] * x1 +  F_ptr[7] * y1 +  F_ptr[8];
 
         float error = (pt2_F_pt1 * pt2_F_pt1) / (F_pt1_x * F_pt1_x + F_pt1_y * F_pt1_y + F_pt2_x * F_pt2_x + F_pt2_y * F_pt2_y);
-//        std::cout << "error = " << error << '\n';
+
+        // debug
+//        cv::Mat pt1 = (cv::Mat_<double>(3,1) << x1, y1, 1);
+//        cv::Mat pt2 = (cv::Mat_<double>(3,1) << x2, y2, 1);
+//        cv::Mat F_double = cv::Mat_<double> (F);
+//        double error_opencv = cv::sampsonDistance(pt1, pt2, F_double);
+//        if (fabsf (error - (float) error_opencv) > 2) {
+//            std::cout << "error " << error << " VS opencv error " << error_opencv << "\n";
+//            std::cout << "difference " << fabsf (error - (float) error_opencv) << "\n";
+//            std::cout << "Check GetError in Fundamental Matrix Estimator!\n";
+//        }
+        //
+
+        // std::cout << "error = " << error << '\n';
         // error >= 0
         return error;
     }

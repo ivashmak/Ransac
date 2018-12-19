@@ -1,15 +1,15 @@
+#include <iostream>
 #include "FivePoints.h"
-#include <SuiteSparseQR_C.h>
 
 void getCoeffMat(double *e, double *A);
 
-int FivePointsAlgorithm (const double * const pts, const int * const sample, cv::OutputArray E) {
-    cv::Mat q1 = cv::Mat_<float>(5,2), q2 = cv::Mat_<float>(5,2);
-    float *q1_ptr = (float *) q1.data;
-    float *q2_ptr = (float *) q2.data;
+unsigned int FivePointsOpenCV (const float * const pts, const int * const sample, cv::Mat &E) {
+    cv::Mat Q1 = cv::Mat_<float>(5,2), Q2 = cv::Mat_<float>(5,2);
+    float *q1_ptr = (float *) Q1.data;
+    float *q2_ptr = (float *) Q2.data;
 
     unsigned int smpl;
-    for (int i = 0; i < 5; i++) {
+    for (unsigned int i = 0; i < 5; i++) {
         smpl = 4*sample[i];
         (*q1_ptr++) = pts[smpl];
         (*q1_ptr++) = pts[smpl+1];
@@ -17,13 +17,15 @@ int FivePointsAlgorithm (const double * const pts, const int * const sample, cv:
         (*q2_ptr++) = pts[smpl+3];
     }
 
-    cv::Mat Q1 = q1.reshape(1, (int)q1.total());
-    cv::Mat Q2 = q2.reshape(1, (int)q2.total());
-
     int n = Q1.rows;
-    cv::Mat Q(n, 9, CV_64F);
+    cv::Mat_<float> Q(n, 9);
+
+    std::cout << Q1 << " = Q1\n\n";
+    std::cout << Q2 << " = Q2\n\n";
+
     Q.col(0) = Q1.col(0).mul( Q2.col(0) );
     Q.col(1) = Q1.col(1).mul( Q2.col(0) );
+    std::cout << "OK\n";
     Q.col(2) = Q2.col(0) * 1.0;
     Q.col(3) = Q1.col(0).mul( Q2.col(1) );
     Q.col(4) = Q1.col(1).mul( Q2.col(1) );
@@ -31,6 +33,7 @@ int FivePointsAlgorithm (const double * const pts, const int * const sample, cv:
     Q.col(6) = Q1.col(0) * 1.0;
     Q.col(7) = Q1.col(1) * 1.0;
     Q.col(8) = 1.0;
+
 
     cv::Mat U, W, Vt;
     cv::SVD::compute(Q, W, U, Vt, cv::SVD::MODIFY_A | cv::SVD::FULL_UV);
@@ -77,7 +80,7 @@ int FivePointsAlgorithm (const double * const pts, const int * const sample, cv:
     c[1] = (b[29]*b[7]*b[24]-b[29]*b[20]*b[11]+b[2]*b[20]*b[38]-b[2]*b[25]*b[33]-b[28]*b[20]*b[12]+b[28]*b[7]*b[25]-b[29]*b[19]*b[12]-b[3]*b[24]*b[33]+b[15]*b[33]*b[12]+b[3]*b[19]*b[38]-b[16]*b[6]*b[38]+b[3]*b[20]*b[37]+b[16]*b[32]*b[12]+b[29]*b[6]*b[25]-b[16]*b[7]*b[37]-b[3]*b[25]*b[32]-b[15]*b[7]*b[38]+b[16]*b[33]*b[11]);
     c[0] = -b[29]*b[20]*b[12]+b[29]*b[7]*b[25]+b[16]*b[33]*b[12]-b[16]*b[7]*b[38]+b[3]*b[20]*b[38]-b[3]*b[25]*b[33];
 
-    std::vector<Complex<double> > roots;
+    std::vector<cv::Complex<double> > roots;
     solvePoly(coeffs, roots);
 
     std::vector<double> xs, ys, zs;
@@ -87,8 +90,8 @@ int FivePointsAlgorithm (const double * const pts, const int * const sample, cv:
     double* e = ematrix.ptr<double>();
     for (size_t i = 0; i < roots.size(); i++)
     {
-        if (fabs(roots[i].imag()) > 1e-10) continue;
-        double z1 = roots[i].real();
+        if (fabs(roots[i].im) > 1e-10) continue;
+        double z1 = roots[i].re;
         double z2 = z1 * z1;
         double z3 = z2 * z1;
         double z4 = z3 * z1;
@@ -123,7 +126,7 @@ int FivePointsAlgorithm (const double * const pts, const int * const sample, cv:
     return count;
 }
 
-void getCoeffMat(double *e, double *A) const {
+void getCoeffMat(double *e, double *A) {
     double ep2[36], ep3[36];
     for (int i = 0; i < 36; i++)
     {

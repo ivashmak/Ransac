@@ -42,6 +42,7 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, in
          * It is enough to calculate only upper triangle of A.
          * A =
          */
+        // calculate covariance for eigen
         for (int row = 0; row < 9; row++) {
             for (int col = row; col < 9; col++) {
                 A_ptr[row*9+col] += a[row]*a[col];
@@ -50,8 +51,8 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, in
     }
 
     /*
-     * [L,U,D] = split (A), L = U
      * Copy upper triangle of A to lower triangle of A.
+     * covariance matrix
      */
     for (int row = 1; row < 9; row++) {
         for (int col = 0; col < row; col++) {
@@ -62,11 +63,11 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, in
     cv::Mat_<float> eigen_values, eigen_vectors;
     cv::eigen(A, eigen_values, eigen_vectors);
 
-    float * W_ptr = (float *) eigen_values.data;
+    auto * W_ptr = (float *) eigen_values.data;
 
     int i;
     for (i = 0; i < 9; i++) {
-        if (fabs(W_ptr[i]) < DBL_EPSILON) break;
+        if (fabsf(W_ptr[i]) < DBL_EPSILON) break;
     }
 
     if (i < 8) {
@@ -101,20 +102,17 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, in
      *
      */
 
-//    // Transpose T2
     float * t2 = (float *) T2.data;
 
 //    std::cout << T2 << "\n\n";
 
-   // Something crazy is going on here, if I uncomment simple transpose.
+    // Transpose T2
+    t2[6] = t2[2];
+    t2[7] = t2[5];
+    t2[2] = 0;
+    t2[5] = 0;
 
-//    t2[6] = t2[2];
-//    t2[7] = t2[5];
-//    t2[2] = 0;
-//    t2[5] = 0;
-
-     T2 = T2.t();
-//    std::cout << T2 << "\n\n";
+//     T2 = T2.t();
 
     F = T2 * F * T1;
 

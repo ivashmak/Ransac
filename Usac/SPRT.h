@@ -72,7 +72,8 @@ private:
 
     int number_rejected_models;
     int sum_fraction_data_points = 0;
-    int * array;
+    unsigned int * points_random_pool;
+    unsigned int random_pool_idx;
 
     int max_hypothesis_test_before_sprt;
 public:
@@ -82,10 +83,23 @@ public:
     }
 
     void initialize (Estimator * estimator_, Model * model, int points_size_) {
-        array = new int [points_size_];
-        for (int i = 0; i < points_size_; i++) {
-            array[i] = i;
+        // Generate array of points
+        points_random_pool = new unsigned int [points_size_];
+        for (unsigned int i = 0; i < points_size_; i++) {
+            points_random_pool[i] = i;
         }
+        unsigned int temp;
+        int max = points_size_;
+        // Shuffle random pool of points.
+        for (unsigned int i = 0; i < points_size_; i++) {
+            random_pool_idx = (unsigned int) random () % max;
+            temp = points_random_pool[random_pool_idx];
+            max--;
+            points_random_pool[random_pool_idx] = points_random_pool[max];
+            points_random_pool[max] = temp;
+        }
+        random_pool_idx = 0;
+        //
 
         sprt_histories = std::vector<SPRT_history*>();
         sprt_histories.push_back(new SPRT_history);
@@ -181,15 +195,25 @@ public:
         int tested_point = 0;
 
         bool good = true;
-        int max = points_size;
-        unsigned int array_random_index, point;
+//        int max = points_size;
+        unsigned int point;
         for (tested_point = 0; tested_point < points_size; tested_point++) {
 
-            array_random_index = (unsigned int) random () % max;
-            point = array[array_random_index];
-            max--;
-            array[array_random_index] = array[max];
-            array[max] = point;
+            // reset pool index
+            if (random_pool_idx >= points_size) {
+                random_pool_idx = 0;
+            }
+            point = points_random_pool[random_pool_idx];
+            random_pool_idx++;
+
+            /*
+                // every step shuffle
+                array_random_index = (unsigned int) random () % max;
+                point = points_random_pool[array_random_index];
+                max--;
+                points_random_pool[array_random_index] = points_random_pool[max];
+                points_random_pool[max] = point;
+            */
 
 //            std::cout << point << " ";
             if (estimator->GetError(point) < threshold) {
@@ -220,8 +244,15 @@ public:
         if (current_hypothese < max_hypothesis_test_before_sprt) {
             int inliers_after_test = 0;
             // evaluate rest points, max must be less than points_size
-            for (int p = 0; p < max; p++) {
-                if (estimator->GetError(array[p]) < threshold) inliers_after_test++;
+            int left_points_to_eval = points_size - tested_point;
+            for (int p = 0; p < left_points_to_eval; p++) {
+                if (random_pool_idx >= points_size) {
+                    random_pool_idx = 0;
+                }
+                if (estimator->GetError(points_random_pool[random_pool_idx]) < threshold) {
+                    inliers_after_test++;
+                }
+                random_pool_idx++;
             }
             score->inlier_number = tested_inliers + inliers_after_test;
             score->score = score->inlier_number;

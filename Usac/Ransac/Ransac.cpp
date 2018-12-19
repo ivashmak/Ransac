@@ -178,6 +178,11 @@ void Ransac::run(cv::InputArray input_points) {
 //                        std::cout << "skip bad model in iteration " << iters << "\n";
                         continue;
                     }
+//                    else {
+//                        std::cout << "sprt " << current_score->inlier_number << "\n";
+//                        quality->getNumberInliers(current_score, models[i]);
+//                        std::cout << "std " << current_score->inlier_number << "\n";
+//                    }
                 }
 //                else {
 //                    std::cout << "model is good\n";
@@ -186,7 +191,7 @@ void Ransac::run(cv::InputArray input_points) {
                 quality->getNumberInliers(current_score, models[i]);
             }
 
-//            std::cout << "current num inl " << current_score->inlier_number << "\n";
+//            std::cout << "Ransac, iteration " << iters << "; score " << current_score->inlier_number << "\n";
 //            std::cout << models[i]->returnDescriptor() << "\n\n";
 
             if (current_score->bigger(best_score)) {
@@ -221,7 +226,7 @@ void Ransac::run(cv::InputArray input_points) {
                 // remember best model
                 best_model->setDescriptor (models[i]->returnDescriptor());
 
-//                  std::cout << "best score inlier number " << best_score->inlier_number << '\n';
+//                  std::cout << "Ransac, update best score" << best_score->inlier_number << '\n';
 
                 // only for debug
 //                best_sample[0] = sample[0];
@@ -290,7 +295,7 @@ void Ransac::run(cv::InputArray input_points) {
             quality->getNumberInliers(current_score, non_minimal_model, true, max_inliers);
 
             // Priority is for non minimal model estimation
-//            std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
+            std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
 
             if ((float) current_score->inlier_number / best_score->inlier_number < 0.8) {
                 break;

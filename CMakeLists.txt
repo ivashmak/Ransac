@@ -49,6 +49,11 @@ add_executable(
         Usac/Estimator/DLT/NormalizingTransformation.cpp
 
         Usac/Estimator/Essential/FivePoints.h
+        Usac/Estimator/Essential/Rpoly.cpp Usac/Estimator/Essential/Rpoly.h
+        Usac/Estimator/Essential/Polynomial.h
+        Usac/Estimator/Essential/FivePointsOpenCV.cpp
+        Usac/Estimator/Essential/FivePoints.cpp
+
         Usac/Estimator/Fundamental/SevenPoints.cpp
         Usac/Estimator/Fundamental/EightPoints.cpp
         Usac/Estimator/Fundamental/FundemantalSolver.h

@@ -1,13 +1,37 @@
 #include "FivePoints.h"
 #include "Polynomial.h"
 #include "Rpoly.h"
+/*
+ * References:
+ * https://github.com/danini/graph-cut-ransac
+ */
 
-static void ProjectionsFromEssential(const cv::Mat &E, cv::Mat &P1, cv::Mat &P2, cv::Mat &P3, cv::Mat &P4);
-static cv::Mat TriangulatePoint(const cv::Point2d &pt1, const cv::Point2d &pt2, const cv::Mat &P1, const cv::Mat &P2);
-static double CalcDepth(const cv::Mat &X, const cv::Mat &P);
+unsigned int FivePoints (const float * const pts, const int * const sample, cv::Mat &E) {
+    cv::Mat P;
+    std::vector<cv::Point2d> pts1(5), pts2(5);
 
-bool Solve5PointEssential(std::vector<cv::Point2d> &pts1, std::vector<cv::Point2d> &pts2, cv::Mat &ret_E, cv::Mat &ret_P)
-{
+    unsigned int smpl;
+    for (int i = 0; i < 5; i++) {
+        smpl = 4 * sample[i];
+        
+        pts1[i].x = static_cast<double>(pts[smpl]);
+        pts1[i].y = static_cast<double>(pts[smpl+1]);
+        pts2[i].x = static_cast<double>(pts[smpl+2]);
+        pts2[i].y = static_cast<double>(pts[smpl+3]);
+    }
+
+    Solve5PointEssential(pts1, pts2, E, P);
+    E.convertTo(E, CV_32F);
+
+    if (E.rows != 3) {
+        return 0;
+    }
+
+    return E.rows / 3;
+}
+
+
+bool Solve5PointEssential(std::vector<cv::Point2d> &pts1, std::vector<cv::Point2d> &pts2, cv::Mat &ret_E, cv::Mat &ret_P) {
 	int num_pts = static_cast<int>(pts1.size());
 
     assert(num_pts >= 5);

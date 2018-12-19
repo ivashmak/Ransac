@@ -17,14 +17,14 @@ void Tests::testFundamentalFitting() {
 //    detectAndSaveFeatures(getKusvod2Dataset());
 //    exit (0);
 
-    std::string img_name = "napiera";
+    std::string img_name = "barrsmith";
     cv::Mat_<float> points1, points2, points;
 //    getPointsNby6("../dataset/Lebeda/kusvod2/"+img_name+"_vpts_pts.txt", points);
-//    read_points(points1, points2, "../dataset/adelaidermf/"+img_name+"_pts.txt");
+    read_points(points1, points2, "../dataset/adelaidermf/"+img_name+"_pts.txt");
 //    read_points(points1, points2, "../dataset/fundamental/"+img_name+"_pts.txt");
-    //    cv::hconcat(points1, points2, points);
+        cv::hconcat(points1, points2, points);
 
-    LoadPointsFromFile(points, ("../dataset/adelaidermf/sift_update/"+img_name+"_spts.txt").c_str());
+//    LoadPointsFromFile(points, ("../dataset/adelaidermf/sift_update/"+img_name+"_spts.txt").c_str());
 
 
 //        std::cout << "opencv " << cv::findFundamentalMat(points1, points2) << "\n\n";
@@ -45,33 +45,33 @@ void Tests::testFundamentalFitting() {
     // ------------ get Ground truth inliers and model ----------------------
     std::vector<int> gt_inliers;
 //    getGTInliersFromGTModelFundamental (img_name, points, threshold, gt_inliers);
-//    getInliers("../dataset/adelaidermf/"+img_name+"_pts.txt", gt_inliers);
+    getInliers("../dataset/adelaidermf/"+img_name+"_pts.txt", gt_inliers);
 //    getInliers("../dataset/fundamental/"+img_name+"_pts.txt", gt_inliers);
     // -------------------------------------------
 
     Model * model;
 
     // -------------------------- uniform -------------------------------------
-//    model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Uniform);
+    model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Uniform);
     // ------------------------------------------------------------------------
 
     // -------------------------- Prosac -------------------------------------
-    model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Prosac);
+//    model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Prosac);
 //    sorted_points.copyTo(points);
     // ------------------------------------------------------------------------
 
     model->setStandardRansacLO(0);
     model->setGraphCutLO(0);
-    model->setSprtLO(0);
+    model->setSprtLO(1);
     model->setCellSize(50);
     model->setNeighborsType(NeighborsSearch::Grid);
 
-//    test (points, model, img_name, true, gt_inliers);
+    test (points, model, img_name, true, gt_inliers);
 //    test (points, model, img_name, false, gt_inliers);
 
 //    getStatisticalResults(points, model, 400, true, gt_inliers, false, nullptr);
 
-     storeResultsFundamental ();
+//     storeResultsFundamental ();
 }
  
 /*

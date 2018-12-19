@@ -154,11 +154,11 @@ public:
 
                 quality->getNumberInliers(gc_score, gc_model, false, nullptr);
 
-//                std::cout << "GC score " << gc_score->inlier_number << "\n";
+                std::cout << "GC score " << gc_score->inlier_number << "\n";
 
                 if (gc_score->bigger(best_score)) {
 //                    std::cout << "Update best score\n";
-                    // std::cout << "UPDATE best score " << gc_score->inlier_number << "\n";
+                     std::cout << "UPDATE best score " << gc_score->inlier_number << "\n";
                     is_best_model_updated = true;
                     best_score->copyFrom(gc_score);
                     best_model->setDescriptor(gc_model->returnDescriptor());

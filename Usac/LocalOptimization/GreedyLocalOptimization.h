@@ -97,7 +97,7 @@ public:
 
             quality->getNumberInliers(score, model, true, inliers);
 
-            std::cout << "Greedy LO score " << score->inlier_number << "\n";
+            std::cout << "Greedy LO, score " << score->inlier_number << "\n";
 //            std::cout << "num relaxations " << num_relaxations << "\n";
 
             if (score->bigger(best_score)) {
