@@ -35,19 +35,20 @@ public:
         E_ptr = (float *) E.data;
     }
 
+    /*
+     * E = K1^T F K2
+     *
+     * y'^T E y = 0, normalized points by third coordinate.
+     * y' = (x'1 x'2 x'3) / x'3
+     * y  = (x1  x2  x3)  / x3
+     */
     unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         cv::Mat_<float> E;
 
         unsigned int models_count = FivePoints (points, sample, E);
-        cv::Mat E2;
 //        unsigned int models_count2 = FivePointsOpenCV (points, sample, E2);
 
-//        std::cout << "models count2 " << models_count2 << "\n";
-
         std::cout << "models count " << models_count << "\n";
-
-        std::cout << E << " = E\n\n";
-        std::cout << E2 << " = E opencv\n\n";
 
         if (models_count == 0) {
             return 0;

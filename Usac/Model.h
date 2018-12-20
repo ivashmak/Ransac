@@ -20,7 +20,7 @@ public:
 	 */
 	unsigned int lo_sample_size = 14;
 	unsigned int lo_iterative_iterations = 4;
-    unsigned int lo_inner_iterations = 20;
+    unsigned int lo_inner_iterations = 20; // 10
     float lo_threshold = 10.0;
     unsigned int lo_threshold_multiplier = 15;
 

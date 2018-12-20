@@ -35,10 +35,6 @@ bool Solve5PointEssential(std::vector<cv::Point2d> &pts1, std::vector<cv::Point2
 	int num_pts = static_cast<int>(pts1.size());
 
     assert(num_pts >= 5);
-	
-    if(num_pts < 5) {
-        return false;
-    }
 
     // F is a temp variable, not the F fundamental matrix
     cv::Mat F(num_pts, 9, CV_64F);

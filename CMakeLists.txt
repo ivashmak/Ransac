@@ -86,6 +86,8 @@ add_executable(
         RandomGenerator/EvaluateRandomGenerators.h
 
         dataset/Dataset.h dataset/Dataset.cpp
+        dataset/SaveGTModel.h dataset/SaveGTModel.cpp
+        dataset/GetImage.h
 
         Usac/Utils/Math.cpp Usac/Utils/Math.h
         Usac/Utils/NearestNeighbors.cpp Usac/Utils/NearestNeighbors.h

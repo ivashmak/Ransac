@@ -8,6 +8,8 @@
 #include <vector>
 #include <fstream>
 
+enum DATASET {Homogr, Adelaidermf, Kusvod2, Syntectic, Strecha, EVD};
+
 std::vector<std::string> getEVDDataset ();
 std::vector<std::string> getHomographyDatasetPoints ();
 std::vector<std::string> getProblemHomographyDatasetPoints ();

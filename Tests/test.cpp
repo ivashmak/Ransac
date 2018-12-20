@@ -4,6 +4,7 @@
 void Tests::test (cv::Mat points,
                    Model * model,
                    const std::string &img_name,
+                   DATASET dataset,
                    bool gt,
                    const std::vector<int>& gt_inliers) {
 
@@ -92,18 +93,17 @@ void Tests::test (cv::Mat points,
 
 
     if (model->estimator == ESTIMATOR::Homography) {
-        drawing.drawHomographies(img_name, points, ransacOutput->getInliers(), ransacOutput->getModel()->returnDescriptor());
+        drawing.drawHomographies(img_name, dataset, points, ransacOutput->getInliers(), ransacOutput->getModel()->returnDescriptor());
     } else
     if (model->estimator == ESTIMATOR::Fundamental) {
-        drawing.drawEpipolarLines(img_name, ransacOutput->getInliers(), points.colRange(0,2), points.colRange(2,4), ransacOutput->getModel()->returnDescriptor());
+        drawing.drawEpipolarLines(img_name, dataset, ransacOutput->getInliers(), points.colRange(0,2), points.colRange(2,4), ransacOutput->getModel()->returnDescriptor());
     } else
     if (model->estimator == ESTIMATOR::Line2d) {
         drawing.draw(ransacOutput->getInliers(), ransacOutput->getModel(), points, img_name+".png");
     } else
     if (model->estimator == ESTIMATOR::Essential) {
-
+        drawing.drawEpipolarLines(img_name, dataset, ransacOutput->getInliers(), points.colRange(0,2), points.colRange(2,4), ransacOutput->getModel()->returnDescriptor());
     } else {
         std::cout << "UNKNOWN ESTIMATOR\n";
     }
-
 }

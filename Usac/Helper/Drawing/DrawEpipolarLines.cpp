@@ -1,5 +1,7 @@
 #include "Drawing.h"
 #include "../../Estimator/FundamentalEstimator.h"
+#include "../../../dataset/Dataset.h"
+#include "../../../dataset/GetImage.h"
 
 void drawEpipolarLines_ (cv::Mat &img1, cv::Mat &img2, const std::vector<int> &inliers, const cv::Mat& lines1, const cv::Mat& lines2, const cv::Mat& pts1, const cv::Mat& pts2) {
     int c = img1.cols, r = img1.rows;
@@ -105,14 +107,9 @@ void DrawMatches_(cv::Mat points, std::vector<int> inliers, cv::Mat image1, cv::
 /*
  * Draw epipolar line for Fundamental matrix
  */
-void Drawing::drawEpipolarLines (const std::string& img_name, const std::vector<int> &inliers, cv::InputArray points1, cv::InputArray points2, const cv::Mat& F) {
+void Drawing::drawEpipolarLines (const std::string& img_name, DATASET dataset, const std::vector<int> &inliers, const cv::Mat &pts1, const cv::Mat &pts2, const cv::Mat& F) {
     cv::Mat_<float> points;
-    cv::hconcat(points1, points2, points);
-
-    cv::Mat pts1 = points1.getMat(), pts2 = points2.getMat();
-
-    cv::hconcat(pts1, cv::Mat_<float>::ones (pts1.rows, 1), pts1);
-    cv::hconcat(pts2, cv::Mat_<float>::ones (pts2.rows, 1), pts2);
+    cv::hconcat(pts1, pts2, points);
 
     /*
      * For every point in one of the two images of a stereo pair,
@@ -123,13 +120,10 @@ void Drawing::drawEpipolarLines (const std::string& img_name, const std::vector<
     cv::computeCorrespondEpilines(pts2, 2, F, lines1);
     cv::computeCorrespondEpilines(pts1, 1, F, lines2);
 
-
-//    std::string folder = "../dataset/adelaidermf/";
-//    std::string folder = "../dataset/Lebeda/kusvod2/";
-    std::string folder = "../dataset/fundamental/";
-
-    cv::Mat img1 = cv::imread(folder + img_name + "A.png"),
-            img2 = cv::imread(folder + img_name + "B.png");
+    cv::Mat img1, img2;
+    ImageData gt_data (dataset, img_name);
+    img1 = gt_data.getImage1();
+    img2 = gt_data.getImage2();
 
     cv::Mat out_image;
     DrawMatches_(points, inliers, img1, img2, out_image);
@@ -143,7 +137,7 @@ void Drawing::drawEpipolarLines (const std::string& img_name, const std::vector<
 
     cv::hconcat(img1, img2, img1);
 
-    //    drawing_resize(img1);
+    drawing_resize(img1);
 
 //    imshow("Matches", out_image);
     imshow("Epipolar lines", img1);

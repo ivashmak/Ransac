@@ -40,6 +40,7 @@ public:
     void test (cv::Mat points,
                       Model * model,
                       const std::string &img_name,
+                      DATASET dataset,
                       bool gt,
                       const std::vector<int>& gt_inliers);
 

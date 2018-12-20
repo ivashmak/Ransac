@@ -6,9 +6,12 @@
 
 #include "Usac/Sampler/ProsacSampler.h"
 #include "Usac/TerminationCriteria/ProsacTerminationCriteria.h"
+#include "dataset/SaveGTModel.h"
 
 int main (int args, char ** argv) {
     Tests tests;
+
+//    saveGTModel(DATASET::Adelaidermf);
 
     // evaluating random generators
    // evaluateRandomGenerators();
@@ -23,9 +26,9 @@ int main (int args, char ** argv) {
 
 //     run tests
 //   tests.testLineFitting();
-//     tests.testHomographyFitting();
+     tests.testHomographyFitting();
 //    tests.testFundamentalFitting();
-    tests.testEssentialFitting();
+//    tests.testEssentialFitting();
 
 	return 0;
 }

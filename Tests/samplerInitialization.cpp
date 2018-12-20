@@ -15,7 +15,6 @@ void Tests::initUniform (Sampler *& sampler, unsigned int sample_number, unsigne
     sampler = new UniformSampler;
     sampler->setSampleSize(sample_number);
     sampler->setPointsSize(points_size);
-    sampler->initRandomGenerator();
 }
 
 void Tests::initNapsac (Sampler *& sampler, const cv::Mat &neighbors, unsigned int k_nearest_neighbors,

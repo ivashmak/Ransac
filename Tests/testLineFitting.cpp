@@ -25,6 +25,7 @@ void store_results_line2d ();
 void getGTInliers (const cv::Mat& points, const cv::Mat& gt_model, float threshold, std::vector<int> &gt_inliers);
 
 void Tests::testLineFitting() {
+    DATASET dataset = DATASET ::Syntectic;
 //     std::string img_name = "../dataset/image1";
      std::vector<cv::Point_<float>> points;
      cv::Mat_<float> gt_model;
@@ -123,7 +124,7 @@ void Tests::testLineFitting() {
      model->setGraphCutLO(0);
      model->setSprtLO(0);
 
-    test (sorted_pts, model, img_name, true, gt_model);
+    test (sorted_pts, model, img_name, dataset, true, gt_model);
 
 //     getStatisticalResults(pts, model, 1000, true, false, gt_model, nullptr);
 

@@ -278,13 +278,18 @@ void Ransac::run(cv::InputArray input_points) {
 //    std::cout << "end best inl num " << best_score->inlier_number << '\n';
 
     // usually 4-5 iterations are enough
-    unsigned int normalizations = 10;
+    unsigned int normalizations = 5;
     unsigned int previous_non_minimal_num_inlier = 0;
 
     // get inliers from best model
     quality->getInliers(best_model->returnDescriptor(), max_inliers);
 
     for (unsigned int norm = 0; norm < normalizations; norm++) {
+        /*
+         * TODO:
+         * Calculate and Save Covariance Matrix and use it next normalization with adding or
+         * extracting some points.
+         */
 //        std::cout << "end estimate non minimal\n";
 
         // estimate non minimal model with max inliers

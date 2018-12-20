@@ -4,6 +4,8 @@
 #include "../../Estimator/Estimator.h"
 #include "../../Ransac/Ransac.h"
 #include "../../../Detector/ReadPoints.h"
+#include "../../../dataset/Dataset.h"
+#include "../../../dataset/GetImage.h"
 
 class Drawing {
 public:
@@ -126,30 +128,19 @@ public:
     /*
      * Draw epipolar lines by Fundamental Matrix
      */
-    void drawEpipolarLines (const std::string& img_name, const std::vector<int>& inliers, cv::InputArray points1, cv::InputArray points2, const cv::Mat& F);
+    void drawEpipolarLines (const std::string& img_name, DATASET dataset, const std::vector<int> &inliers, const cv::Mat &pts1, const cv::Mat &pts2, const cv::Mat& F);
 
-    void drawHomographies (const std::string& img_name, const cv::Mat& points, const std::vector<int>& inliers, const cv::Mat &H) {
-        std::string folder = "../dataset/homography/";
 
+    void drawHomographies (const std::string& img_name, DATASET dataset, const cv::Mat& points, const std::vector<int>& inliers, const cv::Mat &H) {
         cv::Mat points1 = points.colRange(0, 2);
         cv::Mat points2 = points.colRange(2, 4);
-        cv::Mat ones = cv::Mat_<float>::ones(points1.rows, 1);
-        cv::hconcat(points1, ones, points1);
-        cv::hconcat(points2, ones, points2);
+        cv::hconcat(points1, cv::Mat_<float>::ones(points1.rows, 1), points1);
+        cv::hconcat(points2, cv::Mat_<float>::ones(points1.rows, 1), points2);
 
-        cv::Mat img1 = cv::imread(folder + img_name + "A.png");
-        cv::Mat img2 = cv::imread(folder + img_name + "B.png");
-//        cv::Mat img1 = cv::imread("../dataset/EVD/1/" + img_name + ".png");
-//        cv::Mat img2 = cv::imread("../dataset/EVD/2/" + img_name + ".png");
 
-        if (img1.empty()) {
-            img1 = cv::imread(folder + img_name + "A.jpg");
-            img2 = cv::imread(folder + img_name + "B.jpg");
-            if (img1.empty()) {
-                std::cout << "wrong image direction!\n";
-                exit (111);
-            }
-        }
+        ImageData gt_data (dataset, img_name);
+        cv::Mat img1 = gt_data.getImage1();
+        cv::Mat img2 = gt_data.getImage2();
 
         cv::Mat img1_inl = img1.clone();
         cv::Mat img2_inl = img2.clone();
@@ -170,8 +161,8 @@ public:
 
 
         cv::Mat H_opencv = cv::Mat_<float>(cv::findHomography(points1, points2));
-        cv::Mat_<float> H_gt;
-        getMatrix3x3 (folder+img_name+"_model.txt", H_gt);
+        cv::Mat_<float> H_gt = gt_data.getModel();
+
 //        getMatrix3x3 ("../dataset/EVD/h/"+img_name+".txt", H_gt);
 
         drawErrors(img1_inl, img2_inl, points1, points2, H);
@@ -276,6 +267,7 @@ public:
             vpoints.push_back(p);
         }
     }
+
 };
 
 

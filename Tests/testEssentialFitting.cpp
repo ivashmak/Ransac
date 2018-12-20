@@ -8,10 +8,11 @@
 
 
 void Tests::testEssentialFitting() {
-    std::string img_name = "Brussels_vpts";
-    cv::Mat points1, points2, points;
-    read_points (points1, points2, "../dataset/Lebeda/strechamvs/"+img_name+"_pts.txt");
-    cv::hconcat(points1, points2, points);
+    DATASET dataset = DATASET::Strecha;
+
+    std::string img_name = "Dresden";
+    cv::Mat points;
+    getPointsNby6 ("../dataset/Lebeda/strechamvs/"+img_name+"_vpts_pts.txt", points);
 
     std::cout << "points size = " << points.rows << "\n";
 
@@ -38,5 +39,5 @@ void Tests::testEssentialFitting() {
     model->setCellSize(50);
     model->setNeighborsType(NeighborsSearch::Grid);
 
-    test (points, model, img_name, false, gt_inliers);
+    test (points, model, img_name, dataset, false, gt_inliers);
 }

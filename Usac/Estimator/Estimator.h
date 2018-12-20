@@ -29,6 +29,11 @@ public:
         return EstimateModelNonMinimalSample(sample, sample_size, model);
     }
 
+//    virtual bool WeightedEstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) = 0;
+//    virtual bool WeightedLeastSquaresFitting (const int * const sample, int sample_size, Model &model) {
+//        return WeightedEstimateModelNonMinimalSample(sample, sample_size, model);
+//    }
+
     virtual float GetError(int pidx) = 0;
     virtual int SampleNumber()  = 0;
 

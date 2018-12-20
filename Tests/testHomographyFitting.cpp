@@ -31,11 +31,12 @@ void Tests::testHomographyFitting() {
 
 //    detectAndSaveFeatures(getHomographyDatasetPoints());
 //    exit (0);
-
+    DATASET dataset = DATASET::Homogr;
     std::string img_name = "boat";
-    cv::Mat points, points1, points2;
-    read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
-    cv::hconcat(points1, points2, points);
+
+    ImageData gt_data (dataset, img_name);
+    std::vector<int> gt_inliers = gt_data.getGTInliers();
+    cv::Mat points = gt_data.getPoints();
 
     // points are already sorted
 //    readEVDpoints(points, "../dataset/EVD/EVD_tentatives/"+img_name+".png_m.txt");
@@ -54,8 +55,7 @@ void Tests::testHomographyFitting() {
 
 
 // ------------ get Ground truth inliers and model ----------------------
-    std::vector<int> gt_inliers;
-    getGTInliersFromGTModelHomography ("../dataset/homography/"+img_name+"_model.txt", points, threshold, gt_inliers);
+//    getGTInliersFromGTModelHomography ("../dataset/homography/"+img_name+"_model.txt", points, threshold, gt_inliers);
 //    getGTInliersFromGTModelHomography ("../dataset/EVD/h/"+img_name+".txt", points, threshold, gt_inliers);
     // -------------------------------------------
     std::cout << "gt inliers " << gt_inliers.size() << "\n";
@@ -77,13 +77,13 @@ void Tests::testHomographyFitting() {
 //     -------------------------------------------------
 
 
-     model->setStandardRansacLO(0);
+     model->setStandardRansacLO(1);
      model->setGraphCutLO(0);
      model->setSprtLO(0);
      model->setCellSize(50);
      model->setNeighborsType(NeighborsSearch::Grid);
 
-     test (points, model, img_name, true, gt_inliers);
+     test (points, model, img_name, dataset, true, gt_inliers);
 
 //    getStatisticalResults(points, model, 200, true, gt_inliers, false, nullptr);
 

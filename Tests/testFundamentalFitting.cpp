@@ -17,6 +17,7 @@ void Tests::testFundamentalFitting() {
 //    detectAndSaveFeatures(getKusvod2Dataset());
 //    exit (0);
 
+    DATASET dataset = DATASET::Adelaidermf;
     std::string img_name = "barrsmith";
     cv::Mat_<float> points1, points2, points;
 //    getPointsNby6("../dataset/Lebeda/kusvod2/"+img_name+"_vpts_pts.txt", points);
@@ -62,11 +63,11 @@ void Tests::testFundamentalFitting() {
 
     model->setStandardRansacLO(0);
     model->setGraphCutLO(0);
-    model->setSprtLO(1);
+    model->setSprtLO(0);
     model->setCellSize(50);
     model->setNeighborsType(NeighborsSearch::Grid);
 
-    test (points, model, img_name, true, gt_inliers);
+    test (points, model, img_name, dataset, true, gt_inliers);
 //    test (points, model, img_name, false, gt_inliers);
 
 //    getStatisticalResults(points, model, 400, true, gt_inliers, false, nullptr);
