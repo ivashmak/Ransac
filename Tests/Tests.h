@@ -26,8 +26,7 @@ public:
 
     void initProsac (Sampler *& sampler, unsigned int sample_number, unsigned int points_size);
     void initUniform (Sampler *& sampler, unsigned int sample_number, unsigned int points_size);
-    void initNapsac (Sampler *& sampler, const cv::Mat &neighbors, unsigned int k_nearest_neighbors,
-                            unsigned int sample_number);
+    void initNapsac (Sampler *& sampler, const cv::Mat &neighbors, const std::vector<std::vector<int>> &ns, Model * model);
     void initEvsac (Sampler *& sampler, cv::InputArray points, unsigned int sample_number,
                            unsigned int points_size, unsigned int k_nearest_neighbors);
     void initGraduallyIncreasingSampler (Sampler *& sampler, cv::InputArray points, unsigned int sample_number);
@@ -35,7 +34,7 @@ public:
     void initProsacNapsac1 (Sampler *& sampler, Model * model, const cv::Mat &nearest_neighors);
     void initProsacNapsac2 (Sampler *& sampler, Model * model, const cv::Mat &nearest_neighors);
 
-    void initSampler (Sampler *& sampler, Model * model, unsigned int points_size, cv::InputArray points, const cv::Mat& neighbors);
+    void initSampler (Sampler *& sampler, Model * model, unsigned int points_size, cv::InputArray points, const cv::Mat& neighbors, std::vector<std::vector<int>> ns);
 
     void test (cv::Mat points,
                       Model * model,
@@ -157,7 +156,7 @@ public:
             Estimator * estimator;
             TerminationCriteria * termination_criteria;
 
-            initSampler(sampler, model, points.rows, points, neighbors);
+            initSampler(sampler, model, points.rows, points, neighbors, neighbors_v);
             initEstimator(estimator, model, points);
 
             if (model->sampler == SAMPLER::Prosac) {

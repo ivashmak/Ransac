@@ -188,6 +188,7 @@ void Ransac::run(cv::InputArray input_points) {
 //                    std::cout << "model is good\n";
 //                }
             } else {
+//                std::cout << "Get quality score\n";
                 quality->getNumberInliers(current_score, models[i]);
             }
 

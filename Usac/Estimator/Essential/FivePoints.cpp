@@ -37,7 +37,8 @@ bool Solve5PointEssential(std::vector<cv::Point2d> &pts1, std::vector<cv::Point2
     assert(num_pts >= 5);
 
     // F is a temp variable, not the F fundamental matrix
-    cv::Mat F(num_pts, 9, CV_64F);
+    cv::Mat_<double> F(num_pts, 9);
+    double * F_ptr = (double *) F.data;
 
     for(int i=0; i < num_pts; i++) {
 		double x1 = pts1[i].x;
@@ -46,15 +47,15 @@ bool Solve5PointEssential(std::vector<cv::Point2d> &pts1, std::vector<cv::Point2
 		double x2 = pts2[i].x;
 		double y2 = pts2[i].y;
 
-        F.at<double>(i,0) = x1*x2;
-        F.at<double>(i,1) = x2*y1;
-        F.at<double>(i,2) = x2;
-        F.at<double>(i,3) = x1*y2;
-        F.at<double>(i,4) = y1*y2;
-        F.at<double>(i,5) = y2;
-        F.at<double>(i,6) = x1;
-        F.at<double>(i,7) = y1;
-        F.at<double>(i,8) = 1.0;
+		*F_ptr++ = x1*x2;
+        *F_ptr++ = x2*y1;
+        *F_ptr++ = x2;
+        *F_ptr++ = x1*y2;
+        *F_ptr++ = y1*y2;
+        *F_ptr++ = y2;
+        *F_ptr++ = x1;
+        *F_ptr++ = y1;
+        *F_ptr++ = 1;
     }
 
     cv::SVD svd(F, cv::SVD::FULL_UV);
@@ -112,9 +113,9 @@ bool Solve5PointEssential(std::vector<cv::Point2d> &pts1, std::vector<cv::Point2
     // max power of the determinant is x^10, so we need 11 points for interpolation
     // the 11 points are at x = [-5, -4 .... 4, 5], luckily there is no overflow at x^10
 
-    cv::Mat X = cv::Mat::ones(11, 11, CV_64F);
-    cv::Mat b(11, 1, CV_64F);
-    cv::Mat ret_eval(10, 10, CV_64F);
+    cv::Mat X = cv::Mat_<double>::ones(11, 11);
+    cv::Mat_<double> b(11, 1);
+    cv::Mat_<double> ret_eval(10, 10);
 
     // first column of M is the lowest power
     for(int i=-5, j=0; i <= 5; i++, j++) {
@@ -159,10 +160,10 @@ bool Solve5PointEssential(std::vector<cv::Point2d> &pts1, std::vector<cv::Point2
     }
 
     // Back substitute the z values and compute null space to get x,y
-    cv::Mat x1(3, 1, CV_64F);
-    cv::Mat x2(3, 1, CV_64F);
-    cv::Mat E = cv::Mat::zeros(3,3,CV_64F);
-    cv::Mat P_ref = cv::Mat::eye(3, 4, CV_64F);
+    cv::Mat_<double> x1(3, 1);
+    cv::Mat_<double> x2(3, 1);
+    cv::Mat E = cv::Mat_<double>::zeros(3,3);
+    cv::Mat P_ref = cv::Mat_<double>::eye(3, 4);
     cv::Mat P[4];
     cv::Mat pt3d;
 
@@ -171,7 +172,7 @@ bool Solve5PointEssential(std::vector<cv::Point2d> &pts1, std::vector<cv::Point2
 	int bestInlierIdx;
 	int bestInlierNumber = 0;
 
-    for(size_t i=0; i < solutions.size(); i++) {
+    for (size_t i=0; i < solutions.size(); i++) {
         double z = solutions[i];
 
         M.Eval(z, (double*)ret_eval.data);
@@ -214,7 +215,7 @@ bool Solve5PointEssential(std::vector<cv::Point2d> &pts1, std::vector<cv::Point2
         int best_inliers = 0;
         bool found = false;
 
-        for(int j=0; j < 4; j++) {
+        for (int j=0; j < 4; j++) {
             pt3d = TriangulatePoint(pts1[0], pts2[0], P_ref, P[j]);
             double depth1 = CalcDepth(pt3d, P_ref);
             double depth2 = CalcDepth(pt3d, P[j]);
@@ -271,8 +272,7 @@ bool Solve5PointEssential(std::vector<cv::Point2d> &pts1, std::vector<cv::Point2
 
 // X is 4x1 is [x,y,z,w]
 // P is 3x4 projection matrix
-double CalcDepth(const cv::Mat &X, const cv::Mat &P)
-{
+double CalcDepth(const cv::Mat &X, const cv::Mat &P) {
     // back project
     cv::Mat X2 = P*X;
 
@@ -298,9 +298,8 @@ double CalcDepth(const cv::Mat &X, const cv::Mat &P)
     return (w/W)*(sign/m3);
 }
 
-cv::Mat TriangulatePoint(const cv::Point2d &pt1, const cv::Point2d &pt2, const cv::Mat &P1, const cv::Mat &P2)
-{
-    cv::Mat A(4,4,CV_64F);
+cv::Mat TriangulatePoint(const cv::Point2d &pt1, const cv::Point2d &pt2, const cv::Mat &P1, const cv::Mat &P2) {
+    cv::Mat_<double> A(4,4);
 
 	A.at<double>(0,0) = pt1.x*P1.at<double>(2,0) - P1.at<double>(0,0);
 	A.at<double>(0,1) = pt1.x*P1.at<double>(2,1) - P1.at<double>(0,1);
@@ -324,7 +323,7 @@ cv::Mat TriangulatePoint(const cv::Point2d &pt1, const cv::Point2d &pt2, const c
 
 	cv::SVD svd(A);
 
-    cv::Mat X(4,1,CV_64F);
+    cv::Mat_<double> X(4,1);
 
 	X.at<double>(0,0) = svd.vt.at<double>(3,0);
 	X.at<double>(1,0) = svd.vt.at<double>(3,1);
@@ -334,15 +333,14 @@ cv::Mat TriangulatePoint(const cv::Point2d &pt1, const cv::Point2d &pt2, const c
     return X;
 }
 
-void ProjectionsFromEssential(const cv::Mat &E, cv::Mat &P1, cv::Mat &P2, cv::Mat &P3, cv::Mat &P4)
-{
+void ProjectionsFromEssential(const cv::Mat &E, cv::Mat &P1, cv::Mat &P2, cv::Mat &P3, cv::Mat &P4) {
     // Assumes input E is a rank 2 matrix, with equal singular values
     cv::SVD svd(E);
 
     cv::Mat VT = svd.vt;
     cv::Mat V = svd.vt.t();
     cv::Mat U = svd.u;
-    cv::Mat W = cv::Mat::zeros(3,3,CV_64F);
+    cv::Mat W = cv::Mat_<double>::zeros(3,3);
 
 	// Find rotation, translation
 	W.at<double>(0,1) = -1.0;
@@ -350,10 +348,10 @@ void ProjectionsFromEssential(const cv::Mat &E, cv::Mat &P1, cv::Mat &P2, cv::Ma
 	W.at<double>(2,2) = 1.0;
 
 	// P1, P2, P3, P4
-	P1 = cv::Mat::eye(3,4,CV_64F);
-	P2 = cv::Mat::eye(3,4,CV_64F);
-	P3 = cv::Mat::eye(3,4,CV_64F);
-	P4 = cv::Mat::eye(3,4,CV_64F);
+	P1 = cv::Mat_<double>::eye(3,4);
+	P2 = cv::Mat_<double>::eye(3,4);
+	P3 = cv::Mat_<double>::eye(3,4);
+	P4 = cv::Mat_<double>::eye(3,4);
 
     // Rotation
 	P1(cv::Range(0,3), cv::Range(0,3)) = U*W*VT;

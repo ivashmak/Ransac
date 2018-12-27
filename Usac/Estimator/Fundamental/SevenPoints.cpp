@@ -129,11 +129,11 @@ unsigned int SevenPointsAlgorithm (const float * const pts, const int * const sa
 
     // solve the cubic equation; there can be 1 to 3 roots ...
     int nroots = cv::solveCubic (coeffs, roots);
-    if (nroots < 1) return nroots;
+    if (nroots < 1) return 0;
 
     F  = cv::Mat_<float>(nroots*3,3);
 
-    float* F_ptr = (float *) F.data;
+    float * F_ptr = (float *) F.data;
 
     for (int k = 0; k < nroots; k++ , F_ptr += 9) {
         // for each root form the fundamental matrix

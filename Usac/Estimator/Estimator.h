@@ -35,7 +35,7 @@ public:
 //    }
 
     virtual float GetError(int pidx) = 0;
-    virtual int SampleNumber()  = 0;
+    virtual int SampleNumber() = 0;
 
     // Setters of points set and model's parameters sufficiently sped up code
     // functions are virtual, they can be overwritten but not necessarily.
@@ -43,13 +43,16 @@ public:
      * These function should be avoided in Ransac. Efficiently to use global 
      * input points and descriptors as private class members.
      */
-    virtual void setPoints (cv::InputArray input_points) {}
-    virtual void setModelParameters (const cv::Mat& model) {}
+    virtual void setModelParameters (const cv::Mat& model) {
+        std::cout << "YOU ARE IN NOT IMPLEMENTED FUNCTION setModelParameters!\n";
+    }
 
-    virtual int getNumberOfInliers (const Model * const model) {return 0;}
+    virtual void getModelbyCameraMatrix (const cv::Mat &K1, const cv::Mat &K2, const cv::Mat &InModel, cv::Mat &OutModel) {
+        std::cout << "YOU ARE IN NOT IMPLEMENTED FUNCTION getModelbyCameraMatrix!\n";
+    }
 
     /*
-     * Especially for Fundamental Estimator
+     * Fundamental Estimator
      */
     virtual bool isValid (const Model * const model) {
         return true;

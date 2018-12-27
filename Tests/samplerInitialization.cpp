@@ -17,10 +17,18 @@ void Tests::initUniform (Sampler *& sampler, unsigned int sample_number, unsigne
     sampler->setPointsSize(points_size);
 }
 
-void Tests::initNapsac (Sampler *& sampler, const cv::Mat &neighbors, unsigned int k_nearest_neighbors,
-                        unsigned int sample_number) {
+void Tests::initNapsac (Sampler *& sampler, const cv::Mat &neighbors, const std::vector<std::vector<int>> &ns, Model * model) {
+    int points_size = std::max ((int) neighbors.rows, (int) ns.size());
 
-    sampler = new NapsacSampler((int *)neighbors.data, k_nearest_neighbors, sample_number, neighbors.rows);
+    sampler = new NapsacSampler(model, points_size);
+    if (model->neighborsType == NeighborsSearch::Nanoflann) {
+        assert(! neighbors.empty());
+        ((NapsacSampler *) sampler)->setNeighbors(neighbors);
+    } else {
+        assert(! ns.empty());
+        ((NapsacSampler *) sampler)->setNeighbors(ns);
+    }
+
 }
 
 void Tests::initEvsac (Sampler *& sampler, cv::InputArray points, unsigned int sample_number,
@@ -41,7 +49,7 @@ void Tests::initProsacNapsac2 (Sampler *& sampler, Model * model, const cv::Mat 
 
 }
 
-void Tests::initSampler (Sampler *& sampler, Model * model, unsigned int points_size, cv::InputArray points, const cv::Mat& neighbors) {
+void Tests::initSampler (Sampler *& sampler, Model * model, unsigned int points_size, cv::InputArray points, const cv::Mat& neighbors, std::vector<std::vector<int>> ns) {
     Tests tests;
     if (model->sampler == SAMPLER::Uniform) {
         tests.initUniform(sampler, model->sample_number, points_size);
@@ -49,8 +57,7 @@ void Tests::initSampler (Sampler *& sampler, Model * model, unsigned int points_
         tests.initProsac(sampler, model->sample_number, points_size);
     } else if (model->sampler == SAMPLER::Napsac) {
         assert(model->k_nearest_neighbors > 0);
-        assert(!neighbors.empty());
-        tests.initNapsac(sampler, neighbors, model->k_nearest_neighbors, model->sample_number);
+        tests.initNapsac(sampler, neighbors, ns, model);
     } else if (model->sampler == SAMPLER::Evsac) {
         assert(model->k_nearest_neighbors > 0);
         tests.initEvsac(sampler, points, model->sample_number, points_size, model->k_nearest_neighbors);

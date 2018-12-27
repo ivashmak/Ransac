@@ -81,12 +81,12 @@ public:
         float x2 = points[smpl+2];
         float y2 = points[smpl+3];
 
-        // pt2 E, line 1
+        // pt2^T * E, line 1
         float l1 = *(E_ptr)* x2 + *(E_ptr + 3) * y2 + *(E_ptr + 6);
         float l2 = *(E_ptr + 1) * x2 + *(E_ptr + 4) * y2 + *(E_ptr + 7);
         float l3 = *(E_ptr + 2) * x2 + *(E_ptr + 5) * y2 + *(E_ptr + 8);
 
-        // E pt1, line 2
+        // E * pt1, line 2
         float t1 = *(E_ptr)* x1 + *(E_ptr + 1) * y1 + *(E_ptr + 2);
         float t2 = *(E_ptr + 3) * x1 + *(E_ptr + 4) * y1 + *(E_ptr + 5);
         float t3 = *(E_ptr + 6) * x1 + *(E_ptr + 7) * y1 + *(E_ptr + 8);
@@ -99,9 +99,17 @@ public:
         float b1 = t1 * x2 + t2 * y2 + t3;
         float b2 = sqrt(t1 * t1 + t2 * t2);
 
-        // normalized distance
-        // abs (d1 + d2) / 2
-        return fabsf((a1 / a2) + (b1 / b2)) / 2;
+        // get distances
+        // distance1 = abs (a1 / a2)
+        // distance2 = abs (b1 / b2)
+
+        // error is average of distances
+        return (fabsf(a1 / a2) + fabsf(b1 / b2)) / 2; // fabsf((a1 / a2) + (b1 / b2)) / 2
+    }
+
+
+    void getModelbyCameraMatrix (const cv::Mat &K1, const cv::Mat &K2, const cv::Mat &F, cv::Mat &E) override {
+        E =  K2.t() * F * K1;
     }
 
     int SampleNumber() override {

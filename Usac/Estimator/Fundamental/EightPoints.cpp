@@ -7,8 +7,8 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, in
     GetNormalizingTransformation(pts, norm_points, sample, sample_number, T1, T2);
 
     const float * const norm_points_ptr = (float *) norm_points.data;
-    cv::Mat_ <float> A(9, 9, float (0));
-    float * A_ptr = (float *) A.data;
+    cv::Mat_ <float> covA(9, 9, float (0));
+    float * covA_ptr = (float *) covA.data;
 
     // form a linear system Ax=0: for each selected pair of points m1 & m2,
     // the row of A(=a) represents the coefficients of equation: (m2, 1)'*F*(m1, 1) = 0
@@ -43,52 +43,58 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, in
          * A =
          */
         // calculate covariance for eigen
-        for (int row = 0; row < 9; row++) {
-            for (int col = row; col < 9; col++) {
-                A_ptr[row*9+col] += a[row]*a[col];
+        for (unsigned int row = 0; row < 9; row++) {
+            for (unsigned int col = row; col < 9; col++) {
+                covA_ptr[row*9+col] += a[row]*a[col];
             }
         }
     }
 
     /*
      * Copy upper triangle of A to lower triangle of A.
-     * covariance matrix
+     * symmetric covariance matrix
      */
-    for (int row = 1; row < 9; row++) {
-        for (int col = 0; col < row; col++) {
-            A_ptr[row*9+col] = A_ptr[col*9+row];
+    for (unsigned int row = 1; row < 9; row++) {
+        for (unsigned int col = 0; col < row; col++) {
+            covA_ptr[row*9+col] = covA_ptr[col*9+row];
         }
     }
 
     cv::Mat_<float> eigen_values, eigen_vectors;
-    cv::eigen(A, eigen_values, eigen_vectors);
+    cv::eigen(covA, eigen_values, eigen_vectors);
 
-    auto * W_ptr = (float *) eigen_values.data;
-
-    int i;
-    for (i = 0; i < 9; i++) {
-        if (fabsf(W_ptr[i]) < DBL_EPSILON) break;
-    }
-
-    if (i < 8) {
-        std::cout << "Eigen values are too small\n";
-//        return false;
-    }
-
-
+    // last column is optimal (minimizing) subspace of Af = 0
+    // In opencv V (eigen vectors) is transpose, so last row
     F = cv::Mat_<float> (eigen_vectors.row(8).reshape (3,3));
 
-    // make F0 singular (of rank 2) by decomposing it with SVD,
-    // zeroing the last diagonal element of W and then composing the matrices back.
-    cv::Mat_<float> w, U, Vt;
-    cv::SVD::compute (F, w, U, Vt);
+//    std::cout << "det F = " << cv::determinant(F) << "\n";
 
-    // create from w diagonal matrix with w33 = 0
-    w = (cv::Mat_<float> (3, 3) << w.at<float>(0), 0, 0,
-                                    0, w.at<float>(1), 0,
-                                    0, 0, 0);
+    // ------------------------
+     /*
+     make F singular (of rank 2) by decomposing it with SVD,
+     zeroing the last diagonal element of W and then composing the matrices back.
+     F = USV^T
 
-    F = U*w*Vt;
+     This step is not really necessary, because
+     A*(f11 f12 ... f33)^T = 0 is singular (7 equations for 9 variables), so
+     the solution is linear subspace of dimensionality 2.
+     => use the last two singular std::vectors as a basis of the space
+
+     But numerically F usually has rank 3 and det F is almost zero (10^-3).
+     */
+
+//    cv::Mat_<float> S, U, Vt;
+//    cv::SVD::compute (F, S, U, Vt);
+//
+//    // create from S (singular/eigen values) diagonal matrix with S(3,3) = 0
+//    S = (cv::Mat_<float> (3, 3) << S.at<float>(0), 0, 0,
+//                                    0, S.at<float>(1), 0,
+//                                    0, 0, 0);
+//
+//    // last eigen value in S is 0, so F must have rank 2
+//    F = U*S*Vt;
+    // -------------------------
+
 
     /*
      * T1 = (t11 0   t13)
@@ -112,11 +118,9 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, in
     t2[2] = 0;
     t2[5] = 0;
 
-//     T2 = T2.t();
-
     F = T2 * F * T1;
 
-    // normalize f33
+    // normalize by f33
     if (fabs(F.at<float>(2,2)) > FLT_EPSILON) {
         F = F / F.at<float>(2, 2);
     }

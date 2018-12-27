@@ -32,7 +32,7 @@ void Tests::testHomographyFitting() {
 //    detectAndSaveFeatures(getHomographyDatasetPoints());
 //    exit (0);
     DATASET dataset = DATASET::Homogr;
-    std::string img_name = "boat";
+    std::string img_name = "graf";
 
     ImageData gt_data (dataset, img_name);
     std::vector<int> gt_inliers = gt_data.getGTInliers();
@@ -63,12 +63,12 @@ void Tests::testHomographyFitting() {
     Model * model;
 
 //     ---------------------- uniform ----------------------------------
-   model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
+//   model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
     // --------------------------------------------------------------
 
 
     // ---------------------- napsac ----------------------------------
-//    model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Napsac);
+    model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Napsac);
     // --------------------------------------------------------------
 
 
@@ -77,15 +77,15 @@ void Tests::testHomographyFitting() {
 //     -------------------------------------------------
 
 
-     model->setStandardRansacLO(1);
+     model->setStandardRansacLO(0);
      model->setGraphCutLO(0);
      model->setSprtLO(0);
      model->setCellSize(50);
      model->setNeighborsType(NeighborsSearch::Grid);
 
      test (points, model, img_name, dataset, true, gt_inliers);
-
-//    getStatisticalResults(points, model, 200, true, gt_inliers, false, nullptr);
+//
+//    getStatisticalResults(points, model, 500, true, gt_inliers, false, nullptr);
 
 //     storeResults();
 }

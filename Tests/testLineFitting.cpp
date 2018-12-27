@@ -123,6 +123,7 @@ void Tests::testLineFitting() {
      model->setStandardRansacLO(0);
      model->setGraphCutLO(0);
      model->setSprtLO(0);
+     model->setNeighborsType(NeighborsSearch::Nanoflann);
 
     test (sorted_pts, model, img_name, dataset, true, gt_model);
 

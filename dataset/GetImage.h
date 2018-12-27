@@ -32,6 +32,12 @@ public:
         } else if (dataset == DATASET::Strecha) {
             folder = "../dataset/Lebeda/strechamvs/";
             getPointsNby6(folder+img_name+"_vpts_pts.txt", pts);
+            img1 = cv::imread("../dataset/Lebeda/strechamvs/"+img_name+"A.jpg");
+            img2 = cv::imread("../dataset/Lebeda/strechamvs/"+img_name+"B.jpg");
+            if (img1.empty()) {
+                img1 = cv::imread("../dataset/Lebeda/strechamvs/"+img_name+"A.png");
+                img2 = cv::imread("../dataset/Lebeda/strechamvs/"+img_name+"B.png");
+            }
             pts1 = pts.colRange(0,2);
             pts2 = pts.colRange(2,4);
             return;

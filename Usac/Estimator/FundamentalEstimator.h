@@ -40,14 +40,16 @@ public:
         cv::Mat_<float> F; // use global
 
         unsigned int roots = SevenPointsAlgorithm(points, sample, F);
-        if (roots < 1) {
-            std::cout << "roots less than 1\n";
-            return 0;
-        }
+
 //        std::cout << "Roots " << roots << "\n\n";
 
-        for (int i = 0; i < roots; i++) {
-            models[i]->setDescriptor(F.rowRange(i * 3, i * 3 + 3));
+        for (int i = 0; i < roots;) {
+            if (!all_ori_valid(F.rowRange(i * 3, i * 3 + 3), sample, 7)) {
+//                std::cout << "BAD FUNDAMENTAL MATRIX ORIENTATION. continue\n";
+                roots--;
+                continue;
+            }
+            models[i++]->setDescriptor(F.rowRange(i * 3, i * 3 + 3));
         }
 
         return roots;
@@ -112,8 +114,80 @@ public:
         return error;
     }
 
+    void getModelbyCameraMatrix (const cv::Mat &K1, const cv::Mat &K2, const cv::Mat &E, cv::Mat &F) override {
+        F =  K2.inv().t() * E * K1.inv();
+    }
+
     int SampleNumber() override {
         return 7;
+    }
+
+
+    void GetFundamentalFromProjectionMats(const cv::Mat &P1, const cv::Mat &P2, cv::Mat &F) {
+        cv::Mat e1;
+        cv::SVD svd(P1, 4);
+
+        e1 = svd.vt.row(3);
+        e1 = e1.t();
+
+        cv::Mat e2 = P2 * e1;
+
+        cv::Mat e2x = (cv::Mat_<float>(3, 3) << 0, -e2.at<float>(2), e2.at<float>(1),
+                                                e2.at<float>(2), 0, -e2.at<float>(0),
+                                               -e2.at<float>(1), e2.at<float>(0), 0);
+
+        F = e2x * P2 * P1.inv(cv::DECOMP_SVD);
+        F = F / F.at<float>(2, 2);
+    }
+
+
+
+private:
+    // https://github.com/danini/graph-cut-ransac/blob/master/GraphCutRANSAC/essential_estimator.cpp
+    /************** oriented constraints ******************/
+    void epipole(cv::Mat &ec, const cv::Mat &F) const {
+        ec = F.row(0).cross(F.row(2));
+
+        for (int i = 0; i < 3; i++)
+            if ((ec.at<float>(i) > 1.9984e-15) || (ec.at<float>(i) < -1.9984e-15)) return;
+        ec = F.row(1).cross(F.row(2));
+    }
+
+    // u = x1 y1 1 x2 y2 1
+    float getorisig(const cv::Mat &F, const cv::Mat *ec, unsigned int pt_idx) const {
+        float s1, s2;
+        cv::Mat pt;
+
+//        float x1 = points[pt_idx];
+        float y1 = points[pt_idx+1];
+        float x2 = points[pt_idx+2];
+        float y2 = points[pt_idx+3];
+
+//        s1 = F->at<float>(0) * u.at<float>(3) + F->at<float>(3) * u.at<float>(4) + F->at<float>(6) * u.at<float>(5);
+//        s2 = ec->at<float>(1) * u.at<float>(2) - ec->at<float>(2) * u.at<float>(1);
+
+        s1 = F.at<float>(0) * x2 + F.at<float>(3) * y2 + F.at<float>(6);
+        s2 = ec->at<float>(1) - ec->at<float>(2) * y1;
+
+        return(s1 * s2);
+    }
+
+    bool all_ori_valid(const cv::Mat &F, const int * const sample, int N) const {
+        cv::Mat ec;
+        float sig, sig1;
+        int i;
+        epipole(ec, F);
+
+//        sig1 = getorisig(F, &ec, data.row(sample[0]));
+        sig1 = getorisig(F, &ec, 4*sample[0]);
+
+        for (i = 1; i < N; i++) {
+//            sig = getorisig(F, &ec, data.row(sample[i]));
+            sig = getorisig(F, &ec, 4*sample[i]);
+
+            if (sig1 * sig < 0) return false;
+        }
+        return true;
     }
 };
 

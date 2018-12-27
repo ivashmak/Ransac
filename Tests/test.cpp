@@ -20,6 +20,7 @@ void Tests::test (cv::Mat points,
         nn.getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
     } else {
         nn.getGridNearestNeighbors(points, model->cell_size, neighbors_v);
+        std::cout << "GOT neighbors\n";
     }
     auto end_time = std::chrono::steady_clock::now();
     std::chrono::duration<float> fs = end_time - begin_time;
@@ -33,7 +34,7 @@ void Tests::test (cv::Mat points,
     Estimator * estimator;
     TerminationCriteria * termination_criteria;
 
-    initSampler(sampler, model, points.rows, points, neighbors);
+    initSampler(sampler, model, points.rows, points, neighbors, neighbors_v);
     initEstimator(estimator, model, points);
 
     if (model->sampler == SAMPLER::Prosac) {

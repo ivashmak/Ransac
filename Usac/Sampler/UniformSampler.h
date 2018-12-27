@@ -9,24 +9,11 @@
 class UniformSampler : public Sampler {
 private:
     unsigned int * points_random_pool;
-    unsigned int current_point_idx;
-
-    void shuffleArray () {
-        unsigned int max = points_size;
-        for (int i = 0; i < points_size; i++) {
-            unsigned int array_random_index = (unsigned int) random () % max;
-            unsigned int temp = points_random_pool[array_random_index];
-            max--;
-            points_random_pool[array_random_index] = points_random_pool[max];
-            points_random_pool[max] = temp;
-        }
-        current_point_idx = 0;
-    }
-
+    int max;
 public:
     UniformSampler (bool reset_time=true) {
         if (reset_time) {
-            srand (time(NULL));
+//            srand (time(NULL));
         }
     }
 
@@ -35,32 +22,27 @@ public:
     }
 
     void setPointsSize (unsigned int points_size_) override {
-        if (points_size < points_size_) {
-            points_size = points_size_;
-            points_random_pool = new unsigned int[points_size];
-            for (unsigned int i = 0; i < points_size; i++) {
-                points_random_pool[i] = i;
-            }
-            shuffleArray();
-        } else {
-            points_size = points_size_;
+        points_size = points_size_;
+        points_random_pool = new unsigned int[points_size];
+        for (unsigned int i = 0; i < points_size; i++) {
+            points_random_pool[i] = i;
         }
-
+        max = points_size;
     }
 
 
     void generateSample (int * sample) override {
-        /*
-         * Shuffle if required sample size is bigger than points size.
-         * I we shuffle inside sample loop, we can get repeated sample.
-         */
-        if (current_point_idx + sample_size >= points_size) {
-            shuffleArray();
-            current_point_idx = 0;
-        }
-
         for (unsigned int i = 0; i < sample_size; i++) {
-            sample[i] = points_random_pool[current_point_idx++];
+            if (max == 0) {
+                max = points_size;
+            }
+            unsigned int array_random_index = (unsigned int) random () % max;
+            unsigned int random_number = points_random_pool[array_random_index];
+            max--;
+            points_random_pool[array_random_index] = points_random_pool[max];
+            points_random_pool[max] = random_number;
+            sample[i] = random_number;
+
 //            std::cout << sample[i] << " ";
         }
 //        std::cout << '\n';

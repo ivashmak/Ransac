@@ -46,28 +46,50 @@ public:
      * Principal Component Analysis
      */
     bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
-        cv::Mat_<float> points (sample_size, 2);
-        float *points_arr = (float *) points.data;
+
+        /*
+         * cov (i, j) = sum ((xi - mean_x) * (yi - mean_y)) =
+         * sum (xi*yi - xi * mean_y - yi * mean_x + mean_x * mean_y) =
+         * sum (xi*yi) - mean_y * sum (xi) - mean_x * sum (yi) + N * mean_x * mean_y
+         *
+         * Symmetric cov (i, j) = cov (j, i)
+         * It is enough to calculate sum_x, sum_y, sum_xy, sum_x_sq and sum_y_sq, and means after.
+         */
+
+        float x, y, sum_x = 0, sum_y = 0, sum_xy, sum_x2 = 0, sum_y2 = 0, mean_x, mean_y;
+        unsigned int smpl;
+        for (unsigned int i = 0; i < sample_size; i++) {
+            smpl = 2*sample[i];
+            x = input_points[smpl];
+            y = input_points[smpl+1];
+
+            sum_x += x;
+            sum_y += y;
+            sum_xy += x * y;
+            sum_x2 += x * x;
+            sum_y2 += y * y;
+        }
+        mean_x = sum_x / sample_size;
+        mean_y = sum_y / sample_size;
+
+        cv::Mat_<float> cov (2,2);
+        cov.at<float>(0, 0) = sum_x2 - 2 * sum_x * mean_x              + sample_size * mean_x * mean_x;
+        cov.at<float>(0, 1) = sum_xy - sum_x * mean_y - sum_y * mean_x + sample_size * mean_x * mean_y;
+        cov.at<float>(1, 1) = sum_y2 - 2 * sum_y * mean_y              + sample_size * mean_y * mean_y;
+        cov.at<float>(1, 0) = cov.at<float>(0, 1);
+
+        cv::Mat eigenvecs, eigenvals;
+        cv::eigen (cov, eigenvals, eigenvecs);
+
+        // in opencv eigen values has decreased order, so
+        // optimal subspace is first eigen vector,
+        // the equation of line is second eigen vector
+
         float a, b, c;
-
-       for (int i = 0; i < sample_size; i++) {
-           *points_arr++ = input_points[2*sample[i]];
-           *points_arr++ = input_points[2*sample[i]+1];
-       }
-
-        cv::Mat covar, eigenvecs, means, eigenvals;
-        // Find the covariance matrix
-        cv::calcCovarMatrix(points, covar, means, 1 | 8); //CV_COVAR_NORMAL | CV_COVAR_ROWS
-        // Find the eigenvectors and eigenvalues of the covariance matrix
-        cv::eigen (covar, eigenvals, eigenvecs);
-
-        // std::cout << covar << "\n\n";
-        // std::cout << eigenvals << "\n\n";
-        // std::cout << eigenvecs << "\n\n";
-
-        a = (float) -eigenvecs.at<double>(1,0);
-        b = (float) -eigenvecs.at<double>(1,1);
-        c = (float) (-a*means.at<double>(0) - b*means.at<double>(1));
+        // eigen vectors are normalized
+        a = -eigenvecs.at<float>(1,0);
+        b = -eigenvecs.at<float>(1,1);
+        c = -a * mean_x - b * mean_y;
 
         model.setDescriptor((cv::Mat_<float>(1,3) <<  a, b, c));
         return true;
