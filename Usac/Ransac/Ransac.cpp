@@ -20,13 +20,15 @@ int getPointsSize (cv::InputArray points) {
 }
 
 void Ransac::run(cv::InputArray input_points) {
+    auto begin_time = std::chrono::steady_clock::now();
+
     // todo: initialize (= new) estimator, quality, sampler and others here...
 
     /*
      * Check if all components are initialized and safe to run
      * todo: add more criteria
      */
-//    assert(model->estimator != ESTIMATOR::NullE && model->sampler != SAMPLER::NullS);
+    assert(model->estimator != ESTIMATOR::NullE && model->sampler != SAMPLER::NullS);
     assert(!input_points.empty());
     assert(estimator != nullptr);
     assert(model != nullptr);
@@ -35,8 +37,6 @@ void Ransac::run(cv::InputArray input_points) {
     assert(termination_criteria != nullptr);
     assert(sampler->isInit());
     assert(model->neighborsType != NullN);
-
-    auto begin_time = std::chrono::steady_clock::now();
 
     int points_size = getPointsSize(input_points);
 
@@ -47,6 +47,7 @@ void Ransac::run(cv::InputArray input_points) {
 
     // initialize quality
     quality->init(points_size, model->threshold, estimator);
+
 
     Score *best_score = new Score, *current_score = new Score;
 
@@ -59,19 +60,11 @@ void Ransac::run(cv::InputArray input_points) {
         models.push_back (new Model(model));
         models.push_back (new Model(model));
     }
+    Model * best_model = new Model (model);
+    unsigned int number_of_models;
 
-    Model *best_model = new Model (model);
 
-    // get information from model about LO
-    bool LO = model->LO;
-    bool GraphCutLO = model->GraphCutLO;
-    bool SprtLO = model->Sprt;
-    
-//    std::cout << "General ransac Local Optimization " << LO << "\n";
-//    std::cout << "graphCut Local Optimization " << GraphCutLO << "\n";
-//    std::cout << "Sprt Local Optimization " << Sprt << "\n";
-
-    // prosac
+    //--------------- Prosac ---------------------
     ProsacTerminationCriteria * prosac_termination_criteria;
     ProsacSampler * prosac_sampler;
     bool is_prosac = model->sampler == SAMPLER::Prosac;
@@ -79,7 +72,7 @@ void Ransac::run(cv::InputArray input_points) {
         prosac_sampler = (ProsacSampler *) sampler;
         prosac_termination_criteria = (ProsacTerminationCriteria *) termination_criteria;
     }
-    //
+    //--------------------------------------------
 
     /*
      * Allocate inliers of points_size, to avoid reallocation in getModelScore()
@@ -87,14 +80,16 @@ void Ransac::run(cv::InputArray input_points) {
     int * inliers = new int[points_size];
     int * sample = new int[estimator->SampleNumber()];
 
-    unsigned int number_of_models;
-
+    // ------------- Standard Local Optimization
+    bool LO = model->LO;
     LocalOptimization * lo_ransac;
     if (LO) {
         lo_ransac = new RansacLocalOptimization (model, sampler, termination_criteria, quality, estimator, points_size);
     }
+    //--------------------------------------
 
-    //--------------------------------------------
+    //------------- SPRT -------------------
+    bool SprtLO = model->Sprt;
     SPRT * sprt;
     bool is_good_model;
     if (SprtLO) {
@@ -103,7 +98,8 @@ void Ransac::run(cv::InputArray input_points) {
     }
     //--------------------------------------------
 
-    // Graph cut local optimization
+    //---------- Graph cut local optimization ----------
+    bool GraphCutLO = model->GraphCutLO;
     GraphCut * graphCut;
     if (GraphCutLO) {
         graphCut = new GraphCut;
@@ -114,11 +110,12 @@ void Ransac::run(cv::InputArray input_points) {
             graphCut->setNeighbors(neighbors_v);
         }
     }
+    unsigned int gc_runs = 0;
+    //------------------------------------------
 
     // if we have small number of data points, so LO will run with quarter of them,
     // otherwise it requires at least 3 sample size.
-    int min_inlier_count_for_LO = std::min ((int) points_size/4, (int) 3 * model->sample_number);
-    int gc_runs = 0;
+    int min_inlier_count_for_LO = std::min (points_size/4, (int) 3 * model->sample_number);
 
     int iters = 0;
     int max_iters = model->max_iterations;
@@ -127,10 +124,9 @@ void Ransac::run(cv::InputArray input_points) {
 //    int * best_sample = new int[4];
 
     while (iters < max_iters) {
-//        std::cout << "current iteration = " << iters << '\n';
 
         if (is_prosac) {
-            prosac_sampler->generateSampleProsac (sample, prosac_termination_criteria->getStoppingLength());
+            ((ProsacSampler *)sampler)->generateSampleProsac (sample, prosac_termination_criteria->getStoppingLength());
         } else {
             sampler->generateSample(sample);
         }
@@ -148,11 +144,6 @@ void Ransac::run(cv::InputArray input_points) {
 //        }
 //        std::cout << "\n";
 //        if (eq) std::cout << "SAMPLE EQUAL\n";
-
-//        sample[0] = 124;
-//        sample[1] = 119;
-//        sample[2] = 53;
-//        sample[3] = 5;
 
 //         std::cout << "samples are generated\n";
 
@@ -229,13 +220,6 @@ void Ransac::run(cv::InputArray input_points) {
 
 //                  std::cout << "Ransac, update best score" << best_score->inlier_number << '\n';
 
-                // only for debug
-//                best_sample[0] = sample[0];
-//                best_sample[1] = sample[1];
-//                best_sample[2] = sample[2];
-//                best_sample[3] = sample[3];
-                //
-
                 // Termination conditions:
                 if (is_prosac) {
                     max_iters = prosac_termination_criteria->
@@ -265,27 +249,24 @@ void Ransac::run(cv::InputArray input_points) {
     }
 
     // Graph Cut lo was set, but did not run, run it
-    if (GraphCutLO && gc_runs == 0) {
+    if (GraphCutLO && graphCut->gc_iterations == 0) {
         // update best model and best score
         graphCut->GraphCutLO(best_model, best_score);
     }
 
-
-    int * max_inliers = new int[points_size];
 //    std::cout << "Calculate Non minimal model\n";
 
     Model *non_minimal_model = new Model (model);
 
 //    std::cout << "end best inl num " << best_score->inlier_number << '\n';
 
-    // usually 4-5 iterations are enough
-    unsigned int normalizations = 5;
     unsigned int previous_non_minimal_num_inlier = 0;
 
+    int * max_inliers = new int[points_size];
     // get inliers from best model
     quality->getInliers(best_model->returnDescriptor(), max_inliers);
 
-    for (unsigned int norm = 0; norm < normalizations; norm++) {
+    for (unsigned int norm = 0; norm < 5 /* normalizations count */; norm++) {
         /*
          * TODO:
          * Calculate and Save Covariance Matrix and use it next normalization with adding or
@@ -301,8 +282,9 @@ void Ransac::run(cv::InputArray input_points) {
             quality->getNumberInliers(current_score, non_minimal_model, true, max_inliers);
 
             // Priority is for non minimal model estimation
-            std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
+//            std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
 
+            // break if non minimal model score is less than 80% of the best minimal model score
             if ((float) current_score->inlier_number / best_score->inlier_number < 0.8) {
                 break;
 //                std::cout << "|I|best = " << best_score->inlier_number << "\n";
@@ -325,8 +307,7 @@ void Ransac::run(cv::InputArray input_points) {
         }
     }
 
-    auto end_time = std::chrono::steady_clock::now();
-    std::chrono::duration<float> fs = end_time - begin_time;
+    std::chrono::duration<float> fs = std::chrono::steady_clock::now() - begin_time;
     // ================= here is ending ransac main implementation ===========================
 
     // get final inliers from the best model

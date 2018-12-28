@@ -15,11 +15,11 @@ public:
     virtual void generateSample (int *sample) = 0;
 
     virtual void setSampleSize (unsigned int sample_size_) {
-        std::cout << "YOU ARE IN NOT IMPLEMENTED AREA IN SET SAMPLE SIZE!\n";
+        std::cout << "YOU ARE IN NOT IMPLEMENTED FUNCTION setSampleSize!\n";
     }
 
     virtual void setPointsSize (unsigned int points_size_) {
-        std::cout << "YOU ARE IN NOT IMPLEMENTED AREA IN SET POINTS SIZE!\n";
+        std::cout << "YOU ARE IN NOT IMPLEMENTED FUNCTION setPointsSize!\n";
     }
 
     /*

@@ -3,7 +3,7 @@
 #include "../Usac/Sampler/ProsacSampler.h"
 #include "../Usac/Sampler/EvsacSampler.h"
 #include "../Usac/Sampler/NapsacSampler.h"
-#include "../Usac/Sampler/GradualNapsacSampler.h"
+#include "../Usac/Sampler/ProgressiveNapsac.h"
 
 void Tests::initProsac (Sampler *& sampler, unsigned int sample_number, unsigned int points_size) {
     sampler = new ProsacSampler;
@@ -38,7 +38,7 @@ void Tests::initEvsac (Sampler *& sampler, cv::InputArray points, unsigned int s
 }
 
 void Tests::initGraduallyIncreasingSampler (Sampler *& sampler, cv::InputArray points, unsigned int sample_number) {
-    sampler = new GradualNapsacSampler(points, sample_number);
+    sampler = new ProgressiveNapsac(points, sample_number);
 }
 
 void Tests::initProsacNapsac1 (Sampler *& sampler, Model * model, const cv::Mat &nearest_neighors) {

@@ -27,12 +27,11 @@ add_executable(
         Usac/Sampler/Sampler.h
         Usac/Sampler/UniformSampler.h
         Usac/Sampler/NapsacSampler.h
-        Usac/Sampler/GradualNapsacSampler.h
+        Usac/Sampler/ProgressiveNapsac.h
         Usac/Sampler/EvsacSampler.h
         Usac/Sampler/ProsacSimpleSampler.h
         Usac/Sampler/ProsacSampler.h
-        Usac/Sampler/ProsacNapsac1Sampler.h
-        Usac/Sampler/ProsacNapsac2Sampler.h
+        Usac/Sampler/ProsacNapsacSampler.h
 
         Usac/Ransac/Ransac.cpp
         Usac/Ransac/Ransac.h

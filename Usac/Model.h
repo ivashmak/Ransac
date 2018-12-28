@@ -38,6 +38,8 @@ public:
     int max_hypothesis_test_before_sprt = 20;
     NeighborsSearch neighborsType = NeighborsSearch::NullN;
     int cell_size = 50; // for grid neighbors searching
+
+    bool reset_random_generator = true;
 private:
     cv::Mat descriptor;
 	
@@ -57,6 +59,10 @@ public:
 		k_nearest_neighbors = knn;
 		estimator = estimator_;
 		sampler = sampler_;
+	}
+
+	void ResetRandomGenerator (bool reset) {
+		reset_random_generator = reset;
 	}
 
 	void setNeighborsType (NeighborsSearch neighborsType_) {
@@ -151,7 +157,7 @@ public:
 	    } else if (sampler == SAMPLER ::Napsac) {
 	        name += "Napsac";
 	    } else if (sampler == SAMPLER ::GradualNapsac) {
-	        name += "GradualNapsacSampler";
+	        name += "ProgressiveNapsac";
 	    }
 	    name += "_sampler";
         return name;

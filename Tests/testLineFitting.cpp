@@ -12,7 +12,7 @@
 
 #include "../Usac/Sampler/Sampler.h"
 #include "../Usac/Sampler/NapsacSampler.h"
-#include "../Usac/Sampler/GradualNapsacSampler.h"
+#include "../Usac/Sampler/ProgressiveNapsac.h"
 #include "../Usac/Sampler/EvsacSampler.h"
 #include "../Usac/Sampler/UniformSampler.h"
 #include "../Usac/Sampler/ProsacSimpleSampler.h"

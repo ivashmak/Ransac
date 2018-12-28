@@ -74,8 +74,9 @@ public:
         inliers = new int [points_size];
         sample = new int [num_sample];
         uniform_random_generator = new UniformRandomGenerator;
-        // comment to debug
-        uniform_random_generator->resetTime();
+
+        if (model->reset_random_generator)
+            uniform_random_generator->resetTime();
 
         lo_inner_iterations = model->lo_inner_iterations;
 
@@ -108,6 +109,9 @@ public:
 //        std::cout << "begin best score " << best_score->inlier_number << "\n";
 
         gc_model->setDescriptor(best_model->returnDescriptor());
+
+        OneStepLO (gc_model);
+
         bool is_best_model_updated;
         while (true) {
             // build graph problem
@@ -144,21 +148,26 @@ public:
                     }
                 } else {
                     if (iter > 0) {
+                        /*
+                         * If iterations are more than 0 and there are not enough inliers for random sampling,
+                         * so break. Because EstimateModelNonMinimalSample for same inliers gives same model, it
+                         * is redundant to use it more than 1 time.
+                         */
                         break;
                     }
                     if (! estimator->EstimateModelNonMinimalSample(inliers, inner_inliers_size, *gc_model)) {
-                        // break loop of inner iterations if inliers are bad.
+                        // break loop of inner iterations if estimation failed.
                         break;
                     }
                 }
 
                 quality->getNumberInliers(gc_score, gc_model, false, nullptr);
 
-                std::cout << "GC score " << gc_score->inlier_number << "\n";
+//                std::cout << "GC score " << gc_score->inlier_number << "\n";
 
                 if (gc_score->bigger(best_score)) {
 //                    std::cout << "Update best score\n";
-                     std::cout << "UPDATE best score " << gc_score->inlier_number << "\n";
+//                     std::cout << "UPDATE best score " << gc_score->inlier_number << "\n";
                     is_best_model_updated = true;
                     best_score->copyFrom(gc_score);
                     best_model->setDescriptor(gc_model->returnDescriptor());
@@ -178,6 +187,44 @@ public:
 //        std::cout << "end best score " << best_score->inlier_number << "\n";
     }
 
+private:
+    void OneStepLO (Model * model) {
+        /*
+         * Do one step local optimization on min (|I|, |max_I|) before doing Graph Cut.
+         * This LSQ must give better model for next GC labeling.
+         */
+        // use gc_score variable, but we are not getting gc score.
+        quality->getNumberInliers(gc_score, model, true, inliers);
+
+//        std::cout << "inliers before one step LO " << gc_score->inlier_number << "\n";
+
+        unsigned int sample_generate = std::min ((unsigned int)gc_score->inlier_number, model->lo_sample_size);
+
+        if (sample_generate < model->sample_number)
+            return;
+
+
+        if (model->sampler == SAMPLER::Prosac) {
+            // if we use prosac sample, so points are ordered by some score,
+            // so take first N inliers, because they have higher score
+            for (unsigned int smpl = 0; smpl < sample_generate; smpl++) {
+                sample[smpl] = inliers[smpl];
+            }
+        } else {
+            uniform_random_generator->setSubsetSize(sample_generate);
+            uniform_random_generator->resetGenerator(0, gc_score->inlier_number -1);
+            uniform_random_generator->generateUniqueRandomSet(sample);
+            for (unsigned int smpl = 0; smpl < sample_generate; smpl++) {
+                sample[smpl] = inliers[sample[smpl]];
+            }
+        }
+
+        estimator->EstimateModelNonMinimalSample(sample, sample_generate, *model);
+
+        // debug
+//        quality->getNumberInliers(gc_score, model);
+//        std::cout << "inliers after one step LO " << gc_score->inlier_number << "\n";
+    }
 };
 
 #endif //USAC_GRAPHCUT_H

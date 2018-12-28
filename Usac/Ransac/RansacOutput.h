@@ -50,10 +50,6 @@ public:
         splitTime (time, time_mcs);
     }
 
-    void printTime () {
-        std::cout << time->seconds << " secs, " << time->milliseconds << " ms, " << time->microseconds << " mcs\n";
-    }
-
     std::vector<int> getInliers () {
         return inliers;
     }

@@ -13,7 +13,7 @@
  * http://www.bmva.org/bmvc/2002/papers/164/full_164.pdf
  *
  */
-class GradualNapsacSampler : public Sampler {
+class ProgressiveNapsac : public Sampler {
 private:
     int taking_sample_size_from_block = 0;
     int current_block = 0;
@@ -27,7 +27,7 @@ private:
 public:
 
 
-    GradualNapsacSampler (cv::InputArray input_points, unsigned int sample_size, bool reset_time = true) {
+    ProgressiveNapsac (cv::InputArray input_points, unsigned int sample_size, bool reset_time = true) {
         assert (!input_points.empty());
 
         this->sample_size = sample_size;

@@ -32,16 +32,17 @@ void Tests::testHomographyFitting() {
 //    detectAndSaveFeatures(getHomographyDatasetPoints());
 //    exit (0);
     DATASET dataset = DATASET::Homogr;
-    std::string img_name = "graf";
+    std::string img_name = "Brussels";
 
     ImageData gt_data (dataset, img_name);
     std::vector<int> gt_inliers = gt_data.getGTInliers();
-    cv::Mat points = gt_data.getPoints();
+    cv::Mat points;
+    // points = gt_data.getPoints();
 
     // points are already sorted
 //    readEVDpoints(points, "../dataset/EVD/EVD_tentatives/"+img_name+".png_m.txt");
 
-//    LoadPointsFromFile(points, ("../dataset/homography/sift_update/"+img_name+"_spts.txt").c_str());
+    LoadPointsFromFile(points, ("../dataset/homography/sift_update/"+img_name+"_spts.txt").c_str());
 
     unsigned int points_size = (unsigned int) points.rows;
     std::cout << "points size " << points_size << "\n";
@@ -68,12 +69,12 @@ void Tests::testHomographyFitting() {
 
 
     // ---------------------- napsac ----------------------------------
-    model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Napsac);
+//    model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Napsac);
     // --------------------------------------------------------------
 
 
 // ------------------ prosac ---------------------
-//     model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Prosac);
+     model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Prosac);
 //     -------------------------------------------------
 
 
@@ -82,10 +83,11 @@ void Tests::testHomographyFitting() {
      model->setSprtLO(0);
      model->setCellSize(50);
      model->setNeighborsType(NeighborsSearch::Grid);
+     model->ResetRandomGenerator(false);
 
      test (points, model, img_name, dataset, true, gt_inliers);
-//
-//    getStatisticalResults(points, model, 500, true, gt_inliers, false, nullptr);
+
+//    getStatisticalResults(points, model, 200, true, gt_inliers, false, nullptr);
 
 //     storeResults();
 }

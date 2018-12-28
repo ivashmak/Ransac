@@ -7,6 +7,7 @@
 #include "Usac/Sampler/ProsacSampler.h"
 #include "Usac/TerminationCriteria/ProsacTerminationCriteria.h"
 #include "dataset/SaveGTModel.h"
+#include "Usac/Sampler/ProsacSimpleSampler.h"
 
 int main (int args, char ** argv) {
     Tests tests;
