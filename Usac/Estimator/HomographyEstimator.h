@@ -26,7 +26,7 @@ public:
 
     void setModelParameters (const cv::Mat& model) override {
         H = cv::Mat_<float>(model); // clone
-//        H = model.clone();
+//        H = model;
         H_inv = H.inv();
 
         /*
@@ -48,7 +48,7 @@ public:
         return 1;
     }
 
-    bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
+    bool EstimateModelNonMinimalSample (const int * const sample, unsigned int sample_size, Model &model) override {
         cv::Mat H;
         if (! NormalizedDLT(points, sample, sample_size, H)) {
             std::cout << "Normalized DLT failed\n";
@@ -61,7 +61,17 @@ public:
         return true;
     }
 
-    bool LeastSquaresFitting (const int * const sample, int sample_size, Model &model) override {
+    bool EstimateModelNonMinimalSample (const int * const sample, unsigned int sample_size, const float * const weights, Model &model) override {
+        cv::Mat H;
+        if (! NormalizedDLT(points, sample, sample_size, weights, H)) {
+            return false;
+        }
+        H = H / H.at<float>(2,2);
+        model.setDescriptor(H);
+        return true;
+    }
+
+    bool LeastSquaresFitting (const int * const sample, unsigned int sample_size, Model &model) override {
         return EstimateModelNonMinimalSample(sample, sample_size, model);
 
         EstimateModelNonMinimalSample(sample, sample_size, model);
@@ -82,7 +92,7 @@ public:
     /*
      * Error = distance (pt(i)H, pt'(i)) + distance (pt(i), pt'(i)H^-1)
      */
-    float GetError(int pidx) override {
+    float GetError(unsigned int pidx) override {
         unsigned int smpl = 4*pidx;
         float x1 = points[smpl];
         float y1 = points[smpl+1];

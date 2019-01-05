@@ -25,7 +25,7 @@ public:
     void initEstimator (Estimator *& estimator, Model * model, const cv::Mat& points);
 
     void initProsac (Sampler *& sampler, unsigned int sample_number, unsigned int points_size);
-    void initUniform (Sampler *& sampler, unsigned int sample_number, unsigned int points_size);
+    void initUniform (Sampler *& sampler, unsigned int sample_number, unsigned int points_size, bool reset_time);
     void initNapsac (Sampler *& sampler, const cv::Mat &neighbors, const std::vector<std::vector<int>> &ns, Model * model);
     void initEvsac (Sampler *& sampler, cv::InputArray points, unsigned int sample_number,
                            unsigned int points_size, unsigned int k_nearest_neighbors);
@@ -184,6 +184,8 @@ public:
             } else {
                 times[i] = ransacOutput->getTimeMicroSeconds();
             }
+
+//            std::cout << "inl " << ransacOutput->getNumberOfInliers() << "\n";
 
             num_inlierss[i] = ransacOutput->getNumberOfInliers();
             num_iterss[i] = ransacOutput->getNumberOfMainIterations();

@@ -8,7 +8,7 @@ protected:
     unsigned int subset_size = 0;
 public:
     void resetTime () {
-//      srand (time(NULL));
+      srand (time(NULL));
     }
 
     virtual int getRandomNumber () = 0;

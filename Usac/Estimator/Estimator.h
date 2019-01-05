@@ -24,9 +24,13 @@ public:
     // or Model **& models
     virtual unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) = 0;
     
-    virtual bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) = 0;
-    virtual bool LeastSquaresFitting (const int * const sample, int sample_size, Model &model) {
+    virtual bool EstimateModelNonMinimalSample(const int * const sample, unsigned int sample_size, Model &model) = 0;
+    virtual bool LeastSquaresFitting (const int * const sample, unsigned int sample_size, Model &model) {
         return EstimateModelNonMinimalSample(sample, sample_size, model);
+    }
+
+    virtual bool EstimateModelNonMinimalSample(const int * const sample, unsigned int sample_size, const float * const weights, Model &model) {
+        std::cout << "NOT IMPLEMENTED EstimateModelNonMinimalSample in estimator\n";
     }
 
 //    virtual bool WeightedEstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) = 0;
@@ -34,7 +38,7 @@ public:
 //        return WeightedEstimateModelNonMinimalSample(sample, sample_size, model);
 //    }
 
-    virtual float GetError(int pidx) = 0;
+    virtual float GetError(unsigned int pidx) = 0;
     virtual int SampleNumber() = 0;
 
     // Setters of points set and model's parameters sufficiently sped up code
@@ -44,11 +48,11 @@ public:
      * input points and descriptors as private class members.
      */
     virtual void setModelParameters (const cv::Mat& model) {
-        std::cout << "YOU ARE IN NOT IMPLEMENTED FUNCTION setModelParameters!\n";
+        std::cout << "NOT IMPLEMENTED FUNCTION setModelParameters!\n";
     }
 
     virtual void getModelbyCameraMatrix (const cv::Mat &K1, const cv::Mat &K2, const cv::Mat &InModel, cv::Mat &OutModel) {
-        std::cout << "YOU ARE IN NOT IMPLEMENTED FUNCTION getModelbyCameraMatrix!\n";
+        std::cout << "NOT IMPLEMENTED FUNCTION getModelbyCameraMatrix!\n";
     }
 
     /*

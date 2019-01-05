@@ -8,7 +8,7 @@ enum NeighborsSearch {NullN, Nanoflann, Grid};
 class Model {
 public:
 	float threshold = 2;
-	int sample_number;
+	unsigned int sample_size;
 	float desired_prob = 0.95;
 
     int min_iterations = 20;
@@ -54,7 +54,7 @@ public:
             ESTIMATOR estimator_, SAMPLER sampler_) {
 		threshold = threshold_;
 		lo_threshold = threshold_;
-		sample_number = sample_number_;
+		sample_size = sample_number_;
 		desired_prob = desired_prob_;
 		k_nearest_neighbors = knn;
 		estimator = estimator_;
@@ -110,7 +110,7 @@ public:
 	}
 
 	void setSampleNumber (float sample_number) {
-		this->sample_number = sample_number;
+		this->sample_size = sample_number;
 	}
 
 	void setDesiredProbability (float desired_prob) {
@@ -122,7 +122,7 @@ public:
 	}
 	void copyFrom (const Model * const model) {
         threshold = model->threshold;
-        sample_number = model->sample_number;
+        sample_size = model->sample_size;
         desired_prob = model->desired_prob;
         max_iterations = model->max_iterations;
         estimator = model->estimator;

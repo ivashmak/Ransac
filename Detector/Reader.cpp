@@ -1,7 +1,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/core.hpp>
 
-#include "ReadPoints.h"
+#include "Reader.h"
 
 /*
  * Get correspondence points from file
@@ -10,7 +10,7 @@
  * ...
  * xN yN zN xN yN zN isinlierN
  */
-void read_points (cv::Mat &pts1, cv::Mat &pts2, const std::string &filename) {
+void Reader::read_points (cv::Mat &pts1, cv::Mat &pts2, const std::string &filename) {
     std::fstream file(filename, std::ios_base::in);
 
     float x1, y1, z1, x2, y2, z2, inl;
@@ -55,7 +55,7 @@ void read_points (cv::Mat &pts1, cv::Mat &pts2, const std::string &filename) {
  * x1i y1i x2i y2i
  */
 
-void getPointsNby6 (const std::string& filename, cv::Mat &points) {
+void Reader::getPointsNby6 (const std::string& filename, cv::Mat &points) {
     std::fstream file(filename, std::ios_base::in);
 
     float x1, y1, z1, x2, y2, z2;
@@ -72,7 +72,7 @@ void getPointsNby6 (const std::string& filename, cv::Mat &points) {
  * ...
  * xN yN zN xN yN zN isinlierN
  */
-void getInliers (const std::string &filename, std::vector<int> &inliers) {
+void Reader::getInliers (const std::string &filename, std::vector<int> &inliers) {
     std::fstream file(filename, std::ios_base::in);
 
     cv::Mat tmp = cv::Mat_<float>(1, 2), pts1, pts2;
@@ -125,7 +125,7 @@ void getInliers (const std::string &filename, std::vector<int> &inliers) {
  * a21 a22 a23
  * a31 a32 a33
  */
-void getMatrix3x3 (const std::string &filename, cv::Mat &model) {
+void Reader::getMatrix3x3 (const std::string &filename, cv::Mat &model) {
     model = cv::Mat_<float>(3,3);
     std::fstream file(filename, std::ios_base::in);
 
@@ -141,8 +141,7 @@ void getMatrix3x3 (const std::string &filename, cv::Mat &model) {
 
 
 
-bool SavePointsToFile(const cv::Mat &points, const char* file, std::vector<int> *inliers)
-{
+bool Reader::SavePointsToFile(const cv::Mat &points, const char* file, std::vector<int> *inliers) {
     std::ofstream outfile(file, std::ios::out);
 
     float *points_ptr = reinterpret_cast<float*>(points.data);
@@ -175,7 +174,7 @@ bool SavePointsToFile(const cv::Mat &points, const char* file, std::vector<int> 
     return true;
 }
 
-bool LoadPointsFromFile(cv::Mat &points, const char* file)
+bool Reader::LoadPointsFromFile(cv::Mat &points, const char* file)
 {
     std::ifstream infile(file);
 
@@ -212,7 +211,7 @@ bool LoadPointsFromFile(cv::Mat &points, const char* file)
  * Format
  * x1,y1,x2,y2,FGINN_ratio,SNN_ratio,detector,descriptor,is_correct
  */
-void readEVDpoints (cv::Mat &points, const std::string &filename) {
+void Reader::readEVDpoints (cv::Mat &points, const std::string &filename) {
     std::fstream file(filename, std::ios_base::in);
 
     float x1, y1, x2, y2;

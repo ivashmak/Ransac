@@ -32,7 +32,7 @@ public:
                          
      */
     void getLOScore (Score * best_score, Model * best_model, Quality * quality, Estimator * estimator, int points_size) {
-        if (best_score->inlier_number <= best_model->sample_number)
+        if (best_score->inlier_number <= best_model->sample_size)
             return;
 
         int inliers_relax_size = points_size/2;

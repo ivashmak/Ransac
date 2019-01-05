@@ -1,5 +1,5 @@
 #include "NearestNeighbors.h"
-#include "../../Detector/ReadPoints.h"
+#include "../../Detector/Reader.h"
 #include "Math.h"
 
 #include <Eigen/Dense>
@@ -91,7 +91,7 @@ void NearestNeighbors::getNearestNeighbors_nanoflann (const cv::Mat& points, int
         nearest_neighbors_distances = cv::Mat_<float>(points_size, k_nearest_neighbors);
         float *nearest_neighbors_distances_ptr = (float *) nearest_neighbors_distances.data;
 
-        for (int p = 0; p < points_size; p++) {
+        for (unsigned int p = 0; p < points_size; p++) {
             resultSet.init(ret_indexes, out_dists_sqr);
             mat_index.index->findNeighbors(resultSet,
                                            Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>(mat.row(p)).data(),
@@ -104,7 +104,7 @@ void NearestNeighbors::getNearestNeighbors_nanoflann (const cv::Mat& points, int
             }
         }
     } else {
-        for (int p = 0; p < points_size; p++) {
+        for (unsigned int p = 0; p < points_size; p++) {
             resultSet.init(ret_indexes, out_dists_sqr);
             mat_index.index->findNeighbors(resultSet,
                                            Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>(mat.row(p)).data(),
@@ -119,7 +119,8 @@ void NearestNeighbors::getNearestNeighbors_nanoflann (const cv::Mat& points, int
 //    std::cout << nearest_neighbors << "\n\n";
 //    std::cout << nearest_neighbors_distances << "\n\n";
 
-    delete ret_indexes, out_dists_sqr;
+    delete ret_indexes;
+    delete out_dists_sqr;
 }
 
 /*
@@ -237,7 +238,7 @@ void NearestNeighbors::test (int knn) {
 
     std::string img_name = "Brussels";
     cv::Mat points, points1, points2;
-    read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
+    Reader::read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
     cv::hconcat(points1, points2, points);
     std::vector<std::vector<int>> neighbors;
     start = std::clock();

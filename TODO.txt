@@ -13,7 +13,7 @@
 dependencies and slow down compilation)? Skip
 4. Napsac Find K Nearest Neighbors for one initial point or for all points. My idea is to
 find K nearest neighbors for one, compute maximum iterations by getting SampleNumber from KNN
-using formula knn!/(sample_number!*(knn-sample_number)!  and reset KNN after iterations expired.
+using formula knn!/(sample_size!*(knn-sample_size)!  and reset KNN after iterations expired.
 5. ArrayRandomGenerator and ShuffleRandomGenrator are the best now. They are 100% uniform, have
 the fastest GetRandomNumber() and numbers are uniques. Should we use them instead of UniformRandomGenerator?
 6. HomographyEstimator: We can implement getInliersCount inside Homography estimator.

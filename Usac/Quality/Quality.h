@@ -78,7 +78,7 @@ public:
 //            std::cout << "PARALLEL MODE\n";
 
             #pragma omp parallel for reduction (+:score_inlier_number)
-            for (int point = 0; point < points_size; point++) {
+            for (unsigned int point = 0; point < points_size; point++) {
                 if (estimator->GetError(point) < threshold) {
                     score_inlier_number++;
                 }
@@ -88,13 +88,13 @@ public:
 
         } else {
             if (get_inliers) {
-                for (int point = 0; point < points_size; point++) {
+                for (unsigned int point = 0; point < points_size; point++) {
                     if (estimator->GetError(point) < threshold) {
                         inliers[score->inlier_number++] = point;
                     }    
                 }
             } else {
-                for (int point = 0; point < points_size; point++) {
+                for (unsigned int point = 0; point < points_size; point++) {
                     if (estimator->GetError(point) < threshold) {
                         score->inlier_number++;
                     }
@@ -107,6 +107,7 @@ public:
 
 
 	virtual void getScore (const float * const points, Score * score, const cv::Mat& model, int * inliers) {
+        std::cout << "NOT IMPEMENTED getScore IN QUALITY\n";
     }
 
     /*
@@ -120,7 +121,7 @@ public:
         estimator->setModelParameters(model);
 
 	    int num_inliers = 0;
-	    for (int point = 0; point < points_size; point++) {
+	    for (unsigned int point = 0; point < points_size; point++) {
             if (estimator->GetError(point) < threshold) {
                 inliers[num_inliers] = point;
                 num_inliers++;
@@ -131,7 +132,7 @@ public:
     static void getInliers (Estimator * estimator, const cv::Mat &model, float threshold, int points_size, std::vector<int> &inliers) {
         estimator->setModelParameters(model);
         inliers.clear();
-        for (int p = 0; p < points_size; p++) {
+        for (unsigned int p = 0; p < points_size; p++) {
             if (estimator->GetError(p) < threshold) {
                 inliers.push_back(p);
             }
@@ -152,7 +153,7 @@ public:
         estimator->setModelParameters(gt_model);
         int * inliers = new int [points_size];
         int inliers_size = 0;
-        for (int point = 0; point < points_size; point++) {
+        for (unsigned int point = 0; point < points_size; point++) {
             if (estimator->GetError(point) < model->threshold) {
                 inliers[inliers_size++] = point;
             }
@@ -166,7 +167,7 @@ public:
         // calculate sum of errors to inliers of gt model
         float sum_errors = 0;
         estimator->setModelParameters(model->returnDescriptor());
-        for (int i = 0; i < inliers_size; i++) {
+        for (unsigned int i = 0; i < inliers_size; i++) {
             sum_errors += estimator->GetError(inliers[i]);
         }
         return sum_errors / inliers_size;
@@ -182,8 +183,8 @@ public:
         // calculate sum of errors to inliers of gt model
         float sum_errors = 0;
         estimator->setModelParameters(model->returnDescriptor());
-        for (int i = 0; i < gt_inliers.size(); i++) {
-            sum_errors += estimator->GetError(gt_inliers[i]);
+        for (unsigned int inl : gt_inliers) {
+            sum_errors += estimator->GetError(inl);
         }
         return sum_errors / gt_inliers.size();
     }

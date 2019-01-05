@@ -8,7 +8,7 @@
 #include "../Usac/Helper/Drawing/Drawing.h"
 #include "../Usac/Helper/Logging.h"
 
-#include "../Detector/ReadPoints.h"
+#include "../Detector/Reader.h"
 
 #include "../Usac/Sampler/Sampler.h"
 #include "../Usac/Sampler/NapsacSampler.h"

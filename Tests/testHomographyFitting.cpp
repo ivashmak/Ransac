@@ -1,4 +1,9 @@
 #include "Tests.h"
+#include "../Detector/Reader.h"
+#include "../Usac/Utils/Utils.h"
+#include "../Usac/Helper/Logging.h"
+#include "../Usac/Estimator/HomographyEstimator.h"
+#include "../dataset/Dataset.h"
 
 #include <cstdio>
 #include <iostream>
@@ -6,25 +11,7 @@
 #include <vector>
 #include <opencv2/core/types.hpp>
 
-#include "../Detector/ReadPoints.h"
-
-#include "../Usac/Model.h"
-#include "../Usac/Sampler/Sampler.h"
-#include "../Usac/Ransac/Ransac.h"
-#include "../Usac/Sampler/UniformSampler.h"
-#include "../Usac/Estimator/HomographyEstimator.h"
-#include "../Usac/Helper/Drawing/Drawing.h"
-#include "../Usac/Helper/Logging.h"
-
-#include "../Generator/generator.h"
-#include "../dataset/Dataset.h"
-#include "../Usac/Utils/NearestNeighbors.h"
-#include "../Usac/TerminationCriteria/ProsacTerminationCriteria.h"
-#include "../Usac/Sampler/NapsacSampler.h"
-#include "../Detector/detector.h"
-#include "../Usac/Utils/Utils.h"
-
-void storeResults ();
+void storeResultsHomography ();
 void getGTInliersFromGTModelHomography (const std::string& filename, const cv::Mat& points, float threshold, std::vector<int> &gt_inliers);
 
 void Tests::testHomographyFitting() {
@@ -42,7 +29,7 @@ void Tests::testHomographyFitting() {
     // points are already sorted
 //    readEVDpoints(points, "../dataset/EVD/EVD_tentatives/"+img_name+".png_m.txt");
 
-    LoadPointsFromFile(points, ("../dataset/homography/sift_update/"+img_name+"_spts.txt").c_str());
+    Reader::LoadPointsFromFile(points, ("../dataset/homography/sift_update/"+img_name+"_spts.txt").c_str());
 
     unsigned int points_size = (unsigned int) points.rows;
     std::cout << "points size " << points_size << "\n";
@@ -64,7 +51,7 @@ void Tests::testHomographyFitting() {
     Model * model;
 
 //     ---------------------- uniform ----------------------------------
-//   model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
+   model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
     // --------------------------------------------------------------
 
 
@@ -74,7 +61,7 @@ void Tests::testHomographyFitting() {
 
 
 // ------------------ prosac ---------------------
-     model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Prosac);
+//     model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Prosac);
 //     -------------------------------------------------
 
 
@@ -83,11 +70,11 @@ void Tests::testHomographyFitting() {
      model->setSprtLO(0);
      model->setCellSize(50);
      model->setNeighborsType(NeighborsSearch::Grid);
-     model->ResetRandomGenerator(false);
+     model->ResetRandomGenerator(true);
 
      test (points, model, img_name, dataset, true, gt_inliers);
 
-//    getStatisticalResults(points, model, 200, true, gt_inliers, false, nullptr);
+//    getStatisticalResults(points, model, 500, true, gt_inliers, false, nullptr);
 
 //     storeResults();
 }
@@ -96,9 +83,9 @@ void Tests::testHomographyFitting() {
 /*
 // * Store results from dataset to csv file.
  */
-void storeResults () {
+void storeResultsHomography () {
 //    std::vector<std::string> points_filename = getHomographyDatasetPoints();
-    std::vector<std::string> points_filename = getEVDDataset();
+    std::vector<std::string> points_filename = Dataset::getEVDDataset();
 //    std::vector<std::string> points_filename = getProblemHomographyDatasetPoints();
 
     Tests tests;
@@ -118,7 +105,7 @@ void storeResults () {
         std::cout << "get points for " << img_name << "\n";
         cv::Mat_<float> points1, points2, points;
 //        LoadPointsFromFile(points, ("../dataset/homography/sift_update/"+img_name+"_pts.txt").c_str());
-        readEVDpoints(points, "../dataset/EVD/EVD_tentatives/"+img_name+".png_m.txt");
+        Reader::readEVDpoints(points, "../dataset/EVD/EVD_tentatives/"+img_name+".png_m.txt");
 //         read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
 //         cv::hconcat(points1, points2, points);
 
@@ -231,7 +218,7 @@ void storeResults () {
 
 void getGTInliersFromGTModelHomography (const std::string& filename, const cv::Mat& points, float threshold, std::vector<int> &gt_inliers) {
     cv::Mat gt_model;
-    getMatrix3x3(filename, gt_model);
+    Reader::getMatrix3x3(filename, gt_model);
 //    std::cout << gt_model << "\n";
 
     Estimator * estimator = new HomographyEstimator (points);

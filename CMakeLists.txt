@@ -10,8 +10,8 @@ add_executable(
         Generator/generator.cpp
         Generator/generator.h
 
-        Detector/ReadPoints.cpp
-        Detector/ReadPoints.h
+        Detector/Reader.cpp
+        Detector/Reader.h
         Detector/detector.cpp
         Detector/detector.h
 
@@ -61,6 +61,7 @@ add_executable(
         Usac/LocalOptimization/RansacLocalOptimization.h
         Usac/LocalOptimization/GraphCut.cpp Usac/LocalOptimization/GraphCut.h
         Usac/LocalOptimization/GreedyLocalOptimization.h
+        Usac/LocalOptimization/IRLS.h
 
         Usac/SPRT.h
 

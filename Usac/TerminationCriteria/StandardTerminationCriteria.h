@@ -10,7 +10,7 @@ private:
     float log_1_p;
     unsigned int sample_size;
     unsigned int points_size;
-    unsigned int max_iterations = 10000;
+    unsigned int max_iterations;
     const float EPSILON = 0.0005;
 public:
 
@@ -21,7 +21,7 @@ public:
         assert (model != nullptr);
         this->model = model;
         log_1_p = (float) log (1-model->desired_prob);
-        sample_size = model->sample_number;
+        sample_size = model->sample_size;
         max_iterations = model->max_iterations;
         points_size = points_size_;
         isinit = true;

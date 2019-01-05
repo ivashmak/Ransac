@@ -45,7 +45,9 @@ private:
 public:
 
     ~ProsacTerminationCriteria () {
-        delete maximality_samples, non_random_inliers, inlier_flags;
+        delete[] maximality_samples;
+        delete[] non_random_inliers;
+        delete[] inlier_flags;
     }
 
     /*
@@ -64,7 +66,7 @@ public:
         
         threshold = model->threshold;
 
-        sample_size = model->sample_number;
+        sample_size = model->sample_size;
         points_size = points_size_;
 
         termination_length = points_size;
@@ -161,7 +163,7 @@ public:
                                     const cv::Mat& model) {
         estimator->setModelParameters(model);
 
-        for (int i = 0; i < points_size; i++) {
+        for (unsigned int i = 0; i < points_size; i++) {
             inlier_flags[i] = estimator->GetError(i) < threshold;
         }
         unsigned int max_samples = maximality_samples[termination_length-1];

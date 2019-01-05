@@ -1,6 +1,6 @@
 #include "Dataset.h"
 
-void saveDatasetToFiles () {
+void Dataset::saveDatasetToFiles () {
     FILE *fp1, *fp2;
     std::string evd_path1 = "../dataset/EVD/1/";
     std::string evd_path2 = "../dataset/EVD/2/";
@@ -30,7 +30,7 @@ void saveDatasetToFiles () {
     pclose(fp1); pclose(fp2);
 }
 
-std::vector<std::string> getEVDDataset () {
+std::vector<std::string> Dataset::getEVDDataset () {
     std::vector<std::string> fnames = {"adam", "cafe",
                                        "mag", "cat", "dum",     "face",
                                        "fox",        "girl",         "graf",
@@ -41,7 +41,7 @@ std::vector<std::string> getEVDDataset () {
 }
 
 
-std::vector<std::string> getHomographyDatasetPoints () {
+std::vector<std::string> Dataset::getHomographyDatasetPoints () {
     std::vector<std::string> fnames = {"adam", "Brussels",
                                        "boat",
                                        "BostonLib",     "city",
@@ -56,13 +56,13 @@ std::vector<std::string> getHomographyDatasetPoints () {
     return fnames;
 };
 
-std::vector<std::string> getProblemHomographyDatasetPoints () {
+std::vector<std::string> Dataset::getProblemHomographyDatasetPoints () {
     std::vector<std::string> fnames = {"LePoint1", "LePoint2", "LePoint3", "CapitalRegion"};
     return fnames;
 };
 
 
-std::vector<std::string> getFundamentalDatasetPoints () {
+std::vector<std::string> Dataset::getFundamentalDatasetPoints () {
     std::vector<std::string> fnames = {"barrsmith_pts.txt", "bonhall_pts.txt",
                                        "bonython_pts.txt", "elderhalla_pts.txt", "elderhallb_pts.txt",
                                        "hartley_pts.txt", "johnssona_pts.txt", "johnssonb_pts.txt",
@@ -73,7 +73,7 @@ std::vector<std::string> getFundamentalDatasetPoints () {
     return fnames;
 };
 
-std::vector<std::string> getKusvod2Dataset () {
+std::vector<std::string> Dataset::getKusvod2Dataset () {
     std::vector<std::string> fnames = {"booksh", "box",
                                        "castle", "corr", "graff",
                                        "head", "kampa", "Kyoto",
@@ -83,7 +83,7 @@ std::vector<std::string> getKusvod2Dataset () {
     return fnames;
 };
 
-std::vector<std::string> getAdelaidermfDataset () {
+std::vector<std::string> Dataset::getAdelaidermfDataset () {
     std::vector<std::string> fnames = {
             "barrsmith",
             "bonhall",

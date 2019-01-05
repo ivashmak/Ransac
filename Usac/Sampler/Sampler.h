@@ -7,6 +7,7 @@ class Sampler {
 protected:
     unsigned int k_iterations = 0, points_size = 0, sample_size = 0;
 public:
+    ~Sampler() = default;
 
     /*
      * generate sample. Considering that all parameters are defined (including sample_size, points_size and

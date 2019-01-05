@@ -7,65 +7,82 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, in
     GetNormalizingTransformation(pts, norm_points, sample, sample_number, T1, T2);
 
     const float * const norm_points_ptr = (float *) norm_points.data;
-    cv::Mat_ <float> covA(9, 9, float (0));
-    float * covA_ptr = (float *) covA.data;
 
     // form a linear system Ax=0: for each selected pair of points m1 & m2,
     // the row of A(=a) represents the coefficients of equation: (m2, 1)'*F*(m1, 1) = 0
     // to save computation time, we compute (At*A) instead of A and then solve (At*A)x=0.
     float x1, x2, y1, y2;
     unsigned int norm_points_idx;
-    float a[9];
 
+//    float a[9];
+//    cv::Mat_ <float> covA(9, 9, float (0));
+//    float * covA_ptr = (float *) covA.data;
+//    for (unsigned int i = 0; i < sample_size; i++) {
+//        norm_points_idx = 4*i;
+//        x1 = norm_points_ptr[norm_points_idx];
+//        y1 = norm_points_ptr[norm_points_idx+1];
+//        x2 = norm_points_ptr[norm_points_idx+2];
+//        y2 = norm_points_ptr[norm_points_idx+3];
+//        a[0] = x2*x1;
+//        a[1] = x2*y1;
+//        a[2] = x2;
+//        a[3] = y2*x1;
+//        a[4] = y2*y1;
+//        a[5] = y2;
+//        a[6] = x1;
+//        a[7] = y1;
+//        a[8] = 1;
+//
+//        // calculate covariance for eigen
+//        for (unsigned int row = 0; row < 9; row++) {
+//            for (unsigned int col = row; col < 9; col++) {
+//                covA_ptr[row*9+col] += a[row]*a[col];
+//            }
+//        }
+//    }
+//
+//    /*
+//     * Copy upper triangle of A to lower triangle of A.
+//     * symmetric covariance matrix
+//     */
+//    for (unsigned int row = 1; row < 9; row++) {
+//        for (unsigned int col = 0; col < row; col++) {
+//            covA_ptr[row*9+col] = covA_ptr[col*9+row];
+//        }
+//    }
+//
+//    cv::Mat_<float> D, Vt;
+//    cv::eigen(covA, D, Vt);
+//
+
+    // -------------- 8 points with SVD ---------------------
+    cv::Mat_<float> A(sample_number, 9);
+    float * A_ptr = (float *) A.data;
     for (unsigned int i = 0; i < sample_number; i++) {
         norm_points_idx = 4*i;
         x1 = norm_points_ptr[norm_points_idx];
         y1 = norm_points_ptr[norm_points_idx+1];
         x2 = norm_points_ptr[norm_points_idx+2];
         y2 = norm_points_ptr[norm_points_idx+3];
-        a[0] = x2*x1;
-        a[1] = x2*y1;
-        a[2] = x2;
-        a[3] = y2*x1;
-        a[4] = y2*y1;
-        a[5] = y2;
-        a[6] = x1;
-        a[7] = y1;
-        a[8] = 1;
-
-        /*
-         * A += a * a^t, where aa^t is symmetric
-         * (a1) * (a1 a2 ... a9)     (a1^2 a1a2 ... a1a9)
-         * (a2)                   =  (a2a1 a2^2 ... a2a9)
-         * ...                       ...
-         * (a9)                      (a9a1 a9a2 ... a9^2)
-         * It is enough to calculate only upper triangle of A.
-         * A =
-         */
-        // calculate covariance for eigen
-        for (unsigned int row = 0; row < 9; row++) {
-            for (unsigned int col = row; col < 9; col++) {
-                covA_ptr[row*9+col] += a[row]*a[col];
-            }
-        }
+        (*A_ptr++) = x2*x1;
+        (*A_ptr++) = x2*y1;
+        (*A_ptr++) = x2;
+        (*A_ptr++) = y2*x1;
+        (*A_ptr++) = y2*y1;
+        (*A_ptr++) = y2;
+        (*A_ptr++) = x1;
+        (*A_ptr++) = y1;
+        (*A_ptr++) = 1;
     }
+    cv::Mat_<float> U, S, Vt;
+    cv::SVD::compute(A, S, U, Vt);
+    // -----------------------------------------------------
 
-    /*
-     * Copy upper triangle of A to lower triangle of A.
-     * symmetric covariance matrix
-     */
-    for (unsigned int row = 1; row < 9; row++) {
-        for (unsigned int col = 0; col < row; col++) {
-            covA_ptr[row*9+col] = covA_ptr[col*9+row];
-        }
-    }
-
-    cv::Mat_<float> eigen_values, eigen_vectors;
-    cv::eigen(covA, eigen_values, eigen_vectors);
 
     // last column is optimal (minimizing) subspace of Af = 0
-    // In opencv V (eigen vectors) is transpose, so last row
-    F = cv::Mat_<float> (eigen_vectors.row(8).reshape (3,3));
+    // In opencv V (eigen vectors) is transpose, so last row. Eigen values have descending order.
+    F = cv::Mat_<float> (Vt.row(8).reshape (3,3));
+
 
 //    std::cout << "det F = " << cv::determinant(F) << "\n";
 
@@ -83,7 +100,6 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, in
      But numerically F usually has rank 3 and det F is almost zero (10^-3).
      */
 
-//    cv::Mat_<float> S, U, Vt;
 //    cv::SVD::compute (F, S, U, Vt);
 //
 //    // create from S (singular/eigen values) diagonal matrix with S(3,3) = 0
@@ -109,8 +125,6 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, in
      */
 
     float * t2 = (float *) T2.data;
-
-//    std::cout << T2 << "\n\n";
 
     // Transpose T2
     t2[6] = t2[2];

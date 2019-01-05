@@ -4,7 +4,7 @@
 #include <iostream>
 #include <opencv2/core/types.hpp>
 
-#include "../Detector/ReadPoints.h"
+#include "../Detector/Reader.h"
 
 
 void Tests::testEssentialFitting() {
@@ -12,7 +12,7 @@ void Tests::testEssentialFitting() {
 
     std::string img_name = "Dresden";
     cv::Mat points;
-    getPointsNby6 ("../dataset/Lebeda/strechamvs/"+img_name+"_vpts_pts.txt", points);
+    Reader::getPointsNby6 ("../dataset/Lebeda/strechamvs/"+img_name+"_vpts_pts.txt", points);
 
     std::cout << "points size = " << points.rows << "\n";
 

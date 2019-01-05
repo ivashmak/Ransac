@@ -43,19 +43,20 @@ public:
 
 //        std::cout << "Roots " << roots << "\n\n";
 
-        for (int i = 0; i < roots;) {
+        for (unsigned int i = 0; i < roots;) {
             if (!all_ori_valid(F.rowRange(i * 3, i * 3 + 3), sample, 7)) {
 //                std::cout << "BAD FUNDAMENTAL MATRIX ORIENTATION. continue\n";
                 roots--;
                 continue;
             }
-            models[i++]->setDescriptor(F.rowRange(i * 3, i * 3 + 3));
+            models[i]->setDescriptor(F.rowRange(i * 3, i * 3 + 3));
+            i++;
         }
 
         return roots;
     }
 
-    bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
+    bool EstimateModelNonMinimalSample(const int * const sample, unsigned int sample_size, Model &model) override {
         cv::Mat_<float> F;
 
         if (! EightPointsAlgorithm(points, sample, sample_size, F)) {
@@ -78,7 +79,7 @@ public:
      *               [ F(3,1)  F(3,2)  F(3,3) ]   [ 1  ]
      *
      */
-    float GetError(int pidx) override {
+    float GetError(unsigned int pidx) override {
         unsigned int smpl = 4*pidx;
         float x1 = points[smpl];
         float y1 = points[smpl+1];

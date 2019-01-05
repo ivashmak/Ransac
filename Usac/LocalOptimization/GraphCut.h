@@ -40,7 +40,7 @@ public:
     int gc_iterations;
 
     ~GraphCut() {
-        delete errors, gc_score, gc_model, inliers, sample, uniform_random_generator;
+        delete[] errors, gc_score, gc_model, inliers, sample, uniform_random_generator;
     }
     void init (unsigned int points_size_, Model * model, Estimator * estimator_, Quality * quality_, NeighborsSearch neighborsType_) {
         neighborsType = neighborsType_;
@@ -56,18 +56,18 @@ public:
         gc_model = new Model (model);
 
 //        if (points_size < 50) {
-//            num_sample = 2 * model->sample_number;
+//            num_sample = 2 * model->sample_size;
 //        } else if (points_size < 100) {
-//            num_sample = 3 * model->sample_number;
+//            num_sample = 3 * model->sample_size;
 //        } else if (points_size < 300) {
-//            num_sample = 4 * model->sample_number;
+//            num_sample = 4 * model->sample_size;
 //        } else {
-//            num_sample = 7 * model->sample_number;
+//            num_sample = 7 * model->sample_size;
 //        }
 
-        num_sample = 7 * model->sample_number;
+        num_sample = 7 * model->sample_size;
 
-        sample_size = model->sample_number;
+        sample_size = model->sample_size;
 
         errors = new float[points_size];
 
@@ -133,7 +133,7 @@ public:
 
             unsigned int inner_inliers_size = gc_score->inlier_number;
 //            std::cout << gc_sample_size << " vs " << inner_inliers_size << "\n";
-            for (int iter = 0; iter < lo_inner_iterations; iter++) {
+            for (unsigned int iter = 0; iter < lo_inner_iterations; iter++) {
                 if (gc_sample_size < inner_inliers_size) {
 
                     uniform_random_generator->generateUniqueRandomSet(sample);
@@ -200,7 +200,7 @@ private:
 
         unsigned int sample_generate = std::min ((unsigned int)gc_score->inlier_number, model->lo_sample_size);
 
-        if (sample_generate < model->sample_number)
+        if (sample_generate < model->sample_size)
             return;
 
 

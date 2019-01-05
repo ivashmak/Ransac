@@ -3,8 +3,6 @@
 
 #include "../../Estimator/Estimator.h"
 #include "../../Ransac/Ransac.h"
-#include "../../../Detector/ReadPoints.h"
-#include "../../../dataset/Dataset.h"
 #include "../../../dataset/GetImage.h"
 
 class Drawing {

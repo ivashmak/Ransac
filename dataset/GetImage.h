@@ -5,7 +5,7 @@
 #include <opencv2/imgcodecs.hpp>
 #include <iostream>
 #include "Dataset.h"
-#include "../Detector/ReadPoints.h"
+#include "../Detector/Reader.h"
 
 class ImageData {
 private:
@@ -18,20 +18,20 @@ public:
         std::string folder;
         if (dataset == DATASET::Adelaidermf) {
             folder = "../dataset/adelaidermf/";
-            read_points(pts1, pts2, folder+img_name+"_pts.txt");
-            getInliers(folder+img_name+"_pts.txt", inliers);
+            Reader::read_points(pts1, pts2, folder+img_name+"_pts.txt");
+            Reader::getInliers(folder+img_name+"_pts.txt", inliers);
 
         } else if (dataset == DATASET::Kusvod2) {
             folder = "../dataset/Lebeda/kusvod2/";
-            getPointsNby6(folder+img_name+"_vpts_pts.txt", pts);
+            Reader::getPointsNby6(folder+img_name+"_vpts_pts.txt", pts);
             pts1 = pts.colRange(0,2);
             pts2 = pts.colRange(2,4);
-            getMatrix3x3(folder+img_name+"_model.txt", model);
+            Reader::getMatrix3x3(folder+img_name+"_model.txt", model);
             return;
 
         } else if (dataset == DATASET::Strecha) {
             folder = "../dataset/Lebeda/strechamvs/";
-            getPointsNby6(folder+img_name+"_vpts_pts.txt", pts);
+            Reader::getPointsNby6(folder+img_name+"_vpts_pts.txt", pts);
             img1 = cv::imread("../dataset/Lebeda/strechamvs/"+img_name+"A.jpg");
             img2 = cv::imread("../dataset/Lebeda/strechamvs/"+img_name+"B.jpg");
             if (img1.empty()) {
@@ -50,13 +50,13 @@ public:
             img1 = cv::imread("../dataset/EVD/1/"+img_name+".png");
             img2 = cv::imread("../dataset/EVD/2/"+img_name+".png");
             cv::Mat points;
-            readEVDpoints(pts, "../dataset/EVD/EVD_tentatives/"+img_name+".png_m.txt");
+            Reader::readEVDpoints(pts, "../dataset/EVD/EVD_tentatives/"+img_name+".png_m.txt");
             return;
 
         } else if (dataset == DATASET::Homogr) {
             folder = "../dataset/homography/";
-            read_points(pts1, pts2, folder+img_name+"_pts.txt");
-            getInliers(folder+img_name+"_pts.txt", inliers);
+            Reader::read_points(pts1, pts2, folder+img_name+"_pts.txt");
+            Reader::getInliers(folder+img_name+"_pts.txt", inliers);
 
         } else {
             std::cout << "UNKNOWN DATASET!\n";
@@ -64,7 +64,7 @@ public:
         }
 
         cv::hconcat(pts1, pts2, pts);
-        getMatrix3x3(folder+img_name+"_model.txt", model);
+        Reader::getMatrix3x3(folder+img_name+"_model.txt", model);
 
         img1 = cv::imread(folder+img_name+"A.png");
         img2 = cv::imread(folder+img_name+"B.png");

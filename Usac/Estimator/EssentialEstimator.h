@@ -55,14 +55,14 @@ public:
         }
 
         // todo: fix for more than 3 solutions
-        for (int i = 0; i < std::min ((unsigned int)3, models_count); i++) {
+        for (unsigned int i = 0; i < std::min ((unsigned int)3, models_count); i++) {
             models[i]->setDescriptor(E.rowRange(i * 3, i * 3 + 3));
         }
 
         return models_count;
     }
 
-    bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
+    bool EstimateModelNonMinimalSample(const int * const sample, unsigned int sample_size, Model &model) override {
         cv::Mat_<float> E;
 
         if (! EightPointsAlgorithm(points, sample, sample_size, E)) {
@@ -74,7 +74,7 @@ public:
         return true;
     }
 
-    float GetError(int pidx) override {
+    float GetError(unsigned int pidx) override {
         unsigned int smpl = 4*pidx;
         float x1 = points[smpl];
         float y1 = points[smpl+1];

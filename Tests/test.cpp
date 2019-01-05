@@ -59,6 +59,7 @@ void Tests::test (cv::Mat points,
     } else {
         ransac.setNeighbors(neighbors_v);
     }
+//    std::cout << "RUN ransac\n";
     ransac.run(points);
 
     RansacOutput * ransacOutput = ransac.getRansacOutput();

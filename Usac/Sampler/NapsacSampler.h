@@ -25,7 +25,8 @@ private:
 public:
 
     ~NapsacSampler() {
-        delete next_neighbors, random_generator;
+        delete next_neighbors;
+        delete random_generator;
     }
 
     /*
@@ -40,7 +41,7 @@ public:
 
 //        std::cout << k_nearest_neighbors_indices.getMat() << "\n";
         this->knn = model->k_nearest_neighbors;
-        this->sample_size = model->sample_number;
+        this->sample_size = model->sample_size;
         this->points_size = points_size_;
 
         /* check if sample number minus 1 (initial point) is less or equal than k nearest neighbors

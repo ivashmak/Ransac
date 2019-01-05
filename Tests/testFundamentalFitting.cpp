@@ -1,6 +1,6 @@
 #include "Tests.h"
 
-#include "../Detector/ReadPoints.h"
+#include "../Detector/Reader.h"
 #include "../Usac/Helper/Drawing/Drawing.h"
 #include "../Usac/Helper/Logging.h"
 #include "../Usac/Estimator/FundamentalEstimator.h"
@@ -21,7 +21,7 @@ void Tests::testFundamentalFitting() {
     std::string img_name = "barrsmith";
     cv::Mat_<float> points1, points2, points;
 //    getPointsNby6("../dataset/Lebeda/kusvod2/"+img_name+"_vpts_pts.txt", points);
-    read_points(points1, points2, "../dataset/adelaidermf/"+img_name+"_pts.txt");
+    Reader::read_points(points1, points2, "../dataset/adelaidermf/"+img_name+"_pts.txt");
 //    read_points(points1, points2, "../dataset/fundamental/"+img_name+"_pts.txt");
         cv::hconcat(points1, points2, points);
 
@@ -46,7 +46,7 @@ void Tests::testFundamentalFitting() {
     // ------------ get Ground truth inliers and model ----------------------
     std::vector<int> gt_inliers;
 //    getGTInliersFromGTModelFundamental (img_name, points, threshold, gt_inliers);
-    getInliers("../dataset/adelaidermf/"+img_name+"_pts.txt", gt_inliers);
+    Reader::getInliers("../dataset/adelaidermf/"+img_name+"_pts.txt", gt_inliers);
 //    getInliers("../dataset/fundamental/"+img_name+"_pts.txt", gt_inliers);
     // -------------------------------------------
 
@@ -66,11 +66,11 @@ void Tests::testFundamentalFitting() {
     model->setSprtLO(0);
     model->setCellSize(50);
     model->setNeighborsType(NeighborsSearch::Grid);
+    model->ResetRandomGenerator(false);
 
     test (points, model, img_name, dataset, true, gt_inliers);
-//    test (points, model, img_name, false, gt_inliers);
 
-//    getStatisticalResults(points, model, 400, true, gt_inliers, false, nullptr);
+//    getStatisticalResults(points, model, 300, true, gt_inliers, false, nullptr);
 
 //     storeResultsFundamental ();
 }
@@ -79,7 +79,7 @@ void Tests::testFundamentalFitting() {
  * Store results from dataset to csv file.
  */
 void storeResultsFundamental () {
-    std::vector<std::string> points_filename = getKusvod2Dataset();
+    std::vector<std::string> points_filename = Dataset::getKusvod2Dataset();
 //    std::vector<std::string> points_filename = getAdelaidermfDataset();
 
     Tests tests;
@@ -101,12 +101,12 @@ void storeResultsFundamental () {
 //        read_points(points1, points2, "../dataset/adelaidermf/"+img_name+"_pts.txt");
 //         cv::hconcat(points1, points2, points);
 //        LoadPointsFromFile(points, ("../dataset/adelaidermf/sift_update/"+img_name+"_pts.txt").c_str());
-        LoadPointsFromFile(points, ("../dataset/Lebeda/kusvod2/sift_update/"+img_name+"_pts.txt").c_str());
+        Reader::LoadPointsFromFile(points, ("../dataset/Lebeda/kusvod2/sift_update/"+img_name+"_pts.txt").c_str());
 
         cv::Mat_<float> sorted_points;
 //        densitySort (points, 3, sorted_points);
 //        LoadPointsFromFile(sorted_points, ("../dataset/adelaidermf/sift_update/"+img_name+"_spts.txt").c_str());
-        LoadPointsFromFile(sorted_points, ("../dataset/Lebeda/kusvod2/sift_update/"+img_name+"_spts.txt").c_str());
+        Reader::LoadPointsFromFile(sorted_points, ("../dataset/Lebeda/kusvod2/sift_update/"+img_name+"_spts.txt").c_str());
         // points are already sorted for EVD
 //        sorted_points = points.clone();
 
@@ -219,7 +219,7 @@ void storeResultsFundamental () {
 
 void getGTInliersFromGTModelFundamental (const std::string& filename, const cv::Mat& points, float threshold, std::vector<int> &gt_inliers) {
     cv::Mat gt_model;
-    getMatrix3x3(filename, gt_model);
+    Reader::getMatrix3x3(filename, gt_model);
 //    std::cout << gt_model << "\n";
 
     Estimator * estimator = new FundamentalEstimator (points);

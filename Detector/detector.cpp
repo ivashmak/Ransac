@@ -1,11 +1,10 @@
 #include "detector.h"
-#include "ReadPoints.h"
+#include "Reader.h"
 
 void DetectFeatures(const std::string &name, const cv::Mat &image1, const cv::Mat &image2, cv::Mat &points)
 {
 
-    if (LoadPointsFromFile(points, name.c_str()))
-    {
+    if (Reader::LoadPointsFromFile(points, name.c_str())) {
         printf("Match number: %d\n", points.rows);
         return;
     }
@@ -64,7 +63,7 @@ void DetectFeatures(const std::string &name, const cv::Mat &image1, const cv::Ma
     }
 
 
-    SavePointsToFile(points, name.c_str(), NULL);
+    Reader::SavePointsToFile(points, name.c_str(), NULL);
     printf("Match number: %d\n", static_cast<int>(dst_points.size()));
 
     // sort points by ratio of distances in ascending order.
@@ -93,7 +92,7 @@ void DetectFeatures(const std::string &name, const cv::Mat &image1, const cv::Ma
         *(sorted_points_ptr++) = dst_points[i].y;
     }
     std::string sort_points_name = img_name+"spts.txt";
-    SavePointsToFile(sorted_points, sort_points_name.c_str(), NULL);
+    Reader::SavePointsToFile(sorted_points, sort_points_name.c_str(), NULL);
 }
 
 

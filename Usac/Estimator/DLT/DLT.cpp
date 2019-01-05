@@ -61,13 +61,94 @@ bool DLT (const float * const points, const int * const sample, int sample_numbe
 }
 
 bool DLT (const float * const points, int sample_number, cv::Mat &H) {
-    float x1, y1, x2, y2;
-    int smpl;
 
-    cv::Mat_<float> A (2*sample_number, 9), w, u, vt;
+    /*
+    A =
+
+    [  -x1_1,  -y1_1, -1,      0,      0,  0,   x1_1*x1_2,   x1_2*y1_1,  x1_2]
+    [      0,      0,  0,  -x1_1,  -y1_1, -1,   x1_1*y1_2,   y1_1*y1_2,  y1_2]
+    [  -x2_1,  -y2_1, -1,      0,      0,  0,   x2_1*x2_2,   x2_2*y2_1,  x2_2]
+    [      0,      0,  0,  -x2_1,  -y2_1, -1,   x2_1*y2_2,   y2_1*y2_2,  y2_2]
+    ...
+    [  -xN_1,  -yN_1, -1,      0,      0,  0,   xN_1*xN_2,   xN_2*yN_1,  xN_2]
+    [      0,      0,  0,  -xN_1,  -yN_1, -1,   xN_1*yN_2,   yN_1*yN_2,  yN_2]
+
+    A^T =
+
+    [     -x1_1,         0,     -x2_1,         0,   ...   -xN_1,              0]
+    [     -y1_1,         0,     -y2_1,         0,   ...   -yN_1,              0]
+    [        -1,         0,        -1,         0,   ...    -1,                0]
+    [         0,     -x1_1,         0,     -x2_1,   ...     0,            -xN_1]
+    [         0,     -y1_1,         0,     -y2_1,           0,            -yN_1]
+    [         0,        -1,         0,        -1,           0,               -1]
+    [ x1_1*x1_2, x1_1*y1_2, x2_1*x2_2, x2_1*y2_2,         xN_1*xN_2,  xN_1*yN_2]
+    [ x1_2*y1_1, y1_1*y1_2, x2_2*y2_1, y2_1*y2_2,         xN_2*yN_1,  yN_1*yN_2]
+    [      x1_2,      y1_2,      x2_2,      y2_2,         xN_2,            yN_2]
+
+     */
+
+
+    float x1, y1, x2, y2;
+    unsigned int smpl;
+
+//    std::clock_t start;
+//    double duration;
+//    start = std::clock();
+
+
+    // ---------- DLT with covariance matrix with Eigen -------------------
+
+//    cv::Mat_<float> AtA (9, 9, float (0)), Vt, D;
+//    float a1[9] = {0, 0, -1, 0, 0, 0, 0, 0, 0}, a2[9] = {0, 0, 0, 0, 0, -1, 0, 0, 0};
+//    float * AtA_ptr = (float *) AtA.data;
+//
+//    for (int i = 0; i < sample_size; i++) {
+//        smpl = 4*i;
+//        x1 = points[smpl];
+//        y1 = points[smpl+1];
+//
+//        x2 = points[smpl+2];
+//        y2 = points[smpl+3];
+//
+//        a1[0] = -x1;
+//        a1[1] = -y1;
+//        a1[6] = x2*x1;
+//        a1[7] = x2*y1;
+//        a1[8] = x2;
+//
+//        a2[3] = -x1;
+//        a2[4] = -y1;
+//        a2[6] = y2*x1;
+//        a2[7] = y2*y1;
+//        a2[8] = y2;
+//
+//        for (unsigned int j = 0; j < 9; j++) {
+//            for (unsigned int z = j; z < 9; z++) {
+//                AtA_ptr[j*9+z] += a1[j]*a1[z] + a2[j]*a2[z];
+//            }
+//        }
+//    }
+//
+//    for (unsigned int row = 1; row < 9; row++) {
+//        for (unsigned int col = 0; col < row; col++) {
+//            AtA_ptr[row*9+col] = AtA_ptr[col*9+row];
+//        }
+//    }
+//
+//    cv::eigen(AtA, D, Vt);
+    // -------------------------------------------------------------------
+
+//    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+//    std::cout << "Eigen: "<< duration <<'\n';
+//    start = std::clock();
+
+    // --------------- DLT with Singular Value Decomposition -----------
+
+    cv::Mat_<float> A (2*sample_number, 9), S, U, Vt;
     float * A_ptr = (float *) A.data;
 
-    for (int i = 0; i < sample_number; i++) {
+    for (unsigned int i = 0; i < sample_number; i++) {
+//        std::cout << i << "\n";
         smpl = 4*i;
         x1 = points[smpl];
         y1 = points[smpl+1];
@@ -96,51 +177,69 @@ bool DLT (const float * const points, int sample_number, cv::Mat &H) {
         (*A_ptr++) = y2;
     }
 
-    cv::SVD::compute(A, w, u, vt);
+//    std::cout << "svd compute\n";
+//    std::cout << A << "\n\n";
+    cv::SVD::compute(A, S, U, Vt);
+//    std::cout << "svd computed\n";
+    // ------------------------------------------------------------
 
-    if (vt.empty ()) {
-//        std::cout << "\033[1;31mDecomposed Matrix Vt is empty\033[0m \n";
+    //    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    //    std::cout << "SVD: "<< duration <<'\n';
+
+
+
+    if (Vt.empty ()) {
         return false;
     }
 
-/*    
-        cv::Mat_<float> V, D;
-        
-        // eigenvalues (D) – output vector of eigenvalues of the same type as src; 
-        // the eigenvalues are stored in the DESCENDING order.
-         
-        // eigenvectors (V) – output matrix of eigenvectors; it has the same size and type as src; 
-        // the eigenvectors are stored as subsequent matrix ROWS, in the same order as the 
-        // corresponding eigenvalues.
-    
-        std::clock_t start;
-        double duration;
+    H = cv::Mat_<float>(Vt.row(Vt.rows-1).reshape (3,3));
 
-        start = std::clock();
-        
-        cv::eigen (A.t() * A, D, V);
-
-        duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-        std::cout << "Eigen: "<< duration <<'\n';
-            
-        
-        // so in this case H should be last row of V
-        // H = V.row(8);
-        // std::cout << "A = \n" << A << "\n\n";
-        // std::cout << "vt =\n" << vt << "\n\n";
-        // std::cout << "w = \n" << w << "\n\n";
-        // std::cout << "V =\n" << V << "\n\n";
-        // std::cout << "D =\n" << D << "\n\n";
-        // std::cout << "==========================\n" << "\n\n";
-
-        H = cv::Mat_<float>(V.row(V.rows-1).reshape (3,3));
-        
-        // Eigen like this is 2-3 times faster than svd. 
-    
-*/
-    H = cv::Mat_<float>(vt.row(vt.rows-1).reshape (3,3));
     return true;
 }
+
+
+//bool DLT (const float * const points, int sample_number, const float * const weights, cv::Mat &H) {
+//    float x1, y1, x2, y2;
+//    int smpl;
+//
+//    cv::Mat_<float> A (2*sample_number, 9), S, U, Vt;
+//    float * A_ptr = (float *) A.data;
+//
+//    for (int i = 0; i < sample_number; i++) {
+//        smpl = 4*i;
+//        x1 = points[smpl];
+//        y1 = points[smpl+1];
+//
+//        x2 = points[smpl+2];
+//        y2 = points[smpl+3];
+//
+//        (*A_ptr++) = -x1;
+//        (*A_ptr++) = -y1;
+//        (*A_ptr++) = -1;
+//        (*A_ptr++) = 0;
+//        (*A_ptr++) = 0;
+//        (*A_ptr++) = 0;
+//        (*A_ptr++) = x2*x1;
+//        (*A_ptr++) = x2*y1;
+//        (*A_ptr++) = x2;
+//
+//        (*A_ptr++) = 0;
+//        (*A_ptr++) = 0;
+//        (*A_ptr++) = 0;
+//        (*A_ptr++) = -x1;
+//        (*A_ptr++) = -y1;
+//        (*A_ptr++) = -1;
+//        (*A_ptr++) = y2*x1;
+//        (*A_ptr++) = y2*y1;
+//        (*A_ptr++) = y2;
+//    }
+//    cv::SVD::compute(A, S, U, Vt);
+//    if (Vt.empty ()) {
+//        return false;
+//    }
+//    H = cv::Mat_<float>(Vt.row(Vt.rows-1).reshape (3,3));
+//    return true;
+//}
 
 
 bool DLTLeastSquares (const float * const points, int sample_number, cv::Mat &H) {

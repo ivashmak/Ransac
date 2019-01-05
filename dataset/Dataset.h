@@ -9,12 +9,15 @@
 #include <fstream>
 
 enum DATASET {Homogr, Adelaidermf, Kusvod2, Syntectic, Strecha, EVD};
-
-std::vector<std::string> getEVDDataset ();
-std::vector<std::string> getHomographyDatasetPoints ();
-std::vector<std::string> getProblemHomographyDatasetPoints ();
-std::vector<std::string> getFundamentalDatasetPoints ();
-std::vector<std::string> getKusvod2Dataset ();
-std::vector<std::string> getAdelaidermfDataset ();
+class Dataset {
+public:
+    static void saveDatasetToFiles ();
+    static std::vector<std::string> getEVDDataset ();
+    static std::vector<std::string> getHomographyDatasetPoints ();
+    static std::vector<std::string> getProblemHomographyDatasetPoints ();
+    static std::vector<std::string> getFundamentalDatasetPoints ();
+    static std::vector<std::string> getKusvod2Dataset ();
+    static std::vector<std::string> getAdelaidermfDataset ();
+};
 
 #endif //USAC_DATASET_H

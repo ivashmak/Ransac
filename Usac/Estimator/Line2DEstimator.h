@@ -45,7 +45,7 @@ public:
     /*
      * Principal Component Analysis
      */
-    bool EstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) override {
+    bool EstimateModelNonMinimalSample(const int * const sample, unsigned int sample_size, Model &model) override {
 
         /*
          * cov (i, j) = sum ((xi - mean_x) * (yi - mean_y)) =
@@ -102,7 +102,7 @@ public:
      *     1) Least Square Fitting.
      *     2) Weighted Least Square Fitting.
      */
-    bool LeastSquaresFitting (const int * const sample, int sample_size, Model &model) override {
+    bool LeastSquaresFitting (const int * const sample, unsigned int sample_size, Model &model) override {
         float a = 0, b = 0, c;
         float x, y, x_mean = 0, y_mean = 0;
         unsigned int smpl;
@@ -140,7 +140,7 @@ public:
     /*
      * |ax + by + c|, where ||(a b)|| = 1
      */
-    inline float GetError(int pidx) override {
+    inline float GetError(unsigned int pidx) override {
         return fabsf (a * input_points[2*pidx] + b * input_points[2*pidx+1] + c);
     }
 

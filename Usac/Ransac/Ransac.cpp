@@ -8,6 +8,7 @@
 #include "../TerminationCriteria/ProsacTerminationCriteria.h"
 #include "../Estimator/HomographyEstimator.h"
 #include "../LocalOptimization/GreedyLocalOptimization.h"
+#include "../LocalOptimization/IRLS.h"
 
 int getPointsSize (cv::InputArray points) {
 //    std::cout << points.getMat(0).total() << '\n';
@@ -94,7 +95,7 @@ void Ransac::run(cv::InputArray input_points) {
     bool is_good_model;
     if (SprtLO) {
         sprt = new SPRT;
-        sprt->initialize(estimator, model, points_size);
+        sprt->initialize(estimator, model, points_size, model->reset_random_generator);
     }
     //--------------------------------------------
 
@@ -115,13 +116,18 @@ void Ransac::run(cv::InputArray input_points) {
 
     // if we have small number of data points, so LO will run with quarter of them,
     // otherwise it requires at least 3 sample size.
-    int min_inlier_count_for_LO = std::min (points_size/4, (int) 3 * model->sample_number);
+    int min_inlier_count_for_LO = std::min (points_size/4,  3 * (int)model->sample_size);
 
     int iters = 0;
     int max_iters = model->max_iterations;
 
     // delete, just for test
 //    int * best_sample = new int[4];
+
+    // ------------ Iterated Reweighted Least Squares ------------------
+    IRLS * irls = new IRLS(points_size, model, estimator, quality);
+    // ------------------------------------------------------
+
 
     while (iters < max_iters) {
 
@@ -133,9 +139,9 @@ void Ransac::run(cv::InputArray input_points) {
 
 //      debug
 //        bool eq = false;
-//        for (int s = 0; s < model->sample_number; s++) {
+//        for (int s = 0; s < model->sample_size; s++) {
 //            std::cout << sample[s] << " ";
-//            for (int j = 0; j < model->sample_number; j++) {
+//            for (int j = 0; j < model->sample_size; j++) {
 //                if (s == j) continue;
 //                if (sample[s] == sample[j]) {
 //                    eq = true;
@@ -188,10 +194,11 @@ void Ransac::run(cv::InputArray input_points) {
 
             if (current_score->bigger(best_score)) {
 
-//                GreedyLO * greedyLO = new GreedyLO;
-//                greedyLO->getLOScore(current_score, models[i], quality, estimator, points_size);
-
 //                  std::cout << "current score = " << current_score->score << '\n';
+
+                if (current_score->inlier_number > min_inlier_count_for_LO) {
+                    irls->getModelScore(current_score, models[i]);
+                }
 
                 // update current model and current score by inner and iterative local optimization
                 // if inlier number is too small, do not update
@@ -332,15 +339,20 @@ void Ransac::run(cv::InputArray input_points) {
                                       best_score->inlier_number, iters, lo_inner_iters, lo_iterative_iters, gc_iters);
 
     if (LO) {
-        delete lo_ransac;
+        delete[] lo_ransac;
     }
     if (GraphCutLO) {
-        delete graphCut;
+        delete[] graphCut;
     }
     if (SprtLO) {
-        delete sprt;
+        delete[] sprt;
     }
-    delete sample, current_score, best_score, inliers, max_inliers, best_model;
+    delete[] sample;
+    delete[] current_score;
+    delete[] best_score;
+    delete[] inliers;
+    delete[] max_inliers;
+//    delete[] best_model;
 }
 
 
