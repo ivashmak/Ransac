@@ -3,8 +3,7 @@
 #include "Math.h"
 
 #include <Eigen/Dense>
-#include <opencv/cxeigen.hpp>
-
+#include <opencv2/core/eigen.hpp>
 
 /*
  * Problem with repeated points in flann and nanoflann:
@@ -116,11 +115,11 @@ void NearestNeighbors::getNearestNeighbors_nanoflann (const cv::Mat& points, int
         }
     }
 
-//    std::cout << nearest_neighbors << "\n\n";
-//    std::cout << nearest_neighbors_distances << "\n\n";
+   // std::cout << nearest_neighbors << "\n\n";
+   // std::cout << nearest_neighbors_distances << "\n\n";
 
-    delete ret_indexes;
-    delete out_dists_sqr;
+    delete[] ret_indexes;
+    delete[] out_dists_sqr;
 }
 
 /*

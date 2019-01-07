@@ -29,7 +29,7 @@ void Tests::testHomographyFitting() {
     // points are already sorted
 //    readEVDpoints(points, "../dataset/EVD/EVD_tentatives/"+img_name+".png_m.txt");
 
-    Reader::LoadPointsFromFile(points, ("../dataset/homography/sift_update/"+img_name+"_spts.txt").c_str());
+    Reader::LoadPointsFromFile(points, ("../dataset/homography/sift_update/"+img_name+"_pts.txt").c_str());
 
     unsigned int points_size = (unsigned int) points.rows;
     std::cout << "points size " << points_size << "\n";
