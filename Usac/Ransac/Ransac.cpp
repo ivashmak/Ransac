@@ -129,8 +129,6 @@ void Ransac::run(cv::InputArray input_points) {
     IRLS * irls = new IRLS(points_size, model, estimator, quality);
     // ------------------------------------------------------
 
-    int * inliers_hist = (int *) calloc (points_size, sizeof(int));
-
     while (iters < max_iters) {
 
         if (is_prosac) {
@@ -188,65 +186,9 @@ void Ransac::run(cv::InputArray input_points) {
 //                }
             } else {
 //                std::cout << "Get quality score\n";
-                // quality->getNumberInliers(current_score, models[i]);
-                quality->getNumberInliers(current_score, models[i], true, inliers);   
+                 quality->getNumberInliers(current_score, models[i]);
             }
 
-            for (int p = 0; p < current_score->inlier_number; p++) {
-                inliers_hist[inliers[p]]++;
-            }
-
-            // 100 is very small history. 300 is even better
-            // Makes sense to do it only once or every e.g. 200 iterations
-            // Almost always better than random non minimal sampling from inliers 
-            // of the best model. But there are some (a little) cases, where mle-histogram estimation
-            // is worse (possible improvements?).
-            if (iters == 200) {
-                int * arr = new int[points_size];
-                for (int p = 0; p < points_size; p++) {
-                    arr[p] = p;
-                }
-                std::sort (arr, arr+points_size, [&](int a, int b) {
-                    return inliers_hist[a] > inliers_hist[b];
-                });
-                
-                int max_sample_gen = 14;
-                int * sample_ = new int[max_sample_gen];
-                for (int s = 0; s < max_sample_gen; s++) {
-                    sample_[s] = arr[s];
-                    std::cout << inliers_hist[sample_[s]] << " ";
-                }
-                std::cout << "\n";
-                Model * mlemodel = new Model(model);
-                Score * mlescore = new Score;
-                estimator->EstimateModelNonMinimalSample(sample_, max_sample_gen, *mlemodel);
-                quality->getNumberInliers(mlescore, mlemodel);
-                std::cout << "best score " << best_score->inlier_number << "\n";
-                std::cout << "histogram mle score " << mlescore->inlier_number << "\n";
-                if (mlescore->bigger(current_score)) {
-                    current_score->copyFrom(mlescore);
-                    models[i]->setDescriptor(mlemodel->returnDescriptor());
-                }
-
-                // debug 
-                // random non minimal sampling
-                Score * r_score = new Score;
-                Model * r_model = new Model(model);
-                quality->getNumberInliers(r_score, best_model, true, inliers);
-                UniformRandomGenerator * uniformRandomGenerator = new UniformRandomGenerator;
-                uniformRandomGenerator->resetTime();
-                uniformRandomGenerator->setSubsetSize(max_sample_gen);
-                uniformRandomGenerator->resetGenerator(0, r_score->inlier_number-1);
-                uniformRandomGenerator->generateUniqueRandomSet(sample_);
-                for (int i = 0; i < max_sample_gen; i++) {
-                    sample_[i] = inliers[sample_[i]];
-                }
-                estimator->EstimateModelNonMinimalSample(sample_, max_sample_gen, *r_model);
-                quality->getNumberInliers(r_score, r_model);
-                std::cout << "random samplig score " << r_score->inlier_number << "\n";                
-                //
-                // exit (0);
-            }
 //            std::cout << "Ransac, iteration " << iters << "; score " << current_score->inlier_number << "\n";
 //            std::cout << models[i]->returnDescriptor() << "\n\n";
 
@@ -254,9 +196,9 @@ void Ransac::run(cv::InputArray input_points) {
 
 //                  std::cout << "current score = " << current_score->score << '\n';
 
-                // if (current_score->inlier_number > min_inlier_count_for_LO) {
-                //     irls->getModelScore(current_score, models[i]);
-                // }
+                 if (current_score->inlier_number > min_inlier_count_for_LO) {
+                     irls->getModelScore(current_score, models[i]);
+                 }
                 
                 // update current model and current score by inner and iterative local optimization
                 // if inlier number is too small, do not update
@@ -340,36 +282,37 @@ void Ransac::run(cv::InputArray input_points) {
 //        std::cout << "end estimate non minimal\n";
 
         // estimate non minimal model with max inliers
-        if (estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model)) {
-
-//            std::cout << "end get non minimal score\n";
-
-            quality->getNumberInliers(current_score, non_minimal_model, true, max_inliers);
-
-            // Priority is for non minimal model estimation
-//            std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
-
-            // break if non minimal model score is less than 80% of the best minimal model score
-            if ((float) current_score->inlier_number / best_score->inlier_number < 0.8) {
-                break;
-//                std::cout << "|I|best = " << best_score->inlier_number << "\n";
-//                std::cout << "|I|non minimal = " << current_score->inlier_number << "\n";
-//                std::cout << "\033[1;31mNON minimal model has less than 50% of inliers to compare with best score!\033[0m \n";
-            }
-
-            // if normalization score is less or equal, so next normalization is equal too, so break.
-            if (current_score->inlier_number <= previous_non_minimal_num_inlier) {
-                break;
-            }
-
-            previous_non_minimal_num_inlier = current_score->inlier_number;
-
-            best_score->copyFrom(current_score);
-            best_model->setDescriptor(non_minimal_model->returnDescriptor());
-        } else {
+        if (! estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model)) {
             std::cout << "\033[1;31mNON minimal model completely failed!\033[0m \n";
             break;
         }
+//        std::cout << non_minimal_model->returnDescriptor() << " std ndlt\n\n";
+        //
+//      std::cout << "end get non minimal score\n";
+
+        quality->getNumberInliers(current_score, non_minimal_model, true, max_inliers);
+
+        // Priority is for non minimal model estimation
+//        std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
+
+
+        // break if non minimal model score is less than 80% of the best minimal model score
+        if ((float) current_score->inlier_number / best_score->inlier_number < 0.8) {
+            break;
+//                std::cout << "|I|best = " << best_score->inlier_number << "\n";
+//                std::cout << "|I|non minimal = " << current_score->inlier_number << "\n";
+//                std::cout << "\033[1;31mNON minimal model has less than 50% of inliers to compare with best score!\033[0m \n";
+        }
+
+        // if normalization score is less or equal, so next normalization is equal too, so break.
+        if (current_score->inlier_number <= previous_non_minimal_num_inlier) {
+            break;
+        }
+
+        previous_non_minimal_num_inlier = current_score->inlier_number;
+
+        best_score->copyFrom(current_score);
+        best_model->setDescriptor(non_minimal_model->returnDescriptor());
     }
 
     std::chrono::duration<float> fs = std::chrono::steady_clock::now() - begin_time;
@@ -397,13 +340,13 @@ void Ransac::run(cv::InputArray input_points) {
                                       best_score->inlier_number, iters, lo_inner_iters, lo_iterative_iters, gc_iters);
 
     if (LO) {
-        delete[] lo_ransac;
+        delete (lo_ransac);
     }
     if (GraphCutLO) {
-        delete[] graphCut;
+        delete (graphCut);
     }
     if (SprtLO) {
-        delete[] sprt;
+        delete (sprt);
     }
     delete[] sample;
     delete[] current_score;

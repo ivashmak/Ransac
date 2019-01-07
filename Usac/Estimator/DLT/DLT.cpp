@@ -54,8 +54,13 @@ bool DLT (const float * const points, const int * const sample, int sample_numbe
      * if, however, FULL_UV flag is specified, u and vt will be full-size square orthogonal matrices.
      */
     cv::SVD::compute(A, w, u, vt);
+    if (vt.empty()) {
+        return false;
+    }
 
     H = cv::Mat_<float>(vt.row(vt.rows-1).reshape (3,3));
+    // normalize H by last h33
+    H = H / H.at<float>(2,2);
 
     return true;
 }
@@ -196,51 +201,6 @@ bool DLT (const float * const points, int sample_number, cv::Mat &H) {
 
     return true;
 }
-
-
-//bool DLT (const float * const points, int sample_number, const float * const weights, cv::Mat &H) {
-//    float x1, y1, x2, y2;
-//    int smpl;
-//
-//    cv::Mat_<float> A (2*sample_number, 9), S, U, Vt;
-//    float * A_ptr = (float *) A.data;
-//
-//    for (int i = 0; i < sample_number; i++) {
-//        smpl = 4*i;
-//        x1 = points[smpl];
-//        y1 = points[smpl+1];
-//
-//        x2 = points[smpl+2];
-//        y2 = points[smpl+3];
-//
-//        (*A_ptr++) = -x1;
-//        (*A_ptr++) = -y1;
-//        (*A_ptr++) = -1;
-//        (*A_ptr++) = 0;
-//        (*A_ptr++) = 0;
-//        (*A_ptr++) = 0;
-//        (*A_ptr++) = x2*x1;
-//        (*A_ptr++) = x2*y1;
-//        (*A_ptr++) = x2;
-//
-//        (*A_ptr++) = 0;
-//        (*A_ptr++) = 0;
-//        (*A_ptr++) = 0;
-//        (*A_ptr++) = -x1;
-//        (*A_ptr++) = -y1;
-//        (*A_ptr++) = -1;
-//        (*A_ptr++) = y2*x1;
-//        (*A_ptr++) = y2*y1;
-//        (*A_ptr++) = y2;
-//    }
-//    cv::SVD::compute(A, S, U, Vt);
-//    if (Vt.empty ()) {
-//        return false;
-//    }
-//    H = cv::Mat_<float>(Vt.row(Vt.rows-1).reshape (3,3));
-//    return true;
-//}
-
 
 bool DLTLeastSquares (const float * const points, int sample_number, cv::Mat &H) {
     /*

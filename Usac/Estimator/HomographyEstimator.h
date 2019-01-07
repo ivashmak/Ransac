@@ -39,9 +39,9 @@ public:
 
     unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         cv::Mat H;
-        DLT (points, sample, 4, H);
-        // normalize H by h33
-        H = H / H.at<float>(2,2);
+        if (! DLT (points, sample, 4, H)) {
+            return 0;
+        }
 
         models[0]->setDescriptor(H);
 
@@ -54,8 +54,6 @@ public:
             std::cout << "Normalized DLT failed\n";
             return false;
         }
-        // normalize H by last h33
-        H = H / H.at<float>(2,2);
 
         model.setDescriptor(H);
         return true;
@@ -66,7 +64,7 @@ public:
         if (! NormalizedDLT(points, sample, sample_size, weights, H)) {
             return false;
         }
-        H = H / H.at<float>(2,2);
+
         model.setDescriptor(H);
         return true;
     }
@@ -81,8 +79,6 @@ public:
         if (! NormalizedDLTLeastSquares(points, sample, sample_size, H)) {
             return false;
         }
-        // normalize H by last h33
-        H = H / H.at<float>(2,2);
 
 //        std::cout << "H lsq " << H << "\n\n";
 
@@ -101,7 +97,7 @@ public:
 
         float est_x2 = H_ptr[0] * x1 + H_ptr[1] * y1 + H_ptr[2];
         float est_y2 = H_ptr[3] * x1 + H_ptr[4] * y1 + H_ptr[5];
-        float est_z2 = H_ptr[6] * x1 + H_ptr[7] * y1 + H_ptr[8];
+        float est_z2 = H_ptr[6] * x1 + H_ptr[7] * y1 + H_ptr[8]; // h8 = h33 = 1
 
         est_x2 /= est_z2;
         est_y2 /= est_z2;

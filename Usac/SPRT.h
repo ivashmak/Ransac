@@ -79,8 +79,8 @@ private:
 public:
 
     ~SPRT() {
-        sprt_histories.clear();
-        delete[] points_random_pool;
+//        sprt_histories.clear();
+//        delete[] points_random_pool;
     }
 
     void initialize (Estimator * estimator_, Model * model, unsigned int points_size_, bool reset_time=true) {

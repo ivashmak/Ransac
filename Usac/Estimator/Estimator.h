@@ -39,6 +39,9 @@ public:
 //    }
 
     virtual float GetError(unsigned int pidx) = 0;
+    virtual void GetError(float * weights, float threshold, int * inliers, unsigned int * inliers_size) {
+        std::cout << "NOT IMPLEMENTED GetError (float * weights) in estimator\n";
+    };
     virtual int SampleNumber() = 0;
 
     // Setters of points set and model's parameters sufficiently sped up code

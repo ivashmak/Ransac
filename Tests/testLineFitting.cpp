@@ -26,16 +26,17 @@ void getGTInliers (const cv::Mat& points, const cv::Mat& gt_model, float thresho
 
 void Tests::testLineFitting() {
     DATASET dataset = DATASET ::Syntectic;
-//     std::string img_name = "../dataset/image1";
+     std::string img_name;
+     img_name = "../dataset/image1";
      std::vector<cv::Point_<float>> points;
      cv::Mat_<float> gt_model;
 
     // change false to true to reset time for random points generator
     // get number of ground truth inliers too.
      generate(points, false, true, gt_model);
-    
-    // another generated data 
-    std::string img_name = "../dataset/line2d/w=1000_h=1000_n=3.000000_I=500_N=10500";
+
+    // another generated data
+    img_name = "../dataset/line2d/w=1000_h=1000_n=3.000000_I=500_N=10500";
     std::ifstream read_data_file;
     read_data_file.open (img_name+".txt");
     int width, height, noise, N;
@@ -54,7 +55,8 @@ void Tests::testLineFitting() {
         cv::Point_<float> pt (x, y);
         points.push_back (pt);
     }
-    // 
+    //
+
 
     std::cout << "generated points\n";
 
@@ -95,6 +97,10 @@ void Tests::testLineFitting() {
     cv::Mat_<float> sorted_pts = cv::Mat (sorted_points);
 
     Model * model;
+    float threshold = 10;
+    std::vector<int> gt_inliers;
+    getGTInliers (pts, gt_model, threshold, gt_inliers);
+
 
     // ---------------- uniform -------------------
 //     model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Uniform);
@@ -102,22 +108,22 @@ void Tests::testLineFitting() {
 
 
     // --------------  prosac ---------------------
-    model = new Model (10, 4, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Prosac);
+    model = new Model (threshold, 4, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Prosac);
      // ------------------------------------------------
 
 
     // ---------------- napsac -------------------------------
-    // model = new Model (10, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Napsac);
+    // model = new Model (threshold, 2, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Napsac);
     // ---------------------------------------------------------------------
 
 
     // ----------------- evsac ------------------------------
-//    model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Evsac);
+//    model = new Model (threshold, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::Evsac);
 // ------------------------------------------------------------
 
 
-    // ------------------ gradually increasing ransac ----------------------
-//    model = new Model (10, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::GradualNapsac);
+    // ------------------ Progressive Napsac ----------------------
+//    model = new Model (threshold, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::GradualNapsac);
 // --------------------------------------------------------
 
      model->setStandardRansacLO(0);
@@ -125,7 +131,7 @@ void Tests::testLineFitting() {
      model->setSprtLO(0);
      model->setNeighborsType(NeighborsSearch::Nanoflann);
 
-    test (sorted_pts, model, img_name, dataset, true, gt_model);
+    test (sorted_pts, model, img_name, dataset, true, gt_inliers);
 
 //     getStatisticalResults(pts, model, 1000, true, false, gt_model, nullptr);
 

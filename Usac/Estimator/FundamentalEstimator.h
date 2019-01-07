@@ -9,6 +9,7 @@ private:
     const float * const points;
     cv::Mat F;
     float *F_ptr;
+    unsigned int points_size;
 public:
 
     /*
@@ -24,6 +25,7 @@ public:
      */
     FundamentalEstimator(cv::InputArray input_points) : points((float *)input_points.getMat().data) {
         assert(!input_points.empty());
+        points_size = input_points.getMat().rows;
     }
 
     void setModelParameters (const cv::Mat& model) override {
@@ -60,6 +62,18 @@ public:
         cv::Mat_<float> F;
 
         if (! EightPointsAlgorithm(points, sample, sample_size, F)) {
+            return false;
+        }
+
+        model.setDescriptor(F);
+
+        return true;
+    }
+
+    bool EstimateModelNonMinimalSample(const int * const sample, unsigned int sample_size, const float *const weights, Model &model) override {
+        cv::Mat_<float> F;
+
+        if (! EightPointsAlgorithm(points, sample, weights, sample_size, F)) {
             return false;
         }
 
@@ -114,6 +128,37 @@ public:
         // error >= 0
         return error;
     }
+
+    void GetError(float * weights, float threshold, int * inliers, unsigned int * inliers_size) override {
+        unsigned int smpl;
+        float x1, y1, x2, y2, F_pt1_x, F_pt1_y, F_pt2_x, F_pt2_y, pt2_F_pt1, w, error = 0;
+        unsigned int num_inliers = 0;
+        for (unsigned int i = 0; i < points_size; i++) {
+            smpl = 4*i;
+            x1 = points[smpl];
+            y1 = points[smpl+1];
+            x2 = points[smpl+2];
+            y2 = points[smpl+3];
+
+            F_pt1_x = F_ptr[0] * x1 + F_ptr[1] * y1 + F_ptr[2];
+            F_pt1_y = F_ptr[3] * x1 + F_ptr[4] * y1 + F_ptr[5];
+
+            // Here F is transposed
+            F_pt2_x = F_ptr[0] * x2 + F_ptr[3] * y2 + F_ptr[6];
+            F_pt2_y = F_ptr[1] * x2 + F_ptr[4] * y2 + F_ptr[7];
+
+            pt2_F_pt1 = x2 * F_pt1_x + y2 * F_pt1_y + F_ptr[6] * x1 +  F_ptr[7] * y1 +  F_ptr[8];
+            w = (F_pt1_x * F_pt1_x + F_pt1_y * F_pt1_y + F_pt2_x * F_pt2_x + F_pt2_y * F_pt2_y);
+            weights[i] = w;
+
+            error = (pt2_F_pt1 * pt2_F_pt1) / w;
+            if (error < threshold) {
+                inliers[num_inliers++] = i;
+            }
+        }
+        *inliers_size = num_inliers;
+    }
+
 
     void getModelbyCameraMatrix (const cv::Mat &K1, const cv::Mat &K2, const cv::Mat &E, cv::Mat &F) override {
         F =  K2.inv().t() * E * K1.inv();

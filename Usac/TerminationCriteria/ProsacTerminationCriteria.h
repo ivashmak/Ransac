@@ -176,6 +176,9 @@ public:
             inlier_count += inlier_flags[i];
         }
 
+//        bool i_plus1_point_inlier;
+//        bool i_point_inlier = estimator->GetError(min_termination_length) < threshold;
+
         // after this initial subset, try to update the stopping length if possible
         for (unsigned int i = min_termination_length; i < points_size; ++i) {
             inlier_count += inlier_flags[i];

@@ -52,16 +52,25 @@ public:
         for (unsigned int iter = 1; iter < 20; iter++) {
             estimator->setModelParameters(irls_model->returnDescriptor());
 
+
             unsigned int num_inliers = 0;
-            float error;
-            for (unsigned int i = 0; i < points_size; i++) {
-                error = estimator->GetError(i);
-                if (error < threshold) {
-//                    weights[i] = 1 / (1 + error);
-                    weights[i] = 1 / error;
-                    inliers[num_inliers] = i;
-                    num_inliers++;
+
+            if (model->estimator == ESTIMATOR::Homography) {
+                float error;
+
+                for (unsigned int i = 0; i < points_size; i++) {
+                    error = estimator->GetError(i);
+                    if (error < threshold) {
+                        //                    weights[i] = 1 / (1 + error);
+                        weights[i] = 1 / (error * error);
+                        //                    std::cout << weights[i] << " ";
+                        inliers[num_inliers] = i;
+                        num_inliers++;
+                    }
                 }
+                //            std::cout << "\n";
+            } else {
+                estimator->GetError(weights, model->threshold, inliers, &num_inliers);
             }
 
             if (num_inliers <= model->sample_size)
@@ -86,10 +95,12 @@ public:
             }
 
             // debug
-            estimator->EstimateModelNonMinimalSample(sample, num_samples, *irls_model);
-            quality->getNumberInliers(irls_score, irls_model);
-            std::cout << "irls score without weights " << irls_score->inlier_number << "\n";
-            // -----
+            Model * r_model = new Model (model);
+            Score * r_score = new Score;
+            estimator->EstimateModelNonMinimalSample(sample, num_samples, *r_model);
+            quality->getNumberInliers(r_score, r_model);
+            std::cout << "irls score without weights " << r_score->inlier_number << "\n";
+            // -----c
 
             estimator->EstimateModelNonMinimalSample(sample, num_samples, weights, *irls_model);
 

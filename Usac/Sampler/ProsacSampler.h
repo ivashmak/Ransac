@@ -27,8 +27,10 @@ protected:
     RandomGenerator * randomGenerator;
 public:
     ~ProsacSampler () {
-        delete[] growth_function;
-        delete[] randomGenerator;
+        if (initialized) {
+            delete[] growth_function;
+            delete (randomGenerator);
+        }
     }
 
     unsigned int * getGrowthFunction () {

@@ -1,7 +1,7 @@
 #include "FundemantalSolver.h"
 #include "../DLT/DLT.h"
 
-bool EightPointsAlgorithm (const float * const pts, const int * const sample, int sample_number, cv::Mat &F) {
+bool EightPointsAlgorithm (const float * const pts, const int * const sample, unsigned int sample_number, cv::Mat &F) {
 
     cv::Mat_<float> T1, T2, norm_points;
     GetNormalizingTransformation(pts, norm_points, sample, sample_number, T1, T2);
@@ -14,6 +14,7 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, in
     float x1, x2, y1, y2;
     unsigned int norm_points_idx;
 
+    // 8 points algorithm with Eigen and covariance matrix
 //    float a[9];
 //    cv::Mat_ <float> covA(9, 9, float (0));
 //    float * covA_ptr = (float *) covA.data;
@@ -54,6 +55,7 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, in
 //    cv::Mat_<float> D, Vt;
 //    cv::eigen(covA, D, Vt);
 //
+// -------------------------------------------------------------
 
     // -------------- 8 points with SVD ---------------------
     cv::Mat_<float> A(sample_number, 9);
@@ -123,6 +125,58 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, in
      * F = T2^t * F * T1
      *
      */
+
+    float * t2 = (float *) T2.data;
+
+    // Transpose T2
+    t2[6] = t2[2];
+    t2[7] = t2[5];
+    t2[2] = 0;
+    t2[5] = 0;
+
+    F = T2 * F * T1;
+
+    // normalize by f33
+    if (fabs(F.at<float>(2,2)) > FLT_EPSILON) {
+        F = F / F.at<float>(2, 2);
+    }
+
+    return true;
+}
+
+
+bool EightPointsAlgorithm (const float * const pts, const int * const sample, const float * const weights, unsigned int sample_number, cv::Mat &F) {
+
+    cv::Mat_<float> T1, T2, norm_points;
+    GetNormalizingTransformation(pts, norm_points, sample, sample_number, weights, T1, T2);
+
+    const float * const norm_points_ptr = (float *) norm_points.data;
+
+    float x1, x2, y1, y2;
+    unsigned int norm_points_idx;
+
+    cv::Mat_<float> A(sample_number, 9);
+    float * A_ptr = (float *) A.data;
+    for (unsigned int i = 0; i < sample_number; i++) {
+        norm_points_idx = 4*i;
+        x1 = norm_points_ptr[norm_points_idx];
+        y1 = norm_points_ptr[norm_points_idx+1];
+        x2 = norm_points_ptr[norm_points_idx+2];
+        y2 = norm_points_ptr[norm_points_idx+3];
+        (*A_ptr++) = x2*x1;
+        (*A_ptr++) = x2*y1;
+        (*A_ptr++) = x2;
+        (*A_ptr++) = y2*x1;
+        (*A_ptr++) = y2*y1;
+        (*A_ptr++) = y2;
+        (*A_ptr++) = x1;
+        (*A_ptr++) = y1;
+        (*A_ptr++) = 1;
+    }
+    cv::Mat_<float> U, S, Vt;
+    cv::SVD::compute(A, S, U, Vt);
+
+    F = cv::Mat_<float> (Vt.row(8).reshape (3,3));
 
     float * t2 = (float *) T2.data;
 

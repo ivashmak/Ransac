@@ -15,6 +15,8 @@ bool NormalizedDLT (const float * const points, const int * const sample, unsign
     }
 
     H = T2.inv()*H*T1;
+    // normalize H by last h33
+    H = H / H.at<float>(2,2);
 
     return true;
 }
@@ -34,6 +36,8 @@ bool NormalizedDLT (const float * const points, const int * const sample, unsign
     }
 
     H = T2.inv()*H*T1;
+    // normalize H by last h33
+    H = H / H.at<float>(2,2);
 
     return true;
 }
