@@ -130,7 +130,7 @@ public:
             maximality_samples[i] = max_hypotheses;
         }
 
-        inlier_flags = new bool[points_size];   
+        inlier_flags = new bool[points_size];
     }
 
     unsigned int getStoppingLength () {
@@ -159,25 +159,27 @@ public:
      * In∗ inliers in Un∗ exists and was not found after k
      * samples is smaller than η0 (typically set to 5%).
      */
-    unsigned int getUpBoundIterations(unsigned int hypCount, unsigned int largest_sample_size,
+    inline unsigned int getUpBoundIterations(unsigned int hypCount, unsigned int largest_sample_size,
                                     const cv::Mat& model) {
-        estimator->setModelParameters(model);
 
-        for (unsigned int i = 0; i < points_size; i++) {
-            inlier_flags[i] = estimator->GetError(i) < threshold;
-        }
         unsigned int max_samples = maximality_samples[termination_length-1];
 
         // go through sorted points and track inlier counts
         unsigned int inlier_count = 0;
 
+        estimator->setModelParameters(model);
         // just accumulate the count for the first min_termination_length points
-        for (unsigned int i = 0; i < min_termination_length; ++i) {
-            inlier_count += inlier_flags[i];
+        for (unsigned int i = 0; i < min_termination_length; i++) {
+            inlier_count += estimator->GetError(i) < threshold;
         }
 
-//        bool i_plus1_point_inlier;
-//        bool i_point_inlier = estimator->GetError(min_termination_length) < threshold;
+        // set inlier flags
+        for (unsigned int i = min_termination_length; i < points_size; ++i) {
+            inlier_flags[i] = estimator->GetError(i) < threshold;
+        }
+
+//        bool is_inlier_iplus1;
+//        bool is_inlier_i = estimator->GetError(min_termination_length) < threshold;
 
         // after this initial subset, try to update the stopping length if possible
         for (unsigned int i = min_termination_length; i < points_size; ++i) {

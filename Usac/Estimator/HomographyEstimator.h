@@ -7,8 +7,8 @@
 class HomographyEstimator : public Estimator{
 private:
     const float * const points;
-    cv::Mat H, H_inv;
-    float *H_ptr, *H_inv_ptr;
+    float h11, h12, h13, h21, h22, h23, h31, h32, h33;
+    float hi11, hi12, hi13, hi21, hi22, hi23, hi31, hi32, hi33;
 public:
 
     /*
@@ -25,16 +25,17 @@ public:
     }
 
     void setModelParameters (const cv::Mat& model) override {
-        H = cv::Mat_<float>(model); // clone
-//        H = model;
-        H_inv = H.inv();
+        auto * H_ptr = (float *) model.data;
+        cv::Mat H_inv = model.inv();
+        auto * H_inv_ptr = (float *) H_inv.data;
 
-        /*
-         * To make pointer from Mat class, this Mat class should exists as long as exists pointer
-         * So this->H and this->H_inv must be global in class
-         */
-        H_ptr = (float *) H.data;
-        H_inv_ptr = (float *) H_inv.data;
+        h11 = H_ptr[0]; h12 = H_ptr[1]; h13 = H_ptr[2];
+        h21 = H_ptr[3]; h22 = H_ptr[4]; h23 = H_ptr[5];
+        h31 = H_ptr[6]; h32 = H_ptr[7]; h33 = H_ptr[8];
+
+        hi11 = H_inv_ptr[0]; hi12 = H_inv_ptr[1]; hi13 = H_inv_ptr[2];
+        hi21 = H_inv_ptr[3]; hi22 = H_inv_ptr[4]; hi23 = H_inv_ptr[5];
+        hi31 = H_inv_ptr[6]; hi32 = H_inv_ptr[7]; hi33 = H_inv_ptr[8];
     }
 
     unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
@@ -86,7 +87,7 @@ public:
         return true;
     }
     /*
-     * Error = distance (pt(i)H, pt'(i)) + distance (pt(i), pt'(i)H^-1)
+     * Error = mean (distance (pt(i)H, pt'(i)) + distance (pt(i), pt'(i)H^-1))
      */
     float GetError(unsigned int pidx) override {
         unsigned int smpl = 4*pidx;
@@ -95,23 +96,22 @@ public:
         float x2 = points[smpl+2];
         float y2 = points[smpl+3];
 
-        float est_x2 = H_ptr[0] * x1 + H_ptr[1] * y1 + H_ptr[2];
-        float est_y2 = H_ptr[3] * x1 + H_ptr[4] * y1 + H_ptr[5];
-        float est_z2 = H_ptr[6] * x1 + H_ptr[7] * y1 + H_ptr[8]; // h8 = h33 = 1
+        float est_x2 = h11 * x1 + h12 * y1 + h13;
+        float est_y2 = h21 * x1 + h22 * y1 + h23;
+        float est_z2 = h31 * x1 + h32 * y1 + h33; // h33 = 1
 
         est_x2 /= est_z2;
         est_y2 /= est_z2;
 
-        float est_x1 = H_inv_ptr[0] * x2 + H_inv_ptr[1] * y2 + H_inv_ptr[2];
-        float est_y1 = H_inv_ptr[3] * x2 + H_inv_ptr[4] * y2 + H_inv_ptr[5];
-        float est_z1 = H_inv_ptr[6] * x2 + H_inv_ptr[7] * y2 + H_inv_ptr[8];
+        float est_x1 = hi11 * x2 + hi12 * y2 + hi13;
+        float est_y1 = hi21 * x2 + hi22 * y2 + hi23;
+        float est_z1 = hi31 * x2 + hi32 * y2 + hi33;
 
         est_x1 /= est_z1;
         est_y1 /= est_z1;
 
-        float error = 0;
-        error += sqrt ((x2 - est_x2) * (x2 - est_x2) + (y2 - est_y2) * (y2 - est_y2));
-        error += sqrt ((x1 - est_x1) * (x1 - est_x1) + (y1 - est_y1) * (y1 - est_y1));
+        float error = sqrt ((x2 - est_x2) * (x2 - est_x2) + (y2 - est_y2) * (y2 - est_y2));
+        error +=      sqrt ((x1 - est_x1) * (x1 - est_x1) + (y1 - est_y1) * (y1 - est_y1));
         // error >= 0
         return error/2;
     }

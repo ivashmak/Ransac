@@ -39,8 +39,9 @@ protected:
 public:
     int gc_iterations;
 
-    ~GraphCut() {
-        delete[] errors, gc_score, gc_model, inliers, sample, uniform_random_generator;
+    ~GraphCut() override {
+        delete[] errors; delete[] inliers; delete[] sample;
+        delete (gc_score); delete (gc_model); delete (uniform_random_generator);
     }
     void init (unsigned int points_size_, Model * model, Estimator * estimator_, Quality * quality_, NeighborsSearch neighborsType_) {
         neighborsType = neighborsType_;
@@ -55,16 +56,6 @@ public:
         gc_score = new Score;
         gc_model = new Model (model);
 
-//        if (points_size < 50) {
-//            num_sample = 2 * model->sample_size;
-//        } else if (points_size < 100) {
-//            num_sample = 3 * model->sample_size;
-//        } else if (points_size < 300) {
-//            num_sample = 4 * model->sample_size;
-//        } else {
-//            num_sample = 7 * model->sample_size;
-//        }
-
         num_sample = 7 * model->sample_size;
 
         sample_size = model->sample_size;
@@ -75,8 +66,9 @@ public:
         sample = new int [num_sample];
         uniform_random_generator = new UniformRandomGenerator;
 
-        if (model->reset_random_generator)
+        if (model->reset_random_generator) {
             uniform_random_generator->resetTime();
+        }
 
         lo_inner_iterations = model->lo_inner_iterations;
 
@@ -161,7 +153,7 @@ public:
                     }
                 }
 
-                quality->getNumberInliers(gc_score, gc_model, false, nullptr);
+                quality->getNumberInliers(gc_score, gc_model->returnDescriptor());
 
 //                std::cout << "GC score " << gc_score->inlier_number << "\n";
 
@@ -194,7 +186,7 @@ private:
          * This LSQ must give better model for next GC labeling.
          */
         // use gc_score variable, but we are not getting gc score.
-        quality->getNumberInliers(gc_score, model, true, inliers);
+        quality->getNumberInliers(gc_score, model->returnDescriptor(), model->threshold, true, inliers);
 
 //        std::cout << "inliers before one step LO " << gc_score->inlier_number << "\n";
 

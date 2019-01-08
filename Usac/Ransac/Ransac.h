@@ -25,7 +25,7 @@ protected:
     std::vector<std::vector<int>> neighbors_v;
 public:
     
-    ~Ransac () {}
+    ~Ransac () = default;
 
     Ransac (Model * model_,
             Sampler * sampler_,

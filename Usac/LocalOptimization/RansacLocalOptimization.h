@@ -141,7 +141,7 @@ public:
 
 //            std::cout << "evaluate model from sample\n";
             // Start evaluating a model with new threshold. And get inliers for iterative lo ransac.
-            quality->getNumberInliers(lo_score, lo_model, true, lo_inliers);
+            quality->getNumberInliers(lo_score, lo_model->returnDescriptor(), lo_model->threshold, true, lo_inliers);
 //            std::cout << lo_score->inlier_number << " = |I|\n";
 
             // continue, if score with bigger threshold is less than best score of ransac, it will not be better
@@ -171,7 +171,7 @@ public:
 //                std::cout << "\n";
                 if (!estimator->LeastSquaresFitting(lo_inliers, lo_score->inlier_number, *lo_model)) continue;
 //                std::cout << "evaluate model in iterative \n";
-                quality->getNumberInliers(lo_score, lo_model, true, lo_inliers);
+                quality->getNumberInliers(lo_score, lo_model->returnDescriptor(), lo_model->threshold, true, lo_inliers);
 
 //                std::cout << "lo iterative score  = " << lo_score->inlier_number << '\n';
 //                std::cout << "lo model  = " << lo_model->returnDescriptor() << '\n';

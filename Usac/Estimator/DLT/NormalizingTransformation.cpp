@@ -46,9 +46,9 @@ void GetNormalizingTransformation (const float * const pts, cv::Mat& norm_points
      *             0 1 -mean_pts1_y
      *             0 0 1]
      *
-     * pts1_T2 = [ avg_dist1  0          0
-     *             0         avg_dist1   0
-     *             0         0          1]
+     * pts1_T2 = [ avg_dist1  0         0
+     *             0         avg_dist1  0
+     *             0          0         1]
      *
      * T1 = [avg_dist1  0          -mean_pts1_x*avg_dist1
      *       0         avg_dist1   -mean_pts1_y*avg_dist1
@@ -63,12 +63,12 @@ void GetNormalizingTransformation (const float * const pts, cv::Mat& norm_points
                                     0, avg_dist2, -mean_pts2_y * avg_dist2,
                                     0, 0, 1);
 
-    float *T1_ptr = (float *) T1.data;
-    float *T2_ptr = (float *) T2.data;
+    auto *T1_ptr = (float *) T1.data;
+    auto *T2_ptr = (float *) T2.data;
 
     norm_points = cv::Mat_<float>(sample_number, 4);
 
-    float *norm_points_ptr = (float *) norm_points.data;
+    auto *norm_points_ptr = (float *) norm_points.data;
 
     /*
      * Normalized points
@@ -105,6 +105,7 @@ void GetNormalizingTransformation (const float * const pts, cv::Mat& norm_points
 
 
 
+// Weighted Normalizing Transformation
 void GetNormalizingTransformation (const float * const pts, cv::Mat& norm_points,
                                    const int * const sample, unsigned int sample_number, const float * const weights, cv::Mat &T1, cv::Mat &T2) {
 
@@ -146,12 +147,12 @@ void GetNormalizingTransformation (const float * const pts, cv::Mat& norm_points
             0, avg_dist2, -mean_pts2_y * avg_dist2,
             0, 0, 1);
 
-    float *T1_ptr = (float *) T1.data;
-    float *T2_ptr = (float *) T2.data;
+    auto *T1_ptr = (float *) T1.data;
+    auto *T2_ptr = (float *) T2.data;
 
     norm_points = cv::Mat_<float>(sample_number, 4);
 
-    float *norm_points_ptr = (float *) norm_points.data;
+    auto *norm_points_ptr = (float *) norm_points.data;
 
     unsigned int norm_pts_idx;
     for (unsigned int i = 0; i < sample_number; i++) {

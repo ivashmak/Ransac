@@ -143,7 +143,6 @@ bool Solve5PointEssential(std::vector<cv::Point2d> &pts1, std::vector<cv::Point2
     for(int i=0; i < a.rows; i++) {
         coeffs[i] = a.at<double>(a.rows-i-1);
     }
-
     // Find roots of polynomial
     rpoly_ak1(coeffs, &degrees, zeror, zeroi);
 

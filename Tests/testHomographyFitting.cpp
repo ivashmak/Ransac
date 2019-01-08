@@ -66,7 +66,7 @@ void Tests::testHomographyFitting() {
 
 
      model->setStandardRansacLO(0);
-     model->setGraphCutLO(0);
+     model->setGraphCutLO(1);
      model->setSprtLO(0);
      model->setCellSize(50);
      model->setNeighborsType(NeighborsSearch::Grid);

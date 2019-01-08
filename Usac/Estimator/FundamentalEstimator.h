@@ -7,8 +7,7 @@
 class FundamentalEstimator : public Estimator {
 private:
     const float * const points;
-    cv::Mat F;
-    float *F_ptr;
+    float f11, f12, f13, f21, f22, f23, f31, f32, f33;
     unsigned int points_size;
 public:
 
@@ -29,17 +28,19 @@ public:
     }
 
     void setModelParameters (const cv::Mat& model) override {
-        F = cv::Mat_<float>(model);
 
         /*
          * To make pointer from Mat class, this Mat class should exists as long as exists pointer
          * So this->F and this->F_inv must be global in class
          */
-        F_ptr = (float *) F.data;
+        auto * F_ptr = (float *) model.data;
+        f11 = F_ptr[0]; f12 = F_ptr[1]; f13 = F_ptr[2];
+        f21 = F_ptr[3]; f22 = F_ptr[4]; f23 = F_ptr[5];
+        f31 = F_ptr[6]; f32 = F_ptr[7]; f33 = F_ptr[8];
     }
 
     unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
-        cv::Mat_<float> F; // use global
+        cv::Mat_<float> F;
 
         unsigned int roots = SevenPointsAlgorithm(points, sample, F);
 
@@ -100,24 +101,23 @@ public:
         float x2 = points[smpl+2];
         float y2 = points[smpl+3];
 
-
-        float F_pt1_x = F_ptr[0] * x1 + F_ptr[1] * y1 + F_ptr[2];
-        float F_pt1_y = F_ptr[3] * x1 + F_ptr[4] * y1 + F_ptr[5];
+        float F_pt1_x = f11 * x1 + f12 * y1 + f13;
+        float F_pt1_y = f21 * x1 + f22 * y1 + f23;
 
         // Here F is transposed
-        float F_pt2_x = F_ptr[0] * x2 + F_ptr[3] * y2 + F_ptr[6];
-        float F_pt2_y = F_ptr[1] * x2 + F_ptr[4] * y2 + F_ptr[7];
+        float F_pt2_x = f11 * x2 + f21 * y2 + f31;
+        float F_pt2_y = f12 * x2 + f22 * y2 + f32;
 
-        float pt2_F_pt1 = x2 * F_pt1_x + y2 * F_pt1_y + F_ptr[6] * x1 +  F_ptr[7] * y1 +  F_ptr[8];
+        float pt2_F_pt1 = x2 * F_pt1_x + y2 * F_pt1_y + f31 * x1 +  f32 * y1 + f33; // f33 = 1
 
         float error = (pt2_F_pt1 * pt2_F_pt1) / (F_pt1_x * F_pt1_x + F_pt1_y * F_pt1_y + F_pt2_x * F_pt2_x + F_pt2_y * F_pt2_y);
 
         // debug
 //        cv::Mat pt1 = (cv::Mat_<double>(3,1) << x1, y1, 1);
 //        cv::Mat pt2 = (cv::Mat_<double>(3,1) << x2, y2, 1);
-//        cv::Mat F_double = cv::Mat_<double> (F);
+//        cv::Mat F_double = (cv::Mat_<double>(3,3) << f11, f12, f13, f21, f22, f23, f31, f32, f33);
 //        double error_opencv = cv::sampsonDistance(pt1, pt2, F_double);
-//        if (fabsf (error - (float) error_opencv) > 2) {
+//        if (fabsf (error - (float) error_opencv) > 1) {
 //            std::cout << "error " << error << " VS opencv error " << error_opencv << "\n";
 //            std::cout << "difference " << fabsf (error - (float) error_opencv) << "\n";
 //            std::cout << "Check GetError in Fundamental Matrix Estimator!\n";
@@ -140,14 +140,12 @@ public:
             x2 = points[smpl+2];
             y2 = points[smpl+3];
 
-            F_pt1_x = F_ptr[0] * x1 + F_ptr[1] * y1 + F_ptr[2];
-            F_pt1_y = F_ptr[3] * x1 + F_ptr[4] * y1 + F_ptr[5];
+            F_pt1_x = f11 * x1 + f12 * y1 + f13;
+            F_pt1_y = f21 * x1 + f22 * y1 + f23;
+            F_pt2_x = f11 * x2 + f21 * y2 + f31;
+            F_pt2_y = f12 * x2 + f22 * y2 + f32;
 
-            // Here F is transposed
-            F_pt2_x = F_ptr[0] * x2 + F_ptr[3] * y2 + F_ptr[6];
-            F_pt2_y = F_ptr[1] * x2 + F_ptr[4] * y2 + F_ptr[7];
-
-            pt2_F_pt1 = x2 * F_pt1_x + y2 * F_pt1_y + F_ptr[6] * x1 +  F_ptr[7] * y1 +  F_ptr[8];
+            pt2_F_pt1 = x2 * F_pt1_x + y2 * F_pt1_y + f31 * x1 +  f32 * y1 +  f33;
             w = (F_pt1_x * F_pt1_x + F_pt1_y * F_pt1_y + F_pt2_x * F_pt2_x + F_pt2_y * F_pt2_y);
             weights[i] = w;
 

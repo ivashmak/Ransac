@@ -95,7 +95,7 @@ public:
             iterations++;
             //
 
-            quality->getNumberInliers(score, model, true, inliers);
+            quality->getNumberInliers(score, model->returnDescriptor(), model->threshold, true, inliers);
 
             std::cout << "Greedy LO, score " << score->inlier_number << "\n";
 //            std::cout << "num relaxations " << num_relaxations << "\n";

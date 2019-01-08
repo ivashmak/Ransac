@@ -66,44 +66,41 @@ public:
      * Here score = inlier number.
      * To get real score use getScore
      */
-    inline void getNumberInliers (Score * score, Model * model, bool get_inliers=false,
+    inline void getNumberInliers (Score * score, const cv::Mat& model, float threshold=0, bool get_inliers=false,
                                   int * inliers= nullptr, bool parallel=false) {
-        float threshold = model->threshold;
-        estimator->setModelParameters(model->returnDescriptor());
+        if (threshold == 0) {
+            threshold = this->threshold;
+        }
+        estimator->setModelParameters(model);
 
-        score->inlier_number = 0;
+        unsigned int inlier_number = 0;
 
         if (parallel) {
-            int score_inlier_number = 0;
-//            std::cout << "PARALLEL MODE\n";
-
-            #pragma omp parallel for reduction (+:score_inlier_number)
+            #pragma omp parallel for reduction (+:inlier_number)
             for (unsigned int point = 0; point < points_size; point++) {
                 if (estimator->GetError(point) < threshold) {
-                    score_inlier_number++;
+                    inlier_number++;
                 }
             }
-
-            score->inlier_number = score_inlier_number;
-
         } else {
             if (get_inliers) {
                 for (unsigned int point = 0; point < points_size; point++) {
                     if (estimator->GetError(point) < threshold) {
-                        inliers[score->inlier_number++] = point;
+                        inliers[inlier_number++] = point;
                     }    
                 }
             } else {
                 for (unsigned int point = 0; point < points_size; point++) {
                     if (estimator->GetError(point) < threshold) {
-                        score->inlier_number++;
+                        inlier_number++;
                     }
                 }
             }
        }
 
-        score->score = score->inlier_number;
-	}
+        score->inlier_number = inlier_number;
+        score->score = inlier_number;
+    }
 
 
 	virtual void getScore (const float * const points, Score * score, const cv::Mat& model, int * inliers) {

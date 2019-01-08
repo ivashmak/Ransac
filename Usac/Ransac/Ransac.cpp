@@ -73,6 +73,9 @@ void Ransac::run(cv::InputArray input_points) {
     if (is_prosac) {
         prosac_sampler = (ProsacSampler *) sampler;
         prosac_termination_criteria = (ProsacTerminationCriteria *) termination_criteria;
+//        unsigned int t = 10;
+//        prosac_sampler->setTerminationLength(prosac_termination_criteria->getStoppingLength());
+//        prosac_sampler->setTerminationLength(&t);
     }
     //--------------------------------------------
 
@@ -186,7 +189,7 @@ void Ransac::run(cv::InputArray input_points) {
 //                }
             } else {
 //                std::cout << "Get quality score\n";
-                 quality->getNumberInliers(current_score, models[i]);
+                 quality->getNumberInliers(current_score, models[i]->returnDescriptor());
             }
 
 //            std::cout << "Ransac, iteration " << iters << "; score " << current_score->inlier_number << "\n";
@@ -196,9 +199,9 @@ void Ransac::run(cv::InputArray input_points) {
 
 //                  std::cout << "current score = " << current_score->score << '\n';
 
-                 if (current_score->inlier_number > min_inlier_count_for_LO) {
-                     irls->getModelScore(current_score, models[i]);
-                 }
+//                 if (current_score->inlier_number > min_inlier_count_for_LO) {
+//                     irls->getModelScore(current_score, models[i]);
+//                 }
                 
                 // update current model and current score by inner and iterative local optimization
                 // if inlier number is too small, do not update
@@ -290,7 +293,7 @@ void Ransac::run(cv::InputArray input_points) {
         //
 //      std::cout << "end get non minimal score\n";
 
-        quality->getNumberInliers(current_score, non_minimal_model, true, max_inliers);
+        quality->getNumberInliers(current_score, non_minimal_model->returnDescriptor(), non_minimal_model->threshold, true, max_inliers);
 
         // Priority is for non minimal model estimation
 //        std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';

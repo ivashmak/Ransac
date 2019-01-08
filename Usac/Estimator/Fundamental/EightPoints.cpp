@@ -59,7 +59,7 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, un
 
     // -------------- 8 points with SVD ---------------------
     cv::Mat_<float> A(sample_number, 9);
-    float * A_ptr = (float *) A.data;
+    auto * A_ptr = (float *) A.data;
     for (unsigned int i = 0; i < sample_number; i++) {
         norm_points_idx = 4*i;
         x1 = norm_points_ptr[norm_points_idx];
@@ -126,7 +126,7 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, un
      *
      */
 
-    float * t2 = (float *) T2.data;
+    auto * t2 = (float *) T2.data;
 
     // Transpose T2
     t2[6] = t2[2];

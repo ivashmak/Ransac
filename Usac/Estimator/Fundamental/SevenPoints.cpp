@@ -59,7 +59,7 @@ unsigned int SevenPointsAlgorithm (const float * const pts, const int * const sa
 
     // form a linear system: i-th row of A(=a) represents
     // the equation: (m2[i], 1)'*F*(m1[i], 1) = 0
-    float * A_ptr = (float *) A.data;
+    auto * A_ptr = (float *) A.data;
 
     unsigned int smpl;
     float x1, y1, x2, y2;
@@ -133,7 +133,7 @@ unsigned int SevenPointsAlgorithm (const float * const pts, const int * const sa
 
     F  = cv::Mat_<float>(nroots*3,3);
 
-    float * F_ptr = (float *) F.data;
+    auto * F_ptr = (float *) F.data;
 
     for (int k = 0; k < nroots; k++ , F_ptr += 9) {
         // for each root form the fundamental matrix

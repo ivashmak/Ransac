@@ -5,7 +5,7 @@ bool DLT (const float * const points, const int * const sample, int sample_numbe
     int smpl;
 
     cv::Mat_<float> A (2*sample_number, 9), w, u, vt;
-    float * A_ptr = (float *) A.data;
+    auto * A_ptr = (float *) A.data;
 
     for (int i = 0; i < sample_number; i++) {
         smpl = 4*sample[i];
@@ -150,7 +150,7 @@ bool DLT (const float * const points, int sample_number, cv::Mat &H) {
     // --------------- DLT with Singular Value Decomposition -----------
 
     cv::Mat_<float> A (2*sample_number, 9), S, U, Vt;
-    float * A_ptr = (float *) A.data;
+    auto * A_ptr = (float *) A.data;
 
     for (unsigned int i = 0; i < sample_number; i++) {
 //        std::cout << i << "\n";
@@ -182,8 +182,6 @@ bool DLT (const float * const points, int sample_number, cv::Mat &H) {
         (*A_ptr++) = y2;
     }
 
-//    std::cout << "svd compute\n";
-//    std::cout << A << "\n\n";
     cv::SVD::compute(A, S, U, Vt);
 //    std::cout << "svd computed\n";
     // ------------------------------------------------------------
@@ -213,8 +211,8 @@ bool DLTLeastSquares (const float * const points, int sample_number, cv::Mat &H)
      */
     cv::Mat_<float> b (2*sample_number, 1);
     cv::Mat_<float> A (2*sample_number, 8);
-    float * A_ptr = (float *) A.data;
-    float * b_ptr = (float *) b.data;
+    auto * A_ptr = (float *) A.data;
+    auto * b_ptr = (float *) b.data;
     unsigned int smpl;
     float x1, y1, x2, y2;
 

@@ -17,18 +17,21 @@ protected:
     double t_n;
     int n;
     double t_n_prime;
-    RandomGenerator *array_rand_gen;
+    UniformRandomGenerator * uniformRandomGenerator;
 public:
+    ~ProsacSimpleSampler() override {
+        delete (uniformRandomGenerator);
+    }
+
     ProsacSimpleSampler (unsigned int sample_size, unsigned int N_points, bool reset_time = true) {
-        array_rand_gen = new ArrayRandomGenerator;
+        uniformRandomGenerator = new UniformRandomGenerator;
+        if (reset_time) uniformRandomGenerator->resetTime();
         initSample(sample_size, N_points);
     }
 
-    void initSample (unsigned int sample_size, unsigned int points_size, bool reset_time = true) {
-        if (reset_time) array_rand_gen->resetTime();
-
-        this->sample_size = sample_size;
-        this->points_size = points_size;
+    void initSample (unsigned int sample_size_, unsigned int points_size_) {
+        sample_size = sample_size_;
+        points_size = points_size_;
 
         n = sample_size;
         t_n = 1000;
@@ -57,11 +60,13 @@ public:
 
         // Semi-random sample Mt of size m
         if (t_n_prime < kth_sample_number) {
-            array_rand_gen->resetGenerator(0, n-1);
-            array_rand_gen->generateUniqueRandomSet(sample, sample_size);
+            uniformRandomGenerator->resetGenerator(0, n-1);
+            uniformRandomGenerator->setSubsetSize(sample_size);
+            uniformRandomGenerator->generateUniqueRandomSet(sample);
         } else {
-            array_rand_gen->resetGenerator(0, n-2);
-            array_rand_gen->generateUniqueRandomSet(sample, sample_size-1);
+            uniformRandomGenerator->resetGenerator(0, n-2);
+            uniformRandomGenerator->setSubsetSize(sample_size-1);
+            uniformRandomGenerator->generateUniqueRandomSet(sample);
             sample[sample_size-1] = n; // Make the last point from the nth position.
         }
 
@@ -76,7 +81,7 @@ public:
     }
 
 
-    // Original theia
+    // Original theia (Just for compare)
     int kth_sample_number_ = 1;
     bool Sample(std::vector<int>& subset) {
         // Set t_n according to the PROSAC paper's recommendation.

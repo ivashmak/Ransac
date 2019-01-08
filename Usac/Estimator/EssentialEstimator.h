@@ -8,8 +8,7 @@
 class EssentialEstimator : public Estimator {
 private:
     const float * const points;
-    cv::Mat E;
-    float * E_ptr;
+    float e11, e12, e13, e21, e22, e23, e31, e32, e33;
 public:
 
     /*
@@ -25,22 +24,18 @@ public:
     }
 
     void setModelParameters (const cv::Mat& model) override {
-        E = cv::Mat_<float>(model);
-//        E = model;
-
-        /*
-         * To make pointer from Mat class, this Mat class should exists as long as exists pointer
-         * So this->E and this->E_inv must be global in class
-         */
-        E_ptr = (float *) E.data;
+        float *  E_ptr = (float *) model.data;
+        e11 = E_ptr[0]; e12 = E_ptr[1]; e13 = E_ptr[2];
+        e21 = E_ptr[3]; e22 = E_ptr[4]; e23 = E_ptr[5];
+        e31 = E_ptr[6]; e32 = E_ptr[7]; e33 = E_ptr[8];
     }
 
     /*
      * E = K1^T F K2
      *
      * y'^T E y = 0, normalized points by third coordinate.
-     * y' = (x'1 x'2 x'3) / x'3
-     * y  = (x1  x2  x3)  / x3
+     * x' = (y'1 y'2 y'3) / y'3
+     * x  = (y1  y2  y3)  / y3
      */
     unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         cv::Mat_<float> E;
@@ -49,10 +44,6 @@ public:
 //        unsigned int models_count2 = FivePointsOpenCV (points, sample, E2);
 
         std::cout << "models count " << models_count << "\n";
-
-        if (models_count == 0) {
-            return 0;
-        }
 
         // todo: fix for more than 3 solutions
         for (unsigned int i = 0; i < std::min ((unsigned int)3, models_count); i++) {
@@ -82,14 +73,14 @@ public:
         float y2 = points[smpl+3];
 
         // pt2^T * E, line 1
-        float l1 = *(E_ptr)* x2 + *(E_ptr + 3) * y2 + *(E_ptr + 6);
-        float l2 = *(E_ptr + 1) * x2 + *(E_ptr + 4) * y2 + *(E_ptr + 7);
-        float l3 = *(E_ptr + 2) * x2 + *(E_ptr + 5) * y2 + *(E_ptr + 8);
+        float l1 = e11 * x2 + e21 * y2 + e31;
+        float l2 = e12 * x2 + e22 * y2 + e32;
+        float l3 = e13 * x2 + e23 * y2 + e33;
 
         // E * pt1, line 2
-        float t1 = *(E_ptr)* x1 + *(E_ptr + 1) * y1 + *(E_ptr + 2);
-        float t2 = *(E_ptr + 3) * x1 + *(E_ptr + 4) * y1 + *(E_ptr + 5);
-        float t3 = *(E_ptr + 6) * x1 + *(E_ptr + 7) * y1 + *(E_ptr + 8);
+        float t1 = e11 * x1 + e12 * y1 + e13;
+        float t2 = e21 * x1 + e22 * y1 + e23;
+        float t3 = e31 * x1 + e32 * y1 + e33;
 
         // distance from pt1 to line 1
         float a1 = l1 * x1 + l2 * y1 + l3;

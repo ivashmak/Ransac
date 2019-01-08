@@ -98,7 +98,7 @@ public:
             Model * r_model = new Model (model);
             Score * r_score = new Score;
             estimator->EstimateModelNonMinimalSample(sample, num_samples, *r_model);
-            quality->getNumberInliers(r_score, r_model);
+            quality->getNumberInliers(r_score, r_model->returnDescriptor(), r_model->threshold);
             std::cout << "irls score without weights " << r_score->inlier_number << "\n";
             // -----c
 
@@ -106,7 +106,7 @@ public:
 
         }
 
-        quality->getNumberInliers(irls_score, irls_model);
+        quality->getNumberInliers(irls_score, irls_model->returnDescriptor());
         std::cout << "irls iteration 20; inliers size " << irls_score->inlier_number << "\n";
 
         if (irls_score->bigger(score)) {

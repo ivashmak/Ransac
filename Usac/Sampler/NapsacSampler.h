@@ -24,9 +24,9 @@ private:
 
 public:
 
-    ~NapsacSampler() {
-        delete next_neighbors;
-        delete random_generator;
+    ~NapsacSampler() override {
+        delete[] next_neighbors;
+        delete (random_generator);
     }
 
     /*
@@ -40,9 +40,9 @@ public:
         assert(points_size_ != 0);
 
 //        std::cout << k_nearest_neighbors_indices.getMat() << "\n";
-        this->knn = model->k_nearest_neighbors;
-        this->sample_size = model->sample_size;
-        this->points_size = points_size_;
+        knn = model->k_nearest_neighbors;
+        sample_size = model->sample_size;
+        points_size = points_size_;
 
         /* check if sample number minus 1 (initial point) is less or equal than k nearest neighbors
          * so for line is enough 1 neighbor.
@@ -51,10 +51,9 @@ public:
         assert(sample_size-1 <= knn);
 
         random_generator = new ArrayRandomGenerator;
+        if (reset_time) random_generator->resetTime();
         random_generator->resetGenerator(0, points_size-1);
         random_generator->setSubsetSize(sample_size);
-
-        if (reset_time) random_generator->resetTime();
 
         // allocate as zeros (starting from 1 neighbors)
         next_neighbors = (int *) calloc (points_size, sizeof (int));

@@ -7,6 +7,7 @@
 #include "Sampler.h"
 #include "../Model.h"
 #include "../../RandomGenerator/UniformRandomGenerator.h"
+#include "../TerminationCriteria/ProsacTerminationCriteria.h"
 
 class ProsacSampler : public Sampler {
 protected:
@@ -25,8 +26,15 @@ protected:
     unsigned int points_size;
     
     RandomGenerator * randomGenerator;
+
+    unsigned int * termination_length;
 public:
-    ~ProsacSampler () {
+    // set points to uint of termination length
+    void setTerminationLength (unsigned int * termination_length_) {
+        termination_length = termination_length_;
+    }
+
+    ~ProsacSampler () override {
         if (initialized) {
             delete[] growth_function;
             delete (randomGenerator);
@@ -108,7 +116,8 @@ public:
     
     void generateSampleProsac (int * sample, unsigned int termination_length) {
 //        std::cout << "subset size " << subset_size << "\n";
-//        std::cout << "stopping length " << termination_length << "\n";
+        std::cout << "stopping length " << termination_length << "\n";
+//        std::cout < < "stopping length (this) " << *this->termination_length << "\n";
 
         // revert to RANSAC-style sampling if maximum number of PROSAC samples have been tested
         if (hypCount > growth_max_samples) {

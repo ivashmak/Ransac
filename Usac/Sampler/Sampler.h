@@ -7,7 +7,7 @@ class Sampler {
 protected:
     unsigned int k_iterations = 0, points_size = 0, sample_size = 0;
 public:
-    ~Sampler() = default;
+    virtual ~Sampler() = default;
 
     /*
      * generate sample. Considering that all parameters are defined (including sample_size, points_size and
@@ -16,11 +16,11 @@ public:
     virtual void generateSample (int *sample) = 0;
 
     virtual void setSampleSize (unsigned int sample_size_) {
-        std::cout << "YOU ARE IN NOT IMPLEMENTED FUNCTION setSampleSize!\n";
+        std::cout << "NOT IMPLEMENTED FUNCTION setSampleSize!\n";
     }
 
     virtual void setPointsSize (unsigned int points_size_) {
-        std::cout << "YOU ARE IN NOT IMPLEMENTED FUNCTION setPointsSize!\n";
+        std::cout << "NOT IMPLEMENTED FUNCTION setPointsSize!\n";
     }
 
     /*

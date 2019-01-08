@@ -11,11 +11,9 @@ void GraphCut::labeling (const cv::Mat& model, Score * score, int * inliers) {
         e->add_node();
     }
 
-    float energy, distance;
+    float energy, energy1, energy2, distance, distance1, distance2;
 
-    score->inlier_number = 0;
-
-    for (int i = 0; i < points_size; ++i) {
+    for (unsigned int i = 0; i < points_size; ++i) {
         distance = estimator->GetError(i);
         // save errors to avoid next error calculating
         errors[i] = distance;
@@ -26,17 +24,16 @@ void GraphCut::labeling (const cv::Mat& model, Score * score, int * inliers) {
     }
 
 
-    float distance1, distance2, energy1, energy2;
-    int neighbors_row, n_idx;
-    float e00, e01, e10, e11;
+    unsigned int neighbors_row, n_idx;
+    float e00, e01 = 1, e10 = 1, e11;
     if (neighborsType == NeighborsSearch::Nanoflann) {
-        for (int i = 0; i < points_size; ++i) {
+        for (unsigned int i = 0; i < points_size; ++i) {
             distance1 = errors[i];
 
             energy1 = exp(-(distance1 * distance1) / sqr_thr);
 
             neighbors_row = knn * i;
-            for (int j = 0; j < knn; ++j) { // neighbors are reduced by first neighbor (itself)
+            for (unsigned int j = 0; j < knn; ++j) { // neighbors are reduced by first neighbor (itself)
 
                 n_idx = neighbors[neighbors_row + j];
 
@@ -49,9 +46,7 @@ void GraphCut::labeling (const cv::Mat& model, Score * score, int * inliers) {
 
                 energy2 = exp(-(distance2 * distance2) / sqr_thr);
 
-                e00 = 0.5 * (energy1 + energy2);
-                e01 = 1;
-                e10 = 1;
+                e00 = (energy1 + energy2) / 2;
                 e11 = 1 - e00; // 1 - 0.5 * (energy1 + energy2);
 
                 // B -= A; C -= D;
@@ -71,23 +66,17 @@ void GraphCut::labeling (const cv::Mat& model, Score * score, int * inliers) {
         }
     } else {
         unsigned int neighbors_i_size;
-        for (int i = 0; i < points_size; ++i) {
+        for (unsigned int i = 0; i < points_size; ++i) {
             distance1 = errors[i];
             energy1 = exp(-(distance1 * distance1) / sqr_thr);
-//            std::cout << neighbors_v[i].size() << " = neighbors size\n";
             neighbors_i_size = neighbors_v[i].size();
-            for (int j = 0; j < neighbors_i_size; ++j) {
+            for (unsigned int j = 0; j < neighbors_i_size; ++j) {
                 n_idx = neighbors_v[i][j];
                 distance2 = errors[n_idx];
                 energy2 = exp(-(distance2 * distance2) / sqr_thr);
-                e00 = 0.5 * (energy1 + energy2);
-                e01 = 1;
-                e10 = 1;
+                e00 = (energy1 + energy2) / 2;
                 e11 = 1 - e00;
                 if (e00 + e11 > e01 + e10 || std::isnan (e00)) {
-//                std::cout << "\033[1;31m"
-//                             "Non-submodular expansion term detected;"
-//                             "smooth costs must be a metric for expansion  \033[0m\n";
                     continue;
                 }
                 e->add_term2(i, n_idx, e00 * spatial_coherence, e01 * spatial_coherence, e10 * spatial_coherence, e11 * spatial_coherence);
@@ -98,7 +87,7 @@ void GraphCut::labeling (const cv::Mat& model, Score * score, int * inliers) {
     e->minimize();
 
     score->inlier_number = 0;
-    for (int i = 0; i < points_size; ++i) {
+    for (unsigned int i = 0; i < points_size; ++i) {
         if (e->what_segment(i) == Graph<float, float, float>::SINK) {
             inliers[score->inlier_number++] = i;
         }

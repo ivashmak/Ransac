@@ -101,7 +101,7 @@ public:
             }
             Model * temp_model = new Model(slo_model);
             estimator->EstimateModelNonMinimalSample(sample, num_samples, *temp_model);
-            quality->getNumberInliers(slo_score, temp_model);
+            quality->getNumberInliers(slo_score, temp_model->returnDescriptor());
             std::cout << "sorted lo random subset " << slo_score->inlier_number << "\n";
             // -----
 
