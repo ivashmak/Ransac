@@ -58,7 +58,8 @@ add_executable(
         Usac/Estimator/Fundamental/FundemantalSolver.h
 
         Usac/LocalOptimization/LocalOptimization.h
-        Usac/LocalOptimization/RansacLocalOptimization.h
+        Usac/LocalOptimization/InnerLocalOptimization.h
+        Usac/LocalOptimization/IterativeLocalOptimization.h
         Usac/LocalOptimization/GraphCut.cpp Usac/LocalOptimization/GraphCut.h
         Usac/LocalOptimization/GreedyLocalOptimization.h
         Usac/LocalOptimization/IRLS.h

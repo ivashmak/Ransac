@@ -14,17 +14,20 @@ void Tests::test (cv::Mat points,
 //    std::cout << "get neighbors\n";
     std::vector<std::vector<int>> neighbors_v;
 
-    // calculate time of nearest neighbor calculating
-    auto begin_time = std::chrono::steady_clock::now();
-    if (model->neighborsType == NeighborsSearch::Nanoflann) {
-        nn.getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
-    } else {
-        nn.getGridNearestNeighbors(points, model->cell_size, neighbors_v);
-        std::cout << "GOT neighbors\n";
+    long nn_time = 0;
+    if (model->sampler == SAMPLER::Napsac || model->GraphCutLO) {
+        // calculate time of nearest neighbor calculating
+        auto begin_time = std::chrono::steady_clock::now();
+        if (model->neighborsType == NeighborsSearch::Nanoflann) {
+            nn.getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
+        } else {
+            nn.getGridNearestNeighbors(points, model->cell_size, neighbors_v);
+            std::cout << "GOT neighbors\n";
+        }
+        auto end_time = std::chrono::steady_clock::now();
+        std::chrono::duration<float> fs = end_time - begin_time;
+        nn_time = std::chrono::duration_cast<std::chrono::microseconds>(fs).count();
     }
-    auto end_time = std::chrono::steady_clock::now();
-    std::chrono::duration<float> fs = end_time - begin_time;
-    long nn_time = std::chrono::duration_cast<std::chrono::microseconds>(fs).count();
 
 //    std::cout << "got neighbors\n";
 
@@ -54,11 +57,14 @@ void Tests::test (cv::Mat points,
     Logging logResult;
 
     Ransac ransac (model, sampler, termination_criteria, quality, estimator);
-    if (model->neighborsType == NeighborsSearch::Nanoflann) {
-        ransac.setNeighbors(neighbors);
-    } else {
-        ransac.setNeighbors(neighbors_v);
+    if (model->sampler == SAMPLER::Napsac || model->GraphCutLO) {
+        if (model->neighborsType == NeighborsSearch::Nanoflann) {
+            ransac.setNeighbors(neighbors);
+        } else {
+            ransac.setNeighbors(neighbors_v);
+        }
     }
+
 //    std::cout << "RUN ransac\n";
     ransac.run(points);
 

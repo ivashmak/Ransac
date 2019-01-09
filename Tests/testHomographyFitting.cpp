@@ -22,7 +22,8 @@ void Tests::testHomographyFitting() {
     std::string img_name = "Brussels";
 
     ImageData gt_data (dataset, img_name);
-    std::vector<int> gt_inliers = gt_data.getGTInliers();
+    std::vector<int> gt_inliers;
+//    gt_inliers = gt_data.getGTInliers();
     cv::Mat points;
     // points = gt_data.getPoints();
 
@@ -43,7 +44,7 @@ void Tests::testHomographyFitting() {
 
 
 // ------------ get Ground truth inliers and model ----------------------
-//    getGTInliersFromGTModelHomography ("../dataset/homography/"+img_name+"_model.txt", points, threshold, gt_inliers);
+    getGTInliersFromGTModelHomography ("../dataset/homography/"+img_name+"_model.txt", points, threshold, gt_inliers);
 //    getGTInliersFromGTModelHomography ("../dataset/EVD/h/"+img_name+".txt", points, threshold, gt_inliers);
     // -------------------------------------------
     std::cout << "gt inliers " << gt_inliers.size() << "\n";
@@ -65,16 +66,16 @@ void Tests::testHomographyFitting() {
 //     -------------------------------------------------
 
 
-     model->setStandardRansacLO(0);
-     model->setGraphCutLO(1);
+     model->setStandardRansacLO(1);
+     model->setGraphCutLO(0);
      model->setSprtLO(0);
      model->setCellSize(50);
      model->setNeighborsType(NeighborsSearch::Grid);
-     model->ResetRandomGenerator(true);
+     model->ResetRandomGenerator(false);
 
-     test (points, model, img_name, dataset, true, gt_inliers);
+//     test (points, model, img_name, dataset, true, gt_inliers);
 
-//    getStatisticalResults(points, model, 500, true, gt_inliers, false, nullptr);
+    getStatisticalResults(points, model, 500, true, gt_inliers, false, nullptr);
 
 //     storeResults();
 }

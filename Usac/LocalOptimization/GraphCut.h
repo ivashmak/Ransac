@@ -26,8 +26,8 @@ protected:
     int * sample;
     UniformRandomGenerator * uniform_random_generator;
 
-    int num_sample;
-    int sample_size;
+    unsigned int sample_limit;
+    unsigned int sample_size;
     unsigned int lo_inner_iterations;
     float * errors;
 
@@ -56,16 +56,17 @@ public:
         gc_score = new Score;
         gc_model = new Model (model);
 
-        num_sample = 7 * model->sample_size;
+        sample_limit = 7 * model->sample_size;
 
         sample_size = model->sample_size;
 
         errors = new float[points_size];
 
         inliers = new int [points_size];
-        sample = new int [num_sample];
-        uniform_random_generator = new UniformRandomGenerator;
+        sample = new int [sample_limit];
 
+        uniform_random_generator = new UniformRandomGenerator;
+        uniform_random_generator->setSubsetSize(sample_limit);
         if (model->reset_random_generator) {
             uniform_random_generator->resetTime();
         }
@@ -95,48 +96,50 @@ public:
         neighbors = const_cast<int *>(neighbors_);
     }
 
+    // calculate lambda
+    void calculateSpatialCoherence (float inlier_number) {
+        spatial_coherence = (points_size * (inlier_number / points_size)) / static_cast<float>(neighbor_number);
+    }
+
 	void labeling (const cv::Mat& model, Score * score, int * inliers);
 
     void GraphCutLO (Model * best_model, Score * best_score) {
 //        std::cout << "begin best score " << best_score->inlier_number << "\n";
+        // improve best model by non minimal estimation
 
-        gc_model->setDescriptor(best_model->returnDescriptor());
+//        OneStepLO (best_model);
+        // update score after one step lo
+//        quality->getNumberInliers(best_score, best_model->returnDescriptor());
 
-        OneStepLO (gc_model);
+//        std::cout << "best score after one step lo " << best_score->inlier_number << "\n";
 
-        bool is_best_model_updated;
-        while (true) {
+        bool is_best_model_updated = true;
+        while (is_best_model_updated) {
+            is_best_model_updated = false;
+//            std::cout << "while loop\n";
+
             // build graph problem
             // apply graph cut to G
+//            calculateSpatialCoherence(best_score->inlier_number);
             labeling(best_model->returnDescriptor(), gc_score, inliers);
 //            std::cout << "virtual inliers " << gc_score->inlier_number << "\n";
 
 //             if number of "virtual" inliers is too small then break
             if (gc_score->inlier_number <= sample_size) break;
-            is_best_model_updated = false;
+            unsigned int labeling_inliers_size = gc_score->inlier_number;
 
-            // sample to generate min (|I_7m|, |I|)
-            unsigned int gc_sample_size = std::min (num_sample, gc_score->inlier_number);
-
-            // reset random generator
-            uniform_random_generator->setSubsetSize(gc_sample_size);
-            // generate random subset in range <0; |I|>
-            uniform_random_generator->resetGenerator(0, gc_score->inlier_number-1);
-
-            unsigned int inner_inliers_size = gc_score->inlier_number;
 //            std::cout << gc_sample_size << " vs " << inner_inliers_size << "\n";
             for (unsigned int iter = 0; iter < lo_inner_iterations; iter++) {
-                if (gc_sample_size < inner_inliers_size) {
-
-                    uniform_random_generator->generateUniqueRandomSet(sample);
-                    // set sample as inliers from labeling
-                    for (int smpl = 0; smpl < gc_sample_size; smpl++) {
+                // sample to generate min (|I_7m|, |I|)
+                if (labeling_inliers_size > sample_limit) {
+                    // generate random subset in range <0; |I|>
+                    uniform_random_generator->generateUniqueRandomSet(sample, labeling_inliers_size-1);
+                    // sample from inliers of labeling
+                    for (unsigned int smpl = 0; smpl < sample_limit; smpl++) {
                         sample[smpl] = inliers[sample[smpl]];
-//                         std::cout << sample[smpl] << " ";
                     }
-//                     std::cout << "\n";
-                    if (! estimator->EstimateModelNonMinimalSample(sample, gc_sample_size, *gc_model)) {
-                        continue;
+                    if (! estimator->EstimateModelNonMinimalSample(sample, sample_limit, *gc_model)) {
+                        break;
                     }
                 } else {
                     if (iter > 0) {
@@ -147,8 +150,7 @@ public:
                          */
                         break;
                     }
-                    if (! estimator->EstimateModelNonMinimalSample(inliers, inner_inliers_size, *gc_model)) {
-                        // break loop of inner iterations if estimation failed.
+                    if (! estimator->EstimateModelNonMinimalSample(inliers, labeling_inliers_size, *gc_model)) {
                         break;
                     }
                 }
@@ -159,7 +161,7 @@ public:
 
                 if (gc_score->bigger(best_score)) {
 //                    std::cout << "Update best score\n";
-//                     std::cout << "UPDATE best score " << gc_score->inlier_number << "\n";
+//                    std::cout << "UPDATE best score " << gc_score->inlier_number << "\n";
                     is_best_model_updated = true;
                     best_score->copyFrom(gc_score);
                     best_model->setDescriptor(gc_model->returnDescriptor());
@@ -169,14 +171,9 @@ public:
                 gc_iterations++;
                 //
             }
-
-            // break if best score was not updated
-            if (! is_best_model_updated) {
-                break;
-            }
         }
 
-//        std::cout << "end best score " << best_score->inlier_number << "\n";
+        std::cout << "end best score " << best_score->inlier_number << "\n";
     }
 
 private:
@@ -188,34 +185,35 @@ private:
         // use gc_score variable, but we are not getting gc score.
         quality->getNumberInliers(gc_score, model->returnDescriptor(), model->threshold, true, inliers);
 
-//        std::cout << "inliers before one step LO " << gc_score->inlier_number << "\n";
-
-        unsigned int sample_generate = std::min ((unsigned int)gc_score->inlier_number, model->lo_sample_size);
-
-        if (sample_generate < model->sample_size)
+        // return if not enough inliers
+        if (gc_score->inlier_number <= model->sample_size)
             return;
 
-
-        if (model->sampler == SAMPLER::Prosac) {
-            // if we use prosac sample, so points are ordered by some score,
-            // so take first N inliers, because they have higher score
-            for (unsigned int smpl = 0; smpl < sample_generate; smpl++) {
-                sample[smpl] = inliers[smpl];
-            }
-        } else {
-            uniform_random_generator->setSubsetSize(sample_generate);
-            uniform_random_generator->resetGenerator(0, gc_score->inlier_number -1);
-            uniform_random_generator->generateUniqueRandomSet(sample);
-            for (unsigned int smpl = 0; smpl < sample_generate; smpl++) {
-                sample[smpl] = inliers[sample[smpl]];
-            }
+        unsigned int one_step_lo_sample_limit = model->lo_sample_size;
+        if (sample_limit < one_step_lo_sample_limit) {
+            one_step_lo_sample_limit = sample_limit;
         }
 
-        estimator->EstimateModelNonMinimalSample(sample, sample_generate, *model);
+        if (gc_score->inlier_number < one_step_lo_sample_limit) {
+            // if score is less than limit number sample then take estimation of all inliers
+            estimator->EstimateModelNonMinimalSample(inliers, gc_score->inlier_number, *model);
+        } else {
+            // otherwise take some inliers as sample at random
+            if (model->sampler == SAMPLER::Prosac) {
+                // if we use prosac sample, so points are ordered by some score,
+                // so take first N inliers, because they have higher score
+                for (unsigned int smpl = 0; smpl < one_step_lo_sample_limit; smpl++) {
+                    sample[smpl] = inliers[smpl];
+                }
+            } else {
+                uniform_random_generator->generateUniqueRandomSet(sample, one_step_lo_sample_limit, gc_score->inlier_number-1);
+                for (unsigned int smpl = 0; smpl < one_step_lo_sample_limit; smpl++) {
+                    sample[smpl] = inliers[sample[smpl]];
+                }
+            }
 
-        // debug
-//        quality->getNumberInliers(gc_score, model);
-//        std::cout << "inliers after one step LO " << gc_score->inlier_number << "\n";
+            estimator->EstimateModelNonMinimalSample(sample, one_step_lo_sample_limit, *model);
+        }
     }
 };
 

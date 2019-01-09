@@ -22,23 +22,6 @@ public:
 
     virtual void generateUniqueRandomSet (int * sample) = 0;
 
-    void generateUniqueRandomSet (int * sample, unsigned int subset_sz) {
-        subset_size = subset_sz;
-        generateUniqueRandomSet(sample);
-    }
-
-    void generateUniqueRandomSet (int * sample, unsigned int subset_sz, int size) {
-        resetGenerator(0, size);
-        subset_size = subset_sz;
-        generateUniqueRandomSet(sample);
-    }
-
-    void generateUniqueRandomSet (int * sample, unsigned int subset_sz, int min, int max) {
-        resetGenerator(min, max);
-        subset_size = subset_sz;
-        generateUniqueRandomSet(sample);
-    }
-
     void setSubsetSize (unsigned int subset_sz) {
         subset_size = subset_sz;
     }

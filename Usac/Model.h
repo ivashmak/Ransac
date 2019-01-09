@@ -21,8 +21,7 @@ public:
 	unsigned int lo_sample_size = 14;
 	unsigned int lo_iterative_iterations = 4;
     unsigned int lo_inner_iterations = 20; // 10
-    float lo_threshold = 10.0;
-    unsigned int lo_threshold_multiplier = 15;
+    unsigned int lo_threshold_multiplier = 10;
 
     // Graph cut
     float spatial_coherence_gc = 0.1; // spatial coherence term
@@ -39,6 +38,9 @@ public:
     NeighborsSearch neighborsType = NeighborsSearch::NullN;
     int cell_size = 50; // for grid neighbors searching
 
+    // change to false to apply least squres on all points under threshold in iterative case.
+   	bool FixingLocalOptimization = true;
+
     bool reset_random_generator = true;
 private:
     cv::Mat descriptor;
@@ -53,7 +55,6 @@ public:
 	Model (float threshold_, int sample_number_, float desired_prob_, int knn,
             ESTIMATOR estimator_, SAMPLER sampler_) {
 		threshold = threshold_;
-		lo_threshold = threshold_;
 		sample_size = sample_number_;
 		desired_prob = desired_prob_;
 		k_nearest_neighbors = knn;
@@ -85,10 +86,9 @@ public:
 		Sprt = SprtLO_;
 	}
 
-	void setLOParametres (unsigned int lo_iterative_iters, unsigned int lo_inner_iters, float lo_thresh, unsigned int lo_thresh_mult) {
+	void setLOParametres (unsigned int lo_iterative_iters, unsigned int lo_inner_iters, unsigned int lo_thresh_mult) {
 	    lo_iterative_iterations = lo_iterative_iters;
 	    lo_inner_iterations = lo_inner_iters;
-	    lo_threshold = lo_thresh;
         lo_threshold_multiplier = lo_thresh_mult;
 	}
 
@@ -131,7 +131,6 @@ public:
         lo_sample_size = model->lo_sample_size;
         lo_iterative_iterations = model->lo_iterative_iterations;
         lo_inner_iterations = model->lo_inner_iterations;
-        lo_threshold = model->lo_threshold;
         lo_threshold_multiplier = model->lo_threshold_multiplier;
 //        descriptor = model->descriptor;
 	}

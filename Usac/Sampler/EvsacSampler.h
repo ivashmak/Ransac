@@ -30,7 +30,7 @@ public:
         assert (!input_points.empty());
 
         // init random generator
-        RandomGenerator * randomGenerator = new ArrayRandomGenerator;
+        UniformRandomGenerator * randomGenerator = new UniformRandomGenerator;
         if (reset_time) randomGenerator->resetTime();
 
         this->sample_size = sample_size;
@@ -58,7 +58,7 @@ public:
 //        Eigen::MatrixXd sorted_distances_(num_queries, knn-1);
 
         int *random_samples = new int[num_queries];
-        randomGenerator->generateUniqueRandomSet(random_samples, num_queries, 0, points_size-1);
+        randomGenerator->generateUniqueRandomSet(random_samples, num_queries, points_size-1);
 
         cv::Mat sorted_dists, indicies, points = cv::Mat(points_size, 2, CV_32F, input_points.getMat().data);
         cv::flann::LinearIndexParams flannIndexParams;

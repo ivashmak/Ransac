@@ -44,7 +44,6 @@ public:
 	 * (1 - w^n) is probability that at least one point of N is outlier.
 	 * 1 - p = (1-w^n)^k is probability that in K steps of getting at least one outlier is 1% (5%).
 	 *
-	 * Assume sample size is at least 2
 	 */
     inline unsigned int getUpBoundIterations (unsigned int inlier_size) override {
         float inl_ratio = (float) inlier_size/points_size;

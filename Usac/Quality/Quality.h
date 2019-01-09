@@ -75,14 +75,14 @@ public:
 
         unsigned int inlier_number = 0;
 
-        if (parallel) {
-            #pragma omp parallel for reduction (+:inlier_number)
-            for (unsigned int point = 0; point < points_size; point++) {
-                if (estimator->GetError(point) < threshold) {
-                    inlier_number++;
-                }
-            }
-        } else {
+//        if (parallel && !get_inliers) {
+//            #pragma omp parallel for reduction (+:inlier_number)
+//            for (unsigned int point = 0; point < points_size; point++) {
+//                if (estimator->GetError(point) < threshold) {
+//                    inlier_number++;
+//                }
+//            }
+//        } else {
             if (get_inliers) {
                 for (unsigned int point = 0; point < points_size; point++) {
                     if (estimator->GetError(point) < threshold) {
@@ -96,7 +96,7 @@ public:
                     }
                 }
             }
-       }
+//       }
 
         score->inlier_number = inlier_number;
         score->score = inlier_number;

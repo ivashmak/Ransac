@@ -135,12 +135,13 @@ void getAverageTime (RandomGenerator * random_generator, int size, int unique_se
 
 
     random_generator->resetGenerator(0, size);
+    random_generator->setSubsetSize(unique_set_size);
 
     int * sample = new int [unique_set_size];
 
     begin_time = std::chrono::steady_clock::now();
     for (int i = 0; i < size; i++) {
-        random_generator->generateUniqueRandomSet(sample, unique_set_size);
+        random_generator->generateUniqueRandomSet(sample);
 //        for (int j = 0; j < 10; j++) {
 //            std::cout << sample[j] << " ";
 //        }

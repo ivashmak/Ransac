@@ -32,6 +32,7 @@ private:
     bool * inlier_flags;
     unsigned int * growth_function;
 
+    unsigned int * largest_sample_size;
     unsigned int termination_length;
     const unsigned int min_termination_length = 20;
 
@@ -48,6 +49,10 @@ public:
         delete[] maximality_samples;
         delete[] non_random_inliers;
         delete[] inlier_flags;
+    }
+
+    void setLargestSampleSize (unsigned int * largest_sample_size_) {
+        largest_sample_size = largest_sample_size_;
     }
 
     /*
@@ -133,8 +138,9 @@ public:
         inlier_flags = new bool[points_size];
     }
 
-    unsigned int getStoppingLength () {
-        return termination_length;
+    // return stopping length as pointer to stopping length for prosac sampler
+    unsigned int * getStoppingLength () {
+        return &termination_length;
     }
 
     inline unsigned int getUpBoundIterations (unsigned int inlier_size) override {
@@ -159,7 +165,7 @@ public:
      * In∗ inliers in Un∗ exists and was not found after k
      * samples is smaller than η0 (typically set to 5%).
      */
-    inline unsigned int getUpBoundIterations(unsigned int hypCount, unsigned int largest_sample_size,
+    inline unsigned int getUpBoundIterations(unsigned int hypCount,
                                     const cv::Mat& model) {
 
         unsigned int max_samples = maximality_samples[termination_length-1];
@@ -193,7 +199,7 @@ public:
                     unsigned int new_samples = standart_termination_criteria->
                                             getUpBoundIterations(inlier_count, i+1);
 //                    std::cout << new_samples << "\n";
-                    if (i+1 < largest_sample_size) {
+                    if (i+1 < *largest_sample_size) {
                         // correct for number of samples that have points in [i+1, largest_sample_size-1]
                         new_samples += hypCount - growth_function[i];
                     }

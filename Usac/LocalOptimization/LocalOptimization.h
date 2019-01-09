@@ -7,7 +7,7 @@
 
 class LocalOptimization {
 public:
-	virtual ~LocalOptimization () {}
+	virtual ~LocalOptimization () = default;
 
 	/*
 	 * Returns as int number local optimization iterations including inner

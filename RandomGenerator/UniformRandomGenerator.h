@@ -11,7 +11,7 @@ class UniformRandomGenerator : public RandomGenerator {
 protected:
     std::mt19937 generator;
     std::uniform_int_distribution<int> generate;
-
+    int prev_min, prev_max;
 public:
     UniformRandomGenerator () {
         std::random_device rand_dev;
@@ -27,6 +27,33 @@ public:
     }
 
     void generateUniqueRandomSet (int * sample) override {
+        for (unsigned int i = 0; i < subset_size; i++) {
+            sample[i] = generate (generator);
+            for (int j = i - 1; j >= 0; j--) {
+                if (sample[i] == sample[j]) {
+                    i--;
+                    break;
+                }
+            }
+        }
+    }
+
+    void generateUniqueRandomSet (int * sample, unsigned int subset_size, unsigned int max) {
+        resetGenerator(0, max);
+        for (unsigned int i = 0; i < subset_size; i++) {
+            sample[i] = generate (generator);
+            for (int j = i - 1; j >= 0; j--) {
+                if (sample[i] == sample[j]) {
+                    i--;
+                    break;
+                }
+            }
+        }
+    }
+
+    // closed interval <0; max>
+    void generateUniqueRandomSet (int * sample, unsigned int max) {
+        resetGenerator(0, max);
         for (unsigned int i = 0; i < subset_size; i++) {
             sample[i] = generate (generator);
             for (int j = i - 1; j >= 0; j--) {

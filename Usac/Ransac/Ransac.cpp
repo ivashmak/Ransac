@@ -1,5 +1,5 @@
 #include "Ransac.h"
-#include "../LocalOptimization/RansacLocalOptimization.h"
+#include "../LocalOptimization/InnerLocalOptimization.h"
 #include "../Estimator/DLT/DLT.h"
 #include "../LocalOptimization/GraphCut.h"
 #include "../SPRT.h"
@@ -11,7 +11,7 @@
 #include "../LocalOptimization/IRLS.h"
 #include "../LocalOptimization/SortedLO.h"
 
-int getPointsSize (cv::InputArray points) {
+unsigned int getPointsSize (cv::InputArray points) {
 //    std::cout << points.getMat(0).total() << '\n';
 
     if (points.isVector()) {
@@ -40,7 +40,7 @@ void Ransac::run(cv::InputArray input_points) {
     assert(sampler->isInit());
     assert(model->neighborsType != NullN);
 
-    int points_size = getPointsSize(input_points);
+    unsigned int points_size = getPointsSize(input_points);
 
 //   std::cout << "Points size " << points_size << '\n';
 
@@ -68,14 +68,12 @@ void Ransac::run(cv::InputArray input_points) {
 
     //--------------- Prosac ---------------------
     ProsacTerminationCriteria * prosac_termination_criteria;
-    ProsacSampler * prosac_sampler;
     bool is_prosac = model->sampler == SAMPLER::Prosac;
     if (is_prosac) {
-        prosac_sampler = (ProsacSampler *) sampler;
         prosac_termination_criteria = (ProsacTerminationCriteria *) termination_criteria;
-//        unsigned int t = 10;
-//        prosac_sampler->setTerminationLength(prosac_termination_criteria->getStoppingLength());
-//        prosac_sampler->setTerminationLength(&t);
+        // set stopping length from prosac termination criteria to prosac sample as pointer
+        ((ProsacSampler *) sampler)->setTerminationLength(prosac_termination_criteria->getStoppingLength());
+        prosac_termination_criteria->setLargestSampleSize(((ProsacSampler *) sampler)->getLargestSampleSize());
     }
     //--------------------------------------------
 
@@ -89,7 +87,7 @@ void Ransac::run(cv::InputArray input_points) {
     bool LO = model->LO;
     LocalOptimization * lo_ransac;
     if (LO) {
-        lo_ransac = new RansacLocalOptimization (model, sampler, termination_criteria, quality, estimator, points_size);
+        lo_ransac = new InnerLocalOptimization (model, quality, estimator, points_size);
     }
     //--------------------------------------
 
@@ -120,7 +118,7 @@ void Ransac::run(cv::InputArray input_points) {
 
     // if we have small number of data points, so LO will run with quarter of them,
     // otherwise it requires at least 3 sample size.
-    int min_inlier_count_for_LO = std::min (points_size/4,  3 * (int)model->sample_size);
+    int min_inlier_count_for_LO = std::min (points_size/4,  3 * model->sample_size);
 
     int iters = 0;
     int max_iters = model->max_iterations;
@@ -134,11 +132,7 @@ void Ransac::run(cv::InputArray input_points) {
 
     while (iters < max_iters) {
 
-        if (is_prosac) {
-            ((ProsacSampler *)sampler)->generateSampleProsac (sample, prosac_termination_criteria->getStoppingLength());
-        } else {
-            sampler->generateSample(sample);
-        }
+        sampler->generateSample(sample);
 
 //      debug
 //        bool eq = false;
@@ -232,9 +226,7 @@ void Ransac::run(cv::InputArray input_points) {
 
                 // Termination conditions:
                 if (is_prosac) {
-                    max_iters = prosac_termination_criteria->
-                            getUpBoundIterations(iters, prosac_sampler->getLargestSampleSize(),
-                                                 best_model->returnDescriptor());
+                    max_iters = prosac_termination_criteria->getUpBoundIterations(iters, best_model->returnDescriptor());
                 } else {
                     max_iters = termination_criteria->getUpBoundIterations (best_score->inlier_number);
                 }
@@ -329,7 +321,7 @@ void Ransac::run(cv::InputArray input_points) {
     unsigned int lo_inner_iters = 0;
     unsigned int lo_iterative_iters = 0;
     if (LO) {
-        RansacLocalOptimization * lo_r = (RansacLocalOptimization *) lo_ransac;
+        InnerLocalOptimization * lo_r = (InnerLocalOptimization *) lo_ransac;
         lo_inner_iters = lo_r->lo_inner_iters;
         lo_iterative_iters = lo_r->lo_iterative_iters;
     }

@@ -25,11 +25,11 @@ protected:
     unsigned int sample_size;
     unsigned int points_size;
     
-    RandomGenerator * randomGenerator;
+    UniformRandomGenerator * randomGenerator;
 
     unsigned int * termination_length;
 public:
-    // set points to uint of termination length
+    // set stopping length as pointer to stopping length from prosac termination criteria
     void setTerminationLength (unsigned int * termination_length_) {
         termination_length = termination_length_;
     }
@@ -45,8 +45,9 @@ public:
         return growth_function;
     }
 
-    unsigned int getLargestSampleSize () {
-        return largest_sample_size;
+    // return largest_sample_size as pointer to prosac termination criteria
+    unsigned int * getLargestSampleSize () {
+        return &largest_sample_size;
     }
 
     /*
@@ -112,12 +113,8 @@ public:
 
 
     void generateSample (int * sample) override {
-    }
-    
-    void generateSampleProsac (int * sample, unsigned int termination_length) {
 //        std::cout << "subset size " << subset_size << "\n";
-        std::cout << "stopping length " << termination_length << "\n";
-//        std::cout < < "stopping length (this) " << *this->termination_length << "\n";
+//        std::cout << "stopping length " << termination_length << "\n";
 
         // revert to RANSAC-style sampling if maximum number of PROSAC samples have been tested
         if (hypCount > growth_max_samples) {
@@ -149,8 +146,8 @@ public:
 */
 
         // if current stopping length is less than size of current pool, use only points up to the stopping length
-        if (subset_size > termination_length) {
-            randomGenerator->generateUniqueRandomSet(sample, sample_size, termination_length);
+        if (subset_size > *termination_length) {
+            randomGenerator->generateUniqueRandomSet(sample, sample_size, *termination_length);
             return;
         }
 

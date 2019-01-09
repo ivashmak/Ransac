@@ -48,26 +48,5 @@ function H=DLT(pts1,pts2)
 %     H2
 %     H3
     
-    
-    
-    AA1=zeros(9,9);
-    AA2=zeros(9,9);
-    AA=zeros(9,9);
-    
-    for i=1:NUMP
-        x1=pts1(i,1);
-        y1=pts1(i,2);
-
-        x2=pts2(i,1);
-        y2=pts2(i,2);
-
-        a1=[-x1,-y1,-1.0,0,0,0,x2*x1,x2*y1,x2];
-        AA1 = AA1 + a1' * a1;
-        a2=[0,0,0,-x1,-y1,-1.0,y2*x1,y2*y1,y2];
-        AA2 = AA2 + a2' * a2;
-        AA = AA + a1'*a1 + a2'*a2;
-    end
-    keyboard
-    V = eig (AA);
-    H4 =  reshape (-V(:,1), 3, 3)'
+%     keyboard
 end
