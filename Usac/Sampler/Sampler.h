@@ -16,11 +16,11 @@ public:
     virtual void generateSample (int *sample) = 0;
 
     virtual void setSampleSize (unsigned int sample_size_) {
-        std::cout << "NOT IMPLEMENTED FUNCTION setSampleSize!\n";
+        std::cout << "NOT IMPLEMENTED FUNCTION setSampleSize! in Sampler\n";
     }
 
     virtual void setPointsSize (unsigned int points_size_) {
-        std::cout << "NOT IMPLEMENTED FUNCTION setPointsSize!\n";
+        std::cout << "NOT IMPLEMENTED FUNCTION setPointsSize! in Sampler\n";
     }
 
     /*

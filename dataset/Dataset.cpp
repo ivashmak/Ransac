@@ -85,9 +85,9 @@ std::vector<std::string> Dataset::getKusvod2Dataset () {
 
 std::vector<std::string> Dataset::getAdelaidermfDataset () {
     std::vector<std::string> fnames = {
-            "barrsmith",
+//            "barrsmith",
             "bonhall",
-            "bonython",
+//            "bonython",
             "elderhallb",
             "hartley",
             "johnsona",
@@ -102,6 +102,7 @@ std::vector<std::string> Dataset::getAdelaidermfDataset () {
             "physics",
             "sene",
             "unihouse",
-            "unionhouse"};
+//            "unionhouse"
+    };
     return fnames;
 };

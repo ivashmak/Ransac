@@ -36,6 +36,9 @@ public:
 
     void initSampler (Sampler *& sampler, Model * model, unsigned int points_size, cv::InputArray points, const cv::Mat& neighbors, std::vector<std::vector<int>> ns);
 
+    void testNeighborsSearchCell ();
+    void testNeighborsSearch ();
+
     void test (cv::Mat points,
                       Model * model,
                       const std::string &img_name,
@@ -104,14 +107,14 @@ public:
                                 const std::vector<int>& gt_inliers, bool get_results,
                                 StatisticalResults * statistical_results) {
 
-        std::cout << "Testing " << estimator2string(model->estimator) << "\n";
-        std::cout << "with " << sampler2string(model->sampler) << " sampler\n";
-        std::cout << "with " << nearestNeighbors2string(model->neighborsType) << " neighbors searching\n";
-        std::cout << "with cell size = " << model->cell_size << "\n";
-        std::cout << "LO " << model->LO << "\n";
-        std::cout << "GC " << model->GraphCutLO << "\n";
-        std::cout << "SPRT " << model->Sprt << "\n";
-        std::cout << N << " times \n";
+//        std::cout << "Testing " << estimator2string(model->estimator) << "\n";
+//        std::cout << "with " << sampler2string(model->sampler) << " sampler\n";
+//        std::cout << "with " << nearestNeighbors2string(model->neighborsType) << " neighbors searching\n";
+//        std::cout << "with cell size = " << model->cell_size << "\n";
+//        std::cout << "LO " << model->LO << "\n";
+//        std::cout << "GC " << model->GraphCutLO << "\n";
+//        std::cout << "SPRT " << model->Sprt << "\n";
+//        std::cout << N << " times \n";
 
 
         long * times = new long[N];

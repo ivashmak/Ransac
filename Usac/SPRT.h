@@ -392,7 +392,7 @@ public:
     }
 
 
-    // ------------ Usac version (Chum, Raguram, Chum, Matas, et.al) ----------
+    // ------------ Usac version (Chum, Raguram, et.al) (not using, just for compare) ----------
     unsigned int updateSPRTStopping(unsigned int numInliers) {
         double n_inliers = 1.0;
         double n_pts = 1.0;

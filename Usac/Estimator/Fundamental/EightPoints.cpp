@@ -14,7 +14,7 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, un
     float x1, x2, y1, y2;
     unsigned int norm_points_idx;
 
-    // 8 points algorithm with Eigen and covariance matrix
+    // ------- 8 points algorithm with Eigen and covariance matrix --------------
 //    float a[9];
 //    cv::Mat_ <float> covA(9, 9, float (0));
 //    float * covA_ptr = (float *) covA.data;

@@ -6,30 +6,41 @@
 #include <iostream>
 #include "Dataset.h"
 #include "../Detector/Reader.h"
+#include "../Usac/Estimator/HomographyEstimator.h"
+#include "../Usac/Estimator/FundamentalEstimator.h"
 
 class ImageData {
 private:
     cv::Mat_<float> pts1, pts2, pts, model;
     cv::Mat img1, img2;
     std::vector<int> inliers;
+    ESTIMATOR estimator = ESTIMATOR ::NullE;
 public:
     ImageData (DATASET dataset, const std::string &img_name) {
 
         std::string folder;
         if (dataset == DATASET::Adelaidermf) {
+            estimator = ESTIMATOR ::Fundamental;
+
             folder = "../dataset/adelaidermf/";
             Reader::read_points(pts1, pts2, folder+img_name+"_pts.txt");
             Reader::getInliers(folder+img_name+"_pts.txt", inliers);
+            Reader::getMatrix3x3(folder+img_name+"_model.txt", model);
+            cv::hconcat(pts1, pts2, pts);
 
         } else if (dataset == DATASET::Kusvod2) {
+            estimator = ESTIMATOR ::Fundamental;
+
             folder = "../dataset/Lebeda/kusvod2/";
             Reader::getPointsNby6(folder+img_name+"_vpts_pts.txt", pts);
             pts1 = pts.colRange(0,2);
             pts2 = pts.colRange(2,4);
-            Reader::getMatrix3x3(folder+img_name+"_model.txt", model);
+            Reader::getMatrix3x3(folder+img_name+"_vpts_model.txt", model);
             return;
 
         } else if (dataset == DATASET::Strecha) {
+            estimator = ESTIMATOR ::Essential;
+
             folder = "../dataset/Lebeda/strechamvs/";
             Reader::getPointsNby6(folder+img_name+"_vpts_pts.txt", pts);
             img1 = cv::imread("../dataset/Lebeda/strechamvs/"+img_name+"A.jpg");
@@ -43,10 +54,14 @@ public:
             return;
 
         } else if (dataset == DATASET::Syntectic) {
+            estimator = ESTIMATOR ::Line2d;
+
             img1 = cv::imread("../dataset/line2d/"+img_name+".png");
             return;
 
         } else if (dataset == DATASET::EVD) {
+            estimator = ESTIMATOR ::Homography;
+
             img1 = cv::imread("../dataset/EVD/1/"+img_name+".png");
             img2 = cv::imread("../dataset/EVD/2/"+img_name+".png");
             cv::Mat points;
@@ -54,17 +69,17 @@ public:
             return;
 
         } else if (dataset == DATASET::Homogr) {
+            estimator = ESTIMATOR ::Homography;
+
             folder = "../dataset/homography/";
             Reader::read_points(pts1, pts2, folder+img_name+"_pts.txt");
             Reader::getInliers(folder+img_name+"_pts.txt", inliers);
-
+            Reader::getMatrix3x3(folder+img_name+"_model.txt", model);
+            cv::hconcat(pts1, pts2, pts);
         } else {
             std::cout << "UNKNOWN DATASET!\n";
             exit (0);
         }
-
-        cv::hconcat(pts1, pts2, pts);
-        Reader::getMatrix3x3(folder+img_name+"_model.txt", model);
 
         img1 = cv::imread(folder+img_name+"A.png");
         img2 = cv::imread(folder+img_name+"B.png");
@@ -108,9 +123,43 @@ public:
         return model;
     }
 
-    std::vector<int> getGTInliers () {
+    std::vector<int> getGTInliers (float threshold) {
+        std::cout << model << "\n";
+        if (estimator == ESTIMATOR::Homography) {
+            getGTInliersFromGTModelHomography (threshold);
+        } else if (estimator == ESTIMATOR::Fundamental){
+            getGTInliersFromGTModelFundamental (threshold);
+        } else {
+            std::cout << "unkown estimator in getGTinliers in GetImage\n";
+            exit(111);
+        }
         if (inliers.empty()) std::cout << "INLIERS ARE EMPTY!\n";
         return inliers;
+    }
+
+
+    void getGTInliersFromGTModelHomography (float threshold) {
+        Estimator * estimator = new HomographyEstimator (pts);
+        std::vector<int> inliers2;
+
+        Quality::getInliers(estimator, model, threshold, pts.rows, inliers);
+        Quality::getInliers(estimator, model.inv(), threshold, pts.rows, inliers2);
+
+        if (inliers2.size() > inliers.size()) {
+            inliers = inliers2;
+        }
+    }
+
+    void getGTInliersFromGTModelFundamental (float threshold) {
+        Estimator * estimator = new FundamentalEstimator (pts);
+        std::vector<int> inliers2;
+
+        Quality::getInliers(estimator, model, threshold, pts.rows, inliers);
+        Quality::getInliers(estimator, model.t(), threshold, pts.rows, inliers2);
+
+        if (inliers2.size() > inliers.size()) {
+            inliers = inliers2;
+        }
     }
 
 };

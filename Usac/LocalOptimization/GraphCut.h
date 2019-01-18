@@ -173,7 +173,7 @@ public:
             }
         }
 
-        std::cout << "end best score " << best_score->inlier_number << "\n";
+//        std::cout << "end best score " << best_score->inlier_number << "\n";
     }
 
 private:

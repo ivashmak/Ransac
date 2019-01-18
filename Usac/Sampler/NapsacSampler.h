@@ -120,6 +120,7 @@ public:
         for (i = 1; i < sample_size; i++) {
             sample[i] = neighbors_v[initial_point][next_neighbors[initial_point]];
 
+            // move next neighbor
             next_neighbors[initial_point]++;
             if (next_neighbors[initial_point] >= neighbors_v[initial_point].size()) {
                 next_neighbors[initial_point] = 0;

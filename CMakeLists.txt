@@ -76,7 +76,8 @@ add_executable(
         Tests/StatisticalResults.h
         Tests/samplerInitialization.cpp
         Tests/estimatorInitialization.cpp
-
+        Tests/testNeighborsSearch.cpp
+        
         Usac/Helper/Logging.h
         Usac/Helper/Drawing/Drawing.h
         Usac/Helper/Drawing/DrawPanorama.cpp

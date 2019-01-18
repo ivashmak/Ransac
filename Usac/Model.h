@@ -12,7 +12,7 @@ public:
 	float desired_prob = 0.95;
 
     int min_iterations = 20;
-    int max_iterations = 15000;
+    int max_iterations = 10000;
 	int k_nearest_neighbors = 5;
 
 	/*
