@@ -66,12 +66,8 @@ void Tests::testNeighborsSearchCell () {
 
 
 void Tests::testNeighborsSearch () {
-//    std::vector<std::string> points_filename = Dataset::getHomographyDatasetPoints();
-//    std::vector<std::string> points_filename = Dataset::getEVDDataset();
-//    std::vector<std::string> points_filename = Dataset::getAdelaidermfDataset();
-    std::vector<std::string> points_filename = Dataset::getKusvod2Dataset();
-
-
+    DATASET dataset = DATASET ::EVD; // Homogr, Kusvod2, Adelaidrmf, EVD
+    std::vector<std::string> points_filename = Dataset::getDataset(dataset);
 
     int num_images = points_filename.size();
 
@@ -92,10 +88,7 @@ void Tests::testNeighborsSearch () {
         std::cout << "get points for " << img_name << "\n";
         cv::Mat_<float> points;
 
-//        ImageData gt_data (DATASET::Homogr, img_name);
-//        ImageData gt_data (DATASET::EVD, img_name);
-//        ImageData gt_data (DATASET::Adelaidermf, img_name);
-        ImageData gt_data (DATASET::Kusvod2, img_name);
+        ImageData gt_data (dataset, img_name);
 
         points = gt_data.getPoints();
 

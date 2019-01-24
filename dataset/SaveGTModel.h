@@ -4,5 +4,6 @@
 #include "Dataset.h"
 
 void saveGTModel (DATASET dataset);
+void saveGTModelKusvod2 ();
 
 #endif //USAC_SAVEGTMODEL_H

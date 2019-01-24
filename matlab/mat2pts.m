@@ -1,6 +1,6 @@
 % adelaidermf ();
-% kusvod2 ();
-strechamvs ();
+kusvod2 ();
+% strechamvs ();
 
 function kusvod2 ()
     dataset = '../dataset/Lebeda/kusvod2/';

@@ -24,7 +24,7 @@ int main (int args, char ** argv) {
 
 
 //    generate_syntectic_dataset();
-
+//    saveGTModelKusvod2();
     tests.testNeighborsSearch();
 
 //     run tests

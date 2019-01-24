@@ -66,6 +66,9 @@ public:
             img2 = cv::imread("../dataset/EVD/2/"+img_name+".png");
             cv::Mat points;
             Reader::readEVDpoints(pts, "../dataset/EVD/EVD_tentatives/"+img_name+".png_m.txt");
+            pts1 = pts.colRange(0,2);
+            pts2 = pts.colRange(2,4);
+            Reader::getMatrix3x3("../dataset/EVD/h/"+img_name+".txt", model);
             return;
 
         } else if (dataset == DATASET::Homogr) {
@@ -147,6 +150,8 @@ public:
 
         if (inliers2.size() > inliers.size()) {
             inliers = inliers2;
+            cv::Mat temp = model.inv();
+            model = temp.clone();
         }
     }
 
@@ -157,8 +162,17 @@ public:
         Quality::getInliers(estimator, model, threshold, pts.rows, inliers);
         Quality::getInliers(estimator, model.t(), threshold, pts.rows, inliers2);
 
+//        std::cout << "-------------\n";
+//        std::cout << model << "\n";
+//        std::cout << inliers.size() << "\n";
+//        std::cout << model.t() << "\n";
+//        std::cout << inliers2.size() << "\n";
+//        std::cout << "-------------\n";
+
         if (inliers2.size() > inliers.size()) {
             inliers = inliers2;
+            cv::Mat temp = model.t();
+            model = temp.clone();
         }
     }
 
