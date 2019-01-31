@@ -210,14 +210,24 @@ public:
                  * Ground Truth inliers is less than 50% then
                  * it is fail.
                  */
-                if (num_inlierss[i] / gt_inliers.size() < 0.10) {
+                std::vector<int> est_inliers = ransacOutput->getInliers();
+                float matches = 0;
+                for (int inl = 0; inl < gt_inliers.size(); inl++) {
+                    for (int j = 0; j < num_inlierss[i]; j++) {
+                        if (gt_inliers[inl] == est_inliers[j]) {
+                            matches++;
+                            break;
+                        }
+                    }
+                }
+                if (matches / gt_inliers.size() < 0.10) {
                     fails_10++;
                     fails_25++;
                     fails_50++;
-                } else if (num_inlierss[i] / gt_inliers.size() < 0.25) {
+                } else if (matches / gt_inliers.size() < 0.25) {
                     fails_25++;
                     fails_50++;
-                } else if (num_inlierss[i] / gt_inliers.size() < 0.50) {
+                } else if (matches / gt_inliers.size() < 0.50) {
                     fails_50++;
                 }
 //            std::cout << "----------------------------------------------------------------\n";
@@ -280,7 +290,7 @@ public:
             results->median_avg_error = (errorss[N/2-1] + errorss[N/2])/2;
         }
 
-        std::cout << results << "\n";
+//        std::cout << results << "\n";
 
         if (get_results) {
             statistical_results->copyFrom(results);

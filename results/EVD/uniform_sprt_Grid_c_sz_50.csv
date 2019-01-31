@@ -7,7 +7,7 @@ Runs for each image = 100
 Threshold for each image = 2
 Desired probability for each image = 0.95
 Standard LO = 0
-Graph Cut LO = 1
+Graph Cut LO = 0
 SPRT = 1
 
 

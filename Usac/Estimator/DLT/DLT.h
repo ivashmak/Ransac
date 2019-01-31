@@ -9,6 +9,7 @@
 // Direct Linear Transformation
 bool DLT (const float * const points, int sample_number, cv::Mat &H);
 bool DLT (const float * const points, const int * const sample, int sample_number, cv::Mat &H);
+bool DLTEigen (const float * const points, int sample_number, cv::Mat &H);
 bool DLTLeastSquares (const float * const points, int sample_number, cv::Mat &H);
 
 bool NormalizedDLT (const float * const points, const int * const sample, unsigned int sample_number, cv::Mat &H);

@@ -9,16 +9,16 @@
 #include <fstream>
 #include <iostream>
 
-enum DATASET {Homogr, Adelaidermf, Kusvod2, Syntectic, Strecha, EVD};
+enum DATASET {Homogr, Homogr_SIFT, Adelaidermf, Adelaidermf_SIFT, Kusvod2, Kusvod2_SIFT, Syntectic, Strecha, EVD};
 class Dataset {
 public:
     static void saveDatasetToFiles ();
     static std::vector<std::string> getDataset (DATASET dataset) {
-        if (dataset == DATASET::Homogr) {
+        if (dataset == DATASET::Homogr || dataset == DATASET::Homogr_SIFT) {
             return getHomographyDatasetPoints();
-        } else if (dataset == DATASET::Adelaidermf) {
+        } else if (dataset == DATASET::Adelaidermf || dataset == DATASET ::Adelaidermf_SIFT) {
             return getAdelaidermfDataset();
-        } else if (dataset == DATASET::Kusvod2) {
+        } else if (dataset == DATASET::Kusvod2 || dataset == DATASET::Kusvod2_SIFT) {
             return getKusvod2Dataset();
         } else if (dataset == DATASET::Syntectic) {
             std::cout << "NOT IMPLEMENTED YET for Syntectic dataset\n";

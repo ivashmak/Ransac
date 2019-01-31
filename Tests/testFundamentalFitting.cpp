@@ -17,38 +17,24 @@ void Tests::testFundamentalFitting() {
 //    detectAndSaveFeatures(getKusvod2Dataset());
 //    exit (0);
 
-    DATASET dataset = DATASET::Adelaidermf;
-    std::string img_name = "barrsmith";
-    cv::Mat_<float> points1, points2, points;
-//    getPointsNby6("../dataset/Lebeda/kusvod2/"+img_name+"_vpts_pts.txt", points);
-    Reader::read_points(points1, points2, "../dataset/adelaidermf/"+img_name+"_pts.txt");
-//    read_points(points1, points2, "../dataset/fundamental/"+img_name+"_pts.txt");
-        cv::hconcat(points1, points2, points);
+    DATASET dataset = DATASET::Kusvod2;
+    std::string img_name = "box";
+    cv::Mat_<float> sorted_points, points;
 
-//    LoadPointsFromFile(points, ("../dataset/adelaidermf/sift_update/"+img_name+"_spts.txt").c_str());
+    ImageData gt_data (dataset, img_name);
+    points = gt_data.getPoints();
+    sorted_points = gt_data.getSortedPoints();
 
-
-//        std::cout << "opencv " << cv::findFundamentalMat(points1, points2) << "\n\n";
-    // GT F =
-//    -0.000000837710510  -0.000022207792842   0.004660634536193
-//    0.000020754689916   0.000000443452588  -0.012405343594436
-//    -0.004753112593655   0.009718696572695   1.000000000000000
-
-    cv::Mat_<float> sorted_points;
-    densitySort (points, 4, sorted_points);
+//    densitySort (points, 4, sorted_points);
 
     std::cout << "points size = " << points.rows << "\n";
 
-    float threshold = 5;
+    float threshold = 2;
     float confidence = 0.95;
-    int knn = 5;
+    int knn = 8;
 
-    // ------------ get Ground truth inliers and model ----------------------
-    std::vector<int> gt_inliers;
-//    getGTInliersFromGTModelFundamental (img_name, points, threshold, gt_inliers);
-    Reader::getInliers("../dataset/adelaidermf/"+img_name+"_pts.txt", gt_inliers);
-//    getInliers("../dataset/fundamental/"+img_name+"_pts.txt", gt_inliers);
-    // -------------------------------------------
+    std::vector<int> gt_inliers = gt_data.getGTInliers(threshold);
+    std::vector<int> gt_sorted_inliers = gt_data.getGTInliersSorted(threshold);
 
     Model * model;
 
@@ -66,21 +52,26 @@ void Tests::testFundamentalFitting() {
     model->setSprtLO(0);
     model->setCellSize(50);
     model->setNeighborsType(NeighborsSearch::Grid);
-    model->ResetRandomGenerator(false);
+    model->ResetRandomGenerator(true);
 
-    test (points, model, img_name, dataset, true, gt_inliers);
+//    test (points, model, img_name, dataset, true, gt_inliers);
+//    test (sorted_points, model, img_name, dataset, true, gt_sorted_inliers);
 
-//    getStatisticalResults(points, model, 300, true, gt_inliers, false, nullptr);
+//    getStatisticalResults(points, model, 500, true, gt_inliers, false, nullptr);
+//    getStatisticalResults(sorted_points, model, 500, true, gt_sorted_inliers, false, nullptr);
 
-//     storeResultsFundamental ();
+     storeResultsFundamental ();
 }
  
 /*
  * Store results from dataset to csv file.
  */
+
 void storeResultsFundamental () {
-    std::vector<std::string> points_filename = Dataset::getKusvod2Dataset();
-//    std::vector<std::string> points_filename = getAdelaidermfDataset();
+    DATASET dataset = DATASET ::Kusvod2; // Homogr, Kusvod2, Adelaidrmf, EVD
+    std::vector<std::string> points_filename = Dataset::getDataset(dataset);
+    int num_images = points_filename.size();
+    std::cout << "number of images " << num_images << "\n";
 
     Tests tests;
     Logging log;
@@ -90,131 +81,121 @@ void storeResultsFundamental () {
     std::vector<std::vector<int>> gt_inliers;
     std::vector<std::vector<int>> gt_inliers_sorted;
 
-    int N_runs = 100;
-    int knn = 5;
+    int N_runs = 200;
+    int knn = 8;
     float threshold = 2;
     float confidence = 0.95;
 
     for (const std::string &img_name : points_filename) {
         std::cout << "get points for " << img_name << "\n";
-        cv::Mat_<float> points1, points2, points;
-//        read_points(points1, points2, "../dataset/adelaidermf/"+img_name+"_pts.txt");
-//         cv::hconcat(points1, points2, points);
-//        LoadPointsFromFile(points, ("../dataset/adelaidermf/sift_update/"+img_name+"_pts.txt").c_str());
-        Reader::LoadPointsFromFile(points, ("../dataset/Lebeda/kusvod2/sift_update/"+img_name+"_pts.txt").c_str());
 
-        cv::Mat_<float> sorted_points;
-//        densitySort (points, 3, sorted_points);
-//        LoadPointsFromFile(sorted_points, ("../dataset/adelaidermf/sift_update/"+img_name+"_spts.txt").c_str());
-        Reader::LoadPointsFromFile(sorted_points, ("../dataset/Lebeda/kusvod2/sift_update/"+img_name+"_spts.txt").c_str());
-        // points are already sorted for EVD
-//        sorted_points = points.clone();
+        cv::Mat_<float> points, sorted_points;
+        ImageData gt_data (dataset, img_name);
+        points = gt_data.getPoints();
+        sorted_points = gt_data.getSortedPoints();
 
-        // ------------ get Ground truth inliers and model ----------------------
-        std::vector<int> gt_inliers_;
-//        getInliers ("../dataset/adelaidermf/"+img_name+"_pts.txt", gt_inliers_);
-        getGTInliersFromGTModelFundamental("../dataset/Lebeda/kusvod2/"+img_name+"_vpts_model.txt", points, threshold, gt_inliers_);
-        std::vector<int> gt_inliers_sorted_;
-//        getInliers (img_name, gt_inliers_sorted_);
-        getGTInliersFromGTModelFundamental("../dataset/Lebeda/kusvod2/"+img_name+"_vpts_model.txt", sorted_points, threshold, gt_inliers_sorted_);
-        // -------------------------------------------
-        std::cout << "gt inliers size = " << gt_inliers_.size() << "\n";
-
-        gt_inliers.push_back(gt_inliers_);
-        gt_inliers_sorted.push_back(gt_inliers_sorted_);
+        gt_inliers.push_back(gt_data.getGTInliers(threshold));
+        gt_inliers_sorted.push_back(gt_data.getGTInliersSorted(threshold));
         points_imgs.push_back(points);
         sorted_points_imgs.push_back(sorted_points);
-    }
 
+        std::cout << "inliers size " << gt_inliers[gt_inliers.size()-1].size() << "\n";
+        std::cout << "sorted inliers size " << gt_inliers_sorted[gt_inliers.size()-1].size() << "\n";
+    }
 
     std::vector<SAMPLER> samplers;
     samplers.push_back(SAMPLER::Uniform);
-    samplers.push_back(SAMPLER::Prosac);
+//    samplers.push_back(SAMPLER::Prosac);
 
-    std::vector<NeighborsSearch> neighbors_searching;
-    neighbors_searching.push_back(NeighborsSearch::Grid);
-    neighbors_searching.push_back(NeighborsSearch::Nanoflann);
-
-    std::vector<int> cell_sizes;
-//    cell_sizes.push_back(25);
-    cell_sizes.push_back(50);
-//    cell_sizes.push_back(100);
-
-    int lo_combinations = 2;
+    int lo_combinations = 1;
     bool lo[lo_combinations][3] = {
-            {0, 1, 0},
-            {0, 1, 1},
+            {0, 0, 0},
     };
+    NeighborsSearch neighborsSearch = NeighborsSearch ::Grid;
+    int cell_size = 50;
 
-    bool GT = true;
+    long mean_time = 0;
+    long mean_error = 0;
+
 
     for (SAMPLER smplr : samplers) {
-        for (NeighborsSearch neighbors_search : neighbors_searching) {
-            for (auto cell_size : cell_sizes) {
-                for (int l = 0; l < lo_combinations; l++) {
-                    std::ofstream results_total;
-                    std::ofstream results_matlab;
-                    std::string name = "../results/kusvod2/";
-                    name += Tests::sampler2string(smplr);
-                    if (lo[l][0] == 1) name += "_lo";
-                    if (lo[l][1] == 1) name += "_gc";
-                    if (lo[l][2] == 1) name += "_sprt";
-                    name += "_"+Tests::nearestNeighbors2string(neighbors_search) + "_c_sz_"+std::to_string(cell_size);
+        for (int l = 0; l < lo_combinations; l++) {
+            std::ofstream results_total;
+            std::ofstream results_matlab;
+            std::string name = "../results/EVD/";
+            name += Tests::sampler2string(smplr);
+            if (lo[l][0] == 1) name += "_lo";
+            if (lo[l][1] == 1) name += "_gc";
+            if (lo[l][2] == 1) name += "_sprt";
+            name += "_"+Tests::nearestNeighbors2string(neighborsSearch) + "_c_sz_"+std::to_string(cell_size);
 
-                    std::string mfname = name+"_m.csv";
-                    std::string fname = name+".csv";
+            std::string mfname = name+"_m.csv";
+            std::string fname = name+".csv";
 
-                    Model *model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, smplr);
-                    model->setStandardRansacLO(lo[l][0]);
-                    model->setGraphCutLO(lo[l][1]);
-                    model->setSprtLO(lo[l][2]);
-                    model->setNeighborsType(neighbors_search);
-                    model->setCellSize(cell_size);
+            Model *model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, smplr);
+            model->setStandardRansacLO(lo[l][0]);
+            model->setGraphCutLO(lo[l][1]);
+            model->setSprtLO(lo[l][2]);
+            model->setNeighborsType(neighborsSearch);
+            model->setCellSize(cell_size);
 
-                    results_matlab.open (mfname);
-                    results_total.open (fname);
+            results_matlab.open (mfname);
+            results_total.open (fname);
 
-                    log.saveHeadOfCSV (results_total, model, N_runs);
+            log.saveHeadOfCSV (results_total, model, N_runs);
 
-                    int img = 0;
-                    for (const std::string &img_name : points_filename) {
+            int img = 0;
+            for (const std::string &img_name : points_filename) {
 
-                        std::cout << img_name << "\n";
+                std::cout << img_name << "\n";
 
-                        if (gt_inliers[img].size() == 0) GT = false;
-                        else GT = true;
-
-                        StatisticalResults * statistical_results = new StatisticalResults;
-                        if (smplr == SAMPLER::Prosac) {
-                            tests.getStatisticalResults(sorted_points_imgs[img], model, N_runs,
-                                                        GT, gt_inliers_sorted[img], true, statistical_results);
-                        } else {
-                            tests.getStatisticalResults(points_imgs[img], model, N_runs,
-                                                        GT, gt_inliers[img], true, statistical_results);
-                        }
-
-                        // save to csv file
-                        results_total << img_name << ",";
-                        results_total << gt_inliers[img].size() << ",";
-                        log.saveResultsCSV(results_total, statistical_results);
-
-                        // save results for matlab
-                        results_matlab << img_name << ",";
-                        log.saveResultsMatlab(results_matlab, statistical_results);
-
-                        img++;
-                    }
-                    std::cout << "------------------------------------------------\n";
-
-                    results_total.close();
-                    results_matlab.close();
+                StatisticalResults * statistical_results = new StatisticalResults;
+                if (smplr == SAMPLER::Prosac) {
+                    tests.getStatisticalResults(sorted_points_imgs[img], model, N_runs,
+                                                true, gt_inliers_sorted[img], true, statistical_results);
+                } else {
+                    tests.getStatisticalResults(points_imgs[img], model, N_runs,
+                                                true, gt_inliers[img], true, statistical_results);
                 }
 
-                if (neighbors_search == NeighborsSearch::Nanoflann) break;
+//                // save to csv file
+//                results_total << img_name << ",";
+//                results_total << gt_inliers[img].size() << ",";
+//                log.saveResultsCSV(results_total, statistical_results);
+//
+//                // save results for matlab
+//                results_matlab << img_name << ",";
+//                log.saveResultsMatlab(results_matlab, statistical_results);
+//                std::cout << statistical_results->avg_time_mcs;
+//                std::cout << " +- " << statistical_results->std_dev_time_mcs << "\n";
+//                std::cout << statistical_results->avg_avg_error;
+//                std::cout << " +- " << statistical_results->std_dev_avg_error << "\n";
+//                std::cout << "- - - - - - - - - - - - - - - - - -\n";
+
+                std::cout << statistical_results->avg_num_lo_iters << " ";
+                std::cout << statistical_results->avg_avg_error << " ";
+                std::cout << statistical_results->worst_case_error << " ";
+                std::cout << statistical_results->avg_time_mcs << " ";
+                std::cout << statistical_results->avg_num_iters << " ";
+                std::cout << statistical_results->num_fails_50 << "\n";
+
+//                mean_time += statistical_results->avg_time_mcs;
+//                mean_error += statistical_results->avg_avg_error;
+
+                img++;
             }
+//            std::cout << "------------------------------------------------\n";
+
+//            results_total.close();
+//            results_matlab.close();
         }
     }
+
+//    std::cout << "mean time " << (mean_time / num_images) << "\n";
+//    std::cout << "mean error " << (mean_error / num_images) << "\n";
+
 }
+
 
 
 void getGTInliersFromGTModelFundamental (const std::string& filename, const cv::Mat& points, float threshold, std::vector<int> &gt_inliers) {

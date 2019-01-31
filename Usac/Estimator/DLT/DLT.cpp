@@ -180,12 +180,15 @@ bool DLTEigen (const float * const points, int sample_number, cv::Mat &H) {
     }
 
     cv::eigen(AtA, D, Vt);
+//    std::cout << Vt << "\n\n";
 
     if (Vt.empty ()) {
         return false;
     }
 
     H = cv::Mat_<float>(Vt.row(Vt.rows-1).reshape (3,3));
+
+    return true;
 }
 
 bool DLTLeastSquares (const float * const points, int sample_number, cv::Mat &H) {

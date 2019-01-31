@@ -63,7 +63,8 @@ public:
         cv::Mat_<float> F;
 
         if (! EightPointsAlgorithm(points, sample, sample_size, F)) {
-            return false;
+//        if (! EightPointsAlgorithmEigen(points, sample, sample_size, F)) {
+                return false;
         }
 
         model.setDescriptor(F);
@@ -75,7 +76,7 @@ public:
         cv::Mat_<float> F;
 
         if (! EightPointsAlgorithm(points, sample, weights, sample_size, F)) {
-            return false;
+                return false;
         }
 
         model.setDescriptor(F);

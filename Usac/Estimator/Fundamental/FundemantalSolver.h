@@ -7,6 +7,7 @@
 #include <opencv2/core/mat.hpp>
 
 bool EightPointsAlgorithm (const float * const pts, const int * const sample, unsigned int sample_number, cv::Mat &F);
+bool EightPointsAlgorithmEigen (const float * const pts, const int * const sample, unsigned int sample_number, cv::Mat &F);
 bool EightPointsAlgorithm (const float * const pts, const int * const sample, const float * const weights, unsigned int sample_number, cv::Mat &F);
 unsigned int SevenPointsAlgorithm (const float * const pts, const int * const sample, cv::Mat &F);
 

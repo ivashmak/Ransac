@@ -185,7 +185,7 @@ void Ransac::run(cv::InputArray input_points) {
 //                std::cout << "Get quality score\n";
                  quality->getNumberInliers(current_score, models[i]->returnDescriptor());
             }
-
+//
 //            std::cout << "Ransac, iteration " << iters << "; score " << current_score->inlier_number << "\n";
 //            std::cout << models[i]->returnDescriptor() << "\n\n";
 
@@ -274,8 +274,8 @@ void Ransac::run(cv::InputArray input_points) {
          * Calculate and Save Covariance Matrix and use it next normalization with adding or
          * extracting some points.
          */
-//        std::cout << "end estimate non minimal\n";
-
+//        std::cout << "estimate non minimal\n";
+//        std::cout << best_score->inlier_number << " -\n";
         // estimate non minimal model with max inliers
         if (! estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model)) {
             std::cout << "\033[1;31mNON minimal model completely failed!\033[0m \n";
@@ -283,9 +283,9 @@ void Ransac::run(cv::InputArray input_points) {
         }
 //        std::cout << non_minimal_model->returnDescriptor() << " std ndlt\n\n";
         //
-//      std::cout << "end get non minimal score\n";
-
+//        std::cout << "get non minimal score\n";
         quality->getNumberInliers(current_score, non_minimal_model->returnDescriptor(), non_minimal_model->threshold, true, max_inliers);
+//        std::cout << "end get non minimal score\n";
 
         // Priority is for non minimal model estimation
 //        std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
