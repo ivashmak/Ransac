@@ -9,6 +9,7 @@ private:
     const float * const points;
     float h11, h12, h13, h21, h22, h23, h31, h32, h33;
     float hi11, hi12, hi13, hi21, hi22, hi23, hi31, hi32, hi33;
+    DLt * dlt;
 public:
 
     /*
@@ -22,6 +23,7 @@ public:
 
     HomographyEstimator(cv::InputArray input_points) : points((float *)input_points.getMat().data) {
         assert(!input_points.empty());
+        dlt = new DLt(points);
     }
 
     void setModelParameters (const cv::Mat& model) override {
@@ -40,7 +42,7 @@ public:
 
     unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         cv::Mat H;
-        if (! DLT (points, sample, 4, H)) {
+        if (! dlt->DLT4p (sample, H)) {
             return 0;
         }
 
@@ -51,8 +53,8 @@ public:
 
     bool EstimateModelNonMinimalSample (const int * const sample, unsigned int sample_size, Model &model) override {
         cv::Mat H;
-        if (! NormalizedDLT(points, sample, sample_size, H)) {
-            std::cout << "Normalized DLT failed\n";
+        if (! dlt->NormalizedDLT(sample, sample_size, H)) {
+//            std::cout << "Normalized DLT failed\n";
             return false;
         }
 
@@ -62,7 +64,7 @@ public:
 
     bool EstimateModelNonMinimalSample (const int * const sample, unsigned int sample_size, const float * const weights, Model &model) override {
         cv::Mat H;
-        if (! NormalizedDLT(points, sample, sample_size, weights, H)) {
+        if (! dlt->NormalizedDLT(sample, sample_size, weights, H)) {
             return false;
         }
 
@@ -72,19 +74,6 @@ public:
 
     bool LeastSquaresFitting (const int * const sample, unsigned int sample_size, Model &model) override {
         return EstimateModelNonMinimalSample(sample, sample_size, model);
-
-        EstimateModelNonMinimalSample(sample, sample_size, model);
-//        std::cout << "H pca " << model.returnDescriptor() << "\n\n";
-
-        cv::Mat H;
-        if (! NormalizedDLTLeastSquares(points, sample, sample_size, H)) {
-            return false;
-        }
-
-//        std::cout << "H lsq " << H << "\n\n";
-
-        model.setDescriptor(H);
-        return true;
     }
     /*
      * Error = mean (distance (pt(i)H, pt'(i)) + distance (pt(i), pt'(i)H^-1))

@@ -17,7 +17,7 @@ void Tests::testFundamentalFitting() {
 //    detectAndSaveFeatures(getKusvod2Dataset());
 //    exit (0);
 
-    DATASET dataset = DATASET::Kusvod2;
+    DATASET dataset = DATASET::Kusvod2_SIFT;
     std::string img_name = "box";
     cv::Mat_<float> sorted_points, points;
 
@@ -36,15 +36,18 @@ void Tests::testFundamentalFitting() {
     std::vector<int> gt_inliers = gt_data.getGTInliers(threshold);
     std::vector<int> gt_sorted_inliers = gt_data.getGTInliersSorted(threshold);
 
+//    for (int i = 0; i < gt_inliers.size(); i++) {
+//        std::cout << gt_inliers[i] << " " << gt_sorted_inliers[i] << "\n";
+//    }
+
     Model * model;
 
     // -------------------------- uniform -------------------------------------
-    model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Uniform);
+//    model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Uniform);
     // ------------------------------------------------------------------------
 
     // -------------------------- Prosac -------------------------------------
-//    model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Prosac);
-//    sorted_points.copyTo(points);
+    model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Prosac);
     // ------------------------------------------------------------------------
 
     model->setStandardRansacLO(0);
@@ -68,7 +71,7 @@ void Tests::testFundamentalFitting() {
  */
 
 void storeResultsFundamental () {
-    DATASET dataset = DATASET ::Kusvod2; // Homogr, Kusvod2, Adelaidrmf, EVD
+    DATASET dataset = DATASET ::Adelaidermf_SIFT; // Homogr, Kusvod2, Adelaidrmf, EVD
     std::vector<std::string> points_filename = Dataset::getDataset(dataset);
     int num_images = points_filename.size();
     std::cout << "number of images " << num_images << "\n";
@@ -81,7 +84,7 @@ void storeResultsFundamental () {
     std::vector<std::vector<int>> gt_inliers;
     std::vector<std::vector<int>> gt_inliers_sorted;
 
-    int N_runs = 200;
+    int N_runs = 100;
     int knn = 8;
     float threshold = 2;
     float confidence = 0.95;
@@ -109,7 +112,7 @@ void storeResultsFundamental () {
 
     int lo_combinations = 1;
     bool lo[lo_combinations][3] = {
-            {0, 0, 0},
+            {0, 1, 1},
     };
     NeighborsSearch neighborsSearch = NeighborsSearch ::Grid;
     int cell_size = 50;
@@ -147,7 +150,7 @@ void storeResultsFundamental () {
             int img = 0;
             for (const std::string &img_name : points_filename) {
 
-                std::cout << img_name << "\n";
+//                std::cout << img_name << "\n";
 
                 StatisticalResults * statistical_results = new StatisticalResults;
                 if (smplr == SAMPLER::Prosac) {

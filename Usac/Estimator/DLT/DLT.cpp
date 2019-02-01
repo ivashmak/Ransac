@@ -1,13 +1,13 @@
 #include "DLT.h"
 
-bool DLT (const float * const points, const int * const sample, int sample_number, cv::Mat &H) {
+bool DLt::DLT4p (const int * const sample, cv::Mat &H) {
     float x1, y1, x2, y2;
     int smpl;
 
-    cv::Mat_<float> A (2*sample_number, 9), w, u, vt;
+    cv::Mat_<float> A (8, 9), w, u, vt;
     auto * A_ptr = (float *) A.data;
 
-    for (int i = 0; i < sample_number; i++) {
+    for (int i = 0; i < 4; i++) {
         smpl = 4*sample[i];
         x1 = points[smpl];
         y1 = points[smpl+1];
@@ -65,7 +65,7 @@ bool DLT (const float * const points, const int * const sample, int sample_numbe
     return true;
 }
 
-bool DLT (const float * const points, int sample_number, cv::Mat &H) {
+bool DLT (const float * const points, unsigned int sample_number, cv::Mat &H) {
 
     float x1, y1, x2, y2;
     unsigned int smpl;
@@ -114,7 +114,7 @@ bool DLT (const float * const points, int sample_number, cv::Mat &H) {
     return true;
 }
 
-bool DLTEigen (const float * const points, int sample_number, cv::Mat &H) {
+bool DLTEigen (const float * const points, unsigned int sample_number, cv::Mat &H) {
     /*
     A =
 
@@ -191,7 +191,7 @@ bool DLTEigen (const float * const points, int sample_number, cv::Mat &H) {
     return true;
 }
 
-bool DLTLeastSquares (const float * const points, int sample_number, cv::Mat &H) {
+bool DLTLeastSquares (const float * const points, unsigned int sample_number, cv::Mat &H) {
     /*
      * A is 2N x 8
      * b is 2N x 1

@@ -20,8 +20,8 @@ void Tests::testHomographyFitting() {
 //    detectAndSaveFeatures(getHomographyDatasetPoints());
 //    exit (0);
 
-    DATASET dataset = DATASET::EVD;
-    std::string img_name = "adam";
+    DATASET dataset = DATASET::Homogr_SIFT;
+    std::string img_name = "graf";
 
     ImageData gt_data (dataset, img_name);
 
@@ -126,14 +126,13 @@ void storeResultsHomography () {
 
     int lo_combinations = 1;
     bool lo[lo_combinations][3] = {
-            {0, 1, 0},
+            {0, 1, 1},
     };
     NeighborsSearch neighborsSearch = NeighborsSearch ::Grid;
     int cell_size = 50;
 
     long mean_time = 0;
     long mean_error = 0;
-
 
     for (SAMPLER smplr : samplers) {
         for (int l = 0; l < lo_combinations; l++) {
@@ -209,24 +208,4 @@ void storeResultsHomography () {
 //    std::cout << "mean time " << (mean_time / num_images) << "\n";
 //    std::cout << "mean error " << (mean_error / num_images) << "\n";
 
-}
-
-
-void getGTInliersFromGTModelHomography (const std::string& filename, const cv::Mat& points, float threshold, std::vector<int> &gt_inliers) {
-    cv::Mat gt_model;
-    Reader::getMatrix3x3(filename, gt_model);
-//    std::cout << gt_model << "\n";
-
-    Estimator * estimator = new HomographyEstimator (points);
-    std::vector<int> inliers2;
-
-    Quality::getInliers(estimator, gt_model, threshold, points.rows, gt_inliers);
-    Quality::getInliers(estimator, gt_model.inv(), threshold, points.rows, inliers2);
-
-//    std::cout << "gt inl1 " << gt_inliers.size() << "\n";
-//    std::cout << "gt inl2 " << inliers2.size() << "\n";
-
-    if (inliers2.size() > gt_inliers.size()) {
-        gt_inliers = inliers2;
-    }
 }

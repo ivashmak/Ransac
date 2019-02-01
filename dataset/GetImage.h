@@ -33,7 +33,7 @@ public:
 
             Reader::LoadPointsFromFile(pts, (folder+"sift_update/"+img_name+"_pts.txt").c_str());
             Reader::LoadPointsFromFile(sorted_pts, (folder+"sift_update/"+img_name+"_spts.txt").c_str());
-            Reader::getMatrix3x3(folder + img_name + "_vpts_model.txt", model);
+            Reader::getMatrix3x3(folder + img_name + "_model.txt", model);
 
             pts1 = pts.colRange(0,2);
             pts2 = pts.colRange(2,4);
@@ -46,7 +46,9 @@ public:
             Reader::getMatrix3x3(folder + img_name + "_vpts_model.txt", model);
 
             pts1 = pts.colRange(0, 2);
-            pts2 = pts.colRange(2, 4);            return;
+            pts2 = pts.colRange(2, 4);
+
+            return;
         } else if (dataset == DATASET::Kusvod2_SIFT) {
             estimator = ESTIMATOR::Fundamental;
             folder = "../dataset/Lebeda/kusvod2/";
@@ -57,7 +59,6 @@ public:
 
             pts1 = pts.colRange(0,2);
             pts2 = pts.colRange(2,4);
-            return;
 
         } else if (dataset == DATASET::Strecha) {
             estimator = ESTIMATOR ::Essential;

@@ -245,7 +245,7 @@ void Ransac::run(cv::InputArray input_points) {
 //    std::cout << "end:\n";
 
     if (best_score->inlier_number == 0) {
-        std::cout << "Best score is 0. Check it!\n";
+//        std::cout << "Best score is 0. Check it!\n";
         best_model->setDescriptor(cv::Mat_<float>::eye(3,3));
 //        exit (111);
     }
@@ -278,7 +278,7 @@ void Ransac::run(cv::InputArray input_points) {
 //        std::cout << best_score->inlier_number << " -\n";
         // estimate non minimal model with max inliers
         if (! estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model)) {
-            std::cout << "\033[1;31mNON minimal model completely failed!\033[0m \n";
+//            std::cout << "\033[1;31mNON minimal model completely failed!\033[0m \n";
             break;
         }
 //        std::cout << non_minimal_model->returnDescriptor() << " std ndlt\n\n";

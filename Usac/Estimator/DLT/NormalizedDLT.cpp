@@ -1,6 +1,6 @@
 #include "DLT.h"
 
-bool NormalizedDLT (const float * const points, const int * const sample, unsigned int sample_number, cv::Mat &H) {
+bool DLt::NormalizedDLT (const int * const sample, unsigned int sample_number, cv::Mat &H) {
     cv::Mat T1, T2, norm_points;
     GetNormalizingTransformation(points, norm_points, sample, sample_number, T1, T2);
 
@@ -19,7 +19,7 @@ bool NormalizedDLT (const float * const points, const int * const sample, unsign
 }
 
 // Weighted Normalized DLT, weights go to Normalizing Transformation
-bool NormalizedDLT (const float * const points, const int * const sample, unsigned int sample_number, const float * const weights, cv::Mat &H) {
+bool DLt::NormalizedDLT (const int * const sample, unsigned int sample_number, const float * const weights, cv::Mat &H) {
     cv::Mat T1, T2, norm_points;
     GetNormalizingTransformation(points, norm_points, sample, sample_number, weights, T1, T2);
     const float * const norm_points_ptr = (float *) norm_points.data;

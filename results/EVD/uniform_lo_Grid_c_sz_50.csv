@@ -2,7 +2,7 @@ RAM 15.6 GB
 Intel Core i7
 OS type 64 bit
 8 CPUs
-Homography_estimator_Uniform_sampler
+Fundamental_estimator_Uniform_sampler
 Runs for each image = 100
 Threshold for each image = 2
 Desired probability for each image = 0.95
