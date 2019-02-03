@@ -44,9 +44,9 @@
 // http://cvrs.whu.edu.cn/downloads/ebooks/Multiple%20View%20Geometry%20in%20Computer%20Vision%20(Second%20Edition).pdf
 // page 279
 
-#include "FundemantalSolver.h"
+#include "FundamentalSolver.h"
 
-unsigned int SevenPointsAlgorithm (const float * const pts, const int * const sample, cv::Mat &F) {
+unsigned int FundamentalSolver::SevenPointsAlgorithm (const int * const sample, cv::Mat &F) {
     float w[7], u[9*9], v[9*9], c[4], r[3];
     float* f1, *f2;
     float t0, t1, t2;
@@ -65,10 +65,10 @@ unsigned int SevenPointsAlgorithm (const float * const pts, const int * const sa
     float x1, y1, x2, y2;
     for (unsigned int i = 0; i < 7; i++ ) {
         smpl = 4*sample[i];
-        x1 = pts[smpl];
-        y1 = pts[smpl+1];
-        x2 = pts[smpl+2];
-        y2 = pts[smpl+3];
+        x1 = points[smpl];
+        y1 = points[smpl+1];
+        x2 = points[smpl+2];
+        y2 = points[smpl+3];
 
         (*A_ptr++) = x2*x1;
         (*A_ptr++) = x2*y1;

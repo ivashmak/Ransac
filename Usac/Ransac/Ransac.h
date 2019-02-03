@@ -1,3 +1,7 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #ifndef RANSAC_RANSAC_H
 #define RANSAC_RANSAC_H
 
@@ -6,7 +10,6 @@
 #include "../Quality/Quality.h"
 #include "../Sampler/Sampler.h"
 
-#include "../Verbose.h"
 #include "RansacOutput.h"
 
 class Ransac {
@@ -14,10 +17,10 @@ protected:
     /*
      * Initialize them to 0 to check if they are null
      */
-    Model *model;
-    Quality *quality;
-    Sampler *sampler;
-    TerminationCriteria *termination_criteria;
+    Model * model;
+    Quality * quality;
+    Sampler * sampler;
+    TerminationCriteria * termination_criteria;
     RansacOutput * ransac_output;
     Estimator * estimator;
 
@@ -26,6 +29,13 @@ protected:
 public:
     
     ~Ransac () = default;
+
+    Ransac (Model * model, cv::InputArray points) {
+        assert(model != nullptr);
+        assert(model->sampler != SAMPLER::NullS);
+        assert(model->estimator != ESTIMATOR::NullE);
+        assert(! points.empty());
+    }   
 
     Ransac (Model * model_,
             Sampler * sampler_,

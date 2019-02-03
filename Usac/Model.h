@@ -1,8 +1,12 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #ifndef RANSAC_MODEL_H
 #define RANSAC_MODEL_H
 
 enum ESTIMATOR  { NullE, Line2d, Homography, Fundamental, Essential };
-enum SAMPLER  { NullS, Uniform, GradualNapsac, Napsac, Prosac, Evsac };
+enum SAMPLER  { NullS, Uniform, ProgressiveNAPSAC, Napsac, Prosac, Evsac, ProsacNapsac };
 enum NeighborsSearch {NullN, Nanoflann, Grid};
 
 class Model {
@@ -52,8 +56,9 @@ public:
 	    copyFrom(model);
 	}
 
-	Model (float threshold_, int sample_number_, float desired_prob_, int knn,
-            ESTIMATOR estimator_, SAMPLER sampler_) {
+	Model (float threshold_, int sample_number_, float desired_prob_, int knn, 
+		ESTIMATOR estimator_, SAMPLER sampler_) {
+		
 		threshold = threshold_;
 		sample_size = sample_number_;
 		desired_prob = desired_prob_;
@@ -155,7 +160,7 @@ public:
 	        name += "Prosac";
 	    } else if (sampler == SAMPLER ::Napsac) {
 	        name += "Napsac";
-	    } else if (sampler == SAMPLER ::GradualNapsac) {
+	    } else if (sampler == SAMPLER ::ProgressiveNAPSAC) {
 	        name += "ProgressiveNapsac";
 	    }
 	    name += "_sampler";

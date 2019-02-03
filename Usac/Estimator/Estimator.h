@@ -1,3 +1,7 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #ifndef RANSAC_ESTIMATOR_H
 #define RANSAC_ESTIMATOR_H
 
@@ -10,7 +14,6 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/core.hpp>
 #include <opencv2/features2d.hpp>
-//#include <opencv2/xfeatures2D.hpp>
 #include <opencv2/highgui.hpp>
 
 #include "../Sampler/Sampler.h"
@@ -19,6 +22,8 @@
 
 class Estimator {
 public:
+    virtual ~Estimator () = default;
+
     // Pure virtuals functions
     // return number of models
     // or Model **& models

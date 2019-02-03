@@ -1,3 +1,7 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #include "Ransac.h"
 #include "../LocalOptimization/InnerLocalOptimization.h"
 #include "../Estimator/DLT/DLT.h"
@@ -83,14 +87,6 @@ void Ransac::run(cv::InputArray input_points) {
     int * inliers = new int[points_size];
     int * sample = new int[estimator->SampleNumber()];
 
-    // ------------- Standard Local Optimization
-    bool LO = model->LO;
-    LocalOptimization * lo_ransac;
-    if (LO) {
-        lo_ransac = new InnerLocalOptimization (model, quality, estimator, points_size);
-    }
-    //--------------------------------------
-
     //------------- SPRT -------------------
     bool SprtLO = model->Sprt;
     SPRT * sprt;
@@ -101,16 +97,23 @@ void Ransac::run(cv::InputArray input_points) {
     }
     //--------------------------------------------
 
+    // ------------- Standard Local Optimization
+    LocalOptimization * lo_ransac;
+    bool LO = model->LO;
+    if (LO) {
+        lo_ransac = new InnerLocalOptimization (model, quality, estimator, points_size);
+    }
+    //--------------------------------------
+    
     //---------- Graph cut local optimization ----------
     bool GraphCutLO = model->GraphCutLO;
-    GraphCut * graphCut;
+    LocalOptimization * graphCut;
     if (GraphCutLO) {
-        graphCut = new GraphCut;
-        graphCut->init(points_size, model, estimator, quality, model->neighborsType);
+        graphCut = new GraphCut (points_size, model, estimator, quality, model->neighborsType);
         if (model->neighborsType == NeighborsSearch::Nanoflann) {
-            graphCut->setNeighbors(neighbors);
+            ((GraphCut *)graphCut)->setNeighbors(neighbors);
         } else {
-            graphCut->setNeighbors(neighbors_v);
+            ((GraphCut *)graphCut)->setNeighbors(neighbors_v);
         }
     }
     unsigned int gc_runs = 0;
@@ -201,7 +204,7 @@ void Ransac::run(cv::InputArray input_points) {
                 // if inlier number is too small, do not update
                 if (LO && current_score->inlier_number > min_inlier_count_for_LO) {
 //                    std::cout << "score before LO " << current_score->inlier_number << "\n";
-                    lo_ransac->GetLOModelScore (models[i], current_score);
+                    lo_ransac->GetModelScore (models[i], current_score);
 //                    std::cout << "score after LO " << current_score->inlier_number << "\n";
                 }
 
@@ -211,7 +214,7 @@ void Ransac::run(cv::InputArray input_points) {
                 // if inlier number is too small, do not update
                 if (GraphCutLO && current_score->inlier_number > min_inlier_count_for_LO) {
 //                    std::cout << "score before GC LO " << current_score->inlier_number << "\n";
-                    graphCut->GraphCutLO(models[i], current_score);
+                    graphCut->GetModelScore(models[i], current_score);
 //                    std::cout << "score after GC LO " << current_score->inlier_number << "\n";
                     gc_runs++;
                 }
@@ -251,9 +254,9 @@ void Ransac::run(cv::InputArray input_points) {
     }
 
     // Graph Cut lo was set, but did not run, run it
-    if (GraphCutLO && graphCut->gc_iterations == 0) {
+    if (GraphCutLO && ((GraphCut *)graphCut)->gc_iterations == 0) {
         // update best model and best score
-        graphCut->GraphCutLO(best_model, best_score);
+        graphCut->GetModelScore(best_model, best_score);
     }
 
 //    std::cout << "Calculate Non minimal model\n";
@@ -327,7 +330,7 @@ void Ransac::run(cv::InputArray input_points) {
     }
     unsigned int gc_iters = 0;
     if (GraphCutLO) {
-        gc_iters = graphCut->gc_iterations;
+        gc_iters = ((GraphCut *)graphCut)->gc_iterations;
     }
     // Store results
     ransac_output = new RansacOutput (best_model, max_inliers,

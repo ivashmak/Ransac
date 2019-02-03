@@ -1,16 +1,23 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #ifndef USAC_FUNDAMENTALESTIMATOR_H
 #define USAC_FUNDAMENTALESTIMATOR_H
 
 #include "Estimator.h"
-#include "Fundamental/FundemantalSolver.h"
+#include "Fundamental/FundamentalSolver.h"
 
 class FundamentalEstimator : public Estimator {
 private:
     const float * const points;
     float f11, f12, f13, f21, f22, f23, f31, f32, f33;
     unsigned int points_size;
+    FundamentalSolver * solver;
 public:
-
+    ~FundamentalEstimator () {
+        delete (solver);
+    }
     /*
      * input_points must be:
      * img1_x1 img1_y1 img2_x1 img2_y1
@@ -25,6 +32,7 @@ public:
     FundamentalEstimator(cv::InputArray input_points) : points((float *)input_points.getMat().data) {
         assert(!input_points.empty());
         points_size = input_points.getMat().rows;
+        solver = new FundamentalSolver (points);
     }
 
     void setModelParameters (const cv::Mat& model) override {
@@ -42,7 +50,7 @@ public:
     unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         cv::Mat_<float> F;
 
-        unsigned int roots = SevenPointsAlgorithm(points, sample, F);
+        unsigned int roots = solver->SevenPointsAlgorithm(sample, F);
 
 //        std::cout << "Roots " << roots << "\n\n";
 
@@ -62,8 +70,8 @@ public:
     bool EstimateModelNonMinimalSample(const int * const sample, unsigned int sample_size, Model &model) override {
         cv::Mat_<float> F;
 
-        if (! EightPointsAlgorithm(points, sample, sample_size, F)) {
-//        if (! EightPointsAlgorithmEigen(points, sample, sample_size, F)) {
+        if (! solver->EightPointsAlgorithm(sample, sample_size, F)) {
+//        if (! EightPointsAlgorithmEigen(sample, sample_size, F)) {
                 return false;
         }
 
@@ -75,7 +83,7 @@ public:
     bool EstimateModelNonMinimalSample(const int * const sample, unsigned int sample_size, const float *const weights, Model &model) override {
         cv::Mat_<float> F;
 
-        if (! EightPointsAlgorithm(points, sample, weights, sample_size, F)) {
+        if (! solver->EightPointsAlgorithm(sample, weights, sample_size, F)) {
                 return false;
         }
 

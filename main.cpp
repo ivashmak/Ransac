@@ -28,9 +28,9 @@ int main (int args, char ** argv) {
 //    tests.testNeighborsSearch();
 
 //     run tests
-//   tests.testLineFitting();
+  tests.testLineFitting();
 //     tests.testHomographyFitting();
-    tests.testFundamentalFitting();
+    // tests.testFundamentalFitting();
 //    tests.testEssentialFitting();
 
 	return 0;

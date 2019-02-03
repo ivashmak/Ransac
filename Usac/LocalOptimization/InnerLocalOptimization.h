@@ -1,3 +1,7 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #ifndef USAC_RANSACLOCALOPTIMIZATION_H
 #define USAC_RANSACLOCALOPTIMIZATION_H
 
@@ -75,7 +79,7 @@ public:
      * Implementation of Locally Optimized Ransac
      * Inner + Iterative
      */
-    void GetLOModelScore (Model * best_model,
+    void GetModelScore (Model * best_model,
                            Score * best_score) override {
 
         // get inliers from so far the best model of Ransac.

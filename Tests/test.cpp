@@ -42,8 +42,7 @@ void Tests::test (cv::Mat points,
 
     if (model->sampler == SAMPLER::Prosac) {
         // re init termination criteria for prosac
-        ProsacTerminationCriteria *  prosac_termination_criteria_ = new ProsacTerminationCriteria;
-        prosac_termination_criteria_->initProsacTerminationCriteria
+        ProsacTerminationCriteria *  prosac_termination_criteria_ = new ProsacTerminationCriteria
                 (((ProsacSampler *) sampler)->getGrowthFunction(), model, points.rows, estimator);
 
         termination_criteria = prosac_termination_criteria_;

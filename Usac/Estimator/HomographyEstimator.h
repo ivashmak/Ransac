@@ -1,3 +1,7 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #ifndef RANSAC_HOMOGRAPHYESTIMATOR_H
 #define RANSAC_HOMOGRAPHYESTIMATOR_H
 
@@ -11,7 +15,9 @@ private:
     float hi11, hi12, hi13, hi21, hi22, hi23, hi31, hi32, hi33;
     DLt * dlt;
 public:
-
+    ~HomographyEstimator () {
+        delete (dlt);
+    }
     /*
      * input_points must be:
      * img1_x1 img1_y1 img2_x1 img2_y1

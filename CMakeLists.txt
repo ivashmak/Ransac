@@ -36,7 +36,8 @@ add_executable(
         Usac/Ransac/Ransac.cpp
         Usac/Ransac/Ransac.h
         Usac/Ransac/RansacOutput.h
-
+        Usac/Ransac/Init.hpp
+        
         Usac/Estimator/Estimator.h
         Usac/Estimator/Line2DEstimator.h
         Usac/Estimator/HomographyEstimator.h
@@ -55,7 +56,7 @@ add_executable(
 
         Usac/Estimator/Fundamental/SevenPoints.cpp
         Usac/Estimator/Fundamental/EightPoints.cpp
-        Usac/Estimator/Fundamental/FundemantalSolver.h
+        Usac/Estimator/Fundamental/FundamentalSolver.h
 
         Usac/LocalOptimization/LocalOptimization.h
         Usac/LocalOptimization/InnerLocalOptimization.h
@@ -96,8 +97,6 @@ add_executable(
         Usac/Utils/NearestNeighbors.cpp Usac/Utils/NearestNeighbors.h
         Usac/Utils/Utils.h
         Usac/Utils/Utils.cpp
-
-        Usac/Verbose.h
 )
 
 # parallel

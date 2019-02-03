@@ -1,3 +1,7 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #ifndef USAC_LOCALOPTIMIZATION_H
 #define USAC_LOCALOPTIMIZATION_H
 
@@ -14,8 +18,8 @@ public:
 	 * and iterative ransac.
 	 * Returns also best lo model and best lo score.
 	 */
-    virtual void GetLOModelScore  (Model * best_model,
-                                   Score * best_score) {}
+    virtual void GetModelScore  (Model * best_model,
+                                   Score * best_score) = 0;
 
 };
 

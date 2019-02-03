@@ -1,3 +1,7 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #ifndef USAC_GRAPHCUT_H
 #define USAC_GRAPHCUT_H
 
@@ -43,7 +47,8 @@ public:
         delete[] errors; delete[] inliers; delete[] sample;
         delete (gc_score); delete (gc_model); delete (uniform_random_generator);
     }
-    void init (unsigned int points_size_, Model * model, Estimator * estimator_, Quality * quality_, NeighborsSearch neighborsType_) {
+    
+    GraphCut (unsigned int points_size_, Model * model, Estimator * estimator_, Quality * quality_, NeighborsSearch neighborsType_) {
         neighborsType = neighborsType_;
         spatial_coherence = model->spatial_coherence_gc;
         knn = model->k_nearest_neighbors;
@@ -103,7 +108,7 @@ public:
 
 	void labeling (const cv::Mat& model, Score * score, int * inliers);
 
-    void GraphCutLO (Model * best_model, Score * best_score) {
+    void GetModelScore (Model * best_model, Score * best_score) override {
 //        std::cout << "begin best score " << best_score->inlier_number << "\n";
         // improve best model by non minimal estimation
 

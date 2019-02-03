@@ -1,11 +1,24 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #ifndef USAC_FIVEPOINTSALGORITHM_H
 #define USAC_FIVEPOINTSALGORITHM_H
 
 #include <opencv2/core/mat.hpp>
 #include <opencv2/core.hpp>
 
+class EssentialSolver {
+private:
+	const float * const points;
+public:
+	EssentialSolver (const float * const points_) : points (points_) {}
+	
+	unsigned int FivePoints (const int * const sample, cv::Mat &E);
+};
+
+// not working need to check
 unsigned int FivePointsOpenCV (const float * const pts, const int * const sample, cv::Mat &E);
-unsigned int FivePoints (const float * const pts, const int * const sample, cv::Mat &E);
 
 // helper
 static void ProjectionsFromEssential(const cv::Mat &E, cv::Mat &P1, cv::Mat &P2, cv::Mat &P3, cv::Mat &P4);

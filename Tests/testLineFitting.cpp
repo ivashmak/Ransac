@@ -138,7 +138,6 @@ void Tests::testLineFitting() {
 //   store_results_line2d();
 }
 
-// problem for 111
 void store_results_line2d () {
 
     std::vector<std::string> dataset;
@@ -207,13 +206,12 @@ void store_results_line2d () {
     samplers.push_back(SAMPLER::Prosac);
     samplers.push_back(SAMPLER::Napsac);
 
-    int lo_combinations = 5;
+    int lo_combinations = 4;
     bool lo[lo_combinations][3] = {
             {0, 0, 0},
             {1, 0, 0},
             {0, 1, 0},
             {0, 0, 1},
-            {1, 1, 1},
     };
 
     for (SAMPLER smplr : samplers) {

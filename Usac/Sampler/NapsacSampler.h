@@ -1,3 +1,7 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #ifndef USAC_NAPSACSAMPLER_H
 #define USAC_NAPSACSAMPLER_H
 
@@ -44,11 +48,8 @@ public:
         sample_size = model->sample_size;
         points_size = points_size_;
 
-        /* check if sample number minus 1 (initial point) is less or equal than k nearest neighbors
-         * so for line is enough 1 neighbor.
-         * for homography at least 3 neighbors are required.
-         */
-        assert(sample_size-1 <= knn);
+        // check if nearest neighbors is enough to sample
+        assert (knn >= sample_size-1);
 
         random_generator = new ArrayRandomGenerator;
         if (reset_time) random_generator->resetTime();

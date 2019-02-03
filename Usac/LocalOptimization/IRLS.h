@@ -1,3 +1,7 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #ifndef USAC_IRLS_H
 #define USAC_IRLS_H
 
@@ -5,7 +9,7 @@
 #include "../Quality/Quality.h"
 #include "../Estimator/DLT/DLT.h"
 
-class IRLS {
+class IRLS : public LocalOptimization {
 private:
     float * weights;
     int *inliers, *sample;
@@ -20,10 +24,8 @@ private:
     unsigned int max_sample_size;
 public:
     ~IRLS() {
-        delete[] weights;
-        delete[] inliers;
-        delete[] sample;
-        delete[] uniformRandomGenerator;
+        delete[] weights; delete[] inliers; delete[] sample; delete[] uniformRandomGenerator;
+        delete(irls_model); delete(irls_score);
     }
 
     IRLS (unsigned int points_size_, Model * model, Estimator * estimator_, Quality * quality_) {
@@ -46,7 +48,7 @@ public:
         max_sample_size = model->lo_sample_size;
     }
 
-    void getModelScore (Score * score, Model * model) {
+    void GetModelScore (Model * model, Score * score) override {
         irls_model->setDescriptor(model->returnDescriptor());
 
         for (unsigned int iter = 1; iter < 20; iter++) {

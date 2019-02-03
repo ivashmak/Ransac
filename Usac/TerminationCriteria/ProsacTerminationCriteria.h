@@ -29,7 +29,6 @@ private:
 
     unsigned int * maximality_samples;
     unsigned int * non_random_inliers;
-    bool * inlier_flags;
     unsigned int * growth_function;
 
     unsigned int * largest_sample_size;
@@ -48,7 +47,6 @@ public:
     ~ProsacTerminationCriteria () {
         delete[] maximality_samples;
         delete[] non_random_inliers;
-        delete[] inlier_flags;
     }
 
     void setLargestSampleSize (unsigned int * largest_sample_size_) {
@@ -58,7 +56,7 @@ public:
     /*
         Remember to initialize estimator with sorted points and Prosac sampler before.
     */
-    void initProsacTerminationCriteria (unsigned int * growth_function_,
+    ProsacTerminationCriteria (unsigned int * growth_function_,
                                         const Model * const model,
                                         unsigned int points_size_,
                                         Estimator * estimator_) {
@@ -134,8 +132,6 @@ public:
         for (size_t i = 0; i < points_size; ++i) {
             maximality_samples[i] = max_hypotheses;
         }
-
-        inlier_flags = new bool[points_size];
     }
 
     // return stopping length as pointer to stopping length for prosac sampler
@@ -179,23 +175,22 @@ public:
             inlier_count += estimator->GetError(i) < threshold;
         }
 
-        // set inlier flags
-        for (unsigned int i = min_termination_length; i < points_size; ++i) {
-            inlier_flags[i] = estimator->GetError(i) < threshold;
-        }
-
-//        bool is_inlier_iplus1;
-//        bool is_inlier_i = estimator->GetError(min_termination_length) < threshold;
+       bool is_inlier_iplus1;
+       bool is_inlier_i = estimator->GetError(min_termination_length) < threshold;
 
         // after this initial subset, try to update the stopping length if possible
         for (unsigned int i = min_termination_length; i < points_size; ++i) {
-            inlier_count += inlier_flags[i];
+            if (i != points_size-1) {
+                is_inlier_iplus1 = estimator->GetError(i+1) < threshold;
+            }
+
+            inlier_count += is_inlier_i;
 
             if (non_random_inliers[i] < inlier_count) {
                 non_random_inliers[i] = inlier_count;	// update the best inliers for the the subset [0...i]
 
                 // update the number of samples based on this inlier count
-                if ((i == points_size-1) || (inlier_flags[i] && !inlier_flags[i+1])) {
+                if ((i == points_size-1) || (is_inlier_i && !is_inlier_iplus1)) {
                     unsigned int new_samples = standart_termination_criteria->
                                             getUpBoundIterations(inlier_count, i+1);
 //                    std::cout << new_samples << "\n";
@@ -214,6 +209,8 @@ public:
                     }
                 }
             }
+
+            is_inlier_i = is_inlier_iplus1;
         }
 
         return max_samples;

@@ -61,7 +61,7 @@ void Tests::initSampler (Sampler *& sampler, Model * model, unsigned int points_
     } else if (model->sampler == SAMPLER::Evsac) {
         assert(model->k_nearest_neighbors > 0);
         tests.initEvsac(sampler, points, model->sample_size, points_size, model->k_nearest_neighbors);
-    } else if (model->sampler == SAMPLER::GradualNapsac) {
+    } else if (model->sampler == SAMPLER::ProgressiveNAPSAC) {
         tests.initGraduallyIncreasingSampler(sampler, points, model->sample_size);
     } else {
         std::cout << "UNKOWN SAMPLER\n";

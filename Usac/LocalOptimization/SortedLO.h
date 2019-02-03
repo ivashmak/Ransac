@@ -1,3 +1,7 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #ifndef USAC_SORTED_LO_H
 #define USAC_SORTED_LO_H
 
@@ -20,10 +24,8 @@ private:
     unsigned int max_sample_size;
 public:
     ~SortedLO() {
-        delete[] errors;
-        delete[] inliers;
-        delete[] sample;
-        delete[] uniformRandomGenerator;
+        delete[] errors; delete[] inliers; delete[] sample; delete[] uniformRandomGenerator;
+        delete(slo_model); delete(slo_score);
     }
 
     SortedLO (unsigned int points_size_, Model * model, Estimator * estimator_, Quality * quality_) {

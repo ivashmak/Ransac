@@ -164,8 +164,7 @@ public:
 
             if (model->sampler == SAMPLER::Prosac) {
                 // re init termination criteria for prosac
-                termination_criteria = new ProsacTerminationCriteria;
-                ((ProsacTerminationCriteria *)termination_criteria)->initProsacTerminationCriteria
+                termination_criteria = new ProsacTerminationCriteria 
                         (((ProsacSampler *) sampler)->getGrowthFunction(), model, points.rows, estimator);
             } else {
                 termination_criteria = new StandardTerminationCriteria;

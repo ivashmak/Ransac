@@ -1,3 +1,7 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #include "FivePoints.h"
 #include "Polynomial.h"
 #include "Rpoly.h"
@@ -6,7 +10,7 @@
  * https://github.com/danini/graph-cut-ransac
  */
 
-unsigned int FivePoints (const float * const pts, const int * const sample, cv::Mat &E) {
+unsigned int EssentialSolver::FivePoints (const int * const sample, cv::Mat &E) {
     cv::Mat P;
     std::vector<cv::Point2d> pts1(5), pts2(5);
 
@@ -14,10 +18,10 @@ unsigned int FivePoints (const float * const pts, const int * const sample, cv::
     for (int i = 0; i < 5; i++) {
         smpl = 4 * sample[i];
         
-        pts1[i].x = static_cast<double>(pts[smpl]);
-        pts1[i].y = static_cast<double>(pts[smpl+1]);
-        pts2[i].x = static_cast<double>(pts[smpl+2]);
-        pts2[i].y = static_cast<double>(pts[smpl+3]);
+        pts1[i].x = static_cast<double>(points[smpl]);
+        pts1[i].y = static_cast<double>(points[smpl+1]);
+        pts2[i].x = static_cast<double>(points[smpl+2]);
+        pts2[i].y = static_cast<double>(points[smpl+3]);
     }
 
     Solve5PointEssential(pts1, pts2, E, P);

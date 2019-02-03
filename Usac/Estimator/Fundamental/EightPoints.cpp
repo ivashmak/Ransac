@@ -1,10 +1,10 @@
-#include "FundemantalSolver.h"
+#include "FundamentalSolver.h"
 #include "../DLT/DLT.h"
 
-bool EightPointsAlgorithm (const float * const pts, const int * const sample, unsigned int sample_number, cv::Mat &F) {
+bool FundamentalSolver::EightPointsAlgorithm (const int * const sample, unsigned int sample_number, cv::Mat &F) {
 
     cv::Mat_<float> T1, T2, norm_points;
-    GetNormalizingTransformation(pts, norm_points, sample, sample_number, T1, T2);
+    GetNormalizingTransformation(points, norm_points, sample, sample_number, T1, T2);
 
     const float * const norm_points_ptr = (float *) norm_points.data;
 
@@ -100,10 +100,10 @@ bool EightPointsAlgorithm (const float * const pts, const int * const sample, un
     return true;
 }
 
-bool EightPointsAlgorithmEigen (const float * const pts, const int * const sample, unsigned int sample_number, cv::Mat &F) {
+bool FundamentalSolver::EightPointsAlgorithmEigen (const int * const sample, unsigned int sample_number, cv::Mat &F) {
 
     cv::Mat_<float> T1, T2, norm_points;
-    GetNormalizingTransformation(pts, norm_points, sample, sample_number, T1, T2);
+    GetNormalizingTransformation(points, norm_points, sample, sample_number, T1, T2);
 
     const float * const norm_points_ptr = (float *) norm_points.data;
 
@@ -170,10 +170,10 @@ bool EightPointsAlgorithmEigen (const float * const pts, const int * const sampl
     return true;
 }
 
-bool EightPointsAlgorithm (const float * const pts, const int * const sample, const float * const weights, unsigned int sample_number, cv::Mat &F) {
+bool FundamentalSolver::EightPointsAlgorithm (const int * const sample, const float * const weights, unsigned int sample_number, cv::Mat &F) {
 
     cv::Mat_<float> T1, T2, norm_points;
-    GetNormalizingTransformation(pts, norm_points, sample, sample_number, weights, T1, T2);
+    GetNormalizingTransformation(points, norm_points, sample, sample_number, weights, T1, T2);
 
     const float * const norm_points_ptr = (float *) norm_points.data;
 

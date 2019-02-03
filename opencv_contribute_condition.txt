@@ -1,2 +1,2 @@
 https://github.com/opencv/opencv/wiki/How_to_contribute
-
+https://github.com/opencv/opencv/wiki/Coding_Style_Guide

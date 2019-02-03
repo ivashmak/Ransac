@@ -1,16 +1,25 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #ifndef USAC_ESSENTIALESTIMATOR_H
 #define USAC_ESSENTIALESTIMATOR_H
 
 #include "Estimator.h"
-#include "Fundamental/FundemantalSolver.h"
+#include "Fundamental/FundamentalSolver.h"
 #include "Essential/FivePoints.h"
 
 class EssentialEstimator : public Estimator {
 private:
     const float * const points;
     float e11, e12, e13, e21, e22, e23, e31, e32, e33;
+    EssentialSolver * e_solver;
+    FundamentalSolver * f_solver;
 public:
-
+    ~EssentialEstimator () {
+        delete (e_solver);
+        delete (f_solver);
+    }
     /*
      * input_points must be:
      * img1_x1 img1_y1 img2_x1 img2_y1
@@ -21,6 +30,8 @@ public:
 
     EssentialEstimator(cv::InputArray input_points) : points((float *)input_points.getMat().data) {
         assert(!input_points.empty());
+        e_solver = new EssentialSolver (points);
+        f_solver = new FundamentalSolver (points);
     }
 
     void setModelParameters (const cv::Mat& model) override {
@@ -40,7 +51,7 @@ public:
     unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
         cv::Mat_<float> E;
 
-        unsigned int models_count = FivePoints (points, sample, E);
+        unsigned int models_count = e_solver->FivePoints (sample, E);
 //        unsigned int models_count2 = FivePointsOpenCV (points, sample, E2);
 
         std::cout << "models count " << models_count << "\n";
@@ -56,7 +67,7 @@ public:
     bool EstimateModelNonMinimalSample(const int * const sample, unsigned int sample_size, Model &model) override {
         cv::Mat_<float> E;
 
-        if (! EightPointsAlgorithm(points, sample, sample_size, E)) {
+        if (! f_solver->EightPointsAlgorithm(sample, sample_size, E)) {
             return false;
         }
 
