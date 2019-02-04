@@ -1,9 +1,9 @@
 #include "Tests.h"
-#include "../Usac/Sampler/UniformSampler.h"
-#include "../Usac/Sampler/ProsacSampler.h"
-#include "../Usac/Sampler/EvsacSampler.h"
-#include "../Usac/Sampler/NapsacSampler.h"
-#include "../Usac/Sampler/ProgressiveNapsac.h"
+#include "../usac/sampler/uniform_sampler.hpp"
+#include "../usac/sampler/prosac_sampler.hpp"
+#include "../usac/sampler/evsac_sampler.hpp"
+#include "../usac/sampler/napsac_sampler.hpp"
+#include "../usac/sampler/progressive_sampler.hpp"
 
 void Tests::initProsac (Sampler *& sampler, unsigned int sample_number, unsigned int points_size) {
     sampler = new ProsacSampler;

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 set (CMAKE_CXX_STANDARD 11)
 
-project (Usac)
+project (usac)
 find_package (OpenCV REQUIRED)
 
 add_executable(
@@ -15,58 +15,58 @@ add_executable(
         Detector/detector.cpp
         Detector/detector.h
 
-        Usac/Quality/Quality.h
-        Usac/Quality/LineQuality.h
+        usac/quality/quality.hpp
+        usac/quality/line_quality.hpp
 
-        Usac/Model.h
+        usac/model.hpp
 
-        Usac/TerminationCriteria/StandardTerminationCriteria.h
-        Usac/TerminationCriteria/ProsacTerminationCriteria.h
-        Usac/TerminationCriteria/TerminationCriteria.h
+        usac/termination_criteria/standard_termination_criteria.hpp
+        usac/termination_criteria/prosac_termination_criteria.hpp
+        usac/termination_criteria/termination_criteria.hpp
 
-        Usac/Sampler/Sampler.h
-        Usac/Sampler/UniformSampler.h
-        Usac/Sampler/NapsacSampler.h
-        Usac/Sampler/ProgressiveNapsac.h
-        Usac/Sampler/EvsacSampler.h
-        Usac/Sampler/ProsacSimpleSampler.h
-        Usac/Sampler/ProsacSampler.h
-        Usac/Sampler/ProsacNapsacSampler.h
+        usac/sampler/sampler.hpp
+        usac/sampler/uniform_sampler.hpp
+        usac/sampler/napsac_sampler.hpp
+        usac/sampler/progressive_sampler.hpp
+        usac/sampler/evsac_sampler.hpp
+        usac/sampler/prosac_simple_sampler.hpp
+        usac/sampler/prosac_sampler.hpp
+        usac/sampler/prosac_napsac_sampler.hpp
 
-        Usac/Ransac/Ransac.cpp
-        Usac/Ransac/Ransac.h
-        Usac/Ransac/RansacOutput.h
-        Usac/Ransac/Init.hpp
+        usac/ransac/ransac.cpp
+        usac/ransac/ransac.hpp
+        usac/ransac/ransac_output.hpp
+        usac/ransac/init.hpp
         
-        Usac/Estimator/Estimator.h
-        Usac/Estimator/Line2DEstimator.h
-        Usac/Estimator/HomographyEstimator.h
-        Usac/Estimator/EssentialEstimator.h
-        Usac/Estimator/FundamentalEstimator.h
+        usac/estimator/estimator.hpp
+        usac/estimator/line2d_estimator.hpp
+        usac/estimator/homography_estimator.hpp
+        usac/estimator/essential_estimator.hpp
+        usac/estimator/fundamental_estimator.hpp
 
-        Usac/Estimator/DLT/DLT.h Usac/Estimator/DLT/DLT.cpp
-        Usac/Estimator/DLT/NormalizedDLT.cpp
-        Usac/Estimator/DLT/NormalizingTransformation.cpp
+        usac/estimator/dlt/dlt.hpp usac/estimator/dlt/dlt.cpp
+        usac/estimator/dlt/normalized_dlt.cpp
+        usac/estimator/dlt/normalizing_transformation.cpp
 
-        Usac/Estimator/Essential/FivePoints.h
-        Usac/Estimator/Essential/Rpoly.cpp Usac/Estimator/Essential/Rpoly.h
-        Usac/Estimator/Essential/Polynomial.h
-        Usac/Estimator/Essential/FivePointsOpenCV.cpp
-        Usac/Estimator/Essential/FivePoints.cpp
+        usac/estimator/essential/five_points.hpp
+        usac/estimator/essential/five_points.cpp
+        usac/estimator/essential/rpoly.cpp usac/estimator/essential/rpoly.hpp
+        usac/estimator/essential/polynomial.hpp
+        usac/estimator/essential/five_points_opencv.cpp
 
-        Usac/Estimator/Fundamental/SevenPoints.cpp
-        Usac/Estimator/Fundamental/EightPoints.cpp
-        Usac/Estimator/Fundamental/FundamentalSolver.h
+        usac/estimator/fundamental/seven_points.cpp
+        usac/estimator/fundamental/eight_points.cpp
+        usac/estimator/fundamental/fundamental_solver.hpp
 
-        Usac/LocalOptimization/LocalOptimization.h
-        Usac/LocalOptimization/InnerLocalOptimization.h
-        Usac/LocalOptimization/IterativeLocalOptimization.h
-        Usac/LocalOptimization/GraphCut.cpp Usac/LocalOptimization/GraphCut.h
-        Usac/LocalOptimization/GreedyLocalOptimization.h
-        Usac/LocalOptimization/IRLS.h
-        Usac/LocalOptimization/SortedLO.h
+        usac/local_optimization/local_optimization.hpp
+        usac/local_optimization/inner_local_optimization.hpp
+        usac/local_optimization/iterative_local_optimization.hpp
+        usac/local_optimization/graphcut.cpp usac/local_optimization/graphcut.hpp
+        usac/local_optimization/GreedyLocalOptimization.h
+        usac/local_optimization/irls.hpp
+        usac/local_optimization/SortedLO.h
         
-        Usac/SPRT.h
+        usac/sprt.hpp
 
         Tests/Tests.h
         Tests/testHomographyFitting.cpp
@@ -78,25 +78,25 @@ add_executable(
         Tests/samplerInitialization.cpp
         Tests/estimatorInitialization.cpp
         Tests/testNeighborsSearch.cpp
-        
-        Usac/Helper/Logging.h
-        Usac/Helper/Drawing/Drawing.h
-        Usac/Helper/Drawing/DrawPanorama.cpp
-        Usac/Helper/Drawing/DrawEpipolarLines.cpp
 
-        RandomGenerator/RandomGenerator.h
-        RandomGenerator/ArrayRandomGenerator.h
-        RandomGenerator/UniformRandomGenerator.h
-        RandomGenerator/EvaluateRandomGenerators.h
+        helper/Logging.h
+        helper/Drawing/Drawing.h
+        helper/Drawing/DrawPanorama.cpp
+        helper/Drawing/DrawEpipolarLines.cpp
+
+        usac/random_generator/random_generator.hpp
+        usac/random_generator/array_random_generator.hpp
+        usac/random_generator/uniform_random_generator.hpp
+        usac/random_generator/EvaluateRandomGenerators.h
 
         dataset/Dataset.h dataset/Dataset.cpp
         dataset/SaveGTModel.h dataset/SaveGTModel.cpp
         dataset/GetImage.h
 
-        Usac/Utils/Math.cpp Usac/Utils/Math.h
-        Usac/Utils/NearestNeighbors.cpp Usac/Utils/NearestNeighbors.h
-        Usac/Utils/Utils.h
-        Usac/Utils/Utils.cpp
+        usac/utils/math.cpp usac/utils/math.hpp
+        usac/utils/nearest_neighbors.cpp usac/utils/nearest_neighbors.hpp
+        usac/utils/utils.hpp
+        usac/utils/utils.cpp
 )
 
 # parallel

@@ -2,24 +2,23 @@
 #include "Tests.h"
 
 #include "../Generator/generator.h"
-#include "../Usac/Estimator/Line2DEstimator.h"
-#include "../Usac/Ransac/Ransac.h"
+#include "../usac/estimator/line2d_estimator.hpp"
+#include "../usac/ransac/ransac.hpp"
 
-#include "../Usac/Helper/Drawing/Drawing.h"
-#include "../Usac/Helper/Logging.h"
+#include "../helper/Drawing/Drawing.h"
+#include "../helper/Logging.h"
 
 #include "../Detector/Reader.h"
 
-#include "../Usac/Sampler/Sampler.h"
-#include "../Usac/Sampler/NapsacSampler.h"
-#include "../Usac/Sampler/ProgressiveNapsac.h"
-#include "../Usac/Sampler/EvsacSampler.h"
-#include "../Usac/Sampler/UniformSampler.h"
-#include "../Usac/Sampler/ProsacSimpleSampler.h"
-#include "../Usac/Utils/NearestNeighbors.h"
-#include "../Usac/TerminationCriteria/ProsacTerminationCriteria.h"
-#include "../Usac/Sampler/ProsacSampler.h"
-#include "../Usac/Utils/Utils.h"
+#include "../usac/sampler/sampler.hpp"
+#include "../usac/sampler/napsac_sampler.hpp"
+#include "../usac/sampler/prosac_sampler.hpp"
+#include "../usac/sampler/evsac_sampler.hpp"
+#include "../usac/sampler/uniform_sampler.hpp"
+#include "../usac/sampler/prosac_simple_sampler.hpp"
+#include "../usac/utils/nearest_neighbors.hpp"
+#include "../usac/sampler/prosac_sampler.hpp"
+#include "../usac/utils/utils.hpp"
 
 void store_results_line2d ();
 void getGTInliers (const cv::Mat& points, const cv::Mat& gt_model, float threshold, std::vector<int> &gt_inliers);

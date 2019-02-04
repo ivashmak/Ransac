@@ -2,8 +2,8 @@
 #include <opencv2/core/mat.hpp>
 #include "SaveGTModel.h"
 #include "../Detector/Reader.h"
-#include "../Usac/Estimator/Estimator.h"
-#include "../Usac/Estimator/FundamentalEstimator.h"
+#include "../usac/estimator/estimator.hpp"
+#include "../usac/estimator/fundamental_estimator.hpp"
 
 void saveGTModel (DATASET dataset) {
     if (dataset != DATASET::Adelaidermf) {

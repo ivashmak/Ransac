@@ -1,8 +1,8 @@
 #include "Tests.h"
 #include "../Detector/Reader.h"
-#include "../Usac/Utils/Utils.h"
-#include "../Usac/Helper/Logging.h"
-#include "../Usac/Estimator/HomographyEstimator.h"
+#include "../usac/utils/utils.hpp"
+#include "../helper/Logging.h"
+#include "../usac/estimator/homography_estimator.hpp"
 #include "../dataset/Dataset.h"
 
 #include <cstdio>

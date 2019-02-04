@@ -1,5 +1,5 @@
 #include "Tests.h"
-#include "../Usac/Helper/Logging.h"
+#include "../helper/Logging.h"
 
 void Tests::test (cv::Mat points,
                    Model * model,

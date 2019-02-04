@@ -1,13 +1,13 @@
 #include "Tests.h"
 
 #include "../Detector/Reader.h"
-#include "../Usac/Helper/Drawing/Drawing.h"
-#include "../Usac/Helper/Logging.h"
-#include "../Usac/Estimator/FundamentalEstimator.h"
-#include "../Usac/Sampler/UniformSampler.h"
+#include "../helper/Drawing/Drawing.h"
+#include "../helper/Logging.h"
+#include "../usac/estimator/fundamental_estimator.hpp"
+#include "../usac/sampler/uniform_sampler.hpp"
 #include "../dataset/Dataset.h"
-#include "../Usac/Utils/NearestNeighbors.h"
-#include "../Usac/Utils/Utils.h"
+#include "../usac/utils/nearest_neighbors.hpp"
+#include "../usac/utils/utils.hpp"
 
 void storeResultsFundamental ();
 void getGTInliersFromGTModelFundamental (const std::string& filename, const cv::Mat& points, float threshold, std::vector<int> &gt_inliers);

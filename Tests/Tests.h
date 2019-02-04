@@ -1,14 +1,14 @@
 #ifndef TESTS_TESTS_H
 #define TESTS_TESTS_H
 
-#include "../Usac/Helper/Drawing/Drawing.h"
-#include "../Usac/Estimator/Estimator.h"
-#include "../Usac/Quality/Quality.h"
-#include "../Usac/Ransac/Ransac.h"
+#include "../helper/Drawing/Drawing.h"
+#include "../usac/estimator/estimator.hpp"
+#include "../usac/quality/quality.hpp"
+#include "../usac/ransac/ransac.hpp"
 #include "StatisticalResults.h"
-#include "../Usac/Sampler/ProsacSampler.h"
-#include "../Usac/TerminationCriteria/ProsacTerminationCriteria.h"
-#include "../Usac/Utils/NearestNeighbors.h"
+#include "../usac/sampler/prosac_sampler.hpp"
+#include "../usac/termination_criteria/prosac_termination_criteria.hpp"
+#include "../usac/utils/nearest_neighbors.hpp"
 #include "../Detector/detector.h"
 
 class Tests {

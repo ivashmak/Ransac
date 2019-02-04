@@ -1,8 +1,8 @@
 #include "Tests.h"
-#include "../Usac/Estimator/Line2DEstimator.h"
-#include "../Usac/Estimator/HomographyEstimator.h"
-#include "../Usac/Estimator/EssentialEstimator.h"
-#include "../Usac/Estimator/FundamentalEstimator.h"
+#include "../usac/estimator/line2d_estimator.hpp"
+#include "../usac/estimator/homography_estimator.hpp"
+#include "../usac/estimator/essential_estimator.hpp"
+#include "../usac/estimator/fundamental_estimator.hpp"
 
 void Tests::initLine2D (Estimator *& estimator, const cv::Mat& points) {
     estimator = new Line2DEstimator(points);

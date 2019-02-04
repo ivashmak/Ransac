@@ -6,8 +6,8 @@
 #include <iostream>
 #include "Dataset.h"
 #include "../Detector/Reader.h"
-#include "../Usac/Estimator/HomographyEstimator.h"
-#include "../Usac/Estimator/FundamentalEstimator.h"
+#include "../usac/estimator/homography_estimator.hpp"
+#include "../usac/estimator/fundamental_estimator.hpp"
 
 class ImageData {
 private:
