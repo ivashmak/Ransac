@@ -9,6 +9,9 @@
 #include "../quality/quality.hpp"
 #include "../sampler/sampler.hpp"
 #include "ransac_output.hpp"
+#include "init.hpp"
+#include "../sprt.hpp"
+#include "../local_optimization/local_optimization.hpp"
 
 class Ransac {
 protected:
@@ -21,6 +24,8 @@ protected:
     TerminationCriteria * termination_criteria;
     RansacOutput * ransac_output;
     Estimator * estimator;
+    LocalOptimization * local_optimization;
+    SPRT * sprt;
 
     int * neighbors = nullptr;
     std::vector<std::vector<int>> neighbors_v;
@@ -29,10 +34,24 @@ public:
     ~Ransac () = default;
 
     Ransac (Model * model, cv::InputArray points) {
+        assert(! points.empty());
         assert(model != nullptr);
         assert(model->sampler != SAMPLER::NullS);
-        assert(model->estimator != ESTIMATOR::NullE);
-        assert(! points.empty());
+        // cv::Mat p = points.getMat();
+        // InitEstimator (estimator, model->estimator, p);
+
+        assert (model->neighborsType != NullN);
+        if (model->neighborsType == NeighborsSearch::Grid) {
+
+        } else if (model->neighborsType == NeighborsSearch::Grid) {
+
+        } else {
+
+        }
+
+        if (model->Sprt) {
+            sprt = new SPRT (model, estimator, 0);
+        }
     }   
 
     Ransac (Model * model_,

@@ -106,7 +106,7 @@ public:
         // distance2 = abs (b1 / b2)
 
         // error is average of distances
-        return (fabsf(a1 / a2) + fabsf(b1 / b2)) / 2; // fabsf((a1 / a2) + (b1 / b2)) / 2
+        return (fabsf(a1 / a2) + fabsf(b1 / b2)) / 2;
     }
 
 

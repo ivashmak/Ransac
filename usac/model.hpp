@@ -5,9 +5,12 @@
 #ifndef RANSAC_MODEL_H
 #define RANSAC_MODEL_H
 
+#include "../dataset/Dataset.h"
+
 enum ESTIMATOR  { NullE, Line2d, Homography, Fundamental, Essential };
 enum SAMPLER  { NullS, Uniform, ProgressiveNAPSAC, Napsac, Prosac, Evsac, ProsacNapsac };
 enum NeighborsSearch {NullN, Nanoflann, Grid};
+enum LocOpt {NullLO, GC, InItRsc, IRLS};
 
 class Model {
 public:
@@ -46,6 +49,12 @@ public:
    	bool FixingLocalOptimization = true;
 
     bool reset_random_generator = true;
+
+    LocOpt lo = NullLO;
+
+    // for debug
+    std::string img_name;
+    DATASET dataset;
 private:
     cv::Mat descriptor;
 	

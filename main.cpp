@@ -9,9 +9,11 @@
 #include "dataset/SaveGTModel.h"
 #include "usac/sampler/prosac_simple_sampler.hpp"
 
+#include "usac/local_optimization/irls.hpp"
+
 int main (int args, char ** argv) {
     Tests tests;
-
+    
 //    saveGTModel(DATASET::Adelaidermf);
 
     // evaluating random generators

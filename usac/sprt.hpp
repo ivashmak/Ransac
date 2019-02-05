@@ -87,8 +87,8 @@ public:
 //        delete[] points_random_pool;
     }
 
-    void initialize (Estimator * estimator_, Model * model, unsigned int points_size_, bool reset_time=true) {
-        if (reset_time) srand(time(NULL));
+    SPRT (Model * model, Estimator * estimator_, unsigned int points_size_) {
+        if (model->reset_random_generator) srand(time(NULL));
 
         // Generate array of points
         points_random_pool = new unsigned int [points_size_];

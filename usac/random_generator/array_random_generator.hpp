@@ -14,7 +14,6 @@ class ArrayRandomGenerator : public RandomGenerator {
 protected:
     unsigned int array_size = 0;
     int * array;
-    int prev_min = 0, prev_max = 0;
     unsigned int max;
 public:
 
@@ -24,17 +23,12 @@ public:
 
     // range in closed interval <min; max>
     void resetGenerator (int min, int max) override {
-        if (prev_min != min || max != prev_max) {
-            prev_min = min;
-            prev_max = max;
-
-            array_size = max - min + 1;
-            max = array_size;
-            array = new int[array_size];
-            int k = 0;
-            for (int i = min; i <= max; i++) {
-                array[k++] = i;
-            }
+        array_size = max - min + 1;
+        max = array_size;
+        array = new int[array_size];
+        int k = 0;
+        for (int i = min; i <= max; i++) {
+            array[k++] = i;
         }
     }
 

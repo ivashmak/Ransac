@@ -3,17 +3,13 @@
 // of this distribution and at http://opencv.org/license.html.
 
 #include "ransac.hpp"
+#include "../local_optimization/irls.hpp"
 #include "../local_optimization/inner_local_optimization.hpp"
-#include "../estimator/dlt/dlt.hpp"
 #include "../local_optimization/graphcut.hpp"
 #include "../sprt.hpp"
 
 #include "../sampler/prosac_sampler.hpp"
 #include "../termination_criteria/prosac_termination_criteria.hpp"
-#include "../estimator/homography_estimator.hpp"
-#include "../local_optimization/GreedyLocalOptimization.h"
-#include "../local_optimization/irls.hpp"
-#include "../local_optimization/SortedLO.h"
 
 unsigned int getPointsSize (cv::InputArray points) {
 //    std::cout << points.getMat(0).total() << '\n';
@@ -92,8 +88,7 @@ void Ransac::run(cv::InputArray input_points) {
     SPRT * sprt;
     bool is_good_model;
     if (SprtLO) {
-        sprt = new SPRT;
-        sprt->initialize(estimator, model, points_size, model->reset_random_generator);
+        sprt = new SPRT (model, estimator, points_size);
     }
     //--------------------------------------------
 
@@ -101,7 +96,7 @@ void Ransac::run(cv::InputArray input_points) {
     LocalOptimization * lo_ransac;
     bool LO = model->LO;
     if (LO) {
-        lo_ransac = new InnerLocalOptimization (model, quality, estimator, points_size);
+        lo_ransac = new InnerLocalOptimization (model, estimator, quality, points_size);
     }
     //--------------------------------------
     
@@ -109,7 +104,7 @@ void Ransac::run(cv::InputArray input_points) {
     bool GraphCutLO = model->GraphCutLO;
     LocalOptimization * graphCut;
     if (GraphCutLO) {
-        graphCut = new GraphCut (points_size, model, estimator, quality, model->neighborsType);
+        graphCut = new GraphCut (model, estimator, quality, points_size);
         if (model->neighborsType == NeighborsSearch::Nanoflann) {
             ((GraphCut *)graphCut)->setNeighbors(neighbors);
         } else {
@@ -130,7 +125,7 @@ void Ransac::run(cv::InputArray input_points) {
 //    int * best_sample = new int[4];
 
     // ------------ Iterated Reweighted Least Squares ------------------
-    IRLS * irls = new IRLS(points_size, model, estimator, quality);
+    LocalOptimization * irls = new Irls(model, estimator, quality, points_size);
     // ------------------------------------------------------
 
     while (iters < max_iters) {

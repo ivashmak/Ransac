@@ -1,27 +1,13 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #ifndef USAC_PROSACTERMINATIONCRITERIA_H
 #define USAC_PROSACTERMINATIONCRITERIA_H
 
 #include <vector>
 #include <opencv2/core/mat.hpp>
 #include "standard_termination_criteria.hpp"
-
-////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2012 University of North Carolina at Chapel Hill
-//  All Rights Reserved
-//
-//  Permission to use, copy, modify and distribute this software and its
-//  documentation for educational, research and non-profit purposes, without
-//  fee, and without a written agreement is hereby granted, provided that the
-//  above copyright notice and the following paragraph appear in all copies.
-//  
-//  The University of North Carolina at Chapel Hill make no representations
-//  about the suitability of this software for any purpose. It is provided
-//  'as is' without express or implied warranty. 
-//
-//  Please send BUG REPORTS to rraguram@cs.unc.edu
-//
-////////////////////////////////////////////////////////////////////////////
 
 class ProsacTerminationCriteria : public TerminationCriteria {
 private:
@@ -45,8 +31,8 @@ private:
 public:
 
     ~ProsacTerminationCriteria () {
-        delete[] maximality_samples;
-        delete[] non_random_inliers;
+        delete[] maximality_samples; delete[] non_random_inliers;
+        delete (standart_termination_criteria);
     }
 
     void setLargestSampleSize (unsigned int * largest_sample_size_) {

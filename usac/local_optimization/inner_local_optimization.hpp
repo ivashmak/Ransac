@@ -44,10 +44,7 @@ public:
         delete (lo_score); delete (lo_model); delete (uniform_random_generator); delete (iterativeLocalOptimization);
     }
 
-    InnerLocalOptimization (Model *model,
-                             Quality *quality_,
-                             Estimator *estimator_,
-                             unsigned int points_size) {
+    InnerLocalOptimization (Model *model, Estimator *estimator_, Quality *quality_, unsigned int points_size) {
 
         estimator = estimator_;
         quality = quality_;

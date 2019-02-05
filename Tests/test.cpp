@@ -1,6 +1,7 @@
 #include "Tests.h"
 #include "../helper/Logging.h"
 
+
 void Tests::test (cv::Mat points,
                    Model * model,
                    const std::string &img_name,

@@ -48,8 +48,8 @@ public:
         delete (gc_score); delete (gc_model); delete (uniform_random_generator);
     }
     
-    GraphCut (unsigned int points_size_, Model * model, Estimator * estimator_, Quality * quality_, NeighborsSearch neighborsType_) {
-        neighborsType = neighborsType_;
+    GraphCut (Model * model, Estimator * estimator_, Quality * quality_, unsigned int points_size_) {
+        neighborsType = model->neighborsType;
         spatial_coherence = model->spatial_coherence_gc;
         knn = model->k_nearest_neighbors;
         threshold = model->threshold;

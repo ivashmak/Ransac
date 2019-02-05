@@ -9,7 +9,7 @@
 #include "../quality/quality.hpp"
 #include "../estimator/dlt/dlt.hpp"
 
-class IRLS : public LocalOptimization {
+class Irls : public LocalOptimization {
 private:
     float * weights;
     int *inliers, *sample;
@@ -23,15 +23,17 @@ private:
     Score * irls_score;
     unsigned int max_sample_size;
 public:
-    ~IRLS() {
+    ~Irls() {
         delete[] weights; delete[] inliers; delete[] sample; delete[] uniformRandomGenerator;
         delete(irls_model); delete(irls_score);
     }
 
-    IRLS (unsigned int points_size_, Model * model, Estimator * estimator_, Quality * quality_) {
+    Irls (Model * model, Estimator * estimator_, Quality * quality_, unsigned int points_size_) {
+        max_sample_size = model->lo_sample_size;
+    
         weights = new float[points_size_];
         inliers = new int[points_size_];
-        sample = new int [points_size_];
+        sample = new int [max_sample_size];
 
         quality = quality_;
         estimator = estimator_;
@@ -45,7 +47,6 @@ public:
             uniformRandomGenerator->resetTime();
         }
 
-        max_sample_size = model->lo_sample_size;
     }
 
     void GetModelScore (Model * model, Score * score) override {

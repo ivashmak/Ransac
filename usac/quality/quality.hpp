@@ -32,16 +32,6 @@ public:
         return false;
     }
 
-    /*
-     * Compare score of model evaluation
-     */
-//    inline bool operator>(const Score& score2) {
-//        return score > score2.score;
-//    }
-//    inline bool operator>(const Score *const score2) {
-//        return score > score2->score;
-//    }
-
     void copyFrom (const Score * const score_to_copy) {
         score = score_to_copy->score;
         inlier_number = score_to_copy->inlier_number;
@@ -67,8 +57,7 @@ public:
 
     /*
      * calculating number of inliers under current model.
-     * Here score = inlier number.
-     * To get real score use getScore
+     * score is sum of distances to estimated inliers.
      */
     inline void getNumberInliers (Score * score, const cv::Mat& model, float threshold=0, bool get_inliers=false,
                                   int * inliers= nullptr, bool parallel=false) {
@@ -78,32 +67,38 @@ public:
         estimator->setModelParameters(model);
 
         unsigned int inlier_number = 0;
+        float sum_errors = 0;
 
-//        if (parallel && !get_inliers) {
-//            #pragma omp parallel for reduction (+:inlier_number)
-//            for (unsigned int point = 0; point < points_size; point++) {
-//                if (estimator->GetError(point) < threshold) {
-//                    inlier_number++;
-//                }
-//            }
-//        } else {
+        if (parallel && !get_inliers) {
+           #pragma omp parallel for reduction (+:inlier_number)
+           for (unsigned int point = 0; point < points_size; point++) {
+               if (estimator->GetError(point) < threshold) {
+                   inlier_number++;
+               }
+           }
+        } else {
+            float err;
             if (get_inliers) {
                 for (unsigned int point = 0; point < points_size; point++) {
-                    if (estimator->GetError(point) < threshold) {
+                    err = estimator->GetError(point);
+                    if (err < threshold) {
                         inliers[inlier_number++] = point;
+                        sum_errors += err;
                     }    
                 }
             } else {
                 for (unsigned int point = 0; point < points_size; point++) {
-                    if (estimator->GetError(point) < threshold) {
+                    err = estimator->GetError(point);
+                    if (err < threshold) {
                         inlier_number++;
+                        sum_errors += err;
                     }
                 }
             }
-//       }
+        }
 
         score->inlier_number = inlier_number;
-        score->score = inlier_number;
+        score->score = sum_errors;
     }
 
 
