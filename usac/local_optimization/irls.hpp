@@ -8,6 +8,7 @@
 #include "../model.hpp"
 #include "../quality/quality.hpp"
 #include "../estimator/dlt/dlt.hpp"
+#include "../random_generator/uniform_random_generator.hpp"
 
 class Irls : public LocalOptimization {
 private:
@@ -55,7 +56,6 @@ public:
         for (unsigned int iter = 1; iter < 20; iter++) {
             estimator->setModelParameters(irls_model->returnDescriptor());
 
-
             unsigned int num_inliers = 0;
 
             if (model->estimator == ESTIMATOR::Homography) {
@@ -64,9 +64,9 @@ public:
                 for (unsigned int i = 0; i < points_size; i++) {
                     error = estimator->GetError(i);
                     if (error < threshold) {
-                        //                    weights[i] = 1 / (1 + error);
-                        weights[i] = 1 / (error * error);
-                        //                    std::cout << weights[i] << " ";
+                        weights[i] = 1 / (1 + error);
+//                        weights[i] = error;
+                        // std::cout << weights[i] << " ";
                         inliers[num_inliers] = i;
                         num_inliers++;
                     }

@@ -1,4 +1,4 @@
-#include "Tests.h"
+#include "tests.h"
 #include "../dataset/Dataset.h"
 
 void Tests::testNeighborsSearchCell () {
@@ -36,7 +36,7 @@ void Tests::testNeighborsSearchCell () {
     for (int cell_size = 25; cell_size <= 100; cell_size += 5) {
 //        Model *model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
         Model *model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Uniform);
-        model->setGraphCutLO(1);
+        model->lo = LocOpt ::GC;
         model->setNeighborsType(NeighborsSearch::Grid);
         model->setCellSize(cell_size);
         model->ResetRandomGenerator(true);
@@ -109,7 +109,7 @@ void Tests::testNeighborsSearch () {
 
         Model *model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
 //        Model *model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Uniform);
-        model->setGraphCutLO(0);
+        model->lo = LocOpt ::GC;
         model->setNeighborsType(neighborsSearch);
         model->setCellSize(50);
         model->ResetRandomGenerator(true);

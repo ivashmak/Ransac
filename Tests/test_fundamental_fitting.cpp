@@ -1,7 +1,7 @@
-#include "Tests.h"
+#include "tests.h"
 
 #include "../Detector/Reader.h"
-#include "../helper/Drawing/Drawing.h"
+#include "../helper/drawing/Drawing.h"
 #include "../helper/Logging.h"
 #include "../usac/estimator/fundamental_estimator.hpp"
 #include "../usac/sampler/uniform_sampler.hpp"
@@ -50,20 +50,19 @@ void Tests::testFundamentalFitting() {
     model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Prosac);
     // ------------------------------------------------------------------------
 
-    model->setStandardRansacLO(0);
-    model->setGraphCutLO(0);
-    model->setSprtLO(0);
+    model->lo = LocOpt ::NullLO;
+    model->setSprt(0);
     model->setCellSize(50);
-    model->setNeighborsType(NeighborsSearch::Grid);
+    model->setNeighborsType(NeighborsSearch::Nanoflann);
     model->ResetRandomGenerator(true);
 
 //    test (points, model, img_name, dataset, true, gt_inliers);
-//    test (sorted_points, model, img_name, dataset, true, gt_sorted_inliers);
+    test (sorted_points, model, img_name, dataset, true, gt_sorted_inliers);
 
 //    getStatisticalResults(points, model, 500, true, gt_inliers, false, nullptr);
 //    getStatisticalResults(sorted_points, model, 500, true, gt_sorted_inliers, false, nullptr);
 
-     storeResultsFundamental ();
+//     storeResultsFundamental ();
 }
  
 /*
@@ -110,35 +109,34 @@ void storeResultsFundamental () {
     samplers.push_back(SAMPLER::Uniform);
 //    samplers.push_back(SAMPLER::Prosac);
 
-    int lo_combinations = 1;
-    bool lo[lo_combinations][3] = {
-            {0, 1, 1},
-    };
+    std::vector<LocOpt > loc_opts;
+    loc_opts.push_back(LocOpt::GC);
+
     NeighborsSearch neighborsSearch = NeighborsSearch ::Grid;
     int cell_size = 50;
 
     long mean_time = 0;
     long mean_error = 0;
-
+    bool sprt = 0;
 
     for (SAMPLER smplr : samplers) {
-        for (int l = 0; l < lo_combinations; l++) {
+        for (auto loc_opt : loc_opts) {
             std::ofstream results_total;
             std::ofstream results_matlab;
             std::string name = "../results/EVD/";
             name += Tests::sampler2string(smplr);
-            if (lo[l][0] == 1) name += "_lo";
-            if (lo[l][1] == 1) name += "_gc";
-            if (lo[l][2] == 1) name += "_sprt";
+            if (loc_opt == LocOpt::InItRsc) name += "_lo";
+            if (loc_opt == LocOpt::GC) name += "_gc";
+            if (sprt) name += "_sprt";
+
             name += "_"+Tests::nearestNeighbors2string(neighborsSearch) + "_c_sz_"+std::to_string(cell_size);
 
             std::string mfname = name+"_m.csv";
             std::string fname = name+".csv";
 
             Model *model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, smplr);
-            model->setStandardRansacLO(lo[l][0]);
-            model->setGraphCutLO(lo[l][1]);
-            model->setSprtLO(lo[l][2]);
+            model->lo = loc_opt;
+            model->setSprt(sprt);
             model->setNeighborsType(neighborsSearch);
             model->setCellSize(cell_size);
 

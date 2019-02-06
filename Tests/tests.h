@@ -1,11 +1,11 @@
 #ifndef TESTS_TESTS_H
 #define TESTS_TESTS_H
 
-#include "../helper/Drawing/Drawing.h"
+#include "../helper/drawing/Drawing.h"
 #include "../usac/estimator/estimator.hpp"
 #include "../usac/quality/quality.hpp"
 #include "../usac/ransac/ransac.hpp"
-#include "StatisticalResults.h"
+#include "statistical_results.h"
 #include "../usac/sampler/prosac_sampler.hpp"
 #include "../usac/termination_criteria/prosac_termination_criteria.hpp"
 #include "../usac/utils/nearest_neighbors.hpp"
@@ -17,24 +17,6 @@ public:
     void testHomographyFitting ();
     void testFundamentalFitting ();
     void testEssentialFitting ();
-
-    void initLine2D (Estimator *& estimator, const cv::Mat& points);
-    void initHomography (Estimator *& estimator, const cv::Mat& points);
-    void initFundamental (Estimator *& estimator, const cv::Mat& points);
-    void initEssential (Estimator *& estimator, const cv::Mat& points);
-    void initEstimator (Estimator *& estimator, Model * model, const cv::Mat& points);
-
-    void initProsac (Sampler *& sampler, unsigned int sample_number, unsigned int points_size);
-    void initUniform (Sampler *& sampler, unsigned int sample_number, unsigned int points_size, bool reset_time);
-    void initNapsac (Sampler *& sampler, const cv::Mat &neighbors, const std::vector<std::vector<int>> &ns, Model * model);
-    void initEvsac (Sampler *& sampler, cv::InputArray points, unsigned int sample_number,
-                           unsigned int points_size, unsigned int k_nearest_neighbors);
-    void initGraduallyIncreasingSampler (Sampler *& sampler, cv::InputArray points, unsigned int sample_number);
-
-    void initProsacNapsac1 (Sampler *& sampler, Model * model, const cv::Mat &nearest_neighors);
-    void initProsacNapsac2 (Sampler *& sampler, Model * model, const cv::Mat &nearest_neighors);
-
-    void initSampler (Sampler *& sampler, Model * model, unsigned int points_size, cv::InputArray points, const cv::Mat& neighbors, std::vector<std::vector<int>> ns);
 
     void testNeighborsSearchCell ();
     void testNeighborsSearch ();
@@ -133,16 +115,15 @@ public:
         int fails_25 = 0;
         int fails_50 = 0;
 
-        NearestNeighbors nn;
         cv::Mat neighbors, neighbors_dists;
         std::vector<std::vector<int>> neighbors_v;
 
         // calculate time of nearest neighbor calculating
         auto begin_time = std::chrono::steady_clock::now();
         if (model->neighborsType == NeighborsSearch::Nanoflann) {
-            nn.getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
+            NearestNeighbors::getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
         } else {
-            nn.getGridNearestNeighbors(points, model->cell_size, neighbors_v);
+            NearestNeighbors::getGridNearestNeighbors(points, model->cell_size, neighbors_v);
         }
         auto end_time = std::chrono::steady_clock::now();
         std::chrono::duration<float> fs = end_time - begin_time;
@@ -152,36 +133,11 @@ public:
         // time and average error.
         // If we have GT number of inliers, then find number of fails model.
         for (int i = 0; i < N; i++) {
-
-            // ------------------ init -------------------------------------
-            Quality * quality = new Quality;
-            Sampler * sampler;
-            Estimator * estimator;
-            TerminationCriteria * termination_criteria;
-
-            initSampler(sampler, model, points.rows, points, neighbors, neighbors_v);
-            initEstimator(estimator, model, points);
-
-            if (model->sampler == SAMPLER::Prosac) {
-                // re init termination criteria for prosac
-                termination_criteria = new ProsacTerminationCriteria 
-                        (((ProsacSampler *) sampler)->getGrowthFunction(), model, points.rows, estimator);
-            } else {
-                termination_criteria = new StandardTerminationCriteria;
-            }
-            // -------------- end of initialization -------------------
-
-
-            Ransac ransac (model, sampler, termination_criteria, quality, estimator);
-            if (model->neighborsType == NeighborsSearch::Nanoflann) {
-                ransac.setNeighbors(neighbors);
-            } else {
-                ransac.setNeighbors(neighbors_v);
-            }
-            ransac.run(points);
+            Ransac ransac (model, points);
+            ransac.run();
             RansacOutput *ransacOutput = ransac.getRansacOutput();
 
-            if (model->sampler == SAMPLER::Napsac || model->GraphCutLO) {
+            if (model->sampler == SAMPLER::Napsac || model->lo == LocOpt::GC) {
                 times[i] = ransacOutput->getTimeMicroSeconds() + nn_time;
             } else {
                 times[i] = ransacOutput->getTimeMicroSeconds();
@@ -199,6 +155,8 @@ public:
             num_lo_iters = ransacOutput->getLOIters();
 
             if (GT) {
+                Estimator * estimator;
+                initEstimator(estimator, model->estimator, points);
                 float error = Quality::getErrorGT_inl(estimator, ransacOutput->getModel(), gt_inliers);
 
                 errors += error;

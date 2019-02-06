@@ -63,32 +63,30 @@ add_executable(
         usac/local_optimization/inner_local_optimization.hpp
         usac/local_optimization/iterative_local_optimization.hpp
         usac/local_optimization/graphcut.cpp usac/local_optimization/graphcut.hpp
-        usac/local_optimization/GreedyLocalOptimization.h
         usac/local_optimization/irls.hpp
-        usac/local_optimization/SortedLO.h
+        usac/local_optimization/greedy_local_optimization.hpp
+        usac/local_optimization/sorted_lo.hpp
         
         usac/sprt.hpp
 
-        Tests/Tests.h
-        Tests/testHomographyFitting.cpp
-        Tests/testLineFitting.cpp
-        Tests/testEssentialFitting.cpp
-        Tests/testFundamentalFitting.cpp
+        Tests/tests.h
+        Tests/test_homography_fitting.cpp
+        Tests/test_line2d_fitting.cpp
+        Tests/test_essential_fitting.cpp
+        Tests/test_fundamental_fitting.cpp
         Tests/test.cpp
-        Tests/StatisticalResults.h
-        Tests/samplerInitialization.cpp
-        Tests/estimatorInitialization.cpp
-        Tests/testNeighborsSearch.cpp
+        Tests/statistical_results.h
+        Tests/test_neighbors_search.cpp
 
         helper/Logging.h
-        helper/Drawing/Drawing.h
-        helper/Drawing/DrawPanorama.cpp
-        helper/Drawing/DrawEpipolarLines.cpp
+        helper/drawing/Drawing.h
+        helper/drawing/DrawPanorama.cpp
+        helper/drawing/DrawEpipolarLines.cpp
 
         usac/random_generator/random_generator.hpp
         usac/random_generator/array_random_generator.hpp
         usac/random_generator/uniform_random_generator.hpp
-        usac/random_generator/EvaluateRandomGenerators.h
+        Tests/test_random_generator.h
 
         dataset/Dataset.h dataset/Dataset.cpp
         dataset/SaveGTModel.h dataset/SaveGTModel.cpp

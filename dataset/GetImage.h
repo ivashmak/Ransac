@@ -8,6 +8,7 @@
 #include "../Detector/Reader.h"
 #include "../usac/estimator/homography_estimator.hpp"
 #include "../usac/estimator/fundamental_estimator.hpp"
+#include "../usac/quality/quality.hpp"
 
 class ImageData {
 private:
@@ -167,7 +168,7 @@ public:
     }
 
     std::vector<int> getGTInliers (float threshold) {
-        std::cout << model << "\n";
+//        std::cout << model << "\n";
         if (estimator == ESTIMATOR::Homography) {
             getGTInliersFromGTModelHomography (threshold, false);
         } else if (estimator == ESTIMATOR::Fundamental){
@@ -181,7 +182,7 @@ public:
     }
 
     std::vector<int> getGTInliersSorted (float threshold) {
-        std::cout << model << "\n";
+//        std::cout << model << "\n";
         if (estimator == ESTIMATOR::Homography) {
             getGTInliersFromGTModelHomography (threshold, true);
         } else if (estimator == ESTIMATOR::Fundamental){

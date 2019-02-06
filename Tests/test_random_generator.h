@@ -1,8 +1,8 @@
 #ifndef USAC_EVALUATERANDOMGENERATORS_H
 #define USAC_EVALUATERANDOMGENERATORS_H
 
-#include "array_random_generator.hpp"
-#include "uniform_random_generator.hpp"
+#include "../usac/random_generator/array_random_generator.hpp"
+#include "../usac/random_generator/uniform_random_generator.hpp"
 
 void calculateEntropy (RandomGenerator * random_generator, int size, const std::string& name);
 void getAverageTime (RandomGenerator * random_generator, int size, int unique_set_size, const std::string& name);

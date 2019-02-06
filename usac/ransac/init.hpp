@@ -13,21 +13,29 @@
 #include "../sampler/prosac_sampler.hpp"
 #include "../sampler/napsac_sampler.hpp"
 #include "../sampler/uniform_sampler.hpp"
+#include "../sampler/progressive_sampler.hpp"
+#include "../sampler/evsac_sampler.hpp"
 
 #include "../termination_criteria/prosac_termination_criteria.hpp"
 
+#include "../local_optimization/inner_local_optimization.hpp"
+#include "../local_optimization/irls.hpp"
+#include "../local_optimization/graphcut.hpp"
 
 
-void InitEstimator (Estimator *& estimator, ESTIMATOR est, const cv::Mat& points);
+
+void initEstimator (Estimator *& estimator, ESTIMATOR est, const cv::Mat& points);
 // ----------------------------------------------------------------------------------------
-void InitSampler (Sampler *& sampler, const Model * const model, cv::InputArray points, cv::InputArray neighbors);
+void initSampler (Sampler *& sampler, const Model * const model, const cv::Mat& points);
 // ----------------------------------------------------------------------------------------
-void InitTerminationCriteria (TerminationCriteria *& termination_criteria, 
+void initTerminationCriteria (TerminationCriteria *& termination_criteria,
         const Model * const model, unsigned int points_size);
-// ----------------------------------------------------------------------------------------
-void InitProsacTerminationCriteria (TerminationCriteria *& termination_criteria, Sampler * prosac_sampler, 
+
+void initProsacTerminationCriteria (TerminationCriteria *& termination_criteria, Sampler *& prosac_sampler,
             const Model * const model, Estimator * estimator, unsigned int points_size);
 // ----------------------------------------------------------------------------------------
+void initLocalOptimization (LocalOptimization *& local_optimization, Model * model, Estimator * estimator,
+    Quality * quility, unsigned int points_size);
 
 
 

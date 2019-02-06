@@ -5,13 +5,15 @@
 #ifndef RANSAC_RANSAC_H
 #define RANSAC_RANSAC_H
 
+#include "init.hpp"
+
 #include "../estimator/estimator.hpp"
 #include "../quality/quality.hpp"
 #include "../sampler/sampler.hpp"
 #include "ransac_output.hpp"
-#include "init.hpp"
 #include "../sprt.hpp"
 #include "../local_optimization/local_optimization.hpp"
+#include "../utils/nearest_neighbors.hpp"
 
 class Ransac {
 protected:
@@ -27,65 +29,91 @@ protected:
     LocalOptimization * local_optimization;
     SPRT * sprt;
 
-    int * neighbors = nullptr;
+    cv::Mat neighbors_m;
     std::vector<std::vector<int>> neighbors_v;
+    unsigned int points_size;
 public:
     
-    ~Ransac () = default;
+    ~Ransac () {
+        if (model->sprt) delete (sprt);
+        if (model->lo != LocOpt ::NullLO) delete (local_optimization);
+        delete(sampler); delete (quality); delete (estimator); delete(termination_criteria);
+    }
 
-    Ransac (Model * model, cv::InputArray points) {
+    Ransac (Model * model_, cv::InputArray points) {
+        model = model_;
+
         assert(! points.empty());
         assert(model != nullptr);
-        assert(model->sampler != SAMPLER::NullS);
-        // cv::Mat p = points.getMat();
-        // InitEstimator (estimator, model->estimator, p);
 
-        assert (model->neighborsType != NullN);
-        if (model->neighborsType == NeighborsSearch::Grid) {
+        points_size = points.getMat().rows;
+//        std::cout << "points size = " << points_size << "\n";
 
-        } else if (model->neighborsType == NeighborsSearch::Grid) {
+        initEstimator (estimator, model->estimator, points.getMat());
+        initSampler (sampler, model, points.getMat());
 
+        // Init quality
+        quality = new Quality;
+        quality->init(points_size, model->threshold, estimator);
+        //
+
+        initLocalOptimization(local_optimization, model, estimator, quality, points_size);
+
+        // Get neighbors
+        cv::Mat neighbors_dists;
+        if (model->sampler == SAMPLER::Napsac || model->lo == LocOpt::GC) {
+            if (model->neighborsType == NeighborsSearch::Grid) {
+                NearestNeighbors::getGridNearestNeighbors(points.getMat(), model->cell_size, neighbors_v);
+                if (model->sampler == SAMPLER::Napsac) {
+                    ((NapsacSampler *) sampler)->setNeighbors(neighbors_v, NeighborsSearch::Grid);
+                } else {
+                    ((GraphCut *) local_optimization)->setNeighbors(neighbors_v, NeighborsSearch::Grid);
+                }
+            } else {
+                NearestNeighbors::getNearestNeighbors_nanoflann(points.getMat(), model->k_nearest_neighbors, neighbors_m, false, neighbors_dists);
+                if (model->sampler == SAMPLER::Napsac) {
+                    ((NapsacSampler *) sampler)->setNeighbors(neighbors_m, NeighborsSearch::Nanoflann);
+                } else {
+                    ((GraphCut *) local_optimization)->setNeighbors(neighbors_m, NeighborsSearch::Nanoflann);
+                }
+            }
+        }
+        // -----------------
+
+        // init termination criteria
+        if (model->sampler == SAMPLER::Prosac) {
+            initProsacTerminationCriteria(termination_criteria, sampler, model, estimator, points_size);
         } else {
-
+            initTerminationCriteria(termination_criteria, model, points_size);
         }
+        // ----------------------------
 
-        if (model->Sprt) {
-            sprt = new SPRT (model, estimator, 0);
+        // Init SPRT
+        if (model->sprt) {
+            sprt = new SPRT (model, estimator, points_size);
         }
-    }   
-
-    Ransac (Model * model_,
-            Sampler * sampler_,
-            TerminationCriteria * termination_criteria_,
-            Quality * quality_,
-            Estimator * estimator_) {
-
-        assert (model_ != nullptr);
-        assert (sampler_ != nullptr);
-        assert (termination_criteria_ != nullptr);
-        assert (quality_ != nullptr);
-        assert (estimator_ != nullptr);
-
-        model = model_;
-        sampler = sampler_;
-        termination_criteria = termination_criteria_;
-        quality = quality_;
-        estimator = estimator_;
     }
 
-    void setNeighbors (const cv::Mat& neighbors_) {
-//        knn_neighbors = neighbors_.clone();
-//        std::cout << neighbors_ << "\n\n";
-        assert(!neighbors_.empty());
-        neighbors = (int *) neighbors_.data;
-    }
+//    Ransac (Model * model_,
+//            Sampler * sampler_,
+//            TerminationCriteria * termination_criteria_,
+//            Quality * quality_,
+//            Estimator * estimator_) {
+//
+//        assert (model_ != nullptr);
+//        assert (sampler_ != nullptr);
+//        assert (termination_criteria_ != nullptr);
+//        assert (quality_ != nullptr);
+//        assert (estimator_ != nullptr);
+//
+//        model = model_;
+//        sampler = sampler_;
+//        termination_criteria = termination_criteria_;
+//        quality = quality_;
+//        estimator = estimator_;
+//    }
 
-    void setNeighbors (const std::vector<std::vector<int>>& neighbors_) {
-        assert(!neighbors_.empty());
-        neighbors_v = neighbors_;
-    }
-
-    void run (cv::InputArray input_points);
+    void run ();
 
     void setSampler (Sampler * sampler) {
         this->sampler = sampler;

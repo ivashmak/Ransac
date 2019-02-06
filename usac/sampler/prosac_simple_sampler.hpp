@@ -27,13 +27,10 @@ public:
         delete (uniformRandomGenerator);
     }
 
-    ProsacSimpleSampler (unsigned int sample_size, unsigned int N_points, bool reset_time = true) {
+    ProsacSimpleSampler (unsigned int sample_size_, unsigned int points_size_, bool reset_time) {
         uniformRandomGenerator = new UniformRandomGenerator;
         if (reset_time) uniformRandomGenerator->resetTime();
-        initSample(sample_size, N_points);
-    }
 
-    void initSample (unsigned int sample_size_, unsigned int points_size_) {
         sample_size = sample_size_;
         points_size = points_size_;
 
@@ -77,11 +74,11 @@ public:
         kth_sample_number++;
 
         // debug
-        std::vector<int> s;
-        Sample (s);
-        for (int i = 0; i < sample_size; i++) {
-            std::cout << sample[i] << " " << s[i] << "\n";
-        }
+//        std::vector<int> s;
+//        Sample (s);
+//        for (int i = 0; i < sample_size; i++) {
+//            std::cout << sample[i] << " " << s[i] << "\n";
+//        }
     }
 
 

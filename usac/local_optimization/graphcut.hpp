@@ -22,7 +22,6 @@ protected:
     int knn;
     float spatial_coherence;
     float sqr_thr;
-    int * neighbors;
     Score * gc_score;
     Model * gc_model;
 
@@ -35,8 +34,9 @@ protected:
     unsigned int lo_inner_iterations;
     float * errors;
 
+    int * neighbors;
     std::vector<std::vector<int>> neighbors_v;
-    NeighborsSearch neighborsType = NeighborsSearch::NullN;
+    NeighborsSearch neighborsType;
 
     int neighbor_number;
     bool isInit = false;
@@ -49,7 +49,6 @@ public:
     }
     
     GraphCut (Model * model, Estimator * estimator_, Quality * quality_, unsigned int points_size_) {
-        neighborsType = model->neighborsType;
         spatial_coherence = model->spatial_coherence_gc;
         knn = model->k_nearest_neighbors;
         threshold = model->threshold;
@@ -80,25 +79,24 @@ public:
 
         gc_iterations = 0;
 
-        if (neighborsType == NeighborsSearch::Nanoflann) {
-            neighbor_number = knn * points_size;
-        }
         isInit = true;
     }
 
-    void setNeighbors (const std::vector<std::vector<int>>& neighbors_v_) {
-        neighbors_v = neighbors_v_;
-        assert(isInit); // check if GC has already initialized
-        assert(neighborsType == NeighborsSearch::Grid); // check if we use grid search
+    void setNeighbors (cv::InputArray neighbors_, NeighborsSearch search) {
+        assert(! neighbors_.empty());
+        assert(search != NeighborsSearch::NullN);
+        neighborsType = search;
 
-        neighbor_number = 0;
-        for (int i = 0; i < points_size; i++) {
-            neighbor_number += neighbors_v[i].size();
+        if (search == NeighborsSearch::Nanoflann) {
+            neighbor_number = knn * points_size;
+            neighbors = (int *) neighbors_.getMat().data;
+        } else {
+            neighbors_v = *(std::vector<std::vector<int>>*) neighbors_.getObj();
+            neighbor_number = 0;
+            for (int i = 0; i < points_size; i++) {
+                neighbor_number += neighbors_v[i].size();
+            }
         }
-    }
-
-    void setNeighbors (const int * const neighbors_) {
-        neighbors = const_cast<int *>(neighbors_);
     }
 
     // calculate lambda
@@ -112,7 +110,7 @@ public:
 //        std::cout << "begin best score " << best_score->inlier_number << "\n";
         // improve best model by non minimal estimation
 
-//        OneStepLO (best_model);
+//        oneStepLO (best_model);
         // update score after one step lo
 //        quality->getNumberInliers(best_score, best_model->returnDescriptor());
 
@@ -182,7 +180,7 @@ public:
     }
 
 private:
-    void OneStepLO (Model * model) {
+    void oneStepLO (Model * model) {
         /*
          * Do one step local optimization on min (|I|, |max_I|) before doing Graph Cut.
          * This LSQ must give better model for next GC labeling.

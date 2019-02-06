@@ -8,7 +8,7 @@
 #include <opencv2/core/mat.hpp>
 #include <opencv2/flann/flann.hpp>
 #include "sampler.hpp"
-#include "../../helper/Drawing/Drawing.h"
+#include "../../helper/drawing/Drawing.h"
 #include "../random_generator/array_random_generator.hpp"
 
 /*
@@ -58,18 +58,18 @@ public:
 
         // allocate as zeros (starting from 1 neighbors)
         next_neighbors = (int *) calloc (points_size, sizeof (int));
-
-        search = model->neighborsType;
     }
 
-    void setNeighbors (const cv::Mat &neighbors_) {
-        assert (! neighbors_.empty());
-        neighbors = (int *) neighbors_.data;
-    }
+    void setNeighbors (cv::InputArray neighbors_, NeighborsSearch search_) {
+        search = search_;
+        assert(! neighbors_.empty());
+        assert(search != NeighborsSearch::NullN);
 
-    void setNeighbors (const std::vector<std::vector<int>> &neighbors_) {
-        assert (! neighbors_.empty());
-        neighbors_v = neighbors_;
+        if (search == NeighborsSearch::Nanoflann) {
+            neighbors = (int *) neighbors_.getMat().data;
+        } else {
+            neighbors_v = *(std::vector<std::vector<int>>*) neighbors_.getObj();
+        }
     }
 
     /*

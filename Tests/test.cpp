@@ -1,4 +1,4 @@
-#include "Tests.h"
+#include "tests.h"
 #include "../helper/Logging.h"
 
 
@@ -9,20 +9,19 @@ void Tests::test (cv::Mat points,
                    bool gt,
                    const std::vector<int>& gt_inliers) {
 
-    NearestNeighbors nn;
     cv::Mat neighbors, neighbors_dists;
 
 //    std::cout << "get neighbors\n";
     std::vector<std::vector<int>> neighbors_v;
 
     long nn_time = 0;
-    if (model->sampler == SAMPLER::Napsac || model->GraphCutLO) {
+    if (model->sampler == SAMPLER::Napsac || model->lo == LocOpt::GC) {
         // calculate time of nearest neighbor calculating
         auto begin_time = std::chrono::steady_clock::now();
         if (model->neighborsType == NeighborsSearch::Nanoflann) {
-            nn.getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
+            NearestNeighbors::getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
         } else {
-            nn.getGridNearestNeighbors(points, model->cell_size, neighbors_v);
+            NearestNeighbors::getGridNearestNeighbors(points, model->cell_size, neighbors_v);
             std::cout << "GOT neighbors\n";
         }
         auto end_time = std::chrono::steady_clock::now();
@@ -32,48 +31,21 @@ void Tests::test (cv::Mat points,
 
 //    std::cout << "got neighbors\n";
 
-    // ------------------ init -------------------------------------
-    Quality * quality = new Quality;
-    Sampler * sampler;
-    Estimator * estimator;
-    TerminationCriteria * termination_criteria;
-
-    initSampler(sampler, model, points.rows, points, neighbors, neighbors_v);
-    initEstimator(estimator, model, points);
-
-    if (model->sampler == SAMPLER::Prosac) {
-        // re init termination criteria for prosac
-        ProsacTerminationCriteria *  prosac_termination_criteria_ = new ProsacTerminationCriteria
-                (((ProsacSampler *) sampler)->getGrowthFunction(), model, points.rows, estimator);
-
-        termination_criteria = prosac_termination_criteria_;
-    } else {
-        termination_criteria = new StandardTerminationCriteria;
-    }
-    // -------------- end of initialization -------------------
-
 
     Drawing drawing;
     Logging logResult;
 
-    Ransac ransac (model, sampler, termination_criteria, quality, estimator);
-    if (model->sampler == SAMPLER::Napsac || model->GraphCutLO) {
-        if (model->neighborsType == NeighborsSearch::Nanoflann) {
-            ransac.setNeighbors(neighbors);
-        } else {
-            ransac.setNeighbors(neighbors_v);
-        }
-    }
+    Ransac ransac (model, points);
 
 //    std::cout << "RUN ransac\n";
-    ransac.run(points);
+    ransac.run();
 
     RansacOutput * ransacOutput = ransac.getRansacOutput();
 
     std::cout << model->getName() << "\n";
     std::cout << "\ttime: ";
     long time_mcs = ransacOutput->getTimeMicroSeconds();
-    if (model->sampler == SAMPLER::Napsac || model->GraphCutLO) {
+    if (model->sampler == SAMPLER::Napsac || model->lo == LocOpt::GC) {
         time_mcs += nn_time;
     }
     Time * time = new Time;
@@ -89,6 +61,8 @@ void Tests::test (cv::Mat points,
     std::cout << "Best model = ...\n" << ransacOutput->getModel ()->returnDescriptor() << "\n";
 
     if (gt) {
+        Estimator * estimator;
+        initEstimator(estimator, model->estimator, points);
         float error = Quality::getErrorGT_inl(estimator, ransacOutput->getModel(), gt_inliers);
         std::cout << "Ground Truth number of inliers for same model parametres is " << gt_inliers.size() << "\n";
         std::cout << "Error to GT inliers " << error << "\n";

@@ -79,7 +79,6 @@ public:
                 // if inliers less than sample limit then use all of them to estimate model.
                 // if estimation fails break iterative loop.
                 if (! estimator->LeastSquaresFitting(lo_inliers, lo_score->inlier_number, *lo_model)) break;
-
             }
 
             quality->getNumberInliers(lo_score, lo_model->returnDescriptor(), lo_model->threshold, true, lo_inliers);

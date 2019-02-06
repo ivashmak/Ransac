@@ -2,7 +2,6 @@
 #define RANSAC_DRAWING_H
 
 #include "../../usac/estimator/estimator.hpp"
-#include "../../usac/ransac/ransac.hpp"
 #include "../../dataset/GetImage.h"
 
 class Drawing {

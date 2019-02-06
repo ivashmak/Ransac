@@ -19,7 +19,7 @@ public:
         delete[] points_random_pool;
     }
 
-    UniformSampler (bool reset_time=true) {
+    UniformSampler (bool reset_time) {
         if (reset_time) {
             srand (time(NULL));
         }

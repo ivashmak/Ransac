@@ -10,7 +10,7 @@
 enum ESTIMATOR  { NullE, Line2d, Homography, Fundamental, Essential };
 enum SAMPLER  { NullS, Uniform, ProgressiveNAPSAC, Napsac, Prosac, Evsac, ProsacNapsac };
 enum NeighborsSearch {NullN, Nanoflann, Grid};
-enum LocOpt {NullLO, GC, InItRsc, IRLS};
+enum LocOpt {NullLO, InItRsc, GC, IRLS};
 
 class Model {
 public:
@@ -37,9 +37,6 @@ public:
     ESTIMATOR estimator = NullE;
     SAMPLER sampler = NullS;
 
-    bool LO = false;
-    bool GraphCutLO = false;
-    bool Sprt = false;
 
     int max_hypothesis_test_before_sprt = 20;
     NeighborsSearch neighborsType = NeighborsSearch::NullN;
@@ -51,6 +48,7 @@ public:
     bool reset_random_generator = true;
 
     LocOpt lo = NullLO;
+	bool sprt = false;
 
     // for debug
     std::string img_name;
@@ -88,16 +86,8 @@ public:
 		cell_size = cell_size_;
 	}
 
-	void setStandardRansacLO (bool LO_) {
-		LO = LO_;
-	}
-
-	void setGraphCutLO (bool GraphCutLO_) {
-		GraphCutLO = GraphCutLO_;
-	}
-	
-	void setSprtLO (bool SprtLO_) {
-		Sprt = SprtLO_;
+	void setSprt (bool SprtLO_) {
+		sprt = SprtLO_;
 	}
 
 	void setLOParametres (unsigned int lo_iterative_iters, unsigned int lo_inner_iters, unsigned int lo_thresh_mult) {
@@ -106,14 +96,22 @@ public:
         lo_threshold_multiplier = lo_thresh_mult;
 	}
 
-    void setDescriptor(cv::Mat _desc) { 
-//    	descriptor = _desc;
-        descriptor = _desc.clone();
-    }
+    void setDescriptor(cv::Mat desc) {
+//    	descriptor = desc;
+        descriptor = desc.clone();
 
-    void getDescriptor(cv::Mat &_desc) { 
-    	_desc = descriptor;
-	}
+//        descriptor.at<float>(0,0) = desc.at<float>(0);
+//        descriptor.at<float>(0,1) = desc.at<float>(1);
+//        descriptor.at<float>(0,2) = desc.at<float>(2);
+//        if (estimator != ESTIMATOR::Line2d) {
+//            descriptor.at<float>(1,0) = desc.at<float>(1,0);
+//            descriptor.at<float>(1,1) = desc.at<float>(1,1);
+//            descriptor.at<float>(1,2) = desc.at<float>(1,2);
+//            descriptor.at<float>(2,0) = desc.at<float>(2,0);
+//            descriptor.at<float>(2,1) = desc.at<float>(2,1);
+//            descriptor.at<float>(2,2) = desc.at<float>(2,2);
+//        }
+    }
 
     cv::Mat returnDescriptor () {
         return descriptor;

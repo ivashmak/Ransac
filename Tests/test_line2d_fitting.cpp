@@ -1,11 +1,11 @@
 #include <cstdlib>
-#include "Tests.h"
+#include "tests.h"
 
 #include "../Generator/generator.h"
 #include "../usac/estimator/line2d_estimator.hpp"
 #include "../usac/ransac/ransac.hpp"
 
-#include "../helper/Drawing/Drawing.h"
+#include "../helper/drawing/Drawing.h"
 #include "../helper/Logging.h"
 
 #include "../Detector/Reader.h"
@@ -35,25 +35,25 @@ void Tests::testLineFitting() {
      generate(points, false, true, gt_model);
 
     // another generated data
-    img_name = "../dataset/line2d/w=1000_h=1000_n=3.000000_I=500_N=10500";
-    std::ifstream read_data_file;
-    read_data_file.open (img_name+".txt");
-    int width, height, noise, N;
-    float a,b,c;
-    read_data_file >> width;
-    read_data_file >> height;
-    read_data_file >> noise;
-    read_data_file >> a;
-    read_data_file >> b;
-    read_data_file >> c;
-    gt_model = (cv::Mat_<float>(1,3) << a,b,c);
-    read_data_file >> N;
-    float x, y;
-    for (int p = 0; p < N; p++) {
-        read_data_file >> x >> y;
-        cv::Point_<float> pt (x, y);
-        points.push_back (pt);
-    }
+//    img_name = "../dataset/line2d/w=1000_h=1000_n=3.000000_I=500_N=10500";
+//    std::ifstream read_data_file;
+//    read_data_file.open (img_name+".txt");
+//    int width, height, noise, N;
+//    float a,b,c;
+//    read_data_file >> width;
+//    read_data_file >> height;
+//    read_data_file >> noise;
+//    read_data_file >> a;
+//    read_data_file >> b;
+//    read_data_file >> c;
+//    gt_model = (cv::Mat_<float>(1,3) << a,b,c);
+//    read_data_file >> N;
+//    float x, y;
+//    for (int p = 0; p < N; p++) {
+//        read_data_file >> x >> y;
+//        cv::Point_<float> pt (x, y);
+//        points.push_back (pt);
+//    }
     //
 
 
@@ -107,7 +107,7 @@ void Tests::testLineFitting() {
 
 
     // --------------  prosac ---------------------
-    model = new Model (threshold, 4, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Prosac);
+//    model = new Model (threshold, 4, 0.99, knn, ESTIMATOR::Line2d, SAMPLER::Prosac);
      // ------------------------------------------------
 
 
@@ -122,15 +122,15 @@ void Tests::testLineFitting() {
 
 
     // ------------------ Progressive Napsac ----------------------
-//    model = new Model (threshold, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::GradualNapsac);
+    model = new Model (threshold, 2, 0.99, 7, ESTIMATOR::Line2d, SAMPLER::ProgressiveNAPSAC);
 // --------------------------------------------------------
 
-     model->setStandardRansacLO(0);
-     model->setGraphCutLO(0);
-     model->setSprtLO(0);
+     model->lo = LocOpt ::NullLO;
+     model->setSprt(0);
      model->setNeighborsType(NeighborsSearch::Nanoflann);
 
-    test (sorted_pts, model, img_name, dataset, true, gt_inliers);
+    test (pts, model, img_name, dataset, true, gt_inliers);
+//    test (sorted_pts, model, img_name, dataset, true, gt_inliers);
 
 //     getStatisticalResults(pts, model, 1000, true, false, gt_model, nullptr);
 
@@ -205,40 +205,36 @@ void store_results_line2d () {
     samplers.push_back(SAMPLER::Prosac);
     samplers.push_back(SAMPLER::Napsac);
 
-    int lo_combinations = 4;
-    bool lo[lo_combinations][3] = {
-            {0, 0, 0},
-            {1, 0, 0},
-            {0, 1, 0},
-            {0, 0, 1},
-    };
+    std::vector<LocOpt > loc_opts;
+    loc_opts.push_back(LocOpt::InItRsc);
+    bool sprt = 0;
 
     for (SAMPLER smplr : samplers) {
-        for (int l = 0; l < lo_combinations; l++) {
+        for (auto loc_opt : loc_opts) {
             std::ofstream results_total;
             std::ofstream results_matlab;
-            std::string mfname = "../results/line2d/" + tests.sampler2string(smplr) + "_" +
-                                 std::to_string(lo[l][0]) + std::to_string(lo[l][1]) + std::to_string(lo[l][2]) +
-                                 "_m.csv";
-            std::string fname = "../results/line2d/" + tests.sampler2string(smplr) + "_" +
-                                std::to_string(lo[l][0]) + std::to_string(lo[l][1]) + std::to_string(lo[l][2]) + ".csv";
+            std::string name = "../results/line2d/" + Tests::sampler2string(smplr);
+            if (loc_opt == LocOpt::InItRsc) name += "_lo";
+            if (loc_opt == LocOpt::GC) name += "_gc";
+            if (sprt) name += "_sprt";
+
+            std::string mfname = name+"_m.csv";
+            std::string fname = name+".csv";
 
             results_matlab.open(mfname);
             results_total.open(fname);
 
             Model *model = new Model(threshold, 2, confidence, knn, ESTIMATOR::Line2d, smplr);
-            model->setStandardRansacLO(lo[l][0]);
-            model->setGraphCutLO(lo[l][1]);
-            model->setSprtLO(lo[l][2]);
+            model->lo = loc_opt;
+            model->setSprt(sprt);
 
             results_total << tests.getComputerInfo();
             results_total << model->getName() << "\n";
             results_total << "Runs for each image = " << N_runs << "\n";
             results_total << "Threshold for each image = " << model->threshold << "\n";
             results_total << "Desired probability for each image = " << model->desired_prob << "\n";
-            results_total << "Standard LO = " << (bool) model->LO << "\n";
-            results_total << "Graph Cut LO = " << (bool) model->GraphCutLO << "\n";
-            results_total << "SPRT = " << (bool) model->Sprt << "\n\n\n";
+            results_total << "LO = " << (bool) model->lo << "\n";
+            results_total << "SPRT = " << (bool) model->sprt << "\n\n\n";
 
             results_total << "Filename,GT Inl,Avg num inl/gt,Std dev num inl,Med num inl,"
                              "Avg num iters,Std dev num iters,Med num iters,"
@@ -249,7 +245,7 @@ void store_results_line2d () {
                              "Num fails (<10%),Num fails (<25%),Num fails (<50%)\n";
 
             std::cout << tests.sampler2string(smplr) << "\n";
-            std::cout << lo[l][0] << " " << lo[l][1] << " " << lo[l][2] << "\n";
+            std::cout << "LO  " << loc_opt << "\n";
             
             for (int img = 0; img < dataset.size(); img++) {
                 std::cout << dataset[img] << "\n";

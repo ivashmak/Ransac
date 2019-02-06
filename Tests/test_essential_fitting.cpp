@@ -1,4 +1,4 @@
-#include "Tests.h"
+#include "tests.h"
 
 #include <cstdio>
 #include <iostream>
@@ -33,9 +33,8 @@ void Tests::testEssentialFitting() {
 //    sorted_points.copyTo(points);
     // ------------------------------------------------------------------------
 
-    model->setStandardRansacLO(0);
-    model->setGraphCutLO(0);
-    model->setSprtLO(0);
+    model->lo = LocOpt ::NullLO;
+    model->setSprt(0);
     model->setCellSize(50);
     model->setNeighborsType(NeighborsSearch::Grid);
 

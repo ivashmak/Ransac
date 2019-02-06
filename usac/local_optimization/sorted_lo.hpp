@@ -8,6 +8,7 @@
 #include "../model.hpp"
 #include "../quality/quality.hpp"
 #include "../estimator/dlt/dlt.hpp"
+#include "../random_generator/uniform_random_generator.hpp"
 
 class SortedLO {
 private:

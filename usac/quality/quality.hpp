@@ -64,6 +64,7 @@ public:
         if (threshold == 0) {
             threshold = this->threshold;
         }
+//        std::cout << "set model paraments"
         estimator->setModelParameters(model);
 
         unsigned int inlier_number = 0;

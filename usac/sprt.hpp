@@ -83,8 +83,7 @@ private:
 public:
 
     ~SPRT() {
-//        sprt_histories.clear();
-//        delete[] points_random_pool;
+        delete[] points_random_pool;
     }
 
     SPRT (Model * model, Estimator * estimator_, unsigned int points_size_) {

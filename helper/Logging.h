@@ -3,8 +3,8 @@
 
 #include "../usac/model.hpp"
 #include "../usac/quality/quality.hpp"
-#include "../Tests/StatisticalResults.h"
-#include "../Tests/Tests.h"
+#include "../Tests/statistical_results.h"
+#include "../Tests/tests.h"
 
 #include <fstream>
 
@@ -48,9 +48,9 @@ public:
         file << "Runs for each image = " << N_runs << "\n";
         file << "Threshold for each image = " << model->threshold << "\n";
         file << "Desired probability for each image = " << model->desired_prob << "\n";
-        file << "Standard LO = " << (bool) model->LO << "\n";
-        file << "Graph Cut LO = " << (bool) model->GraphCutLO << "\n";
-        file << "SPRT = " << (bool) model->Sprt << "\n\n\n";
+        file << "Standard LO = " << (model->lo == LocOpt ::InItRsc) << "\n";
+        file << "Graph Cut LO = " << (model->lo == LocOpt ::GC) << "\n";
+        file << "SPRT = " << (bool) model->sprt << "\n\n\n";
 
         file << "Filename,GT Inl,Avg num inl/gt,Std dev num inl,Med num inl,"
                          "Avg num iters,Std dev num iters,Med num iters,"
