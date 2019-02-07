@@ -1,9 +1,5 @@
 #include "init.hpp"
 
-void qqq () {
-
-}
-
 void initEstimator (Estimator *& estimator, ESTIMATOR est, const cv::Mat& points) {
     if (est == ESTIMATOR::Line2d) {
         estimator = new Line2DEstimator(points);

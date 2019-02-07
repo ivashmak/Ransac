@@ -54,7 +54,7 @@ public:
         random_generator = new ArrayRandomGenerator;
         if (reset_time) random_generator->resetTime();
         random_generator->resetGenerator(0, points_size-1);
-        random_generator->setSubsetSize(sample_size);
+        random_generator->setSubsetSize(1);
 
         // allocate as zeros (starting from 1 neighbors)
         next_neighbors = (int *) calloc (points_size, sizeof (int));

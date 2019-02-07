@@ -20,6 +20,7 @@ class ProgressiveNapsac : public Sampler {
 private:
     RandomGenerator * random_generator;
     RandomGenerator * random_generator_neighborhood;
+        ;
     int initial_point[1];
 
     class Cell {
@@ -41,6 +42,7 @@ private:
 
     std::map<int, Cell> point_2cell;
     std::map<Cell, std::vector<int>> cell_2points;
+    std::vector<std::vector<Cell>> cells;
 
     int square_radius;
 public:
@@ -50,8 +52,10 @@ public:
         assert (!input_points.empty());
 
         random_generator = new UniformRandomGenerator;
+        random_generator_neighborhood = new UniformRandomGenerator;
         if (reset_time) random_generator->resetTime();
         random_generator->setSubsetSize(1);
+        random_generator_neighborhood->setSubsetSize(sample_size);
         random_generator->resetGenerator(0, points_size-1);
 
         this->sample_size = sample_size;
@@ -72,7 +76,7 @@ public:
             bm1 bm2 ... bmn
          */
         int blocks_size = rows_split*cols_split;
-        std::vector<std::vector<Cell>> cells(rows_split);
+        cells = std::vector<std::vector<Cell>>(rows_split);
 
         float bx = 0, by = 0;
 
@@ -154,13 +158,23 @@ public:
 
         int init_pt = initial_point[0];
         Cell centered_cell = point_2cell[init_pt];
+        
         int num_points_in_neighborhood = 0;
-//        for () {
-//
-//        }
+        for (int i = centered_cell.cellx-square_radius; i < centered_cell.cellx+square_radius; i++) {
+            for (int j = centered_cell.celly-square_radius; j < centered_cell.celly+square_radius; j++) {
+                num_points_in_neighborhood += cell_2points[cells[i][i]].size();        
+            }
+        }
 
-        square_radius++;
+        random_generator_neighborhood->resetGenerator(0, num_points_in_neighborhood-1);
+        random_generator_neighborhood->generateUniqueRandomSet(sample);
+        
+        for (int i = 1; i < sample_size; i++) {
+            // sample[i] = cells[][]
+        }
         sample[0] = init_pt;
+        
+        square_radius++;
         k_iterations++;
     }
 

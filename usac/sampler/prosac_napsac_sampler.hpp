@@ -81,20 +81,20 @@ public:
 
         // add prosac sampling to current initial point, if key is not there yet.
         if (prosac_neighborhood.find(init_pt) == prosac_neighborhood.end()) {
-            // sampling of sample_size-1 from points in neighborhood of initial point
-            prosac_neighborhood[init_pt] = ProsacSimpleSampler(sample_size-1, neighbors_v[init_pt].size(), true);
+            // sampling from points in neighborhood of initial point
+            prosac_neighborhood[init_pt] = ProsacSimpleSampler(sample_size, neighbors_v[init_pt].size(), true);
         }
 
         /* get sample from neighborhood
          * sample range is from 0 to points is neighborhood-1
          */
         prosac_neighborhood[init_pt].generateSample(sample);
-        // initial points is the first sample.
-        sample[0] = init_pt;
         // rearrange sample from neighborhood.
         for (int i = 1; i < sample_size; i++) {
             sample[i] = neighbors_v[init_pt][sample[i]];
         }
+        // initial points is the first sample.
+        sample[0] = init_pt;
     }
 
     /*
@@ -107,8 +107,8 @@ public:
 
         // add prosac sampling to current initial point, if key is not there yet
         if (prosac_neighborhood.find(init_pt) == prosac_neighborhood.end()) {
-            // sampling from of size sample size-1 of knn points.
-            prosac_neighborhood[init_pt] = ProsacSimpleSampler(sample_size-1, knn, true);
+            // sampling from of knn points.
+            prosac_neighborhood[init_pt] = ProsacSimpleSampler(sample_size, knn, true);
         }
 
         /*
@@ -116,11 +116,11 @@ public:
          * sample range is from <0; knn-1>
          */
         prosac_neighborhood[init_pt].generateSample(sample);
-        sample[0] = init_pt;
         // rearrange sample from neighborhood.
         for (int i = 1; i < sample_size; i++) {
             sample[i] = neighbors[init_pt*knn + sample[i]];
         }
+        sample[0] = init_pt;
     }
 
     void generateSample (int * sample) override {

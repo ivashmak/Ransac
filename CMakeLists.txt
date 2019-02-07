@@ -18,8 +18,6 @@ add_executable(
         usac/quality/quality.hpp
         usac/quality/line_quality.hpp
 
-        usac/model.hpp
-
         usac/termination_criteria/standard_termination_criteria.hpp
         usac/termination_criteria/prosac_termination_criteria.hpp
         usac/termination_criteria/termination_criteria.hpp
@@ -67,7 +65,9 @@ add_executable(
         usac/local_optimization/greedy_local_optimization.hpp
         usac/local_optimization/sorted_lo.hpp
         
+        usac/model.hpp
         usac/sprt.hpp
+        usac/precomp.hpp
 
         Tests/tests.h
         Tests/test_homography_fitting.cpp
