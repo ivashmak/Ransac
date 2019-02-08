@@ -51,8 +51,7 @@ void initSampler (Sampler *& sampler, const Model * const model, const cv::Mat& 
 }
 void initTerminationCriteria (TerminationCriteria *& termination_criteria,
         const Model * const model, unsigned int points_size) {
-    termination_criteria = new StandardTerminationCriteria;
-    termination_criteria->init (model, points_size);
+    termination_criteria = new StandardTerminationCriteria (model, points_size);
 }
 
 void initProsacTerminationCriteria (TerminationCriteria *& termination_criteria, Sampler *& prosac_sampler,

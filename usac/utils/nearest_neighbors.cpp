@@ -2,12 +2,11 @@
 // It is subject to the license terms in the LICENSE file found in the top-level directory
 // of this distribution and at http://opencv.org/license.html.
 
-#include "nearest_neighbors.hpp"
-#include "../../Detector/Reader.h"
-#include "math.hpp"
+#include "../precomp.hpp"
 
-#include <Eigen/Dense>
-#include <opencv2/core/eigen.hpp>
+#include "nearest_neighbors.hpp"
+#include "../../detector/Reader.h"
+#include "math.hpp"
 
 /*
  * Problem with repeated points in flann and nanoflann:

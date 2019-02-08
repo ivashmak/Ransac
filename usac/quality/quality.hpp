@@ -5,12 +5,10 @@
 #ifndef RANSAC_QUALITY_H
 #define RANSAC_QUALITY_H
 
-#include <omp.h>
-#include <thread>
+#include "../precomp.hpp"
+
 #include "../estimator/estimator.hpp"
 #include "../model.hpp"
-#include <cmath>
-#include <chrono>
 
 /*
  * Score for model estimation

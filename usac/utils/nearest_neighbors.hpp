@@ -5,11 +5,10 @@
 #ifndef USAC_NEARESTNEIGHBORS_H
 #define USAC_NEARESTNEIGHBORS_H
 
-#include <opencv2/core/mat.hpp>
-#include <opencv2/flann/miniflann.hpp>
+#include "../precomp.hpp"
 
 #include <nanoflann.hpp>
-#include "../../Generator/generator.h"
+#include "../../generator/generator.h"
 
 class NearestNeighbors {
 public:

@@ -5,8 +5,6 @@
 #ifndef USAC_NAPSACSAMPLER_H
 #define USAC_NAPSACSAMPLER_H
 
-#include <opencv2/core/mat.hpp>
-#include <opencv2/flann/flann.hpp>
 #include "sampler.hpp"
 #include "../../helper/drawing/Drawing.h"
 #include "../random_generator/array_random_generator.hpp"

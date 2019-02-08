@@ -9,7 +9,7 @@
 #include "../usac/sampler/prosac_sampler.hpp"
 #include "../usac/termination_criteria/prosac_termination_criteria.hpp"
 #include "../usac/utils/nearest_neighbors.hpp"
-#include "../Detector/detector.h"
+#include "../detector/detector.h"
 
 class Tests {
 public:
@@ -67,8 +67,8 @@ public:
     }
 
     static std::string nearestNeighbors2string (NeighborsSearch nn) {
-        if (nn == NeighborsSearch::Grid) return "Grid";
-        if (nn == NeighborsSearch::Nanoflann) return "Nanoflann";
+        if (nn == NeighborsSearch::Grid) return "grid";
+        if (nn == NeighborsSearch::Nanoflann) return "nanoflann";
         return "";
     }
 

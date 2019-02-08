@@ -5,7 +5,6 @@
 #ifndef USAC_LOCALOPTIMIZATION_H
 #define USAC_LOCALOPTIMIZATION_H
 
-
 #include "../estimator/estimator.hpp"
 #include "../quality/quality.hpp"
 

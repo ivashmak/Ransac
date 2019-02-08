@@ -10,10 +10,8 @@
 
 class IterativeLocalOptimization {
 private:
-    unsigned int max_iters;
-    unsigned int threshold_multiplier;
+    unsigned int max_iters, threshold_multiplier, sample_limit;
     bool is_sample_limit;
-    unsigned int sample_limit;
     float threshold_step, threshold;
     UniformRandomGenerator * uniformRandomGenerator;
     Estimator * estimator;

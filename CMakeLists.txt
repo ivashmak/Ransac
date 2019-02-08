@@ -7,13 +7,13 @@ find_package (OpenCV REQUIRED)
 add_executable(
         ransac main.cpp
 
-        Generator/generator.cpp
-        Generator/generator.h
+        generator/generator.cpp
+        generator/generator.h
 
-        Detector/Reader.cpp
-        Detector/Reader.h
-        Detector/detector.cpp
-        Detector/detector.h
+        detector/Reader.cpp
+        detector/Reader.h
+        detector/detector.cpp
+        detector/detector.h
 
         usac/quality/quality.hpp
         usac/quality/line_quality.hpp
@@ -51,7 +51,6 @@ add_executable(
         usac/estimator/essential/five_points.cpp
         usac/estimator/essential/rpoly.cpp usac/estimator/essential/rpoly.hpp
         usac/estimator/essential/polynomial.hpp
-        usac/estimator/essential/five_points_opencv.cpp
 
         usac/estimator/fundamental/seven_points.cpp
         usac/estimator/fundamental/eight_points.cpp
@@ -69,14 +68,14 @@ add_executable(
         usac/sprt.hpp
         usac/precomp.hpp
 
-        Tests/tests.h
-        Tests/test_homography_fitting.cpp
-        Tests/test_line2d_fitting.cpp
-        Tests/test_essential_fitting.cpp
-        Tests/test_fundamental_fitting.cpp
-        Tests/test.cpp
-        Tests/statistical_results.h
-        Tests/test_neighbors_search.cpp
+        test/tests.h
+        test/test_homography_fitting.cpp
+        test/test_line2d_fitting.cpp
+        test/test_essential_fitting.cpp
+        test/test_fundamental_fitting.cpp
+        test/test.cpp
+        test/statistical_results.h
+        test/test_neighbors_search.cpp
 
         helper/Logging.h
         helper/drawing/Drawing.h
@@ -86,7 +85,7 @@ add_executable(
         usac/random_generator/random_generator.hpp
         usac/random_generator/array_random_generator.hpp
         usac/random_generator/uniform_random_generator.hpp
-        Tests/test_random_generator.h
+        test/test_random_generator.h
 
         dataset/Dataset.h dataset/Dataset.cpp
         dataset/SaveGTModel.h dataset/SaveGTModel.cpp

@@ -11,16 +11,6 @@
 #include "../sampler/prosac_sampler.hpp"
 #include "../termination_criteria/prosac_termination_criteria.hpp"
 
-unsigned int getPointsSize (cv::InputArray points) {
-//    std::cout << points.getMat(0).total() << '\n';
-
-    if (points.isVector()) {
-        return points.size().width;
-    } else {
-        return points.getMat().rows;
-    }
-}
-
 void Ransac::run() {
     auto begin_time = std::chrono::steady_clock::now();
 
@@ -31,10 +21,17 @@ void Ransac::run() {
 
     // Allocate max size of models for fundamental matrix
     // estimation to avoid reallocation
-    if (model->estimator == ESTIMATOR::Fundamental) {
+    if (model->estimator == ESTIMATOR::Fundamental ) {
+        // for fundamental matrix can be up to 3 solutions
         models.push_back (new Model(model));
         models.push_back (new Model(model));
+    } else if (model->estimator == ESTIMATOR::Essential) {
+        // for essential matrix can be up to 10 solutions
+        for (int sol = 0; sol < 9; sol++) {
+            models.push_back(new Model(model));
+        }
     }
+
     Model * best_model = new Model (model);
     unsigned int number_of_models;
 
@@ -50,7 +47,6 @@ void Ransac::run() {
     bool SprtLO = model->sprt;
     bool is_good_model;
 
-
     bool LO = model->lo != LocOpt ::NullLO;
 
     //---------- Graph cut local optimization ----------
@@ -59,9 +55,6 @@ void Ransac::run() {
 
     int iters = 0;
     int max_iters = model->max_iterations;
-
-    // delete, just for test
-//    int * best_sample = new int[4];
 
     while (iters < max_iters) {
 
@@ -188,7 +181,7 @@ void Ransac::run() {
     // get inliers from best model
     quality->getInliers(best_model->returnDescriptor(), max_inliers);
 
-    for (unsigned int norm = 0; norm < 5 /* normalizations count */; norm++) {
+    for (unsigned int norm = 0; norm < 4 /* normalizations count */; norm++) {
         /*
          * TODO:
          * Calculate and Save Covariance Matrix and use it next normalization with adding or

@@ -23,6 +23,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+#include "precomp.hpp"
+
 #include "model.hpp"
 #include "utils/math.hpp"
 #include "estimator/estimator.hpp"
@@ -68,8 +70,7 @@ private:
     int last_sprt_update;
 
     double t_M, m_S, threshold, confidence;
-    bool is_init = false;
-    unsigned int points_size, sample_size, max_iterations;
+    unsigned int points_size, sample_size, max_iterations, random_pool_idx;
     std::vector<SPRT_history*> sprt_histories;
 
     Estimator * estimator;
@@ -77,7 +78,6 @@ private:
     int number_rejected_models;
     int sum_fraction_data_points;
     unsigned int * points_random_pool;
-    unsigned int random_pool_idx;
 
     int max_hypothesis_test_before_sprt;
 public:
@@ -161,7 +161,6 @@ public:
 
         sprt_histories[0]->A = estimateThresholdA(sprt_histories[0]->epsilon, sprt_histories[0]->delta);
         sprt_histories[0]->k = 0;
-        is_init = true;
 
         number_rejected_models = 0;
         sum_fraction_data_points = 0;
@@ -490,11 +489,6 @@ public:
         // std::cout << "------------------------------------------\n";
 
         return h;
-    }
-
-
-    bool isInit () {
-        return is_init;
     }
 };
 

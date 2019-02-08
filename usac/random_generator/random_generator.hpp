@@ -1,7 +1,7 @@
 #ifndef USAC_RANDOMGENERATOR_H
 #define USAC_RANDOMGENERATOR_H
 
-#include <chrono>
+#include "../precomp.hpp"
 
 class RandomGenerator {
 protected:

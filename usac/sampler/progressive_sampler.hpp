@@ -5,22 +5,15 @@
 #ifndef USAC_GRADUALNAPSAC_H
 #define USAC_GRADUALNAPSAC_H
 
-#include <opencv2/core/mat.hpp>
-#include <opencv2/flann/flann.hpp>
 #include "sampler.hpp"
 #include "../random_generator/array_random_generator.hpp"
 #include "../utils/math.hpp"
 
-/*
- * https://pdfs.semanticscholar.org/cec1/2adbb307124e0c62efbaaa870836c3846b5f.pdf
- * http://www.bmva.org/bmvc/2002/papers/164/full_164.pdf
- *
- */
 class ProgressiveNapsac : public Sampler {
 private:
     RandomGenerator * random_generator;
     RandomGenerator * random_generator_neighborhood;
-        ;
+
     int initial_point[1];
 
     class Cell {

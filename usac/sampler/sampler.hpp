@@ -6,6 +6,7 @@
 #define RANSAC_SAMPLER_H
 
 #include "../random_generator/random_generator.hpp"
+#include "../precomp.hpp"
 
 class Sampler {
 protected:

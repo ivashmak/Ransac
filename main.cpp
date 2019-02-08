@@ -1,6 +1,6 @@
 #include <opencv2/core/mat.hpp>
-#include "Tests/tests.h"
-#include "Tests/test_random_generator.h"
+#include "test/tests.h"
+#include "test/test_random_generator.h"
 #include "usac/ransac/ransac_output.hpp"
 #include "usac/utils/nearest_neighbors.hpp"
 
@@ -8,6 +8,7 @@
 #include "usac/termination_criteria/prosac_termination_criteria.hpp"
 #include "dataset/SaveGTModel.h"
 #include "usac/sampler/prosac_simple_sampler.hpp"
+#include "usac/utils/utils.hpp"
 
 int main (int args, char ** argv) {
     Tests tests;
@@ -16,7 +17,6 @@ int main (int args, char ** argv) {
 
     // evaluating random generators
    // evaluateRandomGenerators();
-
 
     // test calculating nearest neighbors using flann and nano flann
 //    NearestNeighbors nn;
@@ -27,10 +27,10 @@ int main (int args, char ** argv) {
 //    tests.testNeighborsSearch();
 
 //     run tests
-  tests.testLineFitting();
+//  tests.testLineFitting();
 //     tests.testHomographyFitting();
 //     tests.testFundamentalFitting();
-//    tests.testEssentialFitting();
+    tests.testEssentialFitting();
 
 	return 0;
 }

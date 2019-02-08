@@ -1,14 +1,14 @@
 #include <cstdlib>
 #include "tests.h"
 
-#include "../Generator/generator.h"
+#include "../generator/generator.h"
 #include "../usac/estimator/line2d_estimator.hpp"
 #include "../usac/ransac/ransac.hpp"
 
 #include "../helper/drawing/Drawing.h"
 #include "../helper/Logging.h"
 
-#include "../Detector/Reader.h"
+#include "../detector/Reader.h"
 
 #include "../usac/sampler/sampler.hpp"
 #include "../usac/sampler/napsac_sampler.hpp"

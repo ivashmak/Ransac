@@ -1,14 +1,10 @@
 #ifndef USAC_ARRAYRANDOMGENERATOR_H
 #define USAC_ARRAYRANDOMGENERATOR_H
 
-#include <cstdlib>
-#include <cmath>
-#include <iostream>
 #include "random_generator.hpp"
 
 /*
- *
- *
+ * Fischer-Yates Shuffle
  */
 class ArrayRandomGenerator : public RandomGenerator {
 protected:

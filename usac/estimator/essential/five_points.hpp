@@ -5,8 +5,7 @@
 #ifndef USAC_FIVEPOINTSALGORITHM_H
 #define USAC_FIVEPOINTSALGORITHM_H
 
-#include <opencv2/core/mat.hpp>
-#include <opencv2/core.hpp>
+#include "../../precomp.hpp"
 
 class EssentialSolver {
 private:
@@ -16,9 +15,6 @@ public:
 	
 	unsigned int FivePoints (const int * const sample, cv::Mat &E);
 };
-
-// not working need to check
-unsigned int FivePointsOpenCV (const float * const pts, const int * const sample, cv::Mat &E);
 
 // helper
 static void ProjectionsFromEssential(const cv::Mat &E, cv::Mat &P1, cv::Mat &P2, cv::Mat &P3, cv::Mat &P4);

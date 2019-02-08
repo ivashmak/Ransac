@@ -12,17 +12,17 @@
 
 class Irls : public LocalOptimization {
 private:
-    float * weights;
-    int *inliers, *sample;
-
     Estimator * estimator;
     Quality * quality;
-    unsigned int points_size;
-    float threshold;
     Model * irls_model;
     UniformRandomGenerator * uniformRandomGenerator;
     Score * irls_score;
-    unsigned int max_sample_size;
+
+    float * weights;
+    int *inliers, *sample;
+    unsigned int points_size, max_sample_size;
+    float threshold;
+
 public:
     ~Irls() {
         delete[] weights; delete[] inliers; delete[] sample; delete[] uniformRandomGenerator;

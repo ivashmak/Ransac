@@ -5,7 +5,8 @@
 #ifndef USAC_GRAPHCUT_H
 #define USAC_GRAPHCUT_H
 
-#include <opencv2/core/mat.hpp>
+#include "../precomp.hpp"
+
 #include "../estimator/estimator.hpp"
 #include "../../include/gco-v3.0/GCoptimization.h"
 #include "local_optimization.hpp"
@@ -15,31 +16,22 @@
 
 class GraphCut : public LocalOptimization {
 protected:
-    float threshold;
-    unsigned int points_size;
     Estimator * estimator;
     Quality * quality;
-    int knn;
-    float spatial_coherence;
-    float sqr_thr;
     Score * gc_score;
     Model * gc_model;
-
-    int * inliers;
-    int * sample;
     UniformRandomGenerator * uniform_random_generator;
 
-    unsigned int sample_limit;
-    unsigned int sample_size;
-    unsigned int lo_inner_iterations;
-    float * errors;
-
-    int * neighbors;
     std::vector<std::vector<int>> neighbors_v;
     NeighborsSearch neighborsType;
 
-    int neighbor_number;
+    int knn, neighbor_number;
+    unsigned int points_size, sample_limit, sample_size, lo_inner_iterations;
+    float threshold, spatial_coherence, sqr_thr;
     bool isInit = false;
+
+    int *inliers, *sample, *neighbors;
+    float * errors;
 public:
     int gc_iterations;
 

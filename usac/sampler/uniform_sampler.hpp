@@ -16,7 +16,7 @@ private:
     int max;
 public:
     ~UniformSampler() override {
-        delete[] points_random_pool;
+        if (isInit()) delete[] points_random_pool;
     }
 
     UniformSampler (bool reset_time) {

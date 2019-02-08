@@ -1,17 +1,12 @@
 #ifndef USAC_UNIFORMRANDOMGENERATOR_H
 #define USAC_UNIFORMRANDOMGENERATOR_H
 
-#include <cstdlib>
-#include <vector>
-#include <random>
-#include <algorithm>
 #include "random_generator.hpp"
 
 class UniformRandomGenerator : public RandomGenerator {
 protected:
     std::mt19937 generator;
     std::uniform_int_distribution<int> generate;
-    int prev_min, prev_max;
 public:
     UniformRandomGenerator () {
         std::random_device rand_dev;

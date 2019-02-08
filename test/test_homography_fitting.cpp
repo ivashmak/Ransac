@@ -1,5 +1,5 @@
 #include "tests.h"
-#include "../Detector/Reader.h"
+#include "../detector/Reader.h"
 #include "../usac/utils/utils.hpp"
 #include "../helper/Logging.h"
 #include "../usac/estimator/homography_estimator.hpp"

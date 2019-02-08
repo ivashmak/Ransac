@@ -5,8 +5,8 @@
 #ifndef USAC_LINEQUALITY_H
 #define USAC_LINEQUALITY_H
 
-#include "Quality.h"
-#include "../Utils/Math.h"
+#include "quality.hpp"
+#include "../utils/math.hpp"
 
 class LineQuality : Quality {
 public:

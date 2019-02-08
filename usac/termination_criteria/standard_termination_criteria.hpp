@@ -21,7 +21,7 @@ public:
     /*
      * Initialize termination criteria
      */
-    void init (const Model * const model, unsigned int points_size_) override {
+    StandardTerminationCriteria (const Model * const model, unsigned int points_size_) {
         assert (model != nullptr);
         this->model = model;
         log_1_p = (float) log (1-model->desired_prob);

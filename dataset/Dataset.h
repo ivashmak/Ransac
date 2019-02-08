@@ -24,8 +24,8 @@ public:
             std::cout << "NOT IMPLEMENTED YET for Syntectic dataset\n";
             return std::vector<std::string>();
         } else if (dataset == DATASET::Strecha) {
-            std::cout << "NOT IMPLEMENTED YET for Strecha dataset\n";
-            return std::vector<std::string>();
+            return getMVSDataset();
+
         } else if (dataset == EVD) {
             return getEVDDataset();
         } else {
@@ -40,6 +40,7 @@ public:
     static std::vector<std::string> getFundamentalDatasetPoints ();
     static std::vector<std::string> getKusvod2Dataset ();
     static std::vector<std::string> getAdelaidermfDataset ();
+    static std::vector<std::string> getStrechaDataset ();
 };
 
 #endif //USAC_DATASET_H

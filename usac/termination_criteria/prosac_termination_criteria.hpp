@@ -5,8 +5,7 @@
 #ifndef USAC_PROSACTERMINATIONCRITERIA_H
 #define USAC_PROSACTERMINATIONCRITERIA_H
 
-#include <vector>
-#include <opencv2/core/mat.hpp>
+#include "../precomp.hpp"
 #include "standard_termination_criteria.hpp"
 
 class ProsacTerminationCriteria : public TerminationCriteria {
@@ -47,8 +46,7 @@ public:
                                         unsigned int points_size_,
                                         Estimator * estimator_) {
 
-        standart_termination_criteria = new StandardTerminationCriteria;
-        standart_termination_criteria->init (model, points_size_);
+        standart_termination_criteria = new StandardTerminationCriteria (model, points_size_);
 
         estimator = estimator_;
         growth_function = growth_function_;

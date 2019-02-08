@@ -1,10 +1,7 @@
 #ifndef USAC_FUNDAMENTALSOLVER_H
 #define USAC_FUNDAMENTALSOLVER_H
 
-#include <opencv2/core/mat.hpp>
-#include <iostream>
-#include <opencv2/core.hpp>
-#include <opencv2/core/mat.hpp>
+#include "../../precomp.hpp"
 
 class FundamentalSolver {
 private:

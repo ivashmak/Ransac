@@ -52,12 +52,8 @@ public:
         cv::Mat_<float> E;
 
         unsigned int models_count = e_solver->FivePoints (sample, E);
-//        unsigned int models_count2 = FivePointsOpenCV (points, sample, E2);
 
-        std::cout << "models count " << models_count << "\n";
-
-        // todo: fix for more than 3 solutions
-        for (unsigned int i = 0; i < std::min ((unsigned int)3, models_count); i++) {
+        for (unsigned int i = 0; i < models_count; i++) {
             models[i]->setDescriptor(E.rowRange(i * 3, i * 3 + 3));
         }
 
@@ -110,7 +106,7 @@ public:
     }
 
 
-    void getModelbyCameraMatrix (const cv::Mat &K1, const cv::Mat &K2, const cv::Mat &F, cv::Mat &E) override {
+    static void getModelbyCameraMatrix (const cv::Mat &K1, const cv::Mat &K2, const cv::Mat &F, cv::Mat &E) {
         E =  K2.t() * F * K1;
     }
 

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <opencv2/core/mat.hpp>
 #include "SaveGTModel.h"
-#include "../Detector/Reader.h"
+#include "../detector/Reader.h"
 #include "../usac/estimator/estimator.hpp"
 #include "../usac/estimator/fundamental_estimator.hpp"
 

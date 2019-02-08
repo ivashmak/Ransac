@@ -167,7 +167,7 @@ public:
     }
 
 
-    void getModelbyCameraMatrix (const cv::Mat &K1, const cv::Mat &K2, const cv::Mat &E, cv::Mat &F) override {
+    static void getModelbyCameraMatrix (const cv::Mat &K1, const cv::Mat &K2, const cv::Mat &E, cv::Mat &F) {
         F =  K2.inv().t() * E * K1.inv();
     }
 
@@ -176,7 +176,7 @@ public:
     }
 
 
-    void GetFundamentalFromProjectionMats(const cv::Mat &P1, const cv::Mat &P2, cv::Mat &F) {
+    static void getFundamentalFromProjection(const cv::Mat &P1, const cv::Mat &P2, cv::Mat &F) {
         cv::Mat e1;
         cv::SVD svd(P1, 4);
 

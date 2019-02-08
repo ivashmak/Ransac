@@ -3,8 +3,8 @@
 
 #include "../usac/model.hpp"
 #include "../usac/quality/quality.hpp"
-#include "../Tests/statistical_results.h"
-#include "../Tests/tests.h"
+#include "../test/statistical_results.h"
+#include "../test/tests.h"
 
 #include <fstream>
 

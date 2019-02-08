@@ -5,9 +5,6 @@
 #ifndef USAC_PROSAC_SIMPLE_SAMPLER_H
 #define USAC_PROSAC_SIMPLE_SAMPLER_H
 
-#include <cmath>
-#include <vector>
-#include <iostream>
 #include "sampler.hpp"
 #include "../model.hpp"
 #include "../random_generator/array_random_generator.hpp"

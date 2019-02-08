@@ -21,22 +21,16 @@ class InnerLocalOptimization : public LocalOptimization {
 private:
     Quality * quality;
     Estimator * estimator;
-
-    int * lo_inliers;
-    int * max_inliers;
-    int * lo_sample;
-
     Score * lo_score;
     Model * lo_model;
-
-    unsigned int lo_inner_iterations;
-    unsigned int sample_limit;
-
     UniformRandomGenerator * uniform_random_generator;
     IterativeLocalOptimization * iterativeLocalOptimization;
+
+    int *lo_inliers, *max_inliers, *lo_sample;
+    unsigned int lo_inner_iterations, sample_limit;
+
 public:
-    unsigned int lo_inner_iters = 0;
-    unsigned int lo_iterative_iters = 0;
+    unsigned int lo_inner_iters, lo_iterative_iters;
 
     ~InnerLocalOptimization () override {
         // std::cout << "cleaning in ransac lo\n";
@@ -70,6 +64,9 @@ public:
         iterativeLocalOptimization = new IterativeLocalOptimization
                 (points_size, model->lo_iterative_iterations, model->threshold, model->lo_threshold_multiplier,
                 true, sample_limit, uniform_random_generator, estimator, quality);
+
+        lo_inner_iterations = 0;
+        lo_iterative_iters = 0;
     }
 
     /*
@@ -117,6 +114,10 @@ public:
             bool fail = iterativeLocalOptimization->GetScoreLimited(lo_score, lo_model, lo_inliers);
             // unlimited iterative lo
 //            bool fail = iterativeLocalOptimization->GetScoreUnlimited(lo_score, lo_model, best_score, lo_inliers);
+
+            // only for test
+            lo_iterative_iters = iterativeLocalOptimization->lo_iterative_iters;
+            //
 
             // update best model
             if (!fail && lo_score->bigger(best_score)) {

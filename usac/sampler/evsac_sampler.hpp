@@ -5,15 +5,8 @@
 #ifndef USAC_EVSACSAMPLER_H
 #define USAC_EVSACSAMPLER_H
 
-#include <vector>
-#include <algorithm>
-#include <iostream>
-#include <memory>
-
 #include "sampler.hpp"
 //#include <theia/theia.h>
-#include <opencv2/core/mat.hpp>
-#include <opencv2/flann/flann.hpp>
 
 // theia implementation
 // Copyright (C) 2014 The Regents of the University of California (Regents).

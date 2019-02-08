@@ -4,8 +4,15 @@
 #include <iostream>
 #include <opencv2/core/types.hpp>
 
-#include "../Detector/Reader.h"
+#include "../detector/Reader.h"
 
+
+void detectFeaturesMVS () {
+    std::vector<std::string> mvs = Dataset::getMVSDataset();
+    for (int i = 0; i < mvs.size(); i++) {
+//        detectFeaturesForEssentialMatrix();
+    }
+}
 
 void Tests::testEssentialFitting() {
     DATASET dataset = DATASET::Strecha;

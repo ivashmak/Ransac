@@ -4,12 +4,6 @@
 
 #include "rpoly.hpp"
 
-#include <iostream>
-#include <fstream>
-#include <cctype>
-#include <cmath>
-#include <cfloat>
-
 void rpoly_ak1(double op[MDP1], int* Degree, double zeror[MAXDEGREE], double zeroi[MAXDEGREE]){
     int i, j, jj, l, N, NM1, NN, NZ, zerok;
 

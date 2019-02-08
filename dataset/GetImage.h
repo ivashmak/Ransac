@@ -5,10 +5,11 @@
 #include <opencv2/imgcodecs.hpp>
 #include <iostream>
 #include "Dataset.h"
-#include "../Detector/Reader.h"
+#include "../detector/Reader.h"
 #include "../usac/estimator/homography_estimator.hpp"
 #include "../usac/estimator/fundamental_estimator.hpp"
 #include "../usac/quality/quality.hpp"
+#include "../detector/detector.h"
 
 class ImageData {
 private:
@@ -107,12 +108,12 @@ public:
             pts2 = pts.colRange(2,4);
 
         } else if (dataset == DATASET::Homogr) {
-            estimator = ESTIMATOR ::Homography;
+            estimator = ESTIMATOR::Homography;
 
             folder = "../dataset/homography/";
-            Reader::read_points(pts1, pts2, folder+img_name+"_pts.txt");
-            Reader::getInliers(folder+img_name+"_pts.txt", inliers);
-            Reader::getMatrix3x3(folder+img_name+"_model.txt", model);
+            Reader::read_points(pts1, pts2, folder + img_name + "_pts.txt");
+            Reader::getInliers(folder + img_name + "_pts.txt", inliers);
+            Reader::getMatrix3x3(folder + img_name + "_model.txt", model);
             cv::hconcat(pts1, pts2, pts);
 
         } else {
@@ -168,33 +169,42 @@ public:
     }
 
     std::vector<int> getGTInliers (float threshold) {
-//        std::cout << model << "\n";
-        if (estimator == ESTIMATOR::Homography) {
-            getGTInliersFromGTModelHomography (threshold, false);
-        } else if (estimator == ESTIMATOR::Fundamental){
-            getGTInliersFromGTModelFundamental (threshold, false);
-        } else {
-            std::cout << "unkown estimator in getGTinliers in GetImage\n";
-            exit(111);
+        if (inliers.empty()) {
+            // if inliers are empty get them by model
+            if (estimator == ESTIMATOR::Homography) {
+                getGTInliersFromGTModelHomography (threshold, false);
+            } else if (estimator == ESTIMATOR::Fundamental){
+                getGTInliersFromGTModelFundamental (threshold, false);
+            } else if (estimator == ESTIMATOR::Essential) {
+                getGTInliersFromGTModelEssential (threshold, true);
+            } else {
+                std::cout << "unkown estimator in getGTinliers in GetImage\n";
+                exit(111);
+            }
         }
-        if (inliers.empty()) std::cout << "INLIERS ARE EMPTY!\n";
         return inliers;
     }
 
     std::vector<int> getGTInliersSorted (float threshold) {
-//        std::cout << model << "\n";
-        if (estimator == ESTIMATOR::Homography) {
-            getGTInliersFromGTModelHomography (threshold, true);
-        } else if (estimator == ESTIMATOR::Fundamental){
-            getGTInliersFromGTModelFundamental (threshold, true);
-        } else {
-            std::cout << "unkown estimator in getGTinliersSorted in GetImage\n";
-            exit(111);
+        if (sorted_inliers.empty()) {
+            // if inliers are empty get them by model
+            if (estimator == ESTIMATOR::Homography) {
+                getGTInliersFromGTModelHomography (threshold, true);
+            } else if (estimator == ESTIMATOR::Fundamental) {
+                getGTInliersFromGTModelFundamental (threshold, true);
+            } else if (estimator == ESTIMATOR::Essential) {
+                getGTInliersFromGTModelEssential (threshold, true);
+            } else {
+                std::cout << "unkown estimator in getGTinliersSorted in GetImage\n";
+                exit(111);
+            }
         }
-        if (sorted_inliers.empty()) std::cout << "SORTED INLIERS ARE EMPTY!\n";
+
         return sorted_inliers;
     }
 
+
+    // get GT inliers using GT Model
     void getGTInliersFromGTModelHomography (float threshold, bool sorted) {
         Estimator * estimator;
         std::vector<int> inliers2;
@@ -211,8 +221,6 @@ public:
                 model = temp.clone();
             }
         } else {
-            assert(!sorted_pts.empty());
-
             estimator = new HomographyEstimator(sorted_pts);
 
             Quality::getInliers(estimator, model, threshold, sorted_pts.rows, sorted_inliers);
@@ -242,8 +250,6 @@ public:
                 model = temp.clone();
             }
         } else {
-            assert(!sorted_pts.empty());
-
             estimator = new FundamentalEstimator(sorted_pts);
 
             Quality::getInliers(estimator, model, threshold, sorted_pts.rows, sorted_inliers);
@@ -255,9 +261,20 @@ public:
                 model = temp.clone();
             }
         }
-
-
     }
+
+    void getGTInliersFromGTModelEssential (float threshold, bool sorted) {
+        Estimator * estimator;
+
+        if (! sorted) {
+            estimator = new FundamentalEstimator(pts);
+            Quality::getInliers(estimator, model, threshold, pts.rows, inliers);
+        } else {
+            estimator = new FundamentalEstimator(sorted_pts);
+            Quality::getInliers(estimator, model, threshold, sorted_pts.rows, sorted_inliers);
+        }
+    }
+
 
 };
 

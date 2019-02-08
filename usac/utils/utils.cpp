@@ -31,3 +31,18 @@ void densitySort (const cv::Mat &points, int knn, cv::Mat &sorted_points) {
         sorted_points.push_back(points.row(sorted_idx[i]));
     }
 }
+
+/*
+ * filename = path/name.ext
+ * path
+ * name
+ * ext
+ */
+void splitFilename (const std::string &filename, std::string &path, std::string &name, std::string &ext) {
+    const unsigned long dot = filename.find_last_of('.');
+    const unsigned long slash = filename.find_last_of('/');
+    // substr (pos, n) take substring of size n starting from position pos.
+    path = filename.substr(0, slash+1);
+    name = filename.substr(slash+1, dot-slash-1);
+    ext = filename.substr(dot+1, filename.length()-1);
+}

@@ -33,6 +33,8 @@
 #define MAXDEGREE 100
 #define MDP1 MAXDEGREE+1
 
+#include "../../precomp.hpp"
+
 void rpoly_ak1(double op[MDP1], int* Degree, double zeror[MAXDEGREE], double zeroi[MAXDEGREE]);
 void Fxshfr_ak1(int L2, int* NZ, double sr, double v, double K[MDP1], int N, double p[MDP1], int NN, double qp[MDP1], double u, double* lzi, double* lzr, double* szi, double* szr);
 void QuadSD_ak1(int NN, double u, double v, double p[MDP1], double q[MDP1], double* a, double* b);

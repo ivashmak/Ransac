@@ -3,7 +3,6 @@
 // of this distribution and at http://opencv.org/license.html.
 
 #include "graphcut.hpp"
-#include <cmath>
 
 void GraphCut::labeling (const cv::Mat& model, Score * score, int * inliers) {
 

@@ -5,9 +5,7 @@
 #ifndef RANSAC_PROSAC_SAMPLER_H
 #define RANSAC_PROSAC_SAMPLER_H
 
-#include <cmath>
-#include <vector>
-#include <iostream>
+
 #include "sampler.hpp"
 #include "../model.hpp"
 #include "../random_generator/uniform_random_generator.hpp"

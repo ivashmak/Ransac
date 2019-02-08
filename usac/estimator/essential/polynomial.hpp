@@ -5,11 +5,7 @@
 #ifndef __POLYNOMIAL_H__
 #define __POLYNOMIAL_H__
 
-#include <vector>
-#include <iostream>
-#include <iomanip>
-#include <cmath>
-#include <assert.h>
+#include "../../precomp.hpp"
 
 class Polynomial
 {

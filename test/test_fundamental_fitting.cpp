@@ -1,6 +1,6 @@
 #include "tests.h"
 
-#include "../Detector/Reader.h"
+#include "../detector/Reader.h"
 #include "../helper/drawing/Drawing.h"
 #include "../helper/Logging.h"
 #include "../usac/estimator/fundamental_estimator.hpp"

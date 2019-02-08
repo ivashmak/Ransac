@@ -5,16 +5,7 @@
 #ifndef RANSAC_ESTIMATOR_H
 #define RANSAC_ESTIMATOR_H
 
-#include <iostream>
-#include <cstdio>
-#include <string>
-#include <cmath>
-#include <chrono>
-
-#include <opencv2/opencv.hpp>
-#include <opencv2/core.hpp>
-#include <opencv2/features2d.hpp>
-#include <opencv2/highgui.hpp>
+#include "../precomp.hpp"
 
 #include "../sampler/sampler.hpp"
 #include "../model.hpp"
@@ -55,13 +46,7 @@ public:
      * These function should be avoided in Ransac. Efficiently to use global 
      * input points and descriptors as private class members.
      */
-    virtual void setModelParameters (const cv::Mat& model) {
-        std::cout << "NOT IMPLEMENTED FUNCTION setModelParameters!\n";
-    }
-
-    virtual void getModelbyCameraMatrix (const cv::Mat &K1, const cv::Mat &K2, const cv::Mat &InModel, cv::Mat &OutModel) {
-        std::cout << "NOT IMPLEMENTED FUNCTION getModelbyCameraMatrix!\n";
-    }
+    virtual void setModelParameters (const cv::Mat& model) = 0;
 
     /*
      * Fundamental Estimator

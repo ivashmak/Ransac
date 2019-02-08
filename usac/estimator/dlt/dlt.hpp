@@ -5,10 +5,7 @@
 #ifndef RANSAC_DLT_H
 #define RANSAC_DLT_H
 
-#include <opencv2/opencv.hpp>
-#include <opencv2/core.hpp>
-#include <opencv2/features2d.hpp>
-#include <opencv2/xfeatures2d.hpp>
+#include "../../precomp.hpp"
 
 // Direct Linear Transformation
 class DLt {

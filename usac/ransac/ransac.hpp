@@ -94,25 +94,6 @@ public:
         }
     }
 
-//    Ransac (Model * model_,
-//            Sampler * sampler_,
-//            TerminationCriteria * termination_criteria_,
-//            Quality * quality_,
-//            Estimator * estimator_) {
-//
-//        assert (model_ != nullptr);
-//        assert (sampler_ != nullptr);
-//        assert (termination_criteria_ != nullptr);
-//        assert (quality_ != nullptr);
-//        assert (estimator_ != nullptr);
-//
-//        model = model_;
-//        sampler = sampler_;
-//        termination_criteria = termination_criteria_;
-//        quality = quality_;
-//        estimator = estimator_;
-//    }
-
     void run ();
 
     void setSampler (Sampler * sampler) {
