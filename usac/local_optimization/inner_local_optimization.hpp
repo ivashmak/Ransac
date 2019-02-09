@@ -7,7 +7,6 @@
 
 #include "local_optimization.hpp"
 #include "../quality/quality.hpp"
-#include "../../helper/drawing/Drawing.h"
 #include "../sampler/uniform_sampler.hpp"
 #include "../random_generator/uniform_random_generator.hpp"
 #include "iterative_local_optimization.hpp"
@@ -27,10 +26,10 @@ private:
     IterativeLocalOptimization * iterativeLocalOptimization;
 
     int *lo_inliers, *max_inliers, *lo_sample;
-    unsigned int lo_inner_iterations, sample_limit;
-
+    unsigned int lo_inner_max_iterations, sample_limit;
+    bool limited;
 public:
-    unsigned int lo_inner_iters, lo_iterative_iters;
+    unsigned int lo_inner_iters = 0, lo_iterative_iters = 0;
 
     ~InnerLocalOptimization () override {
         // std::cout << "cleaning in ransac lo\n";
@@ -43,7 +42,7 @@ public:
         estimator = estimator_;
         quality = quality_;
 
-        lo_inner_iterations = model->lo_inner_iterations;
+        lo_inner_max_iterations = model->lo_inner_iterations;
         sample_limit = model->lo_sample_size;
 
         // Allocate max memory to avoid reallocation
@@ -60,12 +59,12 @@ public:
         if (model->reset_random_generator) uniform_random_generator->resetTime();
         // -----------------------------------
 
+        limited = model->lo == LocOpt ::InItFLORsc;
         // ----------------------
         iterativeLocalOptimization = new IterativeLocalOptimization
-                (points_size, model->lo_iterative_iterations, model->threshold, model->lo_threshold_multiplier,
-                true, sample_limit, uniform_random_generator, estimator, quality);
+                (points_size, model, uniform_random_generator, estimator, quality);
 
-        lo_inner_iterations = 0;
+        lo_inner_iters = 0;
         lo_iterative_iters = 0;
     }
 
@@ -82,7 +81,7 @@ public:
         /*
          * Inner Local Optimization Ransac
          */
-        for (unsigned int iters = 0; iters < lo_inner_iterations; iters++) {
+        for (unsigned int iters = 0; iters < lo_inner_max_iterations; iters++) {
             /*
              * Generate sample of lo_sample_size from inliers from the best model.
              */
@@ -110,10 +109,14 @@ public:
             // continue if there are not enough inliers for non minimal estimation
             if (lo_score->inlier_number <= lo_model->sample_size) continue;
 
-            // fixing locally optimized ransac with limited iterative lo.
-            bool fail = iterativeLocalOptimization->GetScoreLimited(lo_score, lo_model, lo_inliers);
-            // unlimited iterative lo
-//            bool fail = iterativeLocalOptimization->GetScoreUnlimited(lo_score, lo_model, best_score, lo_inliers);
+            bool fail;
+            if (limited) {
+                // fixing locally optimized ransac with limited iterative lo.
+                fail = iterativeLocalOptimization->GetScoreLimited(lo_score, lo_model, lo_inliers);
+            } else {
+                // unlimited iterative lo
+                fail = iterativeLocalOptimization->GetScoreUnlimited(lo_score, lo_model, best_score, lo_inliers);
+            }
 
             // only for test
             lo_iterative_iters = iterativeLocalOptimization->lo_iterative_iters;

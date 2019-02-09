@@ -25,18 +25,17 @@ public:
             delete[] lo_sample;
         }
     }
-    IterativeLocalOptimization (unsigned int points_size, unsigned int max_iters_, float threshold_, unsigned int threshold_multiplier_, bool is_sample_limit_,
-                                unsigned int sample_limit_, UniformRandomGenerator * uniformRandomGenerator_,
+    IterativeLocalOptimization (unsigned int points_size, Model * model, UniformRandomGenerator * uniformRandomGenerator_,
                                 Estimator * estimator_, Quality * quality_) {
-        max_iters = max_iters_;
-        threshold_multiplier = threshold_multiplier_;
-        is_sample_limit = is_sample_limit_;
-        sample_limit = sample_limit_;
+        max_iters = model->lo_iterative_iterations;
+        threshold_multiplier = model->lo_threshold_multiplier;
+        is_sample_limit = model->lo == LocOpt ::InItFLORsc;
+        sample_limit = model->lo_sample_size;
         if (is_sample_limit) {
             lo_sample = new int [sample_limit];
         }
 
-        threshold = threshold_;
+        threshold = model->threshold;
         /*
          * reduce multiplier threshold K·θ by this number in each iteration.
          * In the last iteration there be original threshold θ.

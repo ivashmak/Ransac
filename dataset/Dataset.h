@@ -21,10 +21,9 @@ public:
         } else if (dataset == DATASET::Kusvod2 || dataset == DATASET::Kusvod2_SIFT) {
             return getKusvod2Dataset();
         } else if (dataset == DATASET::Syntectic) {
-            std::cout << "NOT IMPLEMENTED YET for Syntectic dataset\n";
-            return std::vector<std::string>();
+            return getSyntecticLine2dDataset();
         } else if (dataset == DATASET::Strecha) {
-            return getMVSDataset();
+            return getStrechaDataset();
 
         } else if (dataset == EVD) {
             return getEVDDataset();
@@ -41,6 +40,7 @@ public:
     static std::vector<std::string> getKusvod2Dataset ();
     static std::vector<std::string> getAdelaidermfDataset ();
     static std::vector<std::string> getStrechaDataset ();
+    static std::vector<std::string> getSyntecticLine2dDataset ();
 };
 
 #endif //USAC_DATASET_H

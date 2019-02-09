@@ -21,13 +21,12 @@ void Tests::testHomographyFitting() {
 //    exit (0);
 
     DATASET dataset = DATASET::Homogr_SIFT;
-    std::string img_name = "graf";
+    std::string img_name = "Brussels";
 
     ImageData gt_data (dataset, img_name);
 
-    cv::Mat points, sorted_points;
-    points = gt_data.getPoints();
-    sorted_points = gt_data.getSortedPoints();
+    cv::Mat points = gt_data.getPoints();
+    cv::Mat sorted_points = gt_data.getSortedPoints();
 
     std::vector<int> gt_inliers = gt_data.getGTInliers(threshold);
     std::vector<int> gt_sorted_inliers = gt_data.getGTInliersSorted(threshold);
@@ -40,10 +39,8 @@ void Tests::testHomographyFitting() {
     int knn = 7;
     float confidence = 0.95;
 
-//    densitySort(points, 3, sorted_points);
-
     std::cout << "gt inliers " << gt_inliers.size() << "\n";
-    std::cout << "gt inliers sorted " << gt_inliers.size() << "\n";
+    std::cout << "gt inliers sorted " << gt_sorted_inliers.size() << "\n";
 
     Model * model;
 
@@ -51,27 +48,25 @@ void Tests::testHomographyFitting() {
    model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Uniform);
 //     --------------------------------------------------------------
 
-
 //     ---------------------- napsac ----------------------------------
 //    model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Napsac);
-    // --------------------------------------------------------------
-
+//     --------------------------------------------------------------
 
 // ------------------ prosac ---------------------
 //     model = new Model (threshold, 4, confidence, knn, ESTIMATOR::Homography, SAMPLER::Prosac);
 //     -------------------------------------------------
 
 
-     model->lo = LocOpt ::GC;
+     model->lo = LocOpt ::InItFLORsc;
      model->setSprt(0);
      model->setCellSize(50);
      model->setNeighborsType(NeighborsSearch::Grid);
-     model->ResetRandomGenerator(true);
+     model->ResetRandomGenerator(false);
 
      test (points, model, img_name, dataset, true, gt_inliers);
 //     test (sorted_points, model, img_name, dataset, true, gt_sorted_inliers);
 
-//    getStatisticalResults(points, model, 100, true, gt_inliers, false, nullptr);
+//    getStatisticalResults(points, model, 10, true, gt_inliers, false, nullptr);
 //    getStatisticalResults(sorted_points, model, 100, true, gt_sorted_inliers, false, nullptr);
 
 //    storeResultsHomography();
@@ -79,16 +74,13 @@ void Tests::testHomographyFitting() {
 
 
 /*
-// * Store results from dataset to csv file.
+ * Store results from dataset to csv file.
  */
 void storeResultsHomography () {
-    DATASET dataset = DATASET ::EVD; // Homogr, Kusvod2, Adelaidrmf, EVD
+    DATASET dataset = DATASET ::EVD; // Homogr, EVD
     std::vector<std::string> points_filename = Dataset::getDataset(dataset);
     int num_images = points_filename.size();
     std::cout << "number of images " << num_images << "\n";
-
-    Tests tests;
-    Logging log;
 
     std::vector<cv::Mat_<float>> points_imgs;
     std::vector<cv::Mat_<float>> sorted_points_imgs;
@@ -103,15 +95,14 @@ void storeResultsHomography () {
     for (const std::string &img_name : points_filename) {
         std::cout << "get points for " << img_name << "\n";
 
-        cv::Mat_<float> points, sorted_points;
         ImageData gt_data (dataset, img_name);
-        points = gt_data.getPoints();
-        sorted_points = gt_data.getSortedPoints();
+        cv::Mat points = gt_data.getPoints();
+        cv::Mat sorted_points = gt_data.getSortedPoints();
 
         gt_inliers.push_back(gt_data.getGTInliers(threshold));
         gt_inliers_sorted.push_back(gt_data.getGTInliersSorted(threshold));
-        points_imgs.push_back(points);
-        sorted_points_imgs.push_back(sorted_points);
+        points_imgs.emplace_back(points);
+        sorted_points_imgs.emplace_back(sorted_points);
 
         std::cout << "inliers size " << gt_inliers[gt_inliers.size()-1].size() << "\n";
         std::cout << "sorted inliers size " << gt_inliers_sorted[gt_inliers.size()-1].size() << "\n";
@@ -124,7 +115,7 @@ void storeResultsHomography () {
 //    samplers.push_back(SAMPLER::Prosac);
 
     std::vector<LocOpt > loc_opts;
-    loc_opts.push_back(LocOpt::InItRsc);
+    loc_opts.push_back(LocOpt::InItLORsc);
     bool sprt = 0;
 
     NeighborsSearch neighborsSearch = NeighborsSearch ::Grid;
@@ -139,7 +130,8 @@ void storeResultsHomography () {
             std::ofstream results_matlab;
             std::string name = "../results/EVD/";
             name += Tests::sampler2string(smplr);
-            if (loc_opt == LocOpt::InItRsc) name += "_lo";
+            if (loc_opt == LocOpt::InItLORsc) name += "_lo";
+            if (loc_opt == LocOpt::InItFLORsc) name += "_flo";
             if (loc_opt == LocOpt::GC) name += "_gc";
             if (sprt) name += "_sprt";
             name += "_"+Tests::nearestNeighbors2string(neighborsSearch) + "_c_sz_"+std::to_string(cell_size);
@@ -156,7 +148,7 @@ void storeResultsHomography () {
             results_matlab.open (mfname);
             results_total.open (fname);
 
-            log.saveHeadOfCSV (results_total, model, N_runs);
+            Logging::saveHeadOfCSV (results_total, model, N_runs);
 
             int img = 0;
             for (const std::string &img_name : points_filename) {
@@ -165,10 +157,10 @@ void storeResultsHomography () {
 
                 StatisticalResults * statistical_results = new StatisticalResults;
                 if (smplr == SAMPLER::Prosac) {
-                    tests.getStatisticalResults(sorted_points_imgs[img], model, N_runs,
+                    Tests::getStatisticalResults(sorted_points_imgs[img], model, N_runs,
                                                 true, gt_inliers_sorted[img], true, statistical_results);
                 } else {
-                    tests.getStatisticalResults(points_imgs[img], model, N_runs,
+                    Tests::getStatisticalResults(points_imgs[img], model, N_runs,
                                                 true, gt_inliers[img], true, statistical_results);
                 }
 

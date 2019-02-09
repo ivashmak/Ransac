@@ -1,7 +1,6 @@
 #include "tests.h"
 
 #include "../detector/Reader.h"
-#include "../helper/drawing/Drawing.h"
 #include "../helper/Logging.h"
 #include "../usac/estimator/fundamental_estimator.hpp"
 #include "../usac/sampler/uniform_sampler.hpp"
@@ -75,9 +74,6 @@ void storeResultsFundamental () {
     int num_images = points_filename.size();
     std::cout << "number of images " << num_images << "\n";
 
-    Tests tests;
-    Logging log;
-
     std::vector<cv::Mat_<float>> points_imgs;
     std::vector<cv::Mat_<float>> sorted_points_imgs;
     std::vector<std::vector<int>> gt_inliers;
@@ -91,15 +87,14 @@ void storeResultsFundamental () {
     for (const std::string &img_name : points_filename) {
         std::cout << "get points for " << img_name << "\n";
 
-        cv::Mat_<float> points, sorted_points;
         ImageData gt_data (dataset, img_name);
-        points = gt_data.getPoints();
-        sorted_points = gt_data.getSortedPoints();
+        cv::Mat points = gt_data.getPoints();
+        cv::Mat sorted_points = gt_data.getSortedPoints();
 
         gt_inliers.push_back(gt_data.getGTInliers(threshold));
         gt_inliers_sorted.push_back(gt_data.getGTInliersSorted(threshold));
-        points_imgs.push_back(points);
-        sorted_points_imgs.push_back(sorted_points);
+        points_imgs.emplace_back(points);
+        sorted_points_imgs.emplace_back(sorted_points);
 
         std::cout << "inliers size " << gt_inliers[gt_inliers.size()-1].size() << "\n";
         std::cout << "sorted inliers size " << gt_inliers_sorted[gt_inliers.size()-1].size() << "\n";
@@ -125,7 +120,8 @@ void storeResultsFundamental () {
             std::ofstream results_matlab;
             std::string name = "../results/EVD/";
             name += Tests::sampler2string(smplr);
-            if (loc_opt == LocOpt::InItRsc) name += "_lo";
+            if (loc_opt == LocOpt::InItLORsc) name += "_lo";
+            if (loc_opt == LocOpt::InItFLORsc) name += "_flo";
             if (loc_opt == LocOpt::GC) name += "_gc";
             if (sprt) name += "_sprt";
 
@@ -143,7 +139,7 @@ void storeResultsFundamental () {
             results_matlab.open (mfname);
             results_total.open (fname);
 
-            log.saveHeadOfCSV (results_total, model, N_runs);
+            Logging::saveHeadOfCSV (results_total, model, N_runs);
 
             int img = 0;
             for (const std::string &img_name : points_filename) {
@@ -152,10 +148,10 @@ void storeResultsFundamental () {
 
                 StatisticalResults * statistical_results = new StatisticalResults;
                 if (smplr == SAMPLER::Prosac) {
-                    tests.getStatisticalResults(sorted_points_imgs[img], model, N_runs,
+                    Tests::getStatisticalResults(sorted_points_imgs[img], model, N_runs,
                                                 true, gt_inliers_sorted[img], true, statistical_results);
                 } else {
-                    tests.getStatisticalResults(points_imgs[img], model, N_runs,
+                    Tests::getStatisticalResults(points_imgs[img], model, N_runs,
                                                 true, gt_inliers[img], true, statistical_results);
                 }
 

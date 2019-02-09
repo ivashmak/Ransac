@@ -6,10 +6,9 @@
 #include "nearest_neighbors.hpp"
 
 void densitySort (const cv::Mat &points, int knn, cv::Mat &sorted_points) {
-    NearestNeighbors nn;
     // get neighbors
     cv::Mat neighbors, neighbors_dists;
-    nn.getNearestNeighbors_nanoflann(points, knn, neighbors, true, neighbors_dists);
+    NearestNeighbors::getNearestNeighbors_nanoflann(points, knn, neighbors, true, neighbors_dists);
     //
 
     std::vector<int> sorted_idx(points.rows);

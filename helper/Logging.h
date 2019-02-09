@@ -14,9 +14,10 @@ public:
     /*
      * Save results to file
      */
-    void saveResult (Model * const model, RansacOutput * const ransacOutput) {
+    static void saveResult (Model * const model, RansacOutput * const ransacOutput) {
         std::ofstream write_log;
-        std::string filename = "../results/" + model->getName() +".txt";
+        std::string filename = "../results/" + Tests::sampler2string(model->sampler)+"_"+
+                Tests::estimator2string(model->estimator)+".txt";
         write_log.open (filename);
         write_log << ransacOutput->getTimeMicroSeconds() <<"\n";
         write_log << (ransacOutput->getNumberOfMainIterations() + ransacOutput->getLOIters()) <<"\n";
@@ -27,9 +28,10 @@ public:
     /*
      * Read results from saved file and compare with current results.
      */
-    void compare (Model * const model, RansacOutput * const ransacOutput) {
+    static void compare (Model * const model, RansacOutput * const ransacOutput) {
         std::ifstream read_log;
-        std::string filename = "../results/" + model->getName() +".txt";
+        std::string filename = "../results/" + Tests::sampler2string(model->sampler)+"_"+
+                                               Tests::estimator2string(model->estimator) +".txt";
         read_log.open(filename);
         float time;
         int iters, points_under_treshold;
@@ -42,13 +44,15 @@ public:
         std::cout << "points under threshold more on " << ((int)ransacOutput->getNumberOfInliers() - points_under_treshold) << "\n";
     }
 
-    void saveHeadOfCSV (std::ofstream &file, Model * model, int N_runs) {
+    static void saveHeadOfCSV (std::ofstream &file, Model * model, int N_runs) {
         file << Tests::getComputerInfo();
-        file << model->getName() << "\n";
+        file << Tests::sampler2string(model->sampler)+"_"+
+                Tests::estimator2string(model->estimator) << "\n";
         file << "Runs for each image = " << N_runs << "\n";
         file << "Threshold for each image = " << model->threshold << "\n";
         file << "Desired probability for each image = " << model->desired_prob << "\n";
-        file << "Standard LO = " << (model->lo == LocOpt ::InItRsc) << "\n";
+        file << "Inner Iterative LO = " << (model->lo == LocOpt ::InItLORsc) << "\n";
+        file << "Inner Iterative Fxing LO = " << (model->lo == LocOpt ::InItFLORsc) << "\n";
         file << "Graph Cut LO = " << (model->lo == LocOpt ::GC) << "\n";
         file << "SPRT = " << (bool) model->sprt << "\n\n\n";
 
@@ -62,7 +66,7 @@ public:
 
     }
 
-    void saveResultsCSV (std::ofstream &file, const StatisticalResults * const statistical_results) {
+    static void saveResultsCSV (std::ofstream &file, const StatisticalResults * const statistical_results) {
         file << statistical_results->avg_num_inliers << ",";
         file << statistical_results->std_dev_num_inliers << ",";
         file << statistical_results->median_num_inliers << ",";
@@ -91,7 +95,7 @@ public:
         file << statistical_results->num_fails_50 << "\n";
     }
 
-    void saveResultsMatlab (std::ofstream &file, const StatisticalResults * const statistical_results) {
+    static void saveResultsMatlab (std::ofstream &file, const StatisticalResults * const statistical_results) {
         // save results for matlab
         file << statistical_results->avg_num_inliers << ",";
         file << statistical_results->avg_num_iters << ",";
@@ -102,8 +106,6 @@ public:
         file << statistical_results->num_fails_25 << ",";
         file << statistical_results->num_fails_50 << "\n";
     }
-
-
 };
 
 #endif //USAC_LOGGING_H

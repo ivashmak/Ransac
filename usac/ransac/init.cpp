@@ -68,7 +68,7 @@ void initProsacTerminationCriteria (TerminationCriteria *& termination_criteria,
 void initLocalOptimization (LocalOptimization *& local_optimization, Model * model, Estimator * estimator,
           Quality * quality, unsigned int points_size) {
 
-     if (model->lo == LocOpt::InItRsc) {
+     if (model->lo == LocOpt::InItLORsc || model->lo == LocOpt::InItFLORsc) {
          local_optimization = new InnerLocalOptimization (model, estimator, quality, points_size);
 
      } else if (model->lo == LocOpt::GC) {

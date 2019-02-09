@@ -1,7 +1,6 @@
 #ifndef TESTS_TESTS_H
 #define TESTS_TESTS_H
 
-#include "../helper/drawing/Drawing.h"
 #include "../usac/estimator/estimator.hpp"
 #include "../usac/quality/quality.hpp"
 #include "../usac/ransac/ransac.hpp"
@@ -10,6 +9,13 @@
 #include "../usac/termination_criteria/prosac_termination_criteria.hpp"
 #include "../usac/utils/nearest_neighbors.hpp"
 #include "../detector/detector.h"
+#include <cstdio>
+#include <iostream>
+#include <opencv2/core/types.hpp>
+
+#include "../detector/Reader.h"
+#include "../dataset/GetImage.h"
+#include "../helper/drawing/Drawing.h"
 
 class Tests {
 public:
@@ -29,7 +35,7 @@ public:
                       const std::vector<int>& gt_inliers);
 
 
-    void detectAndSaveFeatures (const std::vector<std::string>& dataset) {
+    static void detectAndSaveFeatures (const std::vector<std::string>& dataset) {
 //        std::string folder = "../dataset/homography/";
         std::string folder = "../dataset/Lebeda/kusvod2/";
 //        std::string folder = "../dataset/adelaidermf/";
@@ -55,6 +61,7 @@ public:
         if (sampler == SAMPLER::Uniform) return "uniform";
         if (sampler == SAMPLER::Napsac) return "napsac";
         if (sampler == SAMPLER::Evsac) return "evsac";
+        if (sampler == SAMPLER::ProgressiveNAPSAC) return "pronapsac";
         return "";
     }
 
@@ -82,7 +89,7 @@ public:
      * Display average results such as computational time,
      * number of inliers of N runs of Ransac.
      */
-    void getStatisticalResults (const cv::Mat& points,
+    static void getStatisticalResults (const cv::Mat& points,
                                 Model * const model,
                                 int N,
                                 bool GT,
@@ -120,10 +127,13 @@ public:
 
         // calculate time of nearest neighbor calculating
         auto begin_time = std::chrono::steady_clock::now();
-        if (model->neighborsType == NeighborsSearch::Nanoflann) {
-            NearestNeighbors::getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
-        } else {
-            NearestNeighbors::getGridNearestNeighbors(points, model->cell_size, neighbors_v);
+        if (model->sampler == SAMPLER::Napsac || model->lo == LocOpt::GC) {
+            if (model->neighborsType == NeighborsSearch::Nanoflann) {
+                NearestNeighbors::getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false,
+                                                                neighbors_dists);
+            } else {
+                NearestNeighbors::getGridNearestNeighbors(points, model->cell_size, neighbors_v);
+            }
         }
         auto end_time = std::chrono::steady_clock::now();
         std::chrono::duration<float> fs = end_time - begin_time;
@@ -143,7 +153,8 @@ public:
                 times[i] = ransacOutput->getTimeMicroSeconds();
             }
 
-//            std::cout << "inl " << ransacOutput->getNumberOfInliers() << "\n";
+            std::cout << "inl " << ransacOutput->getNumberOfInliers() << "\n";
+            std::cout << "iters " << ransacOutput->getNumberOfMainIterations() << "\n";
 
             num_inlierss[i] = ransacOutput->getNumberOfInliers();
             num_iterss[i] = ransacOutput->getNumberOfMainIterations();

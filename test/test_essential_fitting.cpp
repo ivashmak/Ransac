@@ -1,33 +1,36 @@
 #include "tests.h"
 
-#include <cstdio>
-#include <iostream>
-#include <opencv2/core/types.hpp>
-
-#include "../detector/Reader.h"
 
 
 void detectFeaturesMVS () {
-    std::vector<std::string> mvs = Dataset::getMVSDataset();
-    for (int i = 0; i < mvs.size(); i++) {
-//        detectFeaturesForEssentialMatrix();
+    std::vector<std::string> mvs = Dataset::getStrechaDataset();
+    cv::Mat P1, P2;
+    float threshold = 1;
+    std::string folder = "../dataset/MVS/";
+    for (const std::string &filename : mvs) {
+        Reader::readProjectionMatrix(P1, folder+filename+"A.P");
+        Reader::readProjectionMatrix(P2, folder+filename+"B.P");
+
+        detectFeaturesForEssentialMatrix(P1, P2, folder+filename, "png", threshold);
     }
 }
 
 void Tests::testEssentialFitting() {
+//    detectFeaturesMVS();
+//    exit (0);
+
     DATASET dataset = DATASET::Strecha;
+    std::string img_name = "fountain_dense_1";
 
-    std::string img_name = "Dresden";
-    cv::Mat points;
-    Reader::getPointsNby6 ("../dataset/Lebeda/strechamvs/"+img_name+"_vpts_pts.txt", points);
-
-    std::cout << "points size = " << points.rows << "\n";
-
-    float threshold = 5;
+    float threshold = 2;
     float confidence = 0.95;
-    int knn = 5;
+    int knn = 6;
 
-    std::vector<int> gt_inliers;
+    ImageData img_data (dataset, img_name);
+    cv::Mat points = img_data.getPoints();
+    cv::Mat sorted_points = img_data.getPoints();
+    std::vector<int> gt_inliers = img_data.getGTInliers(threshold);
+    std::vector<int> gt_sorted_inliers = img_data.getGTInliersSorted(threshold);
 
     Model * model;
 
@@ -37,13 +40,14 @@ void Tests::testEssentialFitting() {
 
     // -------------------------- Prosac -------------------------------------
 //    model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Prosac);
-//    sorted_points.copyTo(points);
     // ------------------------------------------------------------------------
 
     model->lo = LocOpt ::NullLO;
     model->setSprt(0);
     model->setCellSize(50);
     model->setNeighborsType(NeighborsSearch::Grid);
+    model->ResetRandomGenerator(true);
 
-    test (points, model, img_name, dataset, false, gt_inliers);
+    test (points, model, img_name, dataset, true, gt_inliers);
+
 }

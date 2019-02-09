@@ -6,6 +6,7 @@
 #define RANSAC_DLT_H
 
 #include "../../precomp.hpp"
+#include "../estimator.hpp"
 
 // Direct Linear Transformation
 class DLt {
@@ -33,6 +34,16 @@ void GetNormalizingTransformation (const float * const pts, cv::Mat& norm_points
                                    const int * const sample, unsigned int sample_number, const float * const weights, cv::Mat &T1, cv::Mat &T2);
 
 
+/*
+ * Assume small difference between covariance matrices of
+ * previous model and current estimation. Or inliers didn't
+ * change so much.
+ *
+ * So in current estimation we can use previous covariance
+ * matrix with modifications:
+ * 1. Substract if current point was inlier but now is not.
+ * 2. Add if current point is inlier but previously was not.
+ */
 class DLTCov {
 private:
     cv::Mat covA = cv::Mat_<float>(9, 9, float(0));
@@ -41,17 +52,29 @@ private:
     float a2[9] = {0, 0, 0, 0, 0, -1, 0, 0, 0};
     unsigned int points_size;
     bool * inlier_flags;
+    const float * const points;
+    Estimator * estimator;
+    float threshold;
 public:
-    DLTCov (unsigned int points_size_) {
+    DLTCov (unsigned int points_size_, const float * const points_, Estimator * estimator_, float threshold_) : points (points_) {
         points_size = points_size_;
+        estimator = estimator_;
+        // allocate inliers flags in the beginning as all zeros
         inlier_flags = (bool *) calloc (points_size, sizeof(bool));
+        threshold = threshold_;
     }
-    bool computeH (const float * const points, const bool * const inlier_flags_, cv::Mat &H) {
+
+    bool computeH (const cv::Mat &H_, cv::Mat &H) {
+        estimator->setModelParameters(H_);
+
         float x1, y1, x2, y2;
         unsigned int smpl;
         covA_ptr = (float *) covA.data;
+        bool is_inlier_i;
         for (unsigned int i = 0; i < points_size; i++) {
-            if (inlier_flags[i] != inlier_flags_[i]) {
+            is_inlier_i = estimator->GetError(i) < threshold;
+
+            if (inlier_flags[i] != is_inlier_i) {
                 smpl = 4 * i;
                 x1 = points[smpl];
                 y1 = points[smpl + 1];
@@ -74,31 +97,34 @@ public:
                 /*
                  * if previous iteration point was inlier, but now it is not, so subtract
                  */
-                if (inlier_flags[i] < inlier_flags_[i]) {
-                    for (unsigned int j = 0; j < 9; j++) {
-                        for (unsigned int z = j; z < 9; z++) {
-                            covA_ptr[j * 9 + z] -= a1[j] * a1[z] + a2[j] * a2[z];
-                        }
-                    }
-                } else {
+                if (is_inlier_i) { // so inliers_flags[i] is not inlier
                     // otherwise add to covariance
                     for (unsigned int j = 0; j < 9; j++) {
                         for (unsigned int z = j; z < 9; z++) {
                             covA_ptr[j * 9 + z] += a1[j] * a1[z] + a2[j] * a2[z];
                         }
                     }
+                } else {
+                    // otherwise inliers_flags[i] is inliers
+                    for (unsigned int j = 0; j < 9; j++) {
+                        for (unsigned int z = j; z < 9; z++) {
+                            covA_ptr[j * 9 + z] -= a1[j] * a1[z] + a2[j] * a2[z];
+                        }
+                    }
                 }
 
-                // copy new inlier flags
-                inlier_flags[i] = inlier_flags_[i];
+                // copy new inlier flag
+                inlier_flags[i] = is_inlier_i;
             }
         }
 
+        // copy symmetric part
         for (unsigned int row = 1; row < 9; row++) {
             for (unsigned int col = 0; col < row; col++) {
                 covA_ptr[row*9+col] = covA_ptr[col*9+row];
             }
         }
+        //
 
         cv::Mat_<float> D, Vt;
         cv::eigen(covA, D, Vt);

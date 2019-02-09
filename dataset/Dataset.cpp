@@ -109,41 +109,22 @@ std::vector<std::string> Dataset::getAdelaidermfDataset () {
 
 std::vector<std::string> Dataset::getStrechaDataset () {
     std::vector<std::string> fnames = {
-        "castle_dense_large_0025", "castle_entry_dense_0002", "herzjesu_dense_large_0013",
-        "castle_dense_large_0028", "castle_dense_large_0007", "castle_dense_large_0008",
-        "castle_dense_0008", "fountain_dense_0002", "castle_dense_large_0021",
-        "castle_dense_0006", "castle_dense_large_0019", "fountain_dense_0009",
-        "herzjesu_dense_large_0022", "herzjesu_dense_large_0024", "castle_dense_0012",
-        "herzjesu_dense_large_0007", "castle_dense_0001", "herzjesu_dense_0001",
-        "castle_dense_0000", "herzjesu_dense_large_0021", "herzjesu_dense_0006",
-        "herzjesu_dense_large_0012", "herzjesu_dense_0000", "herzjesu_dense_large_0016",
-        "herzjesu_dense_large_0020", "castle_entry_dense_0008", "castle_dense_large_0026",
-        "castle_dense_0013", "castle_dense_large_0011", "herzjesu_dense_large_0005",
-        "castle_dense_large_0018", "herzjesu_dense_large_0008", "castle_dense_large_0005",
-        "castle_dense_large_0006", "herzjesu_dense_large_0017", "castle_dense_large_0023",
-        "castle_dense_large_0010", "castle_dense_large_0024", "herzjesu_dense_0004",
-        "herzjesu_dense_large_0003", "castle_entry_dense_0005", "herzjesu_dense_large_0004",
-        "herzjesu_dense_large_0019", "herzjesu_dense_large_0002", "castle_dense_0015",
-        "castle_dense_0002", "herzjesu_dense_large_0000", "fountain_dense_0010",
-        "castle_dense_large_0013", "fountain_dense_0004", "herzjesu_dense_0003",
-        "castle_dense_0017", "herzjesu_dense_large_0010", "castle_entry_dense_0001",
-        "castle_dense_0005", "castle_dense_large_0016", "herzjesu_dense_large_0023",
-        "fountain_dense_0008", "castle_entry_dense_0009", "herzjesu_dense_large_0011",
-        "fountain_dense_0006", "herzjesu_dense_large_0015", "castle_dense_large_0002",
-        "fountain_dense_0001", "castle_dense_large_0027", "castle_entry_dense_0006",
-        "castle_dense_large_0009", "herzjesu_dense_large_0006", "castle_dense_large_0029",
-        "herzjesu_dense_large_0001", "castle_entry_dense_0007", "castle_dense_0009",
-        "castle_dense_0007", "castle_entry_dense_0004", "castle_entry_dense_0003",
-        "herzjesu_dense_0002", "castle_dense_large_0004", "castle_dense_0004",
-        "castle_dense_large_0014", "castle_dense_large_0015", "herzjesu_dense_0005",
-        "castle_dense_large_0022", "castle_entry_dense_0000", "castle_dense_large_0000",
-        "castle_dense_large_0012", "castle_dense_large_0001", "fountain_dense_0007",
-        "herzjesu_dense_0007", "castle_dense_large_0017", "castle_dense_0003",
-        "herzjesu_dense_large_0014", "castle_dense_large_0003", "castle_dense_0011",
-        "herzjesu_dense_large_0009", "castle_dense_0014", "castle_dense_0018",
-        "castle_dense_0010", "fountain_dense_0003", "fountain_dense_0000",
-        "castle_dense_0016", "fountain_dense_0005", "castle_dense_large_0020",
-        "herzjesu_dense_large_0018"
+        "fountain_dense_1"
     };
     return fnames;
+}
+
+
+std::vector<std::string> Dataset::getSyntecticLine2dDataset () {
+    std::vector<std::string> fnames = {
+        "w=1000_h=1000_n=3.000000_I=200_N=10200",
+        "w=1000_h=1000_n=3.000000_I=500_N=10500",
+        "w=1000_h=1200_n=3.000000_I=200_N=10200",
+        "w=1000_h=1200_n=3.000000_I=500_N=10500",
+        "w=1200_h=1000_n=3.000000_I=200_N=10200",
+        "w=1200_h=1000_n=3.000000_I=500_N=10500",
+        "w=1200_h=1200_n=3.000000_I=200_N=10200",
+        "w=1200_h=1200_n=3.000000_I=500_N=10500"
+    };
+return fnames;
 }

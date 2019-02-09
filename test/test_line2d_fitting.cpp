@@ -5,7 +5,6 @@
 #include "../usac/estimator/line2d_estimator.hpp"
 #include "../usac/ransac/ransac.hpp"
 
-#include "../helper/drawing/Drawing.h"
 #include "../helper/Logging.h"
 
 #include "../detector/Reader.h"
@@ -144,8 +143,6 @@ void store_results_line2d () {
     std::vector<cv::Mat_<float>> dataset_sorted_points;
     std::vector<std::vector<int>> gt_inliers;
 
-    Logging log;
-    Tests tests;
     float confidence = 0.95;
     float threshold = 8;
     int N_runs = 50;
@@ -206,7 +203,7 @@ void store_results_line2d () {
     samplers.push_back(SAMPLER::Napsac);
 
     std::vector<LocOpt > loc_opts;
-    loc_opts.push_back(LocOpt::InItRsc);
+    loc_opts.push_back(LocOpt::InItLORsc);
     bool sprt = 0;
 
     for (SAMPLER smplr : samplers) {
@@ -214,7 +211,7 @@ void store_results_line2d () {
             std::ofstream results_total;
             std::ofstream results_matlab;
             std::string name = "../results/line2d/" + Tests::sampler2string(smplr);
-            if (loc_opt == LocOpt::InItRsc) name += "_lo";
+            if (loc_opt == LocOpt::InItLORsc) name += "_lo";
             if (loc_opt == LocOpt::GC) name += "_gc";
             if (sprt) name += "_sprt";
 
@@ -228,8 +225,8 @@ void store_results_line2d () {
             model->lo = loc_opt;
             model->setSprt(sprt);
 
-            results_total << tests.getComputerInfo();
-            results_total << model->getName() << "\n";
+            results_total << Tests::getComputerInfo();
+            results_total << Tests::sampler2string(model->sampler)+"_"+Tests::estimator2string(model->estimator) << "\n";
             results_total << "Runs for each image = " << N_runs << "\n";
             results_total << "Threshold for each image = " << model->threshold << "\n";
             results_total << "Desired probability for each image = " << model->desired_prob << "\n";
@@ -244,7 +241,7 @@ void store_results_line2d () {
                              "Worst case num Inl,Worst case Err,"
                              "Num fails (<10%),Num fails (<25%),Num fails (<50%)\n";
 
-            std::cout << tests.sampler2string(smplr) << "\n";
+            std::cout << Tests::sampler2string(smplr) << "\n";
             std::cout << "LO  " << loc_opt << "\n";
             
             for (int img = 0; img < dataset.size(); img++) {
@@ -252,10 +249,10 @@ void store_results_line2d () {
 
                 StatisticalResults *statistical_results = new StatisticalResults;
                 if (smplr == SAMPLER::Prosac) {
-                    tests.getStatisticalResults(dataset_sorted_points[img], model, N_runs,
+                    Tests::getStatisticalResults(dataset_sorted_points[img], model, N_runs,
                                                 true, gt_inliers[img], true, statistical_results);
                 } else {
-                    tests.getStatisticalResults(dataset_points[img], model, N_runs,
+                    Tests::getStatisticalResults(dataset_points[img], model, N_runs,
                                                 true, gt_inliers[img], true, statistical_results);
                 }
 
@@ -263,11 +260,11 @@ void store_results_line2d () {
                 // save to csv file
                 results_total << dataset[img] << ",";
                 results_total << gt_inliers[img].size() << ",";
-                log.saveResultsCSV(results_total, statistical_results);
+                Logging::saveResultsCSV(results_total, statistical_results);
 
                 // save results for matlab
                 results_matlab << dataset[img] << ",";
-                log.saveResultsMatlab(results_matlab, statistical_results);
+                Logging::saveResultsMatlab(results_matlab, statistical_results);
 
                 img++;
             }

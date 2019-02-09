@@ -171,27 +171,32 @@ std::vector<cv::KeyPoint> detect(std::string filename, std::string detector_name
 
 
 void detectFeaturesForEssentialMatrix (const cv::Mat &P1, const cv::Mat &P2,
-                                       const std::string &img_path_name,
-                                       const std::string &img_ext,
-                                       float threshold,
-                                       cv::Mat &E_gt, cv::Mat &points, std::vector<int> &gt_inliers) {
+                                       const std::string &img_path_name, const std::string &img_ext, float threshold) {
     cv::Mat K1, R1, t1;
     cv::decomposeProjectionMatrix(P1, K1, R1, t1);
     cv::Mat K2, R2, t2;
     cv::decomposeProjectionMatrix(P2, K2, R2, t2);
 
     cv::Mat F_gt;
+    std::cout << P1 << "\n";
+    std::cout << P2 << "\n";
     FundamentalEstimator::getFundamentalFromProjection(P1, P2, F_gt);
-    EssentialEstimator::getModelbyCameraMatrix(K1, K2, F_gt, E_gt);
 
-    cv::Mat image1 = cv::imread(img_path_name+"."+img_ext);
-    cv::Mat image2 = cv::imread(img_path_name+"."+img_ext);
+    cv::Mat image1 = cv::imread(img_path_name+"A."+img_ext);
+    cv::Mat image2 = cv::imread(img_path_name+"B."+img_ext);
 
+    cv::Mat points;
     // Detect and match features
     DetectFeatures(img_path_name + "_pts.txt", image1, image2, points);
 
+    std::vector<int> gt_inliers;
     Estimator * fundamental = new FundamentalEstimator (points);
     Quality::getInliers(fundamental, F_gt, threshold, points.rows, gt_inliers);
+
+    std::ofstream save_inliers;
+    save_inliers.open(img_path_name+"_inl.txt");
+    save_inliers << gt_inliers.size() << "\n";
+    for (const int &inl : gt_inliers) {
+        save_inliers << inl << "\n";
+    }
 }
-
-

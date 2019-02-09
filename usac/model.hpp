@@ -10,17 +10,17 @@
 enum ESTIMATOR  { NullE, Line2d, Homography, Fundamental, Essential };
 enum SAMPLER  { NullS, Uniform, ProgressiveNAPSAC, Napsac, Prosac, Evsac, ProsacNapsac };
 enum NeighborsSearch {NullN, Nanoflann, Grid};
-enum LocOpt {NullLO, InItRsc, GC, IRLS};
+enum LocOpt {NullLO, InItLORsc, InItFLORsc, GC, IRLS};
 
 class Model {
 public:
 	float threshold = 2;
-	unsigned int sample_size;
 	float desired_prob = 0.95;
 
-    int min_iterations = 20;
-    int max_iterations = 10000;
-	int k_nearest_neighbors = 5;
+    unsigned int sample_size;
+    unsigned int min_iterations = 20;
+    unsigned int max_iterations = 10000;
+	unsigned int k_nearest_neighbors = 5;
 
 	/*
 	 * Local Optimization parameters
@@ -37,13 +37,9 @@ public:
     ESTIMATOR estimator = NullE;
     SAMPLER sampler = NullS;
 
-
     int max_hypothesis_test_before_sprt = 20;
     NeighborsSearch neighborsType = NeighborsSearch::NullN;
     int cell_size = 50; // for grid neighbors searching
-
-    // change to false to apply least squres on all points under threshold in iterative case.
-   	bool FixingLocalOptimization = true;
 
     bool reset_random_generator = true;
 
@@ -63,7 +59,7 @@ public:
 	    copyFrom(model);
 	}
 
-	Model (float threshold_, int sample_number_, float desired_prob_, int knn, 
+	Model (float threshold_, unsigned int sample_number_, float desired_prob_, unsigned int knn,
 		ESTIMATOR estimator_, SAMPLER sampler_) {
 		
 		threshold = threshold_;
@@ -144,34 +140,15 @@ public:
         lo_iterative_iterations = model->lo_iterative_iterations;
         lo_inner_iterations = model->lo_inner_iterations;
         lo_threshold_multiplier = model->lo_threshold_multiplier;
-//        descriptor = model->descriptor;
-	}
+        reset_random_generator = model->reset_random_generator;
+        lo = model->lo;
+        sprt = model->sprt;
+        spatial_coherence_gc = model->spatial_coherence_gc;
+        cell_size = model->cell_size;
+        neighborsType = model->neighborsType;
+        max_hypothesis_test_before_sprt = model->max_hypothesis_test_before_sprt;
 
-	std::string getName () {
-	    std::string name;
-	    if (estimator == ESTIMATOR::Homography) {
-	        name = "Homography";
-	    } else if (estimator == ESTIMATOR::Essential) {
-	        name = "Essential";
-	    } else if (estimator == ESTIMATOR::Fundamental) {
-	        name = "Fundamental";
-	    } else if (estimator == ESTIMATOR::Line2d) {
-	        name = "Line2d";
-	    }
-	    name += "_estimator_";
-	    if (sampler == SAMPLER::Evsac) {
-	        name += "Evsac";
-	    } else if (sampler == SAMPLER::Uniform) {
-	        name += "Uniform";
-	    } else if (sampler == SAMPLER::Prosac) {
-	        name += "Prosac";
-	    } else if (sampler == SAMPLER ::Napsac) {
-	        name += "Napsac";
-	    } else if (sampler == SAMPLER ::ProgressiveNAPSAC) {
-	        name += "ProgressiveNapsac";
-	    }
-	    name += "_sampler";
-        return name;
+//        descriptor = model->descriptor;
 	}
 };
 

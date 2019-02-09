@@ -33,7 +33,7 @@ protected:
     int *inliers, *sample, *neighbors;
     float * errors;
 public:
-    int gc_iterations;
+    unsigned int gc_iterations = 0;
 
     ~GraphCut() override {
         delete[] errors; delete[] inliers; delete[] sample;

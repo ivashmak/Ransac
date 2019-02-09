@@ -123,9 +123,7 @@ void Ransac::run() {
                 // if inlier number is too small, do not update
 
                 if (LO) {
-//                    std::cout << "score before LO " << current_score->inlier_number << "\n";
                     local_optimization->GetModelScore (models[i], current_score);
-//                    std::cout << "score after LO " << current_score->inlier_number << "\n";
                 }
 
                 // copy current score to best score
@@ -178,7 +176,7 @@ void Ransac::run() {
     unsigned int previous_non_minimal_num_inlier = 0;
 
     int * max_inliers = new int[points_size];
-    // get inliers from best model
+    // get inliers from the best model
     quality->getInliers(best_model->returnDescriptor(), max_inliers);
 
     for (unsigned int norm = 0; norm < 4 /* normalizations count */; norm++) {
@@ -190,30 +188,31 @@ void Ransac::run() {
 //        std::cout << "estimate non minimal\n";
 //        std::cout << best_score->inlier_number << " -\n";
         // estimate non minimal model with max inliers
+
         if (! estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model)) {
-//            std::cout << "\033[1;31mNON minimal model completely failed!\033[0m \n";
+            std::cout << "\033[1;31mNON minimal model 2 completely failed!\033[0m \n";
             break;
         }
 //        std::cout << non_minimal_model->returnDescriptor() << " std ndlt\n\n";
+
         //
 //        std::cout << "get non minimal score\n";
-        quality->getNumberInliers(current_score, non_minimal_model->returnDescriptor(), non_minimal_model->threshold, true, max_inliers);
+        quality->getNumberInliers(current_score, non_minimal_model->returnDescriptor(), model->threshold, true, max_inliers);
 //        std::cout << "end get non minimal score\n";
 
         // Priority is for non minimal model estimation
-//        std::cout << "non minimal inlier number " << current_score->inlier_number << '\n';
+//        std::cout << "non minimal inlier number (1) " << current_score->inlier_number << '\n';
 
 
         // break if non minimal model score is less than 80% of the best minimal model score
         if ((float) current_score->inlier_number / best_score->inlier_number < 0.8) {
+            std::cout << "break; non minimal score is significanlty worse than best score.\n";
             break;
-//                std::cout << "|I|best = " << best_score->inlier_number << "\n";
-//                std::cout << "|I|non minimal = " << current_score->inlier_number << "\n";
-//                std::cout << "\033[1;31mNON minimal model has less than 50% of inliers to compare with best score!\033[0m \n";
         }
 
         // if normalization score is less or equal, so next normalization is equal too, so break.
         if (current_score->inlier_number <= previous_non_minimal_num_inlier) {
+            std::cout << "break; previous non minimal score is the same.\n";
             break;
         }
 
@@ -234,7 +233,7 @@ void Ransac::run() {
 
     unsigned int lo_inner_iters = 0;
     unsigned int lo_iterative_iters = 0;
-    if (LO) {
+    if (model->lo == LocOpt::InItLORsc || model->lo == LocOpt::InItFLORsc) {
         lo_inner_iters = ((InnerLocalOptimization *) local_optimization)->lo_inner_iters;
         lo_iterative_iters = ((InnerLocalOptimization *) local_optimization)->lo_iterative_iters;
     }

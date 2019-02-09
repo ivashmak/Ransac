@@ -54,17 +54,17 @@ public:
 
 //        std::cout << "Roots " << roots << "\n\n";
 
-        for (unsigned int i = 0; i < roots;) {
-            if (!all_ori_valid(F.rowRange(i * 3, i * 3 + 3), sample, 7)) {
-//                std::cout << "BAD FUNDAMENTAL MATRIX ORIENTATION. continue\n";
-                roots--;
-                continue;
+        unsigned int valid_solutions = roots;
+        for (unsigned int i = 0; i < roots; i++) {
+            if (isModelValid(F.rowRange(i * 3, i * 3 + 3), sample)) {
+                models[i]->setDescriptor(F.rowRange(i * 3, i * 3 + 3));
+            } else {
+                valid_solutions--;
             }
-            models[i]->setDescriptor(F.rowRange(i * 3, i * 3 + 3));
             i++;
         }
 
-        return roots;
+        return valid_solutions;
     }
 
     bool EstimateModelNonMinimalSample(const int * const sample, unsigned int sample_size, Model &model) override {
@@ -177,13 +177,10 @@ public:
 
 
     static void getFundamentalFromProjection(const cv::Mat &P1, const cv::Mat &P2, cv::Mat &F) {
-        cv::Mat e1;
         cv::SVD svd(P1, 4);
 
-        e1 = svd.vt.row(3);
-        e1 = e1.t();
-
-        cv::Mat e2 = P2 * e1;
+        // e1 = svd.vt.row(3)
+        cv::Mat e2 = P2 * svd.vt.row(3).t();
 
         cv::Mat e2x = (cv::Mat_<float>(3, 3) << 0, -e2.at<float>(2), e2.at<float>(1),
                                                 e2.at<float>(2), 0, -e2.at<float>(0),
@@ -209,9 +206,7 @@ private:
     // u = x1 y1 1 x2 y2 1
     float getorisig(const cv::Mat &F, const cv::Mat *ec, unsigned int pt_idx) const {
         float s1, s2;
-        cv::Mat pt;
 
-//        float x1 = points[pt_idx];
         float y1 = points[pt_idx+1];
         float x2 = points[pt_idx+2];
         float y2 = points[pt_idx+3];
@@ -225,17 +220,15 @@ private:
         return(s1 * s2);
     }
 
-    bool all_ori_valid(const cv::Mat &F, const int * const sample, int N) const {
+    bool isModelValid(const cv::Mat &F, const int * const sample) const {
         cv::Mat ec;
         float sig, sig1;
         int i;
         epipole(ec, F);
 
-//        sig1 = getorisig(F, &ec, data.row(sample[0]));
         sig1 = getorisig(F, &ec, 4*sample[0]);
 
-        for (i = 1; i < N; i++) {
-//            sig = getorisig(F, &ec, data.row(sample[i]));
+        for (i = 1; i < 7; i++) {
             sig = getorisig(F, &ec, 4*sample[i]);
 
             if (sig1 * sig < 0) return false;

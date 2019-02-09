@@ -74,6 +74,7 @@ void Reader::getPointsNby6 (const std::string& filename, cv::Mat &points) {
  */
 void Reader::getInliers (const std::string &filename, std::vector<int> &inliers) {
     std::fstream file(filename, std::ios_base::in);
+    inliers.clear();
 
     cv::Mat tmp = cv::Mat_<float>(1, 2), pts1, pts2;
     float x1, y1, z1, x2, y2, z2;
@@ -128,6 +129,10 @@ void Reader::getInliers (const std::string &filename, std::vector<int> &inliers)
 void Reader::getMatrix3x3 (const std::string &filename, cv::Mat &model) {
     model = cv::Mat_<float>(3,3);
     std::fstream file(filename, std::ios_base::in);
+    if (! file.is_open()) {
+        std::cout << "Wrong direction to matrix file!\n";
+        exit (0);
+    }
 
     float val;
     for (int i = 0; i < 3; i++) {
@@ -211,14 +216,17 @@ bool Reader::LoadPointsFromFile(cv::Mat &points, const char* file)
  * Format
  * x1,y1,x2,y2,FGINN_ratio,SNN_ratio,detector,descriptor,is_correct
  */
-void Reader::readEVDpoints (cv::Mat &points, const std::string &filename) {
+void Reader::readEVDPointsInliers (cv::Mat &points, std::vector<int>&inliers, const std::string &filename) {
     std::fstream file(filename, std::ios_base::in);
+    inliers.clear();
 
     float x1, y1, x2, y2;
+    bool is_inlier;
 
     std::string tmp_str;
     cv::Mat tmp;
 
+    // skip format
     std::getline(file, tmp_str, ',');
     std::getline(file, tmp_str, ',');
     std::getline(file, tmp_str, ',');
@@ -229,6 +237,7 @@ void Reader::readEVDpoints (cv::Mat &points, const std::string &filename) {
     std::getline(file, tmp_str, ',');
     std::getline(file, tmp_str);
 
+    int i = 0;
     while (std::getline(file, tmp_str, ',')) {
         x1 = std::stof (tmp_str);
         std::getline(file, tmp_str, ',');
@@ -248,9 +257,51 @@ void Reader::readEVDpoints (cv::Mat &points, const std::string &filename) {
         std::getline(file, tmp_str, ',');
         // is correct
         std::getline(file, tmp_str);
+        is_inlier = static_cast<bool>(std::stof(tmp_str));
 
         tmp = (cv::Mat_<float>(1, 4) << x1, y1, x2, y2);
         points.push_back(tmp);
+
+        if (is_inlier) inliers.push_back(i);
+        i++;
     }
     file.close();
+}
+
+
+void Reader::readProjectionMatrix (cv::Mat &P, const std::string &filename) {
+    P = cv::Mat_<float>(3,4);
+    std::fstream file(filename, std::ios_base::in);
+
+    if (! file.is_open()) {
+        std::cout << "Wrong direction to Projection matrix file!\n";
+        exit (0);
+    }
+
+    float val;
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 4; j++) {
+            file >> val;
+            P.at<float>(i,j) = val;
+        }
+    }
+}
+
+void Reader::readInliers (std::vector<int>&inliers, const std::string &filename) {
+    inliers.clear();
+    std::fstream file(filename, std::ios_base::in);
+
+    if (! file.is_open()) {
+        std::cout << "Wrong direction to inliers file!\n";
+        exit (0);
+    }
+    int num_inliers;
+    file >> num_inliers;
+    inliers = std::vector<int>(num_inliers);
+
+    int inl_idx;
+    for (int i = 0; i < num_inliers; i++) {
+        file >> inl_idx;
+        inliers[i] = inl_idx;
+    }
 }

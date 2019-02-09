@@ -1,9 +1,10 @@
 #ifndef RANSAC_DRAWING_H
 #define RANSAC_DRAWING_H
 
-#include "../../usac/estimator/estimator.hpp"
+#include "../../test/tests.h"
 #include "../../dataset/GetImage.h"
 
+class Tests;
 class Drawing {
 public:
 
@@ -23,7 +24,7 @@ public:
      *                                  h' = sqrt (----)
      *                                              w
      */
-    void drawing_resize (cv::Mat &image) {
+    static void drawing_resize (cv::Mat &image) {
         float nS = 900000; // 600 x 800
         cv::resize(image, image, cv::Size(sqrt ((image.cols * nS)/image.rows), sqrt ((image.rows * nS)/image.cols)));
     }
@@ -34,7 +35,7 @@ public:
      * @input_inliers_idxes  indexes of inliers
      * @image                image
      */
-    void showInliers (cv::InputArray input_points, cv::InputArray input_inliers_idxes, cv::Mat image) {
+    static void showInliers (cv::InputArray input_points, cv::InputArray input_inliers_idxes, cv::Mat image) {
         int *inliers_idxes = (int *) input_inliers_idxes.getMat().data;
         cv::Point_<float> *points = (cv::Point_<float> *) input_points.getMat().data;
 
@@ -45,7 +46,7 @@ public:
     }
 
     // x = ky + b
-    void draw_line_ky_b (float k, float b, cv::Scalar color, cv::Mat img) {
+    static void draw_line_ky_b (float k, float b, cv::Scalar color, cv::Mat img) {
         int max_dimen = std::max (img.cols, img.rows);
         float corner_y1 = max_dimen;
         float corner_x1 = k*corner_y1 + b;
@@ -56,7 +57,7 @@ public:
     }
     
     // y = kx + b
-    void draw_line_kx_b (float k, float b, cv::Scalar color, cv::Mat img) {
+    static void draw_line_kx_b (float k, float b, cv::Scalar color, cv::Mat img) {
         int max_dimen = std::max (img.cols, img.rows);
         float corner_x1 = max_dimen;
         float corner_y1 = k*corner_x1 + b;
@@ -69,7 +70,7 @@ public:
     // ax + by + c = 0
     // y = (-ax - c)/b
     // x = (-by - c)/a 
-    void draw_line_abc (float a, float b, float c, cv::Scalar color, cv::Mat img) {
+    static void draw_line_abc (float a, float b, float c, cv::Scalar color, cv::Mat img) {
         int max_dimen = std::max (img.cols, img.rows);
         float corner_x1, corner_x2, corner_y1, corner_y2;
         if (b == 0) {
@@ -88,8 +89,8 @@ public:
         
         cv::line (img, cv::Point(corner_x1, corner_y1), cv::Point(corner_x2, corner_y2), color,  2, 8);
     }
-    
-    void draw_line_model (Model * const model, cv::Scalar color, cv::Mat img, bool threshold) {
+
+    static void draw_line_model (Model * const model, cv::Scalar color, cv::Mat img, bool threshold) {
         cv::Mat desc = model->returnDescriptor();
         auto * params = reinterpret_cast<float *>(desc.data);
         std::cout <<"model: a = "<< params[0] << " b = " << params[1] << " c = " <<params[2] << '\n';
@@ -112,12 +113,13 @@ public:
      * Show inliers of non minimal best model.
      * To show threshold lines change false to true.
      */
-    void draw (cv::InputArray inliers, Model * const model, cv::InputArray points, const std::string &img_name) {
+    static void draw (cv::InputArray inliers, Model * const model, cv::InputArray points, const std::string &img_name) {
         cv::Mat image  = cv::imread(img_name);
         showInliers(points, inliers, image);
         draw_line_model(model, cv::Scalar(255, 0, 0), image, true);
         imshow("Inliers", image);
-        std::string filename = "../results/linefitting_"+model->getName()+".jpg";
+//        std::string filename = "../results/linefitting_"+Tests::sampler2string(model->sampler)+".jpg";
+        std::string filename = "../results/linefitting_sampler.jpg";
         cv::imwrite(filename, image);
         cv::waitKey (0);
     }
@@ -125,10 +127,10 @@ public:
     /*
      * Draw epipolar lines by Fundamental Matrix
      */
-    void drawEpipolarLines (const std::string& img_name, DATASET dataset, const std::vector<int> &inliers, const cv::Mat &pts1, const cv::Mat &pts2, const cv::Mat& F);
+    static void drawEpipolarLines (const std::string& img_name, DATASET dataset, const std::vector<int> &inliers, const cv::Mat &pts1, const cv::Mat &pts2, const cv::Mat& F);
 
 
-    void drawHomographies (const std::string& img_name, DATASET dataset, const cv::Mat& points, const std::vector<int>& inliers, const cv::Mat &H) {
+    static void drawHomographies (const std::string& img_name, DATASET dataset, const cv::Mat& points, const std::vector<int>& inliers, const cv::Mat &H) {
         cv::Mat points1 = points.colRange(0, 2);
         cv::Mat points2 = points.colRange(2, 4);
         cv::hconcat(points1, cv::Mat_<float>::ones(points1.rows, 1), points1);
@@ -203,9 +205,9 @@ public:
         cv::waitKey(0);
     }
 
-    void drawPanorama (const std::vector<cv::Mat>& imgs, cv::Mat& panorama, const cv::Mat& H);
+    static void drawPanorama (const std::vector<cv::Mat>& imgs, cv::Mat& panorama, const cv::Mat& H);
 
-    void drawMatches (cv::Mat& img_matches, const cv::Mat& img1, const cv::Mat& img2, const cv::Mat& points1, const cv::Mat& points2, const int * const inliers, int inliers_size) {
+    static void drawMatches (cv::Mat& img_matches, const cv::Mat& img1, const cv::Mat& img2, const cv::Mat& points1, const cv::Mat& points2, const int * const inliers, int inliers_size) {
         std::vector< cv::DMatch > good_matches;
         std::vector<cv::KeyPoint> keypoints1, keypoints2;
         mat2keypoint(points1, keypoints1);
@@ -221,7 +223,7 @@ public:
                          std::vector<char>(), cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS );
     }
 
-    void drawErrors (cv::Mat &img1_error, cv::Mat &img2_error, const cv::Mat& points1, const cv::Mat& points2, const cv::Mat& H) {
+    static void drawErrors (cv::Mat &img1_error, cv::Mat &img2_error, const cv::Mat& points1, const cv::Mat& points2, const cv::Mat& H) {
         cv::Mat points1_t, points2_t;
         cv::transpose(points1, points1_t);
         cv::transpose(points2, points2_t);
@@ -251,14 +253,14 @@ public:
         }
     }
 
-    void mat2keypoint(const cv::Mat& points, std::vector<cv::KeyPoint>& keypoints) {
+    static void mat2keypoint(const cv::Mat& points, std::vector<cv::KeyPoint>& keypoints) {
         for (int i = 0; i < points.rows; i++) {
             cv::KeyPoint kp(points.at<float>(i,0), points.at<float>(i,1), 1);
             keypoints.push_back(kp);
         }
     }
 
-    void mat2point (const cv::Mat& points, std::vector<cv::Point_<float>>& vpoints) {
+    static void mat2point (const cv::Mat& points, std::vector<cv::Point_<float>>& vpoints) {
         for (int i = 0; i < points.rows; i++) {
             cv::Point_<float> p (points.at<float>(i,0), points.at<float>(i,1));
             vpoints.push_back(p);

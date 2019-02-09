@@ -6,7 +6,6 @@
 #define USAC_NAPSACSAMPLER_H
 
 #include "sampler.hpp"
-#include "../../helper/drawing/Drawing.h"
 #include "../random_generator/array_random_generator.hpp"
 
 /*

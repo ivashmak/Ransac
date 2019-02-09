@@ -29,12 +29,6 @@ void Tests::test (cv::Mat points,
         nn_time = std::chrono::duration_cast<std::chrono::microseconds>(fs).count();
     }
 
-//    std::cout << "got neighbors\n";
-
-
-    Drawing drawing;
-    Logging logResult;
-
     Ransac ransac (model, points);
 
 //    std::cout << "RUN ransac\n";
@@ -42,7 +36,7 @@ void Tests::test (cv::Mat points,
 
     RansacOutput * ransacOutput = ransac.getRansacOutput();
 
-    std::cout << model->getName() << "\n";
+    std::cout << Tests::sampler2string(model->sampler) +"_"+Tests::estimator2string(model->estimator) << "\n";
     std::cout << "\ttime: ";
     long time_mcs = ransacOutput->getTimeMicroSeconds();
     if (model->sampler == SAMPLER::Napsac || model->lo == LocOpt::GC) {
@@ -69,22 +63,22 @@ void Tests::test (cv::Mat points,
     }
 
     // save result and compare with last run
-    logResult.compare(model, ransacOutput);
-    logResult.saveResult(model, ransacOutput);
+    Logging::compare(model, ransacOutput);
+    Logging::saveResult(model, ransacOutput);
     std::cout << "-----------------------------------------------------------------------------------------\n";
 
 
     if (model->estimator == ESTIMATOR::Homography) {
-        drawing.drawHomographies(img_name, dataset, points, ransacOutput->getInliers(), ransacOutput->getModel()->returnDescriptor());
+        Drawing::drawHomographies(img_name, dataset, points, ransacOutput->getInliers(), ransacOutput->getModel()->returnDescriptor());
     } else
     if (model->estimator == ESTIMATOR::Fundamental) {
-        drawing.drawEpipolarLines(img_name, dataset, ransacOutput->getInliers(), points.colRange(0,2), points.colRange(2,4), ransacOutput->getModel()->returnDescriptor());
+        Drawing::drawEpipolarLines(img_name, dataset, ransacOutput->getInliers(), points.colRange(0,2), points.colRange(2,4), ransacOutput->getModel()->returnDescriptor());
     } else
     if (model->estimator == ESTIMATOR::Line2d) {
-        drawing.draw(ransacOutput->getInliers(), ransacOutput->getModel(), points, img_name+".png");
+        Drawing::draw(ransacOutput->getInliers(), ransacOutput->getModel(), points, img_name+".png");
     } else
     if (model->estimator == ESTIMATOR::Essential) {
-        drawing.drawEpipolarLines(img_name, dataset, ransacOutput->getInliers(), points.colRange(0,2), points.colRange(2,4), ransacOutput->getModel()->returnDescriptor());
+        Drawing::drawEpipolarLines(img_name, dataset, ransacOutput->getInliers(), points.colRange(0,2), points.colRange(2,4), ransacOutput->getModel()->returnDescriptor());
     } else {
         std::cout << "UNKNOWN ESTIMATOR\n";
     }

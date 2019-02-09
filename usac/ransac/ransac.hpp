@@ -32,6 +32,7 @@ protected:
     cv::Mat neighbors_m;
     std::vector<std::vector<int>> neighbors_v;
     unsigned int points_size;
+    const float * const points;
 public:
     
     ~Ransac () {
@@ -40,17 +41,17 @@ public:
         delete(sampler); delete (quality); delete (estimator); delete(termination_criteria);
     }
 
-    Ransac (Model * model_, cv::InputArray points) {
+    Ransac (Model * model_, cv::InputArray points_) : points ((float *)points_.getMat().data) {
         model = model_;
 
-        assert(! points.empty());
+        assert(! points_.empty());
         assert(model != nullptr);
 
-        points_size = points.getMat().rows;
+        points_size = points_.getMat().rows;
 //        std::cout << "points size = " << points_size << "\n";
 
-        initEstimator (estimator, model->estimator, points.getMat());
-        initSampler (sampler, model, points.getMat());
+        initEstimator (estimator, model->estimator, points_.getMat());
+        initSampler (sampler, model, points_.getMat());
 
         // Init quality
         quality = new Quality;
@@ -63,14 +64,14 @@ public:
         cv::Mat neighbors_dists;
         if (model->sampler == SAMPLER::Napsac || model->lo == LocOpt::GC) {
             if (model->neighborsType == NeighborsSearch::Grid) {
-                NearestNeighbors::getGridNearestNeighbors(points.getMat(), model->cell_size, neighbors_v);
+                NearestNeighbors::getGridNearestNeighbors(points_.getMat(), model->cell_size, neighbors_v);
                 if (model->sampler == SAMPLER::Napsac) {
                     ((NapsacSampler *) sampler)->setNeighbors(neighbors_v, NeighborsSearch::Grid);
                 } else {
                     ((GraphCut *) local_optimization)->setNeighbors(neighbors_v, NeighborsSearch::Grid);
                 }
             } else {
-                NearestNeighbors::getNearestNeighbors_nanoflann(points.getMat(), model->k_nearest_neighbors, neighbors_m, false, neighbors_dists);
+                NearestNeighbors::getNearestNeighbors_nanoflann(points_.getMat(), model->k_nearest_neighbors, neighbors_m, false, neighbors_dists);
                 if (model->sampler == SAMPLER::Napsac) {
                     ((NapsacSampler *) sampler)->setNeighbors(neighbors_m, NeighborsSearch::Nanoflann);
                 } else {

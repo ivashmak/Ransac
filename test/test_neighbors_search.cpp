@@ -1,13 +1,12 @@
 #include "tests.h"
 #include "../dataset/Dataset.h"
+#include "../dataset/GetImage.h"
 
 void Tests::testNeighborsSearchCell () {
 //    std::vector<std::string> points_filename = Dataset::getHomographyDatasetPoints();
     std::vector<std::string> points_filename = Dataset::getAdelaidermfDataset();
 
     int num_images = points_filename.size();
-
-    Tests tests;
 
     std::vector<cv::Mat_<float>> points_imgs;
     std::vector<std::vector<int>> gt_inliers;
@@ -51,7 +50,7 @@ void Tests::testNeighborsSearchCell () {
 //            std::cout << img_name << "\n";
 
             StatisticalResults * statistical_results = new StatisticalResults;
-                tests.getStatisticalResults(points_imgs[img], model, N_runs,
+                Tests::getStatisticalResults(points_imgs[img], model, N_runs,
                                             true, gt_inliers[img], true, statistical_results);
 
             avg_error += statistical_results->avg_avg_error;
@@ -72,8 +71,6 @@ void Tests::testNeighborsSearch () {
     int num_images = points_filename.size();
     std::cout << "number of images " << num_images << "\n";
 
-    Tests tests;
-
     std::vector<cv::Mat_<float>> points_imgs;
     std::vector<std::vector<int>> gt_inliers;
 
@@ -87,11 +84,9 @@ void Tests::testNeighborsSearch () {
 
     for (const std::string &img_name : points_filename) {
         std::cout << "get points for " << img_name << "\n";
-        cv::Mat_<float> points;
 
         ImageData gt_data (dataset, img_name);
-
-        points = gt_data.getPoints();
+        cv::Mat points = gt_data.getPoints();
 
         gt_inliers.push_back(gt_data.getGTInliers(threshold));
         std::cout << "inliers size " << gt_inliers[gt_inliers.size()-1].size() << "\n";
@@ -124,7 +119,7 @@ void Tests::testNeighborsSearch () {
             std::cout << img_name << "\n";
 
             StatisticalResults * statistical_results = new StatisticalResults;
-            tests.getStatisticalResults(points_imgs[img], model, N_runs,
+            Tests::getStatisticalResults(points_imgs[img], model, N_runs,
                                         true, gt_inliers[img], true, statistical_results);
 
             avg_error += statistical_results->avg_avg_error;

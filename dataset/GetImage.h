@@ -10,6 +10,9 @@
 #include "../usac/estimator/fundamental_estimator.hpp"
 #include "../usac/quality/quality.hpp"
 #include "../detector/detector.h"
+#include "../usac/estimator/essential_estimator.hpp"
+#include "../usac/utils/utils.hpp"
+#include "../usac/estimator/line2d_estimator.hpp"
 
 class ImageData {
 private:
@@ -50,7 +53,6 @@ public:
             pts1 = pts.colRange(0, 2);
             pts2 = pts.colRange(2, 4);
 
-            return;
         } else if (dataset == DATASET::Kusvod2_SIFT) {
             estimator = ESTIMATOR::Fundamental;
             folder = "../dataset/Lebeda/kusvod2/";
@@ -65,22 +67,53 @@ public:
         } else if (dataset == DATASET::Strecha) {
             estimator = ESTIMATOR ::Essential;
 
-            folder = "../dataset/Lebeda/strechamvs/";
-            Reader::getPointsNby6(folder+img_name+"_vpts_pts.txt", pts);
-            img1 = cv::imread("../dataset/Lebeda/strechamvs/"+img_name+"A.jpg");
-            img2 = cv::imread("../dataset/Lebeda/strechamvs/"+img_name+"B.jpg");
-            if (img1.empty()) {
-                img1 = cv::imread("../dataset/Lebeda/strechamvs/"+img_name+"A.png");
-                img2 = cv::imread("../dataset/Lebeda/strechamvs/"+img_name+"B.png");
-            }
+            folder = "../dataset/MVS/";
+            Reader::LoadPointsFromFile(pts, (folder+img_name+"_pts.txt").c_str());
+            Reader::LoadPointsFromFile(sorted_pts, (folder+img_name+"_spts.txt").c_str());
+            Reader::readInliers (inliers, folder+img_name+"_inl.txt");
+            EssentialEstimator essentialEstimator(pts);
+            Model m (1, 0, 0, 0, ESTIMATOR::Essential, SAMPLER::Uniform);
+            essentialEstimator.EstimateModelNonMinimalSample(&inliers[0], inliers.size(), m);
+            model = m.returnDescriptor().clone();
+
             pts1 = pts.colRange(0,2);
             pts2 = pts.colRange(2,4);
-            return;
 
         } else if (dataset == DATASET::Syntectic) {
             estimator = ESTIMATOR ::Line2d;
 
-            img1 = cv::imread("../dataset/line2d/"+img_name+".png");
+            folder = "../dataset/line2d/";
+            img1 = cv::imread(folder+img_name+".png");
+            std::ifstream read_data_file;
+            read_data_file.open (folder+img_name+".txt");
+            if (!read_data_file.is_open()) {
+                std::cout << "Wrong directory for file of line2d dataset!\n";
+                exit (0);
+            }
+            int width, height, noise, N;
+
+            read_data_file >> width;
+            read_data_file >> height;
+            read_data_file >> noise;
+            float a, b, c;
+            read_data_file >> a;
+            read_data_file >> b;
+            read_data_file >> c;
+
+            model = (cv::Mat_<float> (1,3) << a, b, c);
+
+            read_data_file >> N;
+            pts = cv::Mat_<float>(N, 2);
+            float *pts_ptr = (float *) pts.data;
+            float x, y;
+            for (int p = 0; p < N; p++) {
+                read_data_file >> x >> y;
+                pts_ptr[2*p] = x;
+                pts_ptr[2*p+1] = y;
+            }
+
+            densitySort (pts, 3, sorted_pts);
+
             return;
 
         } else if (dataset == DATASET::EVD) {
@@ -89,9 +122,12 @@ public:
             img1 = cv::imread("../dataset/EVD/1/" + img_name + ".png");
             img2 = cv::imread("../dataset/EVD/2/" + img_name + ".png");
             cv::Mat points;
-            Reader::readEVDpoints(pts, "../dataset/EVD/EVD_tentatives/" + img_name + ".png_m.txt");
+            Reader::readEVDPointsInliers(pts, inliers, "../dataset/EVD/EVD_tentatives/" + img_name + ".png_m.txt");
             pts1 = pts.colRange(0, 2);
             pts2 = pts.colRange(2, 4);
+
+            // points (inliers) are already sorted
+            sorted_inliers = inliers;
             sorted_pts = pts.clone();
             Reader::getMatrix3x3("../dataset/EVD/h/" + img_name + ".txt", model);
             return;
@@ -102,7 +138,6 @@ public:
             folder = "../dataset/homography/";
             Reader::LoadPointsFromFile(pts, (folder+"sift_update/"+img_name+"_pts.txt").c_str());
             Reader::LoadPointsFromFile(sorted_pts, (folder+"sift_update/"+img_name+"_spts.txt").c_str());
-            Reader::getInliers(folder+img_name+"_pts.txt", inliers);
             Reader::getMatrix3x3(folder+img_name+"_model.txt", model);
             pts1 = pts.colRange(0,2);
             pts2 = pts.colRange(2,4);
@@ -176,7 +211,9 @@ public:
             } else if (estimator == ESTIMATOR::Fundamental){
                 getGTInliersFromGTModelFundamental (threshold, false);
             } else if (estimator == ESTIMATOR::Essential) {
-                getGTInliersFromGTModelEssential (threshold, true);
+                getGTInliersFromGTModelEssential (threshold, false);
+            } else if (estimator == ESTIMATOR::Line2d) {
+                getGTInliersFromGTModelLine2D (threshold, false);
             } else {
                 std::cout << "unkown estimator in getGTinliers in GetImage\n";
                 exit(111);
@@ -194,6 +231,8 @@ public:
                 getGTInliersFromGTModelFundamental (threshold, true);
             } else if (estimator == ESTIMATOR::Essential) {
                 getGTInliersFromGTModelEssential (threshold, true);
+            } else if (estimator == ESTIMATOR::Line2d) {
+                getGTInliersFromGTModelLine2D (threshold, true);
             } else {
                 std::cout << "unkown estimator in getGTinliersSorted in GetImage\n";
                 exit(111);
@@ -266,15 +305,26 @@ public:
     void getGTInliersFromGTModelEssential (float threshold, bool sorted) {
         Estimator * estimator;
 
-        if (! sorted) {
-            estimator = new FundamentalEstimator(pts);
-            Quality::getInliers(estimator, model, threshold, pts.rows, inliers);
-        } else {
-            estimator = new FundamentalEstimator(sorted_pts);
+        if (sorted) {
+            estimator = new EssentialEstimator(sorted_pts);
             Quality::getInliers(estimator, model, threshold, sorted_pts.rows, sorted_inliers);
+        } else {
+            estimator = new EssentialEstimator(pts);
+            Quality::getInliers(estimator, model, threshold, pts.rows, inliers);
         }
     }
 
+    void getGTInliersFromGTModelLine2D (float threshold, bool sorted) {
+        Estimator * estimator;
+        if (sorted) {
+            estimator = new Line2DEstimator(sorted_pts);
+            Quality::getInliers(estimator, model, threshold, sorted_pts.rows, sorted_inliers);
+        } else {
+            estimator = new Line2DEstimator(pts);
+            Quality::getInliers(estimator, model, threshold, pts.rows, inliers);
+        }
+
+    }
 
 };
 
