@@ -57,8 +57,8 @@ void Tests::testHomographyFitting() {
 //     -------------------------------------------------
 
 
-     model->lo = LocOpt ::InItFLORsc;
-     model->setSprt(0);
+     model->lo = LocOpt ::NullLO;
+     model->setSprt(1);
      model->setCellSize(50);
      model->setNeighborsType(NeighborsSearch::Grid);
      model->ResetRandomGenerator(false);

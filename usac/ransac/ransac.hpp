@@ -97,20 +97,20 @@ public:
 
     void run ();
 
-    void setSampler (Sampler * sampler) {
-        this->sampler = sampler;
+    void setSampler (Sampler * sampler_) {
+        sampler = sampler_;
     }
 
-    void setModel (Model * model) {
-        this->model = model;
+    void setModel (Model * model_) {
+        model = model_;
     }
 
-    void setTerminationCriteria (TerminationCriteria *termination_criteria) {
-        this->termination_criteria = termination_criteria;
+    void setTerminationCriteria (TerminationCriteria * termination_criteria_) {
+        termination_criteria = termination_criteria_;
     }
 
-    void setQuality (Quality * quality) {
-        this->quality = quality;
+    void setQuality (Quality * quality_) {
+        quality = quality_;
     }
 
     RansacOutput* getRansacOutput () {

@@ -105,8 +105,8 @@ public:
         est_x1 /= est_z1;
         est_y1 /= est_z1;
 
-        float error = sqrt ((x2 - est_x2) * (x2 - est_x2) + (y2 - est_y2) * (y2 - est_y2));
-        error +=      sqrt ((x1 - est_x1) * (x1 - est_x1) + (y1 - est_y1) * (y1 - est_y1));
+        float error = sqrt ((x2 - est_x2) * (x2 - est_x2) + (y2 - est_y2) * (y2 - est_y2))
+                    + sqrt ((x1 - est_x1) * (x1 - est_x1) + (y1 - est_y1) * (y1 - est_y1));
         // error >= 0
         return error/2;
     }

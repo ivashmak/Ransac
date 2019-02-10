@@ -25,7 +25,8 @@ public:
 	/*
 	 * Local Optimization parameters
 	 */
-	unsigned int lo_sample_size = 14;
+	LocOpt lo = NullLO;
+    unsigned int lo_sample_size = 14;
 	unsigned int lo_iterative_iterations = 4;
     unsigned int lo_inner_iterations = 20; // 10
     unsigned int lo_threshold_multiplier = 10;
@@ -33,18 +34,17 @@ public:
     // Graph cut
     float spatial_coherence_gc = 0.1; // spatial coherence term
 
-    // name
     ESTIMATOR estimator = NullE;
     SAMPLER sampler = NullS;
 
-    int max_hypothesis_test_before_sprt = 20;
+    // sprt
+    bool sprt = false;
+	unsigned int max_hypothesis_test_before_sprt = 20;
+	
     NeighborsSearch neighborsType = NeighborsSearch::NullN;
     int cell_size = 50; // for grid neighbors searching
 
     bool reset_random_generator = true;
-
-    LocOpt lo = NullLO;
-	bool sprt = false;
 
     // for debug
     std::string img_name;

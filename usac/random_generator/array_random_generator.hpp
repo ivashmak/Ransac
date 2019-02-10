@@ -43,7 +43,7 @@ public:
     }
 
     void generateUniqueRandomSet (int * sample) override {
-        for (int i = 0; i < subset_size; i++) {
+        for (unsigned int i = 0; i < subset_size; i++) {
             sample[i] = getRandomNumber();
         }
     }

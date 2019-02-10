@@ -39,15 +39,15 @@
  * https://ieeexplore.ieee.org/document/1544925
  */
 
-class SPRT_history {
-public:
-    double epsilon, delta, A;
-    // k is number of samples processed by test
-    int k;
-};
-
 class SPRT {
 private:
+    class SPRT_history {
+    public:
+        double epsilon, delta, A;
+        // k is number of samples processed by test
+        int k;
+    };
+
     /*
      * The probability of a data point being consistent
      * with a ‘bad’ model is modeled as a probability of
@@ -182,8 +182,8 @@ public:
      *
      * Verifies model and returns model score.
      */
-    bool verifyModelAndGetModelScore (Model * model, int current_hypothese,
-                                      int maximum_score, Score *score) {
+    bool verifyModelAndGetModelScore (Model * model, int current_hypothese, unsigned int maximum_score, 
+                                                                            Score *score) {
 
         estimator->setModelParameters(model->returnDescriptor());
 
@@ -234,13 +234,11 @@ public:
             // Otherwise we don't need model score, because model is bad.
             score->inlier_number = tested_inliers;
             score->score = score->inlier_number;
-        }
-
+        } else
         if (current_hypothese < max_hypothesis_test_before_sprt) {
+            // we still need the score in this case
             unsigned int inliers_after_test = 0;
-            // evaluate rest points, max must be less than points_size
-            int left_points_to_eval = points_size - tested_point;
-            for (int p = 0; p < left_points_to_eval; p++) {
+            for (unsigned int p = tested_point; p < points_size; p++) {
                 if (random_pool_idx >= points_size) {
                     random_pool_idx = 0;
                 }

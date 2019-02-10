@@ -170,6 +170,7 @@ bool FundamentalSolver::EightPointsAlgorithmEigen (const int * const sample, uns
     return true;
 }
 
+// ----------------- Weighted 8 points algorithm -----------------------
 bool FundamentalSolver::EightPointsAlgorithm (const int * const sample, const float * const weights, unsigned int sample_number, cv::Mat &F) {
 
     cv::Mat_<float> T1, T2, norm_points;

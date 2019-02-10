@@ -29,11 +29,6 @@ public:
         std::cout << "NOT IMPLEMENTED EstimateModelNonMinimalSample in estimator\n";
     }
 
-//    virtual bool WeightedEstimateModelNonMinimalSample(const int * const sample, int sample_size, Model &model) = 0;
-//    virtual bool WeightedLeastSquaresFitting (const int * const sample, int sample_size, Model &model) {
-//        return WeightedEstimateModelNonMinimalSample(sample, sample_size, model);
-//    }
-
     virtual float GetError(unsigned int pidx) = 0;
     virtual void GetError(float * weights, float threshold, int * inliers, unsigned int * inliers_size) {
         std::cout << "NOT IMPLEMENTED GetError (float * weights) in estimator\n";

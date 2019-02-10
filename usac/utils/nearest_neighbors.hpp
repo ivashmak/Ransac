@@ -7,7 +7,6 @@
 
 #include "../precomp.hpp"
 
-#include <nanoflann.hpp>
 #include "../../generator/generator.h"
 
 class NearestNeighbors {
@@ -52,7 +51,5 @@ private:
         }
     };
 };
-
-
 
 #endif //USAC_NEARESTNEIGHBORS_H
