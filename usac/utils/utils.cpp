@@ -19,7 +19,7 @@ void densitySort (const cv::Mat &points, int knn, cv::Mat &sorted_points) {
     std::sort(sorted_idx.begin(), sorted_idx.end(), [&](int a, int b) {
         sum1 = 0, sum2 = 0;
         idxa = knn * a, idxb = knn * b;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < knn; i++) {
             sum1 += neighbors_dists_ptr[idxa + i];
             sum2 += neighbors_dists_ptr[idxb + i];
         }

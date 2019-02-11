@@ -5,28 +5,26 @@
 
 void drawEpipolarLines_ (cv::Mat &img1, cv::Mat &img2, const std::vector<int> &inliers, const cv::Mat& lines1, const cv::Mat& lines2, const cv::Mat& pts1, const cv::Mat& pts2) {
     int c = img1.cols, r = img1.rows;
-    float x0, y1_0, y2_0, x1, y1_1, y2_1;
-    float  r1_0, r1_1, r1_2, r2_0, r2_1, r2_2;
 
 //    int inliers_to_draw = std::min (50, (int)inliers.size());
     int inliers_to_draw = inliers.size();
     for (int i = 0; i < inliers_to_draw; i++) {
-        r1_0 = lines1.at<float>(i, 0);
-        r1_1 = lines1.at<float>(i, 1);
-        r1_2 = lines1.at<float>(i, 2);
+        float r1_0 = lines1.at<float>(i, 0);
+        float r1_1 = lines1.at<float>(i, 1);
+        float r1_2 = lines1.at<float>(i, 2);
 
-        r2_0 = lines2.at<float>(i, 0);
-        r2_1 = lines2.at<float>(i, 1);
-        r2_2 = lines2.at<float>(i, 2);
+        float r2_0 = lines2.at<float>(i, 0);
+        float r2_1 = lines2.at<float>(i, 1);
+        float r2_2 = lines2.at<float>(i, 2);
 
-        x0 = 0;
-        x1 = c;
+        float x0 = 0;
+        float x1 = c;
 
-        y1_0 = -r1_2/r1_1;
-        y1_1 = -(r1_2 + r1_0*c)/r1_1;
+        float y1_0 = -r1_2/r1_1;
+        float y1_1 = -(r1_2 + r1_0*c)/r1_1;
 
-        y2_0 = -r2_2/r2_1;
-        y2_1 = -(r2_2 + r2_0*c)/r2_1;
+        float y2_0 = -r2_2/r2_1;
+        float y2_1 = -(r2_2 + r2_0*c)/r2_1;
 
         cv::Scalar color = cv::Scalar(random()%255, random ()%255, random ()%255);
         cv::line(img1, cv::Point_<float> (x0, y1_0), cv::Point_<float> (x1, y1_1), color);
@@ -107,9 +105,11 @@ void DrawMatches_(cv::Mat points, std::vector<int> inliers, cv::Mat image1, cv::
 /*
  * Draw epipolar line for Fundamental matrix
  */
-void Drawing::drawEpipolarLines (const std::string& img_name, DATASET dataset, const std::vector<int> &inliers, const cv::Mat &pts1, const cv::Mat &pts2, const cv::Mat& F) {
-    cv::Mat_<float> points;
-    cv::hconcat(pts1, pts2, points);
+void Drawing::drawEpipolarLines (Model * model, DATASET dataset, const std::string& img_name) {
+    ImageData gt_data (dataset, img_name);
+    cv::Mat points = gt_data.getPoints();
+    cv::Mat pts1 = points.colRange(0,2);
+    cv::Mat pts2 = points.colRange(2,4);
 
     /*
      * For every point in one of the two images of a stereo pair,
@@ -117,14 +117,21 @@ void Drawing::drawEpipolarLines (const std::string& img_name, DATASET dataset, c
      * line in the other image.
      */
     cv::Mat lines1, lines2;
-    cv::computeCorrespondEpilines(pts2, 2, F, lines1);
-    cv::computeCorrespondEpilines(pts1, 1, F, lines2);
+    cv::computeCorrespondEpilines(pts2, 2, model->returnDescriptor(), lines1);
+    cv::computeCorrespondEpilines(pts1, 1, model->returnDescriptor(), lines2);
 
-    cv::Mat img1, img2;
-    ImageData gt_data (dataset, img_name);
-    img1 = gt_data.getImage1();
-    img2 = gt_data.getImage2();
+    cv::Mat img1 = gt_data.getImage1();
+    cv::Mat img2 = gt_data.getImage2();
 
+    Estimator * est;
+    if (model->estimator == ESTIMATOR::Essential) {
+        est = new EssentialEstimator(points);
+    } else { // fundamental
+        est = new FundamentalEstimator(points);
+    }
+
+    std::vector<int> inliers;
+    Quality::getInliers(est, model->returnDescriptor(), model->threshold, points.rows, inliers);
     cv::Mat out_image;
     DrawMatches_(points, inliers, img1, img2, out_image);
 

@@ -170,33 +170,44 @@ std::vector<cv::KeyPoint> detect(std::string filename, std::string detector_name
 }
 
 
-void detectFeaturesForEssentialMatrix (const cv::Mat &P1, const cv::Mat &P2,
-                                       const std::string &img_path_name, const std::string &img_ext, float threshold) {
+bool detectFeaturesForEssentialMatrix (const cv::Mat &P1, const cv::Mat &P2, const std::string &img1_name,
+                                       const std::string &img2_name, const std::string &out_name, float threshold) {
     cv::Mat K1, R1, t1;
     cv::decomposeProjectionMatrix(P1, K1, R1, t1);
     cv::Mat K2, R2, t2;
     cv::decomposeProjectionMatrix(P2, K2, R2, t2);
 
     cv::Mat F_gt;
-    std::cout << P1 << "\n";
-    std::cout << P2 << "\n";
     FundamentalEstimator::getFundamentalFromProjection(P1, P2, F_gt);
 
-    cv::Mat image1 = cv::imread(img_path_name+"A."+img_ext);
-    cv::Mat image2 = cv::imread(img_path_name+"B."+img_ext);
-
+    cv::Mat image1 = cv::imread(img1_name);
+    cv::Mat image2 = cv::imread(img2_name);
+    if (image1.empty() || image2.empty()) {
+        std::cout << "wrong direction to images for essential dataset\n";
+        exit (0);
+    }
     cv::Mat points;
     // Detect and match features
-    DetectFeatures(img_path_name + "_pts.txt", image1, image2, points);
+    DetectFeatures(out_name+"_pts.txt", image1, image2, points);
 
     std::vector<int> gt_inliers;
     Estimator * fundamental = new FundamentalEstimator (points);
     Quality::getInliers(fundamental, F_gt, threshold, points.rows, gt_inliers);
 
+    if (gt_inliers.size() < 20) {
+        std::remove((out_name+"_pts.txt").c_str());
+        std::remove((out_name+"_spts.txt").c_str());
+        std::remove((out_name+"_score.txt").c_str());
+        std::cout << "not enough inliers\n";
+        return false;
+    }
+
     std::ofstream save_inliers;
-    save_inliers.open(img_path_name+"_inl.txt");
+    save_inliers.open(out_name+"_inl.txt");
     save_inliers << gt_inliers.size() << "\n";
     for (const int &inl : gt_inliers) {
         save_inliers << inl << "\n";
     }
+
+    return true;
 }

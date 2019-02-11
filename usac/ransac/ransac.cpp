@@ -56,7 +56,7 @@ void Ransac::run() {
     unsigned int max_iters = model->max_iterations;
 
     while (iters < max_iters) {
-
+//        std::cout << "generate sample\n";
         sampler->generateSample(sample);
 
 //      debug
@@ -111,7 +111,7 @@ void Ransac::run() {
                  quality->getNumberInliers(current_score, models[i]->returnDescriptor());
             }
 //
-           std::cout << "Ransac, iteration " << iters << "; score " << current_score->inlier_number << "\n";
+//           std::cout << "Ransac, iteration " << iters << "; score " << current_score->inlier_number << "\n";
 //            std::cout << models[i]->returnDescriptor() << "\n\n";
 
             if (current_score->bigger(best_score)) {
@@ -192,7 +192,6 @@ void Ransac::run() {
             std::cout << "\033[1;31mNON minimal model 2 completely failed!\033[0m \n";
             break;
         }
-//        std::cout << non_minimal_model->returnDescriptor() << " std ndlt\n\n";
 
         //
 //        std::cout << "get non minimal score\n";
@@ -200,11 +199,12 @@ void Ransac::run() {
 //        std::cout << "end get non minimal score\n";
 
         // Priority is for non minimal model estimation
-//        std::cout << "non minimal inlier number (1) " << current_score->inlier_number << '\n';
+//        std::cout << "non minimal score " << current_score->inlier_number << '\n';
 
         // break if non minimal model score is less than 80% of the best minimal model score
         if ((float) current_score->inlier_number / best_score->inlier_number < 0.8) {
-            std::cout << "break; non minimal score is significanlty worse than best score.\n";
+//            std::cout << "break; non minimal score is significanlty worse than best score: RSC* "
+//                         << best_score->inlier_number << " vs PCA " << current_score->inlier_number <<"\n";
             break;
         }
 

@@ -7,7 +7,21 @@
 class Tests;
 class Drawing {
 public:
+    static void draw (Model * model, DATASET dataset, const std::string &img_name) {
+        if (model->estimator == ESTIMATOR::Line2d) {
+            draw_line(model, dataset, img_name);
 
+        } else if (model->estimator == ESTIMATOR::Essential) {
+            drawEpipolarLines(model, dataset, img_name);
+
+        } else if (model->estimator == ESTIMATOR::Fundamental) {
+            drawEpipolarLines(model, dataset, img_name);
+
+        } else if (model->estimator == ESTIMATOR::Homography) {
+            drawHomography(model, dataset, img_name);
+
+        }
+    }
     /*
      * w ~ original width;  h ~ original height; S original square;
      * constraint 1: new square is S' = w' * h' == 480000
@@ -35,7 +49,7 @@ public:
      * @input_inliers_idxes  indexes of inliers
      * @image                image
      */
-    static void showInliers (cv::InputArray input_points, cv::InputArray input_inliers_idxes, cv::Mat image) {
+    static void showInliers (cv::InputArray input_points, cv::InputArray input_inliers_idxes, cv::Mat &image) {
         int *inliers_idxes = (int *) input_inliers_idxes.getMat().data;
         cv::Point_<float> *points = (cv::Point_<float> *) input_points.getMat().data;
 
@@ -46,7 +60,7 @@ public:
     }
 
     // x = ky + b
-    static void draw_line_ky_b (float k, float b, cv::Scalar color, cv::Mat img) {
+    static void draw_line_ky_b (float k, float b, const cv::Scalar &color, cv::Mat img) {
         int max_dimen = std::max (img.cols, img.rows);
         float corner_y1 = max_dimen;
         float corner_x1 = k*corner_y1 + b;
@@ -57,7 +71,7 @@ public:
     }
     
     // y = kx + b
-    static void draw_line_kx_b (float k, float b, cv::Scalar color, cv::Mat img) {
+    static void draw_line_kx_b (float k, float b, const cv::Scalar &color, cv::Mat img) {
         int max_dimen = std::max (img.cols, img.rows);
         float corner_x1 = max_dimen;
         float corner_y1 = k*corner_x1 + b;
@@ -113,10 +127,17 @@ public:
      * Show inliers of non minimal best model.
      * To show threshold lines change false to true.
      */
-    static void draw (cv::InputArray inliers, Model * const model, cv::InputArray points, const std::string &img_name) {
-        cv::Mat image  = cv::imread(img_name);
+    static void draw_line (Model * const model, DATASET dataset, const std::string &img_name) {
+        ImageData imageData(dataset, img_name);
+        cv::Mat points = imageData.getPoints();
+        cv::Mat image = imageData.getImage1();
+        Line2DEstimator est (points);
+        std::vector<int> inliers;
+        Quality::getInliers(&est, model->returnDescriptor(), model->threshold, points.rows, inliers);
         showInliers(points, inliers, image);
         draw_line_model(model, cv::Scalar(255, 0, 0), image, true);
+
+        drawing_resize(image);
         imshow("Inliers", image);
 //        std::string filename = "../results/linefitting_"+Tests::sampler2string(model->sampler)+".jpg";
         std::string filename = "../results/linefitting_sampler.jpg";
@@ -127,17 +148,17 @@ public:
     /*
      * Draw epipolar lines by Fundamental Matrix
      */
-    static void drawEpipolarLines (const std::string& img_name, DATASET dataset, const std::vector<int> &inliers, const cv::Mat &pts1, const cv::Mat &pts2, const cv::Mat& F);
+    static void drawEpipolarLines (Model * model, DATASET dataset, const std::string& img_name);
 
 
-    static void drawHomographies (const std::string& img_name, DATASET dataset, const cv::Mat& points, const std::vector<int>& inliers, const cv::Mat &H) {
-        cv::Mat points1 = points.colRange(0, 2);
-        cv::Mat points2 = points.colRange(2, 4);
+    static void drawHomography (Model *model, DATASET dataset, const std::string& img_name) {
+        ImageData gt_data (dataset, img_name);
+
+        cv::Mat points1 = gt_data.getPoints1();
+        cv::Mat points2 = gt_data.getPoints2();
         cv::hconcat(points1, cv::Mat_<float>::ones(points1.rows, 1), points1);
         cv::hconcat(points2, cv::Mat_<float>::ones(points1.rows, 1), points2);
 
-
-        ImageData gt_data (dataset, img_name);
         cv::Mat img1 = gt_data.getImage1();
         cv::Mat img2 = gt_data.getImage2();
 
@@ -164,7 +185,7 @@ public:
 
 //        getMatrix3x3 ("../dataset/EVD/h/"+img_name+".txt", H_gt);
 
-        drawErrors(img1_inl, img2_inl, points1, points2, H);
+        drawErrors(img1_inl, img2_inl, points1, points2, model->returnDescriptor());
 
         drawErrors(gt_img1_inl, gt_img2_inl, points1, points2, H_gt.inv());
 //        drawErrors(gt_img1_inl, gt_img2_inl, points1, points2, H_gt);
@@ -187,7 +208,7 @@ public:
         cv::Mat panorama_opencv, panorama_gt, panorama;
         std::vector<cv::Mat> images;
         images.push_back(img1); images.push_back(img2);
-        drawPanorama(images, panorama, H.inv());
+        drawPanorama(images, panorama, model->returnDescriptor().inv());
         drawPanorama(images, panorama_gt, H_gt);
         drawPanorama(images, panorama_opencv, H_opencv.inv());
 

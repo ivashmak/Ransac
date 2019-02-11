@@ -54,14 +54,11 @@ public:
 
 //        std::cout << "Roots " << roots << "\n\n";
 
-        unsigned int valid_solutions = roots;
+        unsigned int valid_solutions = 0;
         for (unsigned int i = 0; i < roots; i++) {
             if (isModelValid(F.rowRange(i * 3, i * 3 + 3), sample)) {
-                models[i]->setDescriptor(F.rowRange(i * 3, i * 3 + 3));
-            } else {
-                valid_solutions--;
+                models[valid_solutions++]->setDescriptor(F.rowRange(i * 3, i * 3 + 3));
             }
-            i++;
         }
 
         return valid_solutions;

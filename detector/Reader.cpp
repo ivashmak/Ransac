@@ -292,7 +292,7 @@ void Reader::readInliers (std::vector<int>&inliers, const std::string &filename)
     std::fstream file(filename, std::ios_base::in);
 
     if (! file.is_open()) {
-        std::cout << "Wrong direction to inliers file!\n";
+        std::cout << "Wrong direction to inliers file, probably for Strecha dataset. Reader::readInliers!\n";
         exit (0);
     }
     int num_inliers;

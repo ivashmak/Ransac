@@ -36,7 +36,7 @@ public:
     static std::vector<std::string> getEVDDataset ();
     static std::vector<std::string> getHomographyDatasetPoints ();
     static std::vector<std::string> getProblemHomographyDatasetPoints ();
-    static std::vector<std::string> getFundamentalDatasetPoints ();
+    static std::vector<std::string> getStrechaCastleDenseImages (int option);
     static std::vector<std::string> getKusvod2Dataset ();
     static std::vector<std::string> getAdelaidermfDataset ();
     static std::vector<std::string> getStrechaDataset ();

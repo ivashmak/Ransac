@@ -71,9 +71,11 @@ void NearestNeighbors::getNearestNeighbors_nanoflann (const cv::Mat& points, int
                                                       cv::Mat &nearest_neighbors_distances) {
     unsigned int points_size = points.rows;
     unsigned int dim = points.cols;
-
+    
     Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic> mat;
     cv::cv2eigen(points, mat);
+
+//    std::cout << "eigen dynamic " << Eigen::Dynamic << "\n"; // -1
 
     typedef nanoflann::KDTreeEigenMatrixAdaptor<Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>> my_kd_tree_t;
 

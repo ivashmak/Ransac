@@ -126,6 +126,12 @@ public:
             sprt_histories[0]->epsilon = 0.2;
             t_M = 200;
             m_S = 2.48;
+        } else if (model->estimator == ESTIMATOR::Essential) {
+            // ??????????????????????????????????????????????
+            sprt_histories[0]->delta = 0.05;
+            sprt_histories[0]->epsilon = 0.2;
+            t_M = 300;
+            m_S = 4; // up to 10 models
         } else if (model->estimator == ESTIMATOR::Line2d){
             t_M = 100;
             m_S = 1;
@@ -197,8 +203,7 @@ public:
 
         double lambda_new, lambda = 1;
 
-        int tested_inliers = 0;
-        int tested_point = 0;
+        unsigned int tested_point = 0, tested_inliers = 0;
 
         bool good = true;
         for (tested_point = 0; tested_point < points_size; tested_point++) {
@@ -326,12 +331,8 @@ public:
     */
     double estimateThresholdA (double epsilon, double delta) {
         double C;
-//        if (delta == 0) {
-//            C = (1 - delta) * log ((1 - delta)/(1-epsilon));
-//        } else {
-            C = (1 - delta) * log ((1 - delta)/(1-epsilon)) + delta * (log(delta/epsilon));
-//        }
-        // K = K1/K2 + 1 = (t_M / P_g) / (m_S / (C * P_g)) + 1= (t_M * S)/m_S + 1
+        C = (1 - delta) * log ((1 - delta)/(1-epsilon)) + delta * (log(delta/epsilon));
+        // K = K1/K2 + 1 = (t_M / P_g) / (m_S / (C * P_g)) + 1 = (t_M * S)/m_S + 1
         double K = (t_M * C) / m_S + 1;
         double An_1 = K;
 //         std::cout << "C = " << C << "\n";
@@ -392,7 +393,7 @@ public:
     }
 
 
-    // ------------ Usac version (Chum, Raguram, et.al) (not using, just for compare) ----------
+    // ------------ Usac version (Raguram, et.al) (not using, just for compare) ----------
     unsigned int updateSPRTStopping(unsigned int numInliers) {
         double n_inliers = 1.0;
         double n_pts = 1.0;

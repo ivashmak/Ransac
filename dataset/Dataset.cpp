@@ -31,18 +31,17 @@ void Dataset::saveDatasetToFiles () {
 }
 
 std::vector<std::string> Dataset::getEVDDataset () {
-    std::vector<std::string> fnames = {"adam", "cafe",
+    return std::vector<std::string> {"adam", "cafe",
                                        "mag", "cat", "dum",     "face",
                                        "fox",        "girl",         "graf",
                                        "grand",  "index",
                                        "pkk", "shop", "there" , "vin"};
 
-    return fnames;
 }
 
 
 std::vector<std::string> Dataset::getHomographyDatasetPoints () {
-    std::vector<std::string> fnames = {"adam", "Brussels",
+    return std::vector<std::string> {"adam", "Brussels",
                                        "boat",
                                        "BostonLib",     "city",
                                        "Boston",        "Eiffel",         "WhiteBoard",
@@ -53,38 +52,24 @@ std::vector<std::string> Dataset::getHomographyDatasetPoints () {
 //    for (int i = 0; i < problem_img.size(); i++) {
 //        fnames.push_back(problem_img[i]);
 //    }
-    return fnames;
 };
 
 std::vector<std::string> Dataset::getProblemHomographyDatasetPoints () {
-    std::vector<std::string> fnames = {"LePoint1", "LePoint2", "LePoint3", "CapitalRegion"};
-    return fnames;
+    return std::vector<std::string> {"LePoint1", "LePoint2", "LePoint3", "CapitalRegion"};
 };
 
-
-std::vector<std::string> Dataset::getFundamentalDatasetPoints () {
-    std::vector<std::string> fnames = {"barrsmith_pts.txt", "bonhall_pts.txt",
-                                       "bonython_pts.txt", "elderhalla_pts.txt", "elderhallb_pts.txt",
-                                       "hartley_pts.txt", "johnssona_pts.txt", "johnssonb_pts.txt",
-                                       "ladysymon_pts.txt", "library_pts.txt", "napiera_pts.txt",
-                                       "napierb_pts.txt", "neem_pts.txt", "unihouse_pts.txt",
-                                       "oldclassicswing_pts.txt", "physics_pts.txt", "sene_pts.txt",
-                                       "unionhouse_pts.txt"};
-    return fnames;
-};
 
 std::vector<std::string> Dataset::getKusvod2Dataset () {
-    std::vector<std::string> fnames = {"booksh", "box",
+    return std::vector<std::string>  {"booksh", "box",
                                        "castle", "corr", "graff",
                                        "head", "kampa", "Kyoto",
                                        "leafs", "plant", "rotunda",
                                        "shout", "valbonne", "wall",
                                        "wash", "zoom"};
-    return fnames;
 };
 
 std::vector<std::string> Dataset::getAdelaidermfDataset () {
-    std::vector<std::string> fnames = {
+    return std::vector<std::string> {
 //            "barrsmith",
             "bonhall",
 //            "bonython",
@@ -104,19 +89,94 @@ std::vector<std::string> Dataset::getAdelaidermfDataset () {
             "unihouse",
 //            "unionhouse"
     };
-    return fnames;
 };
 
 std::vector<std::string> Dataset::getStrechaDataset () {
-    std::vector<std::string> fnames = {
-        "fountain_dense_1"
-    };
+    std::vector<std::string> fnames;
+    std::fstream file ("../dataset/MVS/zdataset.txt");
+    if (! file.is_open()) {
+        std::cout << "can read images for Strecha dataset!\n";
+        exit (0);
+    }
+    std::string name;
+    while (file >> name) {
+        fnames.push_back(name);
+    }
     return fnames;
+}
+
+//printf "\"%s\",\n" $(ls *.png)
+std::vector<std::string> Dataset::getStrechaCastleDenseImages (int option) {
+    if (option == 0) {
+        return std::vector<std::string>{
+                "castle_dense_0000.png", "castle_dense_0001.png", "castle_dense_0002.png",
+                "castle_dense_0003.png", "castle_dense_0004.png", "castle_dense_0005.png",
+                "castle_dense_0006.png", "castle_dense_0007.png", "castle_dense_0008.png",
+                "castle_dense_0009.png", "castle_dense_0010.png", "castle_dense_0011.png",
+                "castle_dense_0012.png", "castle_dense_0013.png", "castle_dense_0014.png",
+                "castle_dense_0015.png", "castle_dense_0016.png", "castle_dense_0017.png",
+                "castle_dense_0018.png"
+        };
+    } else if (option == 1) {
+        return std::vector<std::string>  {
+                "castle_dense_large_0000.png", "castle_dense_large_0001.png", "castle_dense_large_0002.png",
+                "castle_dense_large_0003.png", "castle_dense_large_0004.png", "castle_dense_large_0005.png",
+                "castle_dense_large_0006.png", "castle_dense_large_0007.png", "castle_dense_large_0008.png",
+                "castle_dense_large_0009.png", "castle_dense_large_0010.png", "castle_dense_large_0011.png",
+                "castle_dense_large_0012.png", "castle_dense_large_0013.png", "castle_dense_large_0014.png",
+                "castle_dense_large_0015.png", "castle_dense_large_0016.png", "castle_dense_large_0017.png",
+                "castle_dense_large_0018.png", "castle_dense_large_0019.png", "castle_dense_large_0020.png",
+                "castle_dense_large_0021.png", "castle_dense_large_0022.png", "castle_dense_large_0023.png",
+                "castle_dense_large_0024.png", "castle_dense_large_0025.png", "castle_dense_large_0026.png",
+                "castle_dense_large_0027.png", "castle_dense_large_0028.png", "castle_dense_large_0029.png"
+        };
+    } else if (option == 2) {
+        return std::vector<std::string>  {
+                "castle_entry_dense_0000.png",
+                "castle_entry_dense_0001.png",
+                "castle_entry_dense_0002.png",
+                "castle_entry_dense_0003.png",
+                "castle_entry_dense_0004.png",
+                "castle_entry_dense_0005.png",
+                "castle_entry_dense_0006.png",
+                "castle_entry_dense_0007.png",
+                "castle_entry_dense_0008.png",
+                "castle_entry_dense_0009.png"
+        };
+    } else if (option == 3) {
+        return std::vector<std::string> {
+                "fountain_dense_0000.png", "fountain_dense_0001.png", "fountain_dense_0002.png",
+                "fountain_dense_0003.png", "fountain_dense_0004.png", "fountain_dense_0005.png",
+                "fountain_dense_0006.png", "fountain_dense_0007.png", "fountain_dense_0008.png",
+                "fountain_dense_0009.png", "fountain_dense_0010.png"
+        };
+    } else if (option == 4) {
+        return std::vector<std::string>{
+                "herzjesu_dense_0000.png", "herzjesu_dense_0001.png", "herzjesu_dense_0002.png",
+                "herzjesu_dense_0003.png", "herzjesu_dense_0004.png", "herzjesu_dense_0005.png",
+                "herzjesu_dense_0006.png", "herzjesu_dense_0007.png"
+        };
+    } else if (option == 5) {
+        return std::vector<std::string>{
+                "herzjesu_dense_large_0000.png", "herzjesu_dense_large_0001.png", "herzjesu_dense_large_0002.png",
+                "herzjesu_dense_large_0003.png", "herzjesu_dense_large_0004.png", "herzjesu_dense_large_0005.png",
+                "herzjesu_dense_large_0006.png", "herzjesu_dense_large_0007.png", "herzjesu_dense_large_0008.png",
+                "herzjesu_dense_large_0009.png", "herzjesu_dense_large_0010.png", "herzjesu_dense_large_0011.png",
+                "herzjesu_dense_large_0012.png", "herzjesu_dense_large_0013.png", "herzjesu_dense_large_0014.png",
+                "herzjesu_dense_large_0015.png", "herzjesu_dense_large_0016.png", "herzjesu_dense_large_0017.png",
+                "herzjesu_dense_large_0018.png", "herzjesu_dense_large_0019.png", "herzjesu_dense_large_0020.png",
+                "herzjesu_dense_large_0021.png", "herzjesu_dense_large_0022.png", "herzjesu_dense_large_0023.png",
+                "herzjesu_dense_large_0024.png",
+        };
+    } else {
+        std::cout <<"undefined option for strecha dataset\n";
+        return std::vector<std::string>();
+    }
 }
 
 
 std::vector<std::string> Dataset::getSyntecticLine2dDataset () {
-    std::vector<std::string> fnames = {
+    return std::vector<std::string> {
         "w=1000_h=1000_n=3.000000_I=200_N=10200",
         "w=1000_h=1000_n=3.000000_I=500_N=10500",
         "w=1000_h=1200_n=3.000000_I=200_N=10200",
@@ -126,5 +186,4 @@ std::vector<std::string> Dataset::getSyntecticLine2dDataset () {
         "w=1200_h=1200_n=3.000000_I=200_N=10200",
         "w=1200_h=1200_n=3.000000_I=500_N=10500"
     };
-return fnames;
 }

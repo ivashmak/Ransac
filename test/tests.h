@@ -1,6 +1,8 @@
 #ifndef TESTS_TESTS_H
 #define TESTS_TESTS_H
 
+#include "test_precomp.hpp"
+
 #include "../usac/estimator/estimator.hpp"
 #include "../usac/quality/quality.hpp"
 #include "../usac/ransac/ransac.hpp"
@@ -9,9 +11,6 @@
 #include "../usac/termination_criteria/prosac_termination_criteria.hpp"
 #include "../usac/utils/nearest_neighbors.hpp"
 #include "../detector/detector.h"
-#include <cstdio>
-#include <iostream>
-#include <opencv2/core/types.hpp>
 
 #include "../detector/Reader.h"
 #include "../dataset/GetImage.h"
@@ -19,15 +18,15 @@
 
 class Tests {
 public:
-    void testLineFitting ();
-    void testHomographyFitting ();
-    void testFundamentalFitting ();
-    void testEssentialFitting ();
+    static void testLineFitting ();
+    static void testHomographyFitting ();
+    static void testFundamentalFitting ();
+    static void testEssentialFitting ();
 
-    void testNeighborsSearchCell ();
-    void testNeighborsSearch ();
+    static void testNeighborsSearchCell ();
+    static void testNeighborsSearch ();
 
-    void test (cv::Mat points,
+    static void test (cv::Mat points,
                       Model * model,
                       const std::string &img_name,
                       DATASET dataset,

@@ -5,14 +5,7 @@
 #include "../usac/estimator/homography_estimator.hpp"
 #include "../dataset/Dataset.h"
 
-#include <cstdio>
-#include <iostream>
-#include <chrono>
-#include <vector>
-#include <opencv2/core/types.hpp>
-
 void storeResultsHomography ();
-void getGTInliersFromGTModelHomography (const std::string& filename, const cv::Mat& points, float threshold, std::vector<int> &gt_inliers);
 
 void Tests::testHomographyFitting() {
     float threshold = 2;

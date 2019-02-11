@@ -9,7 +9,6 @@
 #include "../usac/utils/utils.hpp"
 
 void storeResultsFundamental ();
-void getGTInliersFromGTModelFundamental (const std::string& filename, const cv::Mat& points, float threshold, std::vector<int> &gt_inliers);
 
 void Tests::testFundamentalFitting() {
 //    detectAndSaveFeatures(getAdelaidermfDataset());
@@ -28,9 +27,8 @@ void Tests::testFundamentalFitting() {
 
     std::cout << "points size = " << points.rows << "\n";
 
-    float threshold = 2;
-    float confidence = 0.95;
-    int knn = 8;
+    float threshold = 2, confidence = 0.95;
+    unsigned int knn = 8;
 
     std::vector<int> gt_inliers = gt_data.getGTInliers(threshold);
     std::vector<int> gt_sorted_inliers = gt_data.getGTInliersSorted(threshold);
@@ -45,7 +43,7 @@ void Tests::testFundamentalFitting() {
 //    model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Uniform);
     // ------------------------------------------------------------------------
 
-    // -------------------------- Prosac -------------------------------------
+//     -------------------------- Prosac -------------------------------------
     model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Prosac);
     // ------------------------------------------------------------------------
 
@@ -53,7 +51,7 @@ void Tests::testFundamentalFitting() {
     model->setSprt(0);
     model->setCellSize(50);
     model->setNeighborsType(NeighborsSearch::Nanoflann);
-    model->ResetRandomGenerator(true);
+    model->ResetRandomGenerator(false);
 
 //    test (points, model, img_name, dataset, true, gt_inliers);
     test (sorted_points, model, img_name, dataset, true, gt_sorted_inliers);
@@ -191,22 +189,4 @@ void storeResultsFundamental () {
 //    std::cout << "mean time " << (mean_time / num_images) << "\n";
 //    std::cout << "mean error " << (mean_error / num_images) << "\n";
 
-}
-
-
-
-void getGTInliersFromGTModelFundamental (const std::string& filename, const cv::Mat& points, float threshold, std::vector<int> &gt_inliers) {
-    cv::Mat gt_model;
-    Reader::getMatrix3x3(filename, gt_model);
-//    std::cout << gt_model << "\n";
-
-    Estimator * estimator = new FundamentalEstimator (points);
-    std::vector<int> inliers2;
-
-    Quality::getInliers(estimator, gt_model, threshold, points.rows, gt_inliers);
-    Quality::getInliers(estimator, gt_model.t(), threshold, points.rows, inliers2);
-
-    if (inliers2.size() > gt_inliers.size()) {
-        gt_inliers = inliers2;
-    }
 }

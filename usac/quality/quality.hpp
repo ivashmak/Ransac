@@ -135,7 +135,7 @@ public:
     }
 
 
-    static void getInliers (Estimator * estimator, const cv::Mat &model, float threshold, int points_size, std::vector<int> &inliers) {
+    static void getInliers (Estimator * estimator, const cv::Mat &model, float threshold, unsigned int points_size, std::vector<int> &inliers) {
         estimator->setModelParameters(model);
         inliers.clear();
         for (unsigned int p = 0; p < points_size; p++) {
@@ -144,8 +144,6 @@ public:
             }
         }
     }
-
-
 
     /*
      * Calculate sum of errors to Ground Truth inliers.

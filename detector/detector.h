@@ -13,7 +13,7 @@
 
 std::vector<cv::KeyPoint> detect(std::string filename, std::string detector_name);
 void DetectFeatures(const std::string &name, const cv::Mat &image1, const cv::Mat &image2, cv::Mat &points);
-void detectFeaturesForEssentialMatrix (const cv::Mat &P1, const cv::Mat &P2,
-                                       const std::string &img_path_name, const std::string &img_ext, float threshold);
+bool detectFeaturesForEssentialMatrix (const cv::Mat &P1, const cv::Mat &P2, const std::string &img1_name,
+                                       const std::string &img2_name, const std::string &out_name, float threshold);
 
 #endif //RANSAC_DETECTOR_H

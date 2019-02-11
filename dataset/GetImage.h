@@ -75,6 +75,9 @@ public:
             Model m (1, 0, 0, 0, ESTIMATOR::Essential, SAMPLER::Uniform);
             essentialEstimator.EstimateModelNonMinimalSample(&inliers[0], inliers.size(), m);
             model = m.returnDescriptor().clone();
+            EssentialEstimator essentialEstimator2(sorted_pts);
+            // get sorted inliers using threshold 1!
+            Quality::getInliers(&essentialEstimator2, model, 1/*threshold*/, sorted_pts.rows, sorted_inliers);
 
             pts1 = pts.colRange(0,2);
             pts2 = pts.colRange(2,4);
@@ -112,7 +115,7 @@ public:
                 pts_ptr[2*p+1] = y;
             }
 
-            densitySort (pts, 3, sorted_pts);
+            densitySort (pts, 13 /*knn*/, sorted_pts);
 
             return;
 

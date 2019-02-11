@@ -1,7 +1,6 @@
 #include "tests.h"
 #include "../helper/Logging.h"
 
-
 void Tests::test (cv::Mat points,
                    Model * model,
                    const std::string &img_name,
@@ -67,19 +66,5 @@ void Tests::test (cv::Mat points,
     Logging::saveResult(model, ransacOutput);
     std::cout << "-----------------------------------------------------------------------------------------\n";
 
-
-    if (model->estimator == ESTIMATOR::Homography) {
-        Drawing::drawHomographies(img_name, dataset, points, ransacOutput->getInliers(), ransacOutput->getModel()->returnDescriptor());
-    } else
-    if (model->estimator == ESTIMATOR::Fundamental) {
-        Drawing::drawEpipolarLines(img_name, dataset, ransacOutput->getInliers(), points.colRange(0,2), points.colRange(2,4), ransacOutput->getModel()->returnDescriptor());
-    } else
-    if (model->estimator == ESTIMATOR::Line2d) {
-        Drawing::draw(ransacOutput->getInliers(), ransacOutput->getModel(), points, img_name+".png");
-    } else
-    if (model->estimator == ESTIMATOR::Essential) {
-        Drawing::drawEpipolarLines(img_name, dataset, ransacOutput->getInliers(), points.colRange(0,2), points.colRange(2,4), ransacOutput->getModel()->returnDescriptor());
-    } else {
-        std::cout << "UNKNOWN ESTIMATOR\n";
-    }
+    Drawing::draw(ransacOutput->getModel(), dataset, img_name);
 }

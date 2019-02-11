@@ -17,9 +17,6 @@
 
 class Ransac {
 protected:
-    /*
-     * Initialize them to 0 to check if they are null
-     */
     Model * model;
     Quality * quality;
     Sampler * sampler;
