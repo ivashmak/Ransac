@@ -18,16 +18,14 @@ public:
     ~FundamentalEstimator () {
         delete (solver);
     }
-    /*
-     * input_points must be:
-     * img1_x1 img1_y1 img2_x1 img2_y1
-     * img1_x2 img1_y2 img2_x2 img2_y2
-     * ....
-     * img1_xN img1_yN img2_xN img2_yN
-     */
 
     /*
-     * x^T F x = 0
+     * @input_points: is matrix of size: number of points x 4
+     * x1 y1 x'1 y'1
+     * ...
+     * xN yN x'N y'N
+     *
+     * X^T F X = 0
      */
     FundamentalEstimator(cv::InputArray input_points) : points((float *)input_points.getMat().data) {
         assert(!input_points.empty());
@@ -188,6 +186,21 @@ public:
     }
 
 
+    bool isModelValid(const cv::Mat &F, const int * const sample) override {
+        cv::Mat ec;
+        float sig, sig1;
+        int i;
+        epipole(ec, F);
+
+        sig1 = getorisig(F, &ec, 4*sample[0]);
+
+        for (i = 1; i < 7; i++) {
+            sig = getorisig(F, &ec, 4*sample[i]);
+
+            if (sig1 * sig < 0) return false;
+        }
+        return true;
+    }
 
 private:
     // https://github.com/danini/graph-cut-ransac/blob/master/GraphCutRANSAC/essential_estimator.cpp
@@ -215,22 +228,6 @@ private:
         s2 = ec->at<float>(1) - ec->at<float>(2) * y1;
 
         return(s1 * s2);
-    }
-
-    bool isModelValid(const cv::Mat &F, const int * const sample) const {
-        cv::Mat ec;
-        float sig, sig1;
-        int i;
-        epipole(ec, F);
-
-        sig1 = getorisig(F, &ec, 4*sample[0]);
-
-        for (i = 1; i < 7; i++) {
-            sig = getorisig(F, &ec, 4*sample[i]);
-
-            if (sig1 * sig < 0) return false;
-        }
-        return true;
     }
 };
 

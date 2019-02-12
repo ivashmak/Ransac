@@ -77,6 +77,7 @@ add_executable(
         test/statistical_results.h
         test/test_neighbors_search.cpp
         test/test_precomp.hpp
+        test/test_utils.cpp
 
         helper/Logging.h
         helper/drawing/Drawing.h

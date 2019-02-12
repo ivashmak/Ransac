@@ -11,21 +11,10 @@
 #include "usac/utils/utils.hpp"
 
 int main (int args, char ** argv) {
-//    saveGTModel(DATASET::Adelaidermf);
-
-    // evaluating random generators
-   // evaluateRandomGenerators();
-
-    // test calculating nearest neighbors using flann and nano flann
-//    NearestNeighbors::test();
-
-//    generate_syntectic_dataset();
-//    saveGTModelKusvod2();
-//    Tests::testNeighborsSearch();
 
 //     run tests
-  Tests::testLineFitting();
-//    Tests::testHomographyFitting();
+     Tests::testLineFitting();
+//     Tests::testHomographyFitting();
 //     Tests::testFundamentalFitting();
 //     Tests::testEssentialFitting();
 

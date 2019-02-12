@@ -59,20 +59,6 @@ void Ransac::run() {
 //        std::cout << "generate sample\n";
         sampler->generateSample(sample);
 
-//      debug
-//        bool eq = false;
-//        for (int s = 0; s < model->sample_size; s++) {
-//            std::cout << sample[s] << " ";
-//            for (int j = 0; j < model->sample_size; j++) {
-//                if (s == j) continue;
-//                if (sample[s] == sample[j]) {
-//                    eq = true;
-//                }
-//            }
-//        }
-//        std::cout << "\n";
-//        if (eq) std::cout << "SAMPLE EQUAL\n";
-
 //         std::cout << "samples are generated\n";
 
         number_of_models = estimator->EstimateModel(sample, models);
@@ -244,9 +230,9 @@ void Ransac::run() {
             std::chrono::duration_cast<std::chrono::microseconds>(fs).count(),
                                       best_score->inlier_number, iters, lo_inner_iters, lo_iterative_iters, gc_iters);
 
-    delete (current_score);
-    delete (best_score);
     delete[] inliers;
     delete[] max_inliers;
-//    delete (best_model);
+    delete (current_score);
+    delete (best_score);
+    delete (best_model);
 }

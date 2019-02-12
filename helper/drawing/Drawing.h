@@ -107,7 +107,6 @@ public:
     static void draw_line_model (Model * const model, cv::Scalar color, cv::Mat img, bool threshold) {
         cv::Mat desc = model->returnDescriptor();
         auto * params = reinterpret_cast<float *>(desc.data);
-        std::cout <<"model: a = "<< params[0] << " b = " << params[1] << " c = " <<params[2] << '\n';
         // // ax + by + c = 0
         // // y = kx + l, k = -a*x/b, l = -c/b
         float l = -params[2]/params[1]; 

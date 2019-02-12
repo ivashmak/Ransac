@@ -54,7 +54,7 @@ public:
     }
 
     /*
-     * calculating number of inliers under current model.
+     * calculating number of inliers of current model.
      * score is sum of distances to estimated inliers.
      */
     inline void getNumberInliers (Score * score, const cv::Mat& model, float threshold=0, bool get_inliers=false,
@@ -62,7 +62,7 @@ public:
         if (threshold == 0) {
             threshold = this->threshold;
         }
-//        std::cout << "set model paraments"
+
         estimator->setModelParameters(model);
 
         unsigned int inlier_number = 0;
@@ -105,12 +105,8 @@ public:
         std::cout << "NOT IMPEMENTED getScore IN QUALITY\n";
     }
 
-    /*
-     * We don't need to get inliers in getNumberInliers as we use them only once for estimation
-     * non minimal model. As result faster way will be implement separate function for getting
-     * inliers. Works same as getModelScore, however save inlier's indexes.
-     */
     void getInliers (const cv::Mat& model, int * inliers) {
+        // Note class Quality should be initialized
         assert(isinit);
 
         estimator->setModelParameters(model);
@@ -124,17 +120,6 @@ public:
         }
     }
 
-    void getInliersFlags (const cv::Mat& model, bool * inlier_flags) {
-        assert(isinit);
-
-        estimator->setModelParameters(model);
-
-        for (unsigned int point = 0; point < points_size; point++) {
-            inlier_flags[point] = estimator->GetError(point) < threshold;
-        }
-    }
-
-
     static void getInliers (Estimator * estimator, const cv::Mat &model, float threshold, unsigned int points_size, std::vector<int> &inliers) {
         estimator->setModelParameters(model);
         inliers.clear();
@@ -145,48 +130,13 @@ public:
         }
     }
 
-    /*
-     * Calculate sum of errors to Ground Truth inliers.
-     * And get number of gt inliers.
-     */
-    static float getErrorGT (Estimator * estimator,
-                             Model * model,
-                             int points_size,
-                             const cv::Mat& gt_model,
-                             int * num_gt_inliers) {
+    // Get average error to GT inliers.
+    static float getErrorGT_inl (Estimator * estimator, Model * model, const std::vector<int>& gt_inliers) {
 
-        // get inliers of gt model:
-        estimator->setModelParameters(gt_model);
-        int * inliers = new int [points_size];
-        int inliers_size = 0;
-        for (unsigned int point = 0; point < points_size; point++) {
-            if (estimator->GetError(point) < model->threshold) {
-                inliers[inliers_size++] = point;
-            }
-        }
-
-        if (inliers_size == 0)
-            return -1;
-
-        *num_gt_inliers = inliers_size;
-
-        // calculate sum of errors to inliers of gt model
-        float sum_errors = 0;
-        estimator->setModelParameters(model->returnDescriptor());
-        for (unsigned int i = 0; i < inliers_size; i++) {
-            sum_errors += estimator->GetError(inliers[i]);
-        }
-        return sum_errors / inliers_size;
-    }
-
-    static float getErrorGT_inl (Estimator * estimator,
-                                Model * model,
-                                const std::vector<int>& gt_inliers) {
-
+        // return -1 (unknown) to avoid division by zero
         if (gt_inliers.size() == 0)
             return -1;
 
-        // calculate sum of errors to inliers of gt model
         float sum_errors = 0;
         estimator->setModelParameters(model->returnDescriptor());
         for (unsigned int inl : gt_inliers) {

@@ -15,9 +15,7 @@ class Estimator {
 public:
     virtual ~Estimator () = default;
 
-    // Pure virtuals functions
-    // return number of models
-    // or Model **& models
+    // minimal model estimation
     virtual unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) = 0;
     
     virtual bool EstimateModelNonMinimalSample(const int * const sample, unsigned int sample_size, Model &model) = 0;
@@ -35,18 +33,9 @@ public:
     };
     virtual int SampleNumber() = 0;
 
-    // Setters of points set and model's parameters sufficiently sped up code
-    // functions are virtual, they can be overwritten but not necessarily.
-    /*
-     * These function should be avoided in Ransac. Efficiently to use global 
-     * input points and descriptors as private class members.
-     */
     virtual void setModelParameters (const cv::Mat& model) = 0;
 
-    /*
-     * Fundamental Estimator
-     */
-    virtual bool isValid (const Model * const model) {
+    virtual bool isModelValid (const cv::Mat &model, const int * const sample) {
         return true;
     }
 };

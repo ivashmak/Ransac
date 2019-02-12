@@ -16,7 +16,6 @@ public:
 	unsigned int FivePoints (const int * const sample, cv::Mat &E);
 };
 
-// helper
 static void ProjectionsFromEssential(const cv::Mat &E, cv::Mat &P1, cv::Mat &P2, cv::Mat &P3, cv::Mat &P4);
 static cv::Mat TriangulatePoint(const cv::Point2d &pt1, const cv::Point2d &pt2, const cv::Mat &P1, const cv::Mat &P2);
 static double CalcDepth(const cv::Mat &X, const cv::Mat &P);

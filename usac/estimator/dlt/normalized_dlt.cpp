@@ -10,8 +10,8 @@ bool DLt::NormalizedDLT (const int * const sample, unsigned int sample_number, c
 
     const float * const norm_points_ptr = (float *) norm_points.data;
 
-//    if (! DLT(norm_points_ptr, sample_number, H)) {
-    if (! DLTEigen(norm_points_ptr, sample_number, H)) {
+    if (! DLT(norm_points_ptr, sample_number, H)) {
+//    if (! DLTEigen(norm_points_ptr, sample_number, H)) {
             return false;
     }
 

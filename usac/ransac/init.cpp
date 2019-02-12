@@ -25,8 +25,8 @@ void initSampler (Sampler *& sampler, const Model * const model, const cv::Mat& 
 
      if (model->sampler == SAMPLER::Uniform) {
          sampler = new UniformSampler (model->reset_random_generator);
-	     sampler->setSampleSize(model->sample_size);
-	     sampler->setPointsSize(points_size);
+         ((UniformSampler *)sampler)->setSampleSize(model->sample_size);
+         ((UniformSampler *)sampler)->setPointsSize(points_size);
 
      } else if (model->sampler == SAMPLER::Prosac) {
     	    sampler = new ProsacSampler;

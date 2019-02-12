@@ -38,11 +38,10 @@ bool FundamentalSolver::EightPointsAlgorithm (const int * const sample, unsigned
     cv::SVD::compute(A, S, U, Vt);
     // -----------------------------------------------------
 
-    // last column is optimal (minimizing) subspace of Af = 0
-    // In opencv V (eigen vectors) is transpose, so last row. Eigen values have descending order.
-    F = cv::Mat_<float> (Vt.row(Vt.rows-1).reshape (3,3));
+    if (Vt.empty())
+        return false;
 
-//    std::cout << "det F = " << cv::determinant(F) << "\n";
+    F = cv::Mat_<float> (Vt.row(Vt.rows-1).reshape (3,3));
 
     // ------------------------
      /*
@@ -149,10 +148,13 @@ bool FundamentalSolver::EightPointsAlgorithmEigen (const int * const sample, uns
 
     cv::Mat_<float> D, Vt;
     cv::eigen(covA, D, Vt);
-
 // -------------------------------------------------------------
 
-    F = cv::Mat_<float> (Vt.row(8).reshape (3,3));
+    if (Vt.empty()) {
+        return false;
+    }
+
+    F = cv::Mat_<float> (Vt.row(Vt.rows-1 /* 8 */).reshape (3,3));
 
     auto * t2 = (float *) T2.data;
 
@@ -202,7 +204,10 @@ bool FundamentalSolver::EightPointsAlgorithm (const int * const sample, const fl
     cv::Mat_<float> U, S, Vt;
     cv::SVD::compute(A, S, U, Vt);
 
-    F = cv::Mat_<float> (Vt.row(8).reshape (3,3));
+    if (Vt.empty())
+        return false;
+
+    F = cv::Mat_<float> (Vt.row(Vt.rows-1).reshape (3,3));
 
     float * t2 = (float *) T2.data;
 

@@ -23,8 +23,7 @@ private:
 public:
 
    ~RansacOutput() {
-       delete model;
-       delete time;
+       delete (model); delete (time);
    }
 
     RansacOutput (const Model * const model_,

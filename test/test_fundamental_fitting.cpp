@@ -16,7 +16,7 @@ void Tests::testFundamentalFitting() {
 //    exit (0);
 
     DATASET dataset = DATASET::Kusvod2_SIFT;
-    std::string img_name = "box";
+    std::string img_name = "graff";
     cv::Mat_<float> sorted_points, points;
 
     ImageData gt_data (dataset, img_name);
@@ -40,11 +40,11 @@ void Tests::testFundamentalFitting() {
     Model * model;
 
     // -------------------------- uniform -------------------------------------
-//    model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Uniform);
+    model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Uniform);
     // ------------------------------------------------------------------------
 
 //     -------------------------- Prosac -------------------------------------
-    model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Prosac);
+//    model = new Model (threshold, 7, confidence, knn, ESTIMATOR::Fundamental, SAMPLER::Prosac);
     // ------------------------------------------------------------------------
 
     model->lo = LocOpt ::NullLO;
@@ -53,8 +53,8 @@ void Tests::testFundamentalFitting() {
     model->setNeighborsType(NeighborsSearch::Nanoflann);
     model->ResetRandomGenerator(false);
 
-//    test (points, model, img_name, dataset, true, gt_inliers);
-    test (sorted_points, model, img_name, dataset, true, gt_sorted_inliers);
+    test (points, model, img_name, dataset, true, gt_inliers);
+//    test (sorted_points, model, img_name, dataset, true, gt_sorted_inliers);
 
 //    getStatisticalResults(points, model, 500, true, gt_inliers, false, nullptr);
 //    getStatisticalResults(sorted_points, model, 500, true, gt_sorted_inliers, false, nullptr);
@@ -67,7 +67,7 @@ void Tests::testFundamentalFitting() {
  */
 
 void storeResultsFundamental () {
-    DATASET dataset = DATASET ::Adelaidermf_SIFT; // Homogr, Kusvod2, Adelaidrmf, EVD
+    DATASET dataset = DATASET ::Kusvod2_SIFT; // Homogr, Kusvod2, Adelaidrmf, EVD
     std::vector<std::string> points_filename = Dataset::getDataset(dataset);
     int num_images = points_filename.size();
     std::cout << "number of images " << num_images << "\n";
@@ -142,7 +142,7 @@ void storeResultsFundamental () {
             int img = 0;
             for (const std::string &img_name : points_filename) {
 
-//                std::cout << img_name << "\n";
+                std::cout << img_name << "\n";
 
                 StatisticalResults * statistical_results = new StatisticalResults;
                 if (smplr == SAMPLER::Prosac) {

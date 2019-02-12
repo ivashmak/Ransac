@@ -28,7 +28,6 @@ protected:
     int knn, neighbor_number;
     unsigned int points_size, sample_limit, sample_size, lo_inner_iterations;
     float threshold, spatial_coherence, sqr_thr;
-    bool isInit = false;
 
     int *inliers, *sample, *neighbors;
     float * errors;
@@ -57,21 +56,20 @@ public:
         sample_size = model->sample_size;
 
         errors = new float[points_size];
-
         inliers = new int [points_size];
         sample = new int [sample_limit];
 
+        // set uniform random generator
         uniform_random_generator = new UniformRandomGenerator;
         uniform_random_generator->setSubsetSize(sample_limit);
-        if (model->reset_random_generator) {
-            uniform_random_generator->resetTime();
-        }
+        if (model->reset_random_generator) uniform_random_generator->resetTime();
+        //
 
         lo_inner_iterations = model->lo_inner_iterations;
 
+        // only for test
         gc_iterations = 0;
-
-        isInit = true;
+        //
     }
 
     void setNeighbors (cv::InputArray neighbors_, NeighborsSearch search) {
@@ -99,31 +97,20 @@ public:
 	void labeling (const cv::Mat& model, Score * score, int * inliers);
 
     void GetModelScore (Model * best_model, Score * best_score) override {
-//        std::cout << "begin best score " << best_score->inlier_number << "\n";
         // improve best model by non minimal estimation
-
 //        oneStepLO (best_model);
-        // update score after one step lo
-//        quality->getNumberInliers(best_score, best_model->returnDescriptor());
-
-//        std::cout << "best score after one step lo " << best_score->inlier_number << "\n";
 
         bool is_best_model_updated = true;
         while (is_best_model_updated) {
             is_best_model_updated = false;
-//            std::cout << "while loop\n";
 
-            // build graph problem
-            // apply graph cut to G
-//            calculateSpatialCoherence(best_score->inlier_number);
+            // Build graph problem. Apply graph cut to G
             labeling(best_model->returnDescriptor(), gc_score, inliers);
-//            std::cout << "virtual inliers " << gc_score->inlier_number << "\n";
 
-//             if number of "virtual" inliers is too small then break
+            // if number of "virtual" inliers is too small then break
             if (gc_score->inlier_number <= sample_size) break;
             unsigned int labeling_inliers_size = gc_score->inlier_number;
 
-//            std::cout << gc_sample_size << " vs " << inner_inliers_size << "\n";
             for (unsigned int iter = 0; iter < lo_inner_iterations; iter++) {
                 // sample to generate min (|I_7m|, |I|)
                 if (labeling_inliers_size > sample_limit) {
@@ -140,7 +127,7 @@ public:
                     if (iter > 0) {
                         /*
                          * If iterations are more than 0 and there are not enough inliers for random sampling,
-                         * so break. Because EstimateModelNonMinimalSample for same inliers gives same model, it
+                         * so break. Because EstimateModelNonMinimalSample for the same inliers gives same model, it
                          * is redundant to use it more than 1 time.
                          */
                         break;
@@ -152,11 +139,7 @@ public:
 
                 quality->getNumberInliers(gc_score, gc_model->returnDescriptor());
 
-//                std::cout << "GC score " << gc_score->inlier_number << "\n";
-
                 if (gc_score->bigger(best_score)) {
-//                    std::cout << "Update best score\n";
-//                    std::cout << "UPDATE best score " << gc_score->inlier_number << "\n";
                     is_best_model_updated = true;
                     best_score->copyFrom(gc_score);
                     best_model->setDescriptor(gc_model->returnDescriptor());
@@ -165,16 +148,14 @@ public:
                 // only for test
                 gc_iterations++;
                 //
-            }
-        }
-
-//        std::cout << "end best score " << best_score->inlier_number << "\n";
+            } // end of inner GC local optimization
+        } // end of while loop
     }
 
 private:
     void oneStepLO (Model * model) {
         /*
-         * Do one step local optimization on min (|I|, |max_I|) before doing Graph Cut.
+         * Do one step local optimization on min (|I|, max_I) before doing Graph Cut.
          * This LSQ must give better model for next GC labeling.
          */
         // use gc_score variable, but we are not getting gc score.
@@ -185,9 +166,6 @@ private:
             return;
 
         unsigned int one_step_lo_sample_limit = model->lo_sample_size;
-        if (sample_limit < one_step_lo_sample_limit) {
-            one_step_lo_sample_limit = sample_limit;
-        }
 
         if (gc_score->inlier_number < one_step_lo_sample_limit) {
             // if score is less than limit number sample then take estimation of all inliers

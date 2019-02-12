@@ -18,15 +18,13 @@ public:
     ~HomographyEstimator () {
         delete (dlt);
     }
-    /*
-     * input_points must be:
-     * img1_x1 img1_y1 img2_x1 img2_y1
-     * img1_x2 img1_y2 img2_x2 img2_y2
-     * ....
-     * img1_xN img1_yN img2_xN img2_yN
-     *
-     */
 
+    /*
+     * @input_points: is matrix of size: number of points x 4
+     * x1 y1 x'1 y'1
+     * ...
+     * xN yN x'N y'N
+     */
     HomographyEstimator(cv::InputArray input_points) : points((float *)input_points.getMat().data) {
         assert(!input_points.empty());
         dlt = new DLt(points);

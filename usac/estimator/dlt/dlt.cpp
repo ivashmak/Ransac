@@ -40,23 +40,6 @@ bool DLt::DLT4p (const int * const sample, cv::Mat &H) {
         (*A_ptr++) = y2;
     }
 
-    /*
-     * src	decomposed matrix
-     * w 	calculated singular values (descending order)
-     * u	calculated left singular vectors
-     * vt	transposed matrix of right singular values
-     *
-     * Flags:
-     * MODIFY_A  allow the algorithm to modify the decomposed matrix; it can
-     * save space and speed up processing. currently ignored.
-     *
-     * NO_UV indicates that only a vector of singular values w is to be processed,
-     * while u and vt will be set to empty matrices
-     *
-     * FULL_UV 	when the matrix is not square, by default the algorithm produces
-     * u and vt matrices of sufficiently large size for the further A reconstruction;
-     * if, however, FULL_UV flag is specified, u and vt will be full-size square orthogonal matrices.
-     */
     cv::SVD::compute(A, w, u, vt);
     if (vt.empty()) {
         return false;
@@ -78,7 +61,6 @@ bool DLT (const float * const points, unsigned int sample_number, cv::Mat &H) {
     auto * A_ptr = (float *) A.data;
 
     for (unsigned int i = 0; i < sample_number; i++) {
-//        std::cout << i << "\n";
         smpl = 4*i;
         x1 = points[smpl];
         y1 = points[smpl+1];
@@ -141,7 +123,6 @@ bool DLTEigen (const float * const points, unsigned int sample_number, cv::Mat &
     [ x1_1*x1_2, x1_1*y1_2, x2_1*x2_2, x2_1*y2_2,         xN_1*xN_2,  xN_1*yN_2]
     [ x1_2*y1_1, y1_1*y1_2, x2_2*y2_1, y2_1*y2_2,         xN_2*yN_1,  yN_1*yN_2]
     [      x1_2,      y1_2,      x2_2,      y2_2,         xN_2,            yN_2]
-
      */
 
     float x1, y1, x2, y2;
@@ -184,7 +165,6 @@ bool DLTEigen (const float * const points, unsigned int sample_number, cv::Mat &
     }
 
     cv::eigen(AtA, D, Vt);
-//    std::cout << Vt << "\n\n";
 
     if (Vt.empty ()) {
         return false;

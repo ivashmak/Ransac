@@ -23,12 +23,10 @@ public:
 bool inverse3x3 (cv::Mat& A);
 bool inverse3x3 (const cv::Mat& A, cv::Mat& A_inv);
 
-void testInv ();
-
 float fast_pow (float n, int k);
 
 int fast_factorial (int n);
 
 void splitTime (Time * time, long time_mcs);
-//void fast_
+
 #endif //USAC_UTILS_MATH_H

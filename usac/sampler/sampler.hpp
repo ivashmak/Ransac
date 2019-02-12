@@ -5,8 +5,8 @@
 #ifndef RANSAC_SAMPLER_H
 #define RANSAC_SAMPLER_H
 
-#include "../random_generator/random_generator.hpp"
 #include "../precomp.hpp"
+#include "../random_generator/random_generator.hpp"
 
 class Sampler {
 protected:
@@ -20,16 +20,8 @@ public:
      */
     virtual void generateSample (int *sample) = 0;
 
-    virtual void setSampleSize (unsigned int sample_size_) {
-        std::cout << "NOT IMPLEMENTED FUNCTION setSampleSize! in Sampler\n";
-    }
-
-    virtual void setPointsSize (unsigned int points_size_) {
-        std::cout << "NOT IMPLEMENTED FUNCTION setPointsSize! in Sampler\n";
-    }
-
     /*
-     * Returns count of Sampler calls
+     * Returns number of iterations
      */
     unsigned int getNumberOfIterations () {
         return k_iterations;

@@ -10,10 +10,17 @@
 class Line2DEstimator : public Estimator {
 protected:
     float a,b,c;
-    const float * const input_points;
+    const float * const points;
 public:
-    Line2DEstimator (cv::InputArray input_array_points) : input_points ((float *)input_array_points.getMat().data) {
-        assert(!input_array_points.empty());
+
+    /*
+     * @points: is matrix of size: number of points x 2
+     * x1 y1
+     * ...
+     * xN yN
+     */
+    Line2DEstimator (cv::InputArray input_points) : points ((float *)input_points.getMat().data) {
+        assert(!input_points.empty());
     }
 
     /*
@@ -33,13 +40,13 @@ public:
         float a, b, c; // use global
 
         // Estimate the model parameters from the sample
-        a = input_points[2*idx1+1] - input_points[2*idx2+1]; // tangent_y
-        b = input_points[2*idx2] - input_points[2*idx1]; // tangent_x
+        a = points[2*idx1+1] - points[2*idx2+1]; // tangent_y
+        b = points[2*idx2] - points[2*idx1]; // tangent_x
 
         float mag = sqrt(a * a + b * b);
         a /= mag;
         b /= mag;
-        c = (input_points[2*idx1] * input_points[2*idx2+1] - input_points[2*idx2] * input_points[2*idx1+1])/mag;
+        c = (points[2*idx1] * points[2*idx2+1] - points[2*idx2] * points[2*idx1+1])/mag;
 
         // Set the model descriptor
         models[0]->setDescriptor((cv::Mat_<float>(1,3) <<  a, b, c));
@@ -64,8 +71,8 @@ public:
         unsigned int smpl;
         for (unsigned int i = 0; i < sample_size; i++) {
             smpl = 2*sample[i];
-            x = input_points[smpl];
-            y = input_points[smpl+1];
+            x = points[smpl];
+            y = points[smpl+1];
 
             sum_x += x;
             sum_y += y;
@@ -113,8 +120,8 @@ public:
         
         for (unsigned int i = 0; i < sample_size; i++) {
             smpl = 2*sample[i];
-            x = input_points[smpl];
-            y = input_points[smpl+1];
+            x = points[smpl];
+            y = points[smpl+1];
             x_mean += x;
             y_mean += y;
         }
@@ -122,8 +129,8 @@ public:
         x_mean /= sample_size; y_mean /= sample_size;
         for (unsigned int i = 0; i < sample_size; i++) {
             smpl = 2*sample[i];
-            x = input_points[smpl];
-            y = input_points[smpl+1];
+            x = points[smpl];
+            y = points[smpl+1];
             
             a += (x-x_mean) * (y-y_mean);
             b += (x-x_mean) * (x-x_mean);
@@ -145,7 +152,7 @@ public:
      * |ax + by + c|, where ||(a b)|| = 1
      */
     inline float GetError(unsigned int pidx) override {
-        return fabsf (a * input_points[2*pidx] + b * input_points[2*pidx+1] + c);
+        return fabsf (a * points[2*pidx] + b * points[2*pidx+1] + c);
     }
 
     int SampleNumber() override {

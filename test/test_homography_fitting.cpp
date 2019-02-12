@@ -14,7 +14,7 @@ void Tests::testHomographyFitting() {
 //    exit (0);
 
     DATASET dataset = DATASET::Homogr_SIFT;
-    std::string img_name = "Brussels";
+    std::string img_name = "adam";
 
     ImageData gt_data (dataset, img_name);
 
@@ -29,7 +29,7 @@ void Tests::testHomographyFitting() {
     std::cout << "points size " << points_size << "\n";
     std::cout << "sorted points size " << sorted_points.rows << "\n";
 
-    int knn = 7;
+    unsigned int knn = 7;
     float confidence = 0.95;
 
     std::cout << "gt inliers " << gt_inliers.size() << "\n";
@@ -50,8 +50,8 @@ void Tests::testHomographyFitting() {
 //     -------------------------------------------------
 
 
-     model->lo = LocOpt ::NullLO;
-     model->setSprt(1);
+     model->lo = LocOpt ::GC;
+     model->setSprt(0);
      model->setCellSize(50);
      model->setNeighborsType(NeighborsSearch::Grid);
      model->ResetRandomGenerator(false);
@@ -70,7 +70,7 @@ void Tests::testHomographyFitting() {
  * Store results from dataset to csv file.
  */
 void storeResultsHomography () {
-    DATASET dataset = DATASET ::EVD; // Homogr, EVD
+    DATASET dataset = DATASET ::Homogr_SIFT; // Homogr, EVD
     std::vector<std::string> points_filename = Dataset::getDataset(dataset);
     int num_images = points_filename.size();
     std::cout << "number of images " << num_images << "\n";
@@ -81,9 +81,8 @@ void storeResultsHomography () {
     std::vector<std::vector<int>> gt_inliers_sorted;
 
     int N_runs = 100;
-    int knn = 5;
-    float threshold = 2;
-    float confidence = 0.95;
+    unsigned int knn = 5;
+    float threshold = 2, confidence = 0.95;
 
     for (const std::string &img_name : points_filename) {
         std::cout << "get points for " << img_name << "\n";
@@ -108,7 +107,7 @@ void storeResultsHomography () {
 //    samplers.push_back(SAMPLER::Prosac);
 
     std::vector<LocOpt > loc_opts;
-    loc_opts.push_back(LocOpt::InItLORsc);
+    loc_opts.push_back(LocOpt::GC);
     bool sprt = 0;
 
     NeighborsSearch neighborsSearch = NeighborsSearch ::Grid;

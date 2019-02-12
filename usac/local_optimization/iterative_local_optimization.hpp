@@ -19,7 +19,7 @@ private:
 
     int * lo_sample;
 public:
-    unsigned int lo_iterative_iters;
+    unsigned int lo_iterative_iters = 0;
     ~IterativeLocalOptimization() {
         if (is_sample_limit) {
             delete[] lo_sample;
@@ -68,7 +68,7 @@ public:
                 // if there are more inliers than limit for sample size then generate at random
                 // sample from LO model.
                 uniformRandomGenerator->generateUniqueRandomSet(lo_sample, lo_score->inlier_number-1);
-                for (int smpl = 0; smpl < sample_limit; smpl++) {
+                for (unsigned int smpl = 0; smpl < sample_limit; smpl++) {
                     lo_sample[smpl] = lo_inliers[lo_sample[smpl]];
                 }
                 if (! estimator->LeastSquaresFitting(lo_sample, sample_limit, *lo_model)) continue;

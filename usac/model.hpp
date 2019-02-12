@@ -22,9 +22,7 @@ public:
     unsigned int max_iterations = 10000;
 	unsigned int k_nearest_neighbors = 5;
 
-	/*
-	 * Local Optimization parameters
-	 */
+	// Local Optimization parameters
 	LocOpt lo = NullLO;
     unsigned int lo_sample_size = 14;
 	unsigned int lo_iterative_iterations = 4;
@@ -95,18 +93,6 @@ public:
     void setDescriptor(cv::Mat desc) {
 //    	descriptor = desc;
         descriptor = desc.clone();
-
-//        descriptor.at<float>(0,0) = desc.at<float>(0);
-//        descriptor.at<float>(0,1) = desc.at<float>(1);
-//        descriptor.at<float>(0,2) = desc.at<float>(2);
-//        if (estimator != ESTIMATOR::Line2d) {
-//            descriptor.at<float>(1,0) = desc.at<float>(1,0);
-//            descriptor.at<float>(1,1) = desc.at<float>(1,1);
-//            descriptor.at<float>(1,2) = desc.at<float>(1,2);
-//            descriptor.at<float>(2,0) = desc.at<float>(2,0);
-//            descriptor.at<float>(2,1) = desc.at<float>(2,1);
-//            descriptor.at<float>(2,2) = desc.at<float>(2,2);
-//        }
     }
 
     cv::Mat returnDescriptor () {
@@ -133,7 +119,8 @@ public:
         sample_size = model->sample_size;
         desired_prob = model->desired_prob;
         max_iterations = model->max_iterations;
-        estimator = model->estimator;
+		min_iterations = model->min_iterations;
+		estimator = model->estimator;
         sampler = model->sampler;
         k_nearest_neighbors = model->k_nearest_neighbors;
         lo_sample_size = model->lo_sample_size;
@@ -147,7 +134,6 @@ public:
         cell_size = model->cell_size;
         neighborsType = model->neighborsType;
         max_hypothesis_test_before_sprt = model->max_hypothesis_test_before_sprt;
-
 //        descriptor = model->descriptor;
 	}
 };

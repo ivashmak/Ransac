@@ -15,8 +15,7 @@ public:
 
     /*
      * !!!!!!!!!!!!!!!!!!!!!!!!!!
-     * random numbers will be from min_range to max_range (including bounds)
-     * for example min = 0, max = 5, random_numbers = {0,1,2,3,4,5}
+     * interval is closed.
      */
     virtual void resetGenerator (int min_range, int max_range) = 0;
 

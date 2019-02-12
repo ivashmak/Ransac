@@ -10,4 +10,9 @@
 void densitySort (const cv::Mat &points, int max_neighbor, cv::Mat &sorted_points);
 void splitFilename (const std::string &filename, std::string &path, std::string &name, std::string &ext);
 
+int quicksort_median (int * array, unsigned int k_minth, unsigned int left, unsigned int right);
+int findMedian (int * array, unsigned int length);
+
+
+
 #endif //USAC_UTILS_H

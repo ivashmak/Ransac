@@ -25,8 +25,11 @@ public:
 
     static void testNeighborsSearchCell ();
     static void testNeighborsSearch ();
+    static void testFindMedian ();
+    static void testFindNearestNeighbors (int knn=7);
+    static void testInv ();
 
-    static void test (cv::Mat points,
+        static void test (cv::Mat points,
                       Model * model,
                       const std::string &img_name,
                       DATASET dataset,
@@ -151,9 +154,6 @@ public:
             } else {
                 times[i] = ransacOutput->getTimeMicroSeconds();
             }
-
-            std::cout << "inl " << ransacOutput->getNumberOfInliers() << "\n";
-            std::cout << "iters " << ransacOutput->getNumberOfMainIterations() << "\n";
 
             num_inlierss[i] = ransacOutput->getNumberOfInliers();
             num_iterss[i] = ransacOutput->getNumberOfMainIterations();

@@ -17,7 +17,6 @@ public:
                                         cv::Mat &nearest_neighbors_distances);
 
     static void getGridNearestNeighbors (const cv::Mat& points, int cell_sz, std::vector<std::vector<int>> &neighbors);
-    static void test (int knn=7);
 private:
     struct CellCoord {
         int c1x, c1y, c2x, c2y;

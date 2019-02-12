@@ -5,6 +5,7 @@
 #ifndef USAC_LOCALOPTIMIZATION_H
 #define USAC_LOCALOPTIMIZATION_H
 
+#include "../precomp.hpp"
 #include "../estimator/estimator.hpp"
 #include "../quality/quality.hpp"
 
@@ -13,12 +14,9 @@ public:
 	virtual ~LocalOptimization () = default;
 
 	/*
-	 * Returns as int number local optimization iterations including inner
-	 * and iterative ransac.
-	 * Returns also best lo model and best lo score.
+	 * Update best model and best score.
 	 */
-    virtual void GetModelScore  (Model * best_model,
-                                   Score * best_score) = 0;
+    virtual void GetModelScore  (Model * best_model, Score * best_score) = 0;
 
 };
 

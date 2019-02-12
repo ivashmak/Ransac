@@ -76,35 +76,6 @@ int fast_factorial (int n) {
     return res;
 }
 
-void testInv () {
-    cv::Mat A;
-    A = (cv::Mat_<float>(3,3) << 12, 2, 6, 12, 88, 0, 17, 90, 1);
-    cv::Mat A_inv;
-    int test_size = 1000000;
-
-    std::clock_t start;
-    double duration;
-
-    start = std::clock();
-    for (int i = 0; i < test_size; i++) {
-        A_inv = A.inv();
-    }
-    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-    std::cout << "duration: "<< duration <<'\n';
-
-    std::cout << A_inv << "\n";
-
-    start = std::clock();
-    for (int i = 0; i < test_size; i++) {
-        inverse3x3(A, A_inv);
-    }
-    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-    std::cout<< "duration: "<< duration <<'\n';
-
-    std::cout << A_inv << "\n";
-}
-
-
 void splitTime (Time * time, long time_mcs) {
     time->microseconds = time_mcs % 1000;
     time->milliseconds = ((time_mcs - time->microseconds)/1000) % 1000;

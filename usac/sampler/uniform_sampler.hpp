@@ -25,11 +25,11 @@ public:
         }
     }
 
-    void setSampleSize (unsigned int sample_size_) override {
+    void setSampleSize (unsigned int sample_size_) {
         sample_size = sample_size_;
     }
 
-    void setPointsSize (unsigned int points_size_) override {
+    void setPointsSize (unsigned int points_size_) {
         points_size = points_size_;
         points_random_pool = new unsigned int[points_size];
         for (unsigned int i = 0; i < points_size; i++) {
@@ -50,10 +50,7 @@ public:
             points_random_pool[array_random_index] = points_random_pool[max];
             points_random_pool[max] = random_number;
             sample[i] = random_number;
-
-//            std::cout << sample[i] << " ";
         }
-//        std::cout << '\n';
     }
 
     bool isInit () override {

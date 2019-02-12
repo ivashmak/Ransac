@@ -36,7 +36,7 @@ void GraphCut::labeling (const cv::Mat& model, Score * score, int * inliers) {
             energy1 = exp(-(distance1 * distance1) / sqr_thr);
 
             neighbors_row = knn * i;
-            for (unsigned int j = 0; j < knn; ++j) { // neighbors are reduced by first neighbor (itself)
+            for (unsigned int j = 0; j < knn; ++j) {
 
                 n_idx = neighbors[neighbors_row + j];
 

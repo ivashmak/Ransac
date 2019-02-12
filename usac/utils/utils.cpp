@@ -45,3 +45,47 @@ void splitFilename (const std::string &filename, std::string &path, std::string 
     name = filename.substr(slash+1, dot-slash-1);
     ext = filename.substr(dot+1, filename.length()-1);
 }
+
+void swap(int* a, int* b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+int quicksort_median (int * array, unsigned int k_minth, unsigned int left, unsigned int right) {
+    unsigned int lenght = right - left;
+    if (lenght == 0) {
+        return array[left];
+    }
+    int pivot_val = array[right];
+    int j;
+    int right_ = right-1;
+    unsigned int values_less_eq = 1;
+    for (j = left; j <= right_;) {
+        if (array[j] <= pivot_val) {
+            j++;
+            values_less_eq++;
+        } else {
+            swap(&array[j], &array[right_]);
+            right_--;
+        }
+    }
+    if (values_less_eq == k_minth) return pivot_val;
+    if (k_minth > values_less_eq) {
+        quicksort_median(array, k_minth - values_less_eq, j, right-1);
+    } else {
+        if (j == left) j++;
+        quicksort_median(array, k_minth, left, j-1);
+    }
+}
+
+// find median using quicksort with average O(n) complexity. Worst case is O(n^2).
+int findMedian (int * array, unsigned int length) {
+    if (length % 2 == 1) {
+        // odd number of values
+        return quicksort_median (array, length/2+1, 0, length-1);
+    } else {
+        // even: return average
+        return (quicksort_median(array, length/2, 0, length-1) + quicksort_median(array, length/2+1, 0, length-1))/2;
+    }
+}
