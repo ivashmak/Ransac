@@ -2,56 +2,8 @@
 // It is subject to the license terms in the LICENSE file found in the top-level directory
 // of this distribution and at http://opencv.org/license.html.
 
-#include "../precomp.hpp"
-
-#include "nearest_neighbors.hpp"
-#include "../../detector/Reader.h"
-#include "math.hpp"
-
-/*
- * Problem with repeated points in flann and nanoflann:
- *
-
-0 38 37 39 42 20 21
-1 32 2 30 34 33 47
-2 30 32 1 34 33 31
-3 9 43 11 15 14 29
-4 20 21 38 37 39 16
-5 6 51 29 18 19 9
-6 5 51 29 18 19 9
-7 29 47 5 6 3 9
-8 23 49 48 35 52 22
-9 43 3 11 15 14 29
-10 13 15 14 50 11 9
-11 15 14 9 43 3 13
-12 44 45 25 24 27 0
-13 10 15 14 50 11 9
-15 14 11 13 9 43 3 // here must be 14 15
-15 14 11 13 9 43 3
- */
-
-/*
-[0, 37, 38, 39, 42, 20, 21, 4;
- 1, 32, 2, 30, 33, 34, 47, 31;
- 2, 30, 32, 1, 33, 34, 31, 46;
- 3, 9, 43, 11, 14, 15, 29, 13;
- 4, 20, 21, 37, 38, 39, 16, 17;
- 5, 6, 51, 29, 18, 19, 9, 43;
- 6, 5, 51, 29, 18, 19, 9, 43;
- 7, 29, 47, 5, 6, 3, 9, 43;
- 8, 23, 49, 48, 35, 52, 22, 28;
- 9, 43, 3, 11, 14, 15, 29, 13;
- 10, 13, 14, 15, 50, 11, 9, 43;
- 11, 14, 15, 9, 43, 3, 13, 29;
- 12, 44, 45, 24, 25, 27, 0, 20;
- 13, 10, 14, 15, 50, 11, 9, 43;
- 14, 15, 11, 13, 9, 43, 3, 10;
- 14, 15, 11, 13, 9, 43, 3, 10; // must be 15 14
- 16, 17, 4, 20, 21, 18, 19, 37;
- */
-
-
-
+#include "precomp.hpp"
+#include "../include/opencv2/usac/nearest_neighbors.hpp"
 
 /*
  * @points N x 2
@@ -66,7 +18,7 @@
  * ...
  * xN_nn1 xN_nn2 ... xN_nnk
  */
-void NearestNeighbors::getNearestNeighbors_nanoflann (const cv::Mat& points, int k_nearest_neighbors,
+void cv::usac::NearestNeighbors::getNearestNeighbors_nanoflann (const cv::Mat& points, int k_nearest_neighbors,
                                                       cv::Mat &nearest_neighbors, bool get_distances,
                                                       cv::Mat &nearest_neighbors_distances) {
     unsigned int points_size = points.rows;
@@ -74,8 +26,6 @@ void NearestNeighbors::getNearestNeighbors_nanoflann (const cv::Mat& points, int
     
     Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic> mat;
     cv::cv2eigen(points, mat);
-
-//    std::cout << "eigen dynamic " << Eigen::Dynamic << "\n"; // -1
 
     typedef nanoflann::KDTreeEigenMatrixAdaptor<Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>> my_kd_tree_t;
 
@@ -120,9 +70,6 @@ void NearestNeighbors::getNearestNeighbors_nanoflann (const cv::Mat& points, int
         }
     }
 
-   // std::cout << nearest_neighbors << "\n\n";
-   // std::cout << nearest_neighbors_distances << "\n\n";
-
     delete[] ret_indexes;
     delete[] out_dists_sqr;
 }
@@ -141,7 +88,7 @@ void NearestNeighbors::getNearestNeighbors_nanoflann (const cv::Mat& points, int
  * xN_nn1 xN_nn2 ... xN_nnk
  *
  */
-void NearestNeighbors::getNearestNeighbors_flann (const cv::Mat& points, int k_nearest_neighbors, cv::Mat &nearest_neighbors) {
+void cv::usac::NearestNeighbors::getNearestNeighbors_flann (const cv::Mat& points, int k_nearest_neighbors, cv::Mat &nearest_neighbors) {
     unsigned int points_size = points.rows;
     cv::flann::LinearIndexParams flannIndexParams;
     cv::flann::Index flannIndex (points.reshape(1), flannIndexParams);
@@ -152,15 +99,10 @@ void NearestNeighbors::getNearestNeighbors_flann (const cv::Mat& points, int k_n
     // first nearest neighbor of point is this point itself.
     // remove this first column
     nearest_neighbors.colRange(1, k_nearest_neighbors+1).copyTo (nearest_neighbors);
-
-//    std::cout << nearest_neighbors << "\n\n";
-//    std::cout << dists << "\n\n";
 }
 
-void NearestNeighbors::getGridNearestNeighbors (const cv::Mat& points, int cell_sz, std::vector<std::vector<int>> &neighbors) {
-    // cell size 25, 50, 100
+void cv::usac::NearestNeighbors::getGridNearestNeighbors (const cv::Mat& points, int cell_sz, std::vector<std::vector<int>> &neighbors) {
     std::map<CellCoord, std::vector<int>> neighbors_map;
-//    std::unordered_map<CellCoord, std::vector<int>, hash_fn> neighbors_map;
 
     float *points_p = (float *) points.data;
     unsigned int idx, points_size = points.rows;
@@ -175,17 +117,6 @@ void NearestNeighbors::getGridNearestNeighbors (const cv::Mat& points, int cell_
         neighbors_map[c].push_back(i);
 
     }
-
-    // debug
-//    for (auto cells : neighbors_map) {
-//        std::cout << "key = (" << cells.first.c1x << " " << cells.first.c1y << " " << cells.first.c2x << " "
-//                  << cells.first.c2y <<
-//                  ") values = ";
-//        for (auto v : cells.second) {
-//            std::cout << v << " ";
-//        }
-//        std::cout << "\n";
-//    }
 
     unsigned long neighbors_in_cell;
     for (auto cells : neighbors_map) {

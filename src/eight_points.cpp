@@ -1,10 +1,15 @@
-#include "fundamental_solver.hpp"
-#include "../dlt/dlt.hpp"
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
 
-bool FundamentalSolver::EightPointsAlgorithm (const int * const sample, unsigned int sample_number, cv::Mat &F) {
+#include "precomp.hpp"
+#include "../include/opencv2/usac/fundamental_solver.hpp"
+#include "../include/opencv2/usac/dlt.hpp"
+
+bool cv::usac::FundamentalSolver::EightPointsAlgorithm (const int * const sample, unsigned int sample_number, cv::Mat &F) {
 
     cv::Mat_<float> T1, T2, norm_points;
-    GetNormalizingTransformation(points, norm_points, sample, sample_number, T1, T2);
+    cv::usac::GetNormalizingTransformation(points, norm_points, sample, sample_number, T1, T2);
 
     const float * const norm_points_ptr = (float *) norm_points.data;
 
@@ -99,10 +104,10 @@ bool FundamentalSolver::EightPointsAlgorithm (const int * const sample, unsigned
     return true;
 }
 
-bool FundamentalSolver::EightPointsAlgorithmEigen (const int * const sample, unsigned int sample_number, cv::Mat &F) {
+bool cv::usac::FundamentalSolver::EightPointsAlgorithmEigen (const int * const sample, unsigned int sample_number, cv::Mat &F) {
 
     cv::Mat_<float> T1, T2, norm_points;
-    GetNormalizingTransformation(points, norm_points, sample, sample_number, T1, T2);
+    cv::usac::GetNormalizingTransformation(points, norm_points, sample, sample_number, T1, T2);
 
     const float * const norm_points_ptr = (float *) norm_points.data;
 
@@ -165,61 +170,6 @@ bool FundamentalSolver::EightPointsAlgorithmEigen (const int * const sample, uns
 
     F = T2 * F * T1;
 
-    if (fabs(F.at<float>(2,2)) > FLT_EPSILON) {
-        F = F / F.at<float>(2, 2);
-    }
-
-    return true;
-}
-
-// ----------------- Weighted 8 points algorithm -----------------------
-bool FundamentalSolver::EightPointsAlgorithm (const int * const sample, const float * const weights, unsigned int sample_number, cv::Mat &F) {
-
-    cv::Mat_<float> T1, T2, norm_points;
-    GetNormalizingTransformation(points, norm_points, sample, sample_number, weights, T1, T2);
-
-    const float * const norm_points_ptr = (float *) norm_points.data;
-
-    float x1, x2, y1, y2;
-    unsigned int norm_points_idx;
-
-    cv::Mat_<float> A(sample_number, 9);
-    float * A_ptr = (float *) A.data;
-    for (unsigned int i = 0; i < sample_number; i++) {
-        norm_points_idx = 4*i;
-        x1 = norm_points_ptr[norm_points_idx];
-        y1 = norm_points_ptr[norm_points_idx+1];
-        x2 = norm_points_ptr[norm_points_idx+2];
-        y2 = norm_points_ptr[norm_points_idx+3];
-        (*A_ptr++) = x2*x1;
-        (*A_ptr++) = x2*y1;
-        (*A_ptr++) = x2;
-        (*A_ptr++) = y2*x1;
-        (*A_ptr++) = y2*y1;
-        (*A_ptr++) = y2;
-        (*A_ptr++) = x1;
-        (*A_ptr++) = y1;
-        (*A_ptr++) = 1;
-    }
-    cv::Mat_<float> U, S, Vt;
-    cv::SVD::compute(A, S, U, Vt);
-
-    if (Vt.empty())
-        return false;
-
-    F = cv::Mat_<float> (Vt.row(Vt.rows-1).reshape (3,3));
-
-    float * t2 = (float *) T2.data;
-
-    // Transpose T2
-    t2[6] = t2[2];
-    t2[7] = t2[5];
-    t2[2] = 0;
-    t2[5] = 0;
-
-    F = T2 * F * T1;
-
-    // normalize by f33
     if (fabs(F.at<float>(2,2)) > FLT_EPSILON) {
         F = F / F.at<float>(2, 2);
     }

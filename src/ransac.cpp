@@ -2,16 +2,10 @@
 // It is subject to the license terms in the LICENSE file found in the top-level directory
 // of this distribution and at http://opencv.org/license.html.
 
-#include "ransac.hpp"
-#include "../local_optimization/irls.hpp"
-#include "../local_optimization/inner_local_optimization.hpp"
-#include "../local_optimization/graphcut.hpp"
-#include "../sprt.hpp"
+#include "precomp.hpp"
+#include "../include/opencv2/usac/ransac.hpp"
 
-#include "../sampler/prosac_sampler.hpp"
-#include "../termination_criteria/prosac_termination_criteria.hpp"
-
-void Ransac::run() {
+void cv::usac::Ransac::run() {
     auto begin_time = std::chrono::steady_clock::now();
 
     Score *best_score = new Score, *current_score = new Score;
@@ -59,20 +53,14 @@ void Ransac::run() {
 //        std::cout << "generate sample\n";
         sampler->generateSample(sample);
 
-//         std::cout << "samples are generated\n";
-
         number_of_models = estimator->EstimateModel(sample, models);
 
-//         std::cout << "minimal model estimated\n";
 
         for (unsigned int i = 0; i < number_of_models; i++) {
-//             std::cout << i << "-th model\n";
 
             if (is_sprt) {
-//                std::cout << "sprt verify\n";
                 is_good_model = sprt->verifyModelAndGetModelScore(models[i], iters, best_score->inlier_number,
                                                                  current_score);
-//                std::cout << "sprt verified\n";
 
                 if (!is_good_model) {
 //                    std::cout << "model is bad\n";
@@ -164,47 +152,21 @@ void Ransac::run() {
     // get inliers from the best model
     quality->getInliers(best_model->returnDescriptor(), max_inliers);
 
-    for (unsigned int norm = 0; norm < 1 /* normalizations count */; norm++) {
-        /*
-         * TODO:
-         * Calculate and Save Covariance Matrix and use it next normalization with adding or
-         * extracting some points.
-         */
-//        std::cout << "estimate non minimal\n";
-//        std::cout << best_score->inlier_number << " -\n";
+    for (unsigned int norm = 0; norm < 4 /* normalizations count */; norm++) {
         // estimate non minimal model with max inliers
-        float * weights = (float *) calloc (points_size, sizeof(float));
-        for (int p = 0; p < best_score->inlier_number; p++) {
-            weights[p] = 1;
-        }
-        int * inls = new int[points_size];
-        for (int i = 0; i < points_size; i++) {
-            inls[i] = i;
-        }
-        if (! estimator->EstimateModelNonMinimalSample(inls, points_size, weights, *non_minimal_model)) {
-//        if (! estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model)) {
-            std::cout << "\033[1;31mNON minimal model 2 completely failed!\033[0m \n";
+        if (! estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model)) {
             break;
         }
 
-        //
-//        std::cout << "get non minimal score\n";
         quality->getNumberInliers(current_score, non_minimal_model->returnDescriptor(), model->threshold, true, max_inliers);
-//        std::cout << "end get non minimal score\n";
-
-        // Priority is for non minimal model estimation
-        std::cout << "non minimal score " << current_score->inlier_number << '\n';
 
         // break if non minimal model score is less than 80% of the best minimal model score
         if ((float) current_score->inlier_number / best_score->inlier_number < 0.8) {
-//            std::cout << "break; non minimal score is significanlty worse than best score: RSC* "
-//                         << best_score->inlier_number << " vs PCA " << current_score->inlier_number <<"\n";
             break;
         }
 
         // if normalization score is less or equal, so next normalization is equal too, so break.
         if (current_score->inlier_number <= previous_non_minimal_num_inlier) {
-            // std::cout << "break; previous non minimal score is the same.\n";
             break;
         }
 
@@ -216,12 +178,9 @@ void Ransac::run() {
 
     std::chrono::duration<float> fs = std::chrono::steady_clock::now() - begin_time;
     // ================= here is ending ransac main implementation ===========================
-//    std::cout << "get results\n";
 
     // get final inliers from the best model
     quality->getInliers(best_model->returnDescriptor(), max_inliers);
-//    std::cout << "FINAL best inl num " << best_score->inlier_number << '\n';
-//    std::cout << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
 
     unsigned int lo_inner_iters = 0;
     unsigned int lo_iterative_iters = 0;

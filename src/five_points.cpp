@@ -2,15 +2,17 @@
 // It is subject to the license terms in the LICENSE file found in the top-level directory
 // of this distribution and at http://opencv.org/license.html.
 
-#include "five_points.hpp"
-#include "polynomial.hpp"
-#include "rpoly.hpp"
+#include "precomp.hpp"
+#include "../include/opencv2/usac/five_points.hpp"
+#include "../include/opencv2/usac/polynomial.hpp"
+#include "../include/opencv2/usac/rpoly.hpp"
+
 /*
  * References:
  * https://github.com/danini/graph-cut-ransac
  */
 
-unsigned int EssentialSolver::FivePoints (const int * const sample, cv::Mat &E) {
+unsigned int cv::usac::EssentialSolver::FivePoints (const int * const sample, cv::Mat &E) {
     cv::Mat P;
     std::vector<cv::Point2d> pts1(5), pts2(5);
 
@@ -35,7 +37,7 @@ unsigned int EssentialSolver::FivePoints (const int * const sample, cv::Mat &E) 
 }
 
 
-bool Solve5PointEssential(std::vector<cv::Point2d> &pts1, std::vector<cv::Point2d> &pts2, cv::Mat &ret_E, cv::Mat &ret_P) {
+bool cv::usac::Solve5PointEssential(std::vector<cv::Point2d> &pts1, std::vector<cv::Point2d> &pts2, cv::Mat &ret_E, cv::Mat &ret_P) {
 	int num_pts = static_cast<int>(pts1.size());
 
     assert(num_pts >= 5);
@@ -108,7 +110,7 @@ bool Solve5PointEssential(std::vector<cv::Point2d> &pts1, std::vector<cv::Point2
     PolyMatrix M(10,10);
 
     // This file is not pretty to look at ...
-    #include "mblock.hpp"
+    #include "../include/opencv2/usac/mblock.hpp"
 
     // symbolic determinant using interpolation based on the papers:
     // "Symbolic Determinants: Calculating the Degree", http://www.cs.tamu.edu/academics/tr/tamu-cs-tr-2005-7-1
@@ -275,7 +277,7 @@ bool Solve5PointEssential(std::vector<cv::Point2d> &pts1, std::vector<cv::Point2
 
 // X is 4x1 is [x,y,z,w]
 // P is 3x4 projection matrix
-double CalcDepth(const cv::Mat &X, const cv::Mat &P) {
+double cv::usac::CalcDepth(const cv::Mat &X, const cv::Mat &P) {
     // back project
     cv::Mat X2 = P*X;
 
@@ -301,7 +303,7 @@ double CalcDepth(const cv::Mat &X, const cv::Mat &P) {
     return (w/W)*(sign/m3);
 }
 
-cv::Mat TriangulatePoint(const cv::Point2d &pt1, const cv::Point2d &pt2, const cv::Mat &P1, const cv::Mat &P2) {
+cv::Mat cv::usac::TriangulatePoint(const cv::Point2d &pt1, const cv::Point2d &pt2, const cv::Mat &P1, const cv::Mat &P2) {
     cv::Mat_<double> A(4,4);
 
 	A.at<double>(0,0) = pt1.x*P1.at<double>(2,0) - P1.at<double>(0,0);
@@ -336,7 +338,7 @@ cv::Mat TriangulatePoint(const cv::Point2d &pt1, const cv::Point2d &pt2, const c
     return X;
 }
 
-void ProjectionsFromEssential(const cv::Mat &E, cv::Mat &P1, cv::Mat &P2, cv::Mat &P3, cv::Mat &P4) {
+void cv::usac::ProjectionsFromEssential(const cv::Mat &E, cv::Mat &P1, cv::Mat &P2, cv::Mat &P3, cv::Mat &P4) {
     // Assumes input E is a rank 2 matrix, with equal singular values
     cv::SVD svd(E);
 

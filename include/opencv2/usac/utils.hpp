@@ -5,13 +5,15 @@
 #ifndef USAC_UTILS_H
 #define USAC_UTILS_H
 
-#include "../precomp.hpp"
+#include <opencv2/core/mat.hpp>
 
+namespace cv { namespace usac {
 void densitySort (const cv::Mat &points, int max_neighbor, cv::Mat &sorted_points);
 void splitFilename (const std::string &filename, std::string &path, std::string &name, std::string &ext);
 
 int quicksort_median (int * array, unsigned int k_minth, unsigned int left, unsigned int right);
 int findMedian (int * array, unsigned int length, bool make_copy=false);
+}}
 
 
 

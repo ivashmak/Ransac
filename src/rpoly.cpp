@@ -2,9 +2,10 @@
 // It is subject to the license terms in the LICENSE file found in the top-level directory
 // of this distribution and at http://opencv.org/license.html.
 
-#include "rpoly.hpp"
+#include "precomp.hpp"
+#include "../include/opencv2/usac/rpoly.hpp"
 
-void rpoly_ak1(double op[MDP1], int* Degree, double zeror[MAXDEGREE], double zeroi[MAXDEGREE]){
+void cv::usac::rpoly_ak1(double op[MDP1], int* Degree, double zeror[MAXDEGREE], double zeroi[MAXDEGREE]){
     int i, j, jj, l, N, NM1, NN, NZ, zerok;
 
     double K[MDP1], p[MDP1], pt[MDP1], qp[MDP1], temp[MDP1];
@@ -229,7 +230,7 @@ void rpoly_ak1(double op[MDP1], int* Degree, double zeror[MAXDEGREE], double zer
     return;
 } // End rpoly_ak1
 
-void Fxshfr_ak1(int L2, int* NZ, double sr, double v, double K[MDP1], int N, double p[MDP1], int NN, double qp[MDP1], double u, double* lzi, double* lzr, double* szi, double* szr)
+void cv::usac::Fxshfr_ak1(int L2, int* NZ, double sr, double v, double K[MDP1], int N, double p[MDP1], int NN, double qp[MDP1], double u, double* lzi, double* lzr, double* szi, double* szr)
 {
 
     // Computes up to L2 fixed shift K-polynomials, testing for convergence in the linear or
@@ -375,7 +376,7 @@ void Fxshfr_ak1(int L2, int* NZ, double sr, double v, double K[MDP1], int N, dou
     return;
 } // End Fxshfr_ak1
 
-void QuadSD_ak1(int NN, double u, double v, double p[MDP1], double q[MDP1], double* a, double* b)
+void cv::usac::QuadSD_ak1(int NN, double u, double v, double p[MDP1], double q[MDP1], double* a, double* b)
 {
     // Divides p by the quadratic 1, u, v placing the quotient in q and the remainder in a, b
 
@@ -393,7 +394,7 @@ void QuadSD_ak1(int NN, double u, double v, double p[MDP1], double q[MDP1], doub
     return;
 } // End QuadSD_ak1
 
-int calcSC_ak1(int N, double a, double b, double* a1, double* a3, double* a7, double* c, double* d, double* e, double* f, double* g, double* h, double K[MDP1], double u, double v, double qk[MDP1])
+int cv::usac::calcSC_ak1(int N, double a, double b, double* a1, double* a3, double* a7, double* c, double* d, double* e, double* f, double* g, double* h, double K[MDP1], double u, double v, double qk[MDP1])
 {
 
     // This routine calculates scalar quantities used to compute the next K polynomial and
@@ -434,7 +435,7 @@ int calcSC_ak1(int N, double a, double b, double* a1, double* a3, double* a7, do
     return dumFlag;
 } // End calcSC_ak1
 
-void nextK_ak1(int N, int tFlag, double a, double b, double a1, double* a3, double* a7, double K[MDP1], double qk[MDP1], double qp[MDP1])
+void cv::usac::nextK_ak1(int N, int tFlag, double a, double b, double a1, double* a3, double* a7, double K[MDP1], double qk[MDP1], double qp[MDP1])
 {
     // Computes the next K polynomials using the scalars computed in calcSC_ak1
 
@@ -474,7 +475,7 @@ void nextK_ak1(int N, int tFlag, double a, double b, double a1, double* a3, doub
     return;
 } // End nextK_ak1
 
-void newest_ak1(int tFlag, double* uu, double* vv, double a, double a1, double a3, double a7, double b, double c, double d, double f, double g, double h, double u, double v, double K[MDP1], int N, double p[MDP1])
+void cv::usac::newest_ak1(int tFlag, double* uu, double* vv, double a, double a1, double a3, double a7, double b, double c, double d, double f, double g, double h, double u, double v, double K[MDP1], int N, double p[MDP1])
 {
     // Compute new estimates of the quadratic coefficients using the scalars computed in calcSC_ak1
 
@@ -512,7 +513,7 @@ void newest_ak1(int tFlag, double* uu, double* vv, double a, double a1, double a
     return;
 } // End newest_ak1
 
-void QuadIT_ak1(int N, int* NZ, double uu, double vv, double* szr, double* szi, double* lzr, double* lzi, double qp[MDP1], int NN, double* a, double* b, double p[MDP1], double qk[MDP1], double* a1, double* a3, double* a7, double* c, double* d, double* e, double* f, double* g, double* h, double K[MDP1])
+void cv::usac::QuadIT_ak1(int N, int* NZ, double uu, double vv, double* szr, double* szi, double* lzr, double* lzi, double qp[MDP1], int NN, double* a, double* b, double p[MDP1], double qk[MDP1], double* a1, double* a3, double* a7, double* c, double* d, double* e, double* f, double* g, double* h, double K[MDP1])
 {
     // Variable-shift K-polynomial iteration for a quadratic factor converges only if the
     // zeros are equimodular or nearly so.
@@ -606,7 +607,7 @@ void QuadIT_ak1(int N, int* NZ, double uu, double vv, double* szr, double* szi, 
 
 } //End QuadIT_ak1
 
-void RealIT_ak1(int* iFlag, int* NZ, double* sss, int N, double p[MDP1], int NN, double qp[MDP1], double* szr, double* szi, double K[MDP1], double qk[MDP1])
+void cv::usac::RealIT_ak1(int* iFlag, int* NZ, double* sss, int N, double p[MDP1], int NN, double qp[MDP1], double* szr, double* szi, double K[MDP1], double qk[MDP1])
 {
 
     // Variable-shift H-polynomial iteration for a real zero
@@ -697,7 +698,7 @@ void RealIT_ak1(int* iFlag, int* NZ, double* sss, int N, double p[MDP1], int NN,
 
 } // End RealIT_ak1
 
-void Quad_ak1(double a, double b1, double c, double* sr, double* si, double* lr, double* li)
+void cv::usac::Quad_ak1(double a, double b1, double c, double* sr, double* si, double* lr, double* li)
 {
     // Calculates the zeros of the quadratic a*Z^2 + b1*Z + c
     // The quadratic formula, modified to avoid overflow, is used to find the larger zero if the

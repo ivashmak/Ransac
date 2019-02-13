@@ -2,9 +2,10 @@
 // It is subject to the license terms in the LICENSE file found in the top-level directory
 // of this distribution and at http://opencv.org/license.html.
 
-#include "dlt.hpp"
+#include "precomp.hpp"
+#include "../include/opencv2/usac/dlt.hpp"
 
-bool DLt::DLT4p (const int * const sample, cv::Mat &H) {
+bool cv::usac::DLt::DLT4p (const int * const sample, cv::Mat &H) {
     float x1, y1, x2, y2;
     int smpl;
 
@@ -52,7 +53,7 @@ bool DLt::DLT4p (const int * const sample, cv::Mat &H) {
     return true;
 }
 
-bool DLT (const float * const points, unsigned int sample_number, cv::Mat &H) {
+bool cv::usac::DLT (const float * const points, unsigned int sample_number, cv::Mat &H) {
 
     float x1, y1, x2, y2;
     unsigned int smpl;
@@ -100,7 +101,7 @@ bool DLT (const float * const points, unsigned int sample_number, cv::Mat &H) {
     return true;
 }
 
-bool DLTEigen (const float * const points, unsigned int sample_number, cv::Mat &H) {
+bool cv::usac::DLTEigen (const float * const points, unsigned int sample_number, cv::Mat &H) {
     /*
     A =
 
@@ -175,7 +176,7 @@ bool DLTEigen (const float * const points, unsigned int sample_number, cv::Mat &
     return true;
 }
 
-bool DLTLeastSquares (const float * const points, unsigned int sample_number, cv::Mat &H) {
+bool cv::usac::DLTLeastSquares (const float * const points, unsigned int sample_number, cv::Mat &H) {
     /*
      * A is 2N x 8
      * b is 2N x 1

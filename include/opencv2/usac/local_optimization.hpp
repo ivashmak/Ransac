@@ -5,20 +5,20 @@
 #ifndef USAC_LOCALOPTIMIZATION_H
 #define USAC_LOCALOPTIMIZATION_H
 
-#include "../precomp.hpp"
-#include "../estimator/estimator.hpp"
-#include "../quality/quality.hpp"
+#include "estimator.hpp"
+#include "quality.hpp"
 
+namespace cv { namespace usac {
 class LocalOptimization {
 public:
-	virtual ~LocalOptimization () = default;
+    virtual ~LocalOptimization() = default;
 
-	/*
-	 * Update best model and best score.
-	 */
-    virtual void GetModelScore  (Model * best_model, Score * best_score) = 0;
+    /*
+     * Update best model and best score.
+     */
+    virtual void GetModelScore(Model *best_model, Score *best_score) = 0;
 
 };
-
+}}
 
 #endif //USAC_LOCALOPTIMIZATION_H

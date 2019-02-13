@@ -7,15 +7,16 @@
 
 
 #include "sampler.hpp"
-#include "../model.hpp"
-#include "../random_generator/uniform_random_generator.hpp"
-#include "../termination_criteria/prosac_termination_criteria.hpp"
+#include "model.hpp"
+#include "uniform_random_generator.hpp"
+#include "prosac_termination_criteria.hpp"
 
+namespace cv { namespace usac {
 class ProsacSampler : public Sampler {
 protected:
     bool initialized = false;
 
-    unsigned int * growth_function;
+    unsigned int *growth_function;
 
     unsigned int subset_size;
     unsigned int largest_sample_size;
@@ -26,29 +27,29 @@ protected:
 
     unsigned int sample_size;
     unsigned int points_size;
-    
-    UniformRandomGenerator * randomGenerator;
 
-    unsigned int * termination_length;
+    UniformRandomGenerator *randomGenerator;
+
+    unsigned int *termination_length;
 public:
     // set stopping length as pointer to stopping length from prosac termination criteria
-    void setTerminationLength (unsigned int * termination_length_) {
+    void setTerminationLength(unsigned int *termination_length_) {
         termination_length = termination_length_;
     }
 
-    ~ProsacSampler () override {
+    ~ProsacSampler() override {
         if (initialized) {
             delete[] growth_function;
             delete (randomGenerator);
         }
     }
 
-    unsigned int * getGrowthFunction () {
+    unsigned int *getGrowthFunction() {
         return growth_function;
     }
 
     // return largest_sample_size as pointer to prosac termination criteria
-    unsigned int * getLargestSampleSize () {
+    unsigned int *getLargestSampleSize() {
         return &largest_sample_size;
     }
 
@@ -59,7 +60,7 @@ public:
      * The similarity was defined as the ratio of the distances in
      * the SIFT space of the best and second match.
      */
-    void initProsacSampler (unsigned int sample_size_, unsigned int points_size_, bool reset_time = true) {
+    void initProsacSampler(unsigned int sample_size_, unsigned int points_size_, bool reset_time = true) {
         sample_size = sample_size_;
         points_size = points_size_;
 
@@ -70,7 +71,7 @@ public:
 
         randomGenerator = new UniformRandomGenerator;
         if (reset_time) randomGenerator->resetTime();
-        
+
         growth_function = new unsigned int[points_size];
         // The data points in U_N are sorted in descending order w.r.t. the quality function q.
         // Let {Mi}i = 1...T_N denote the sequence of samples Mi c U_N that are uniformly drawn by Ransac.
@@ -82,7 +83,7 @@ public:
         //                                  N - i
         double T_n = growth_max_samples;
         for (unsigned int i = 0; i < sample_size; ++i) {
-            T_n *= (double)(sample_size-i)/(points_size-i);
+            T_n *= (double) (sample_size - i) / (points_size - i);
         }
 
         unsigned int T_n_prime = 1;
@@ -95,26 +96,26 @@ public:
         // g(t) = min {n, T'_(n) >= t}
         // T'_(n+1) = T'_(n) + (T_(n+1) - T_(n))
         for (unsigned int i = 0; i < points_size; ++i) {
-            if (i+1 <= sample_size) {
+            if (i + 1 <= sample_size) {
                 growth_function[i] = T_n_prime;
                 continue;
             }
-            double Tn_plus1 = (double)(i+1)*T_n/(i+1-sample_size);
-            growth_function[i] = T_n_prime + (unsigned int)ceil(Tn_plus1 - T_n);
+            double Tn_plus1 = (double) (i + 1) * T_n / (i + 1 - sample_size);
+            growth_function[i] = T_n_prime + (unsigned int) ceil(Tn_plus1 - T_n);
             T_n = Tn_plus1;
             T_n_prime = growth_function[i];
         }
 
         // other initializations
         largest_sample_size = sample_size;       // largest set sampled in PROSAC
-        subset_size = sample_size;		// n,  size of the current sampling pool
+        subset_size = sample_size;        // n,  size of the current sampling pool
         hypCount = 1; // t
 
         initialized = true;
     }
 
 
-    void generateSample (int * sample) override {
+    void generateSample(int *sample) override {
 //        std::cout << "subset size " << subset_size << "\n";
 //        std::cout << "stopping length " << termination_length << "\n";
 
@@ -126,25 +127,25 @@ public:
 
 
 /*
-        //-----------------------------------------------------------------------
-        // Choice of the hypothesis generation set
-        // if (t = T'_n) & (n < n*) then n = n + 1 (eqn. 4)
-        if (hypCount == growth_function[subset_size] && subset_size < termination_length) {
-            subset_size++;
-        }
+//-----------------------------------------------------------------------
+// Choice of the hypothesis generation set
+// if (t = T'_n) & (n < n*) then n = n + 1 (eqn. 4)
+if (hypCount == growth_function[subset_size] && subset_size < termination_length) {
+    subset_size++;
+}
 
-        // Semi-random sample M_t of size m
-        if (growth_function[subset_size] < hypCount) {
-            // The sample contains m-1 points selected from U_(n-1) at random and u_n
-            randomGenerator->generateUniqueRandomSet(sample, sample_size-1, subset_size-2);
-            sample[sample_size-1] = subset_size-1;
-        } else {
-            // Select m points from U_n at random.
-            randomGenerator->generateUniqueRandomSet(sample, sample_size, subset_size-1);
-        }
-        hypCount++;
-        return;
-        //-----------------------------------------------------------------------
+// Semi-random sample M_t of size m
+if (growth_function[subset_size] < hypCount) {
+    // The sample contains m-1 points selected from U_(n-1) at random and u_n
+    randomGenerator->generateUniqueRandomSet(sample, sample_size-1, subset_size-2);
+    sample[sample_size-1] = subset_size-1;
+} else {
+    // Select m points from U_n at random.
+    randomGenerator->generateUniqueRandomSet(sample, sample_size, subset_size-1);
+}
+hypCount++;
+return;
+//-----------------------------------------------------------------------
 */
 
         // if current stopping length is less than size of current pool, use only points up to the stopping length
@@ -154,7 +155,7 @@ public:
         }
 
         // increment the size of the sampling pool if required
-        if (hypCount > growth_function[subset_size-1]) {
+        if (hypCount > growth_function[subset_size - 1]) {
             ++subset_size; // n = n + 1
             if (subset_size > points_size) {
                 subset_size = points_size;
@@ -165,15 +166,15 @@ public:
         }
 
         // generate PROSAC sample in range <0, subset_size-2>
-        randomGenerator->generateUniqueRandomSet(sample, sample_size-1, subset_size-2);
-        sample[sample_size-1] = subset_size-1;
+        randomGenerator->generateUniqueRandomSet(sample, sample_size - 1, subset_size - 2);
+        sample[sample_size - 1] = subset_size - 1;
 
         hypCount++; // t = t + 1
     }
 
-    bool isInit () override {
+    bool isInit() override {
         return initialized;
     }
 };
-
+}}
 #endif //RANSAC_PROSAC_SAMPLER_H

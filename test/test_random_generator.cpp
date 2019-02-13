@@ -1,17 +1,24 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #ifndef USAC_EVALUATERANDOMGENERATORS_H
 #define USAC_EVALUATERANDOMGENERATORS_H
 
-#include "../usac/random_generator/array_random_generator.hpp"
-#include "../usac/random_generator/uniform_random_generator.hpp"
+#include "test_precomp.hpp"
+#include "tests.hpp"
+#include "../include/opencv2/usac/random_generator.hpp"
+#include "../include/opencv2/usac/uniform_random_generator.hpp"
+#include "../include/opencv2/usac/array_random_generator.hpp"
 
-void calculateEntropy (RandomGenerator * random_generator, int size, const std::string& name);
-void getAverageTime (RandomGenerator * random_generator, int size, int unique_set_size, const std::string& name);
-void checkUnique (RandomGenerator * random_generator, int size, const std::string& name);
-void checkReset (RandomGenerator * random_generator, const std::string& name);
+void calculateEntropy (cv::usac::RandomGenerator * random_generator, int size, const std::string& name);
+void getAverageTime (cv::usac::RandomGenerator * random_generator, int size, int unique_set_size, const std::string& name);
+void checkUnique (cv::usac::RandomGenerator * random_generator, int size, const std::string& name);
+void checkReset (cv::usac::RandomGenerator * random_generator, const std::string& name);
 
-void evaluateRandomGenerators () {
-    RandomGenerator * array_random_generator = new ArrayRandomGenerator;
-    RandomGenerator * uniform_random_generator = new UniformRandomGenerator;
+void Tests::evaluateRandomGenerators () {
+    cv::usac::RandomGenerator * array_random_generator = new cv::usac::ArrayRandomGenerator;
+    cv::usac::RandomGenerator * uniform_random_generator = new cv::usac::UniformRandomGenerator;
 
     checkReset (array_random_generator, "array");
     checkUnique (array_random_generator, 20, "array");
@@ -26,7 +33,7 @@ void evaluateRandomGenerators () {
     getAverageTime (uniform_random_generator, size, uniques_set_size, "shuffle");
 }
 
-void checkReset (RandomGenerator * random_generator, const std::string& name) {
+void checkReset (cv::usac::RandomGenerator * random_generator, const std::string& name) {
     std::cout << name << " random generator\n";
     
     int size1 = 10000;
@@ -64,7 +71,7 @@ void checkReset (RandomGenerator * random_generator, const std::string& name) {
 
 }
 
-void checkUnique (RandomGenerator * random_generator, int size, const std::string& name) {
+void checkUnique (cv::usac::RandomGenerator * random_generator, int size, const std::string& name) {
     std::cout << name << " random generator, size =  " << size << "\n";
     random_generator->resetGenerator(0, size);
 
@@ -93,7 +100,7 @@ void checkUnique (RandomGenerator * random_generator, int size, const std::strin
 
 }
 
-void calculateEntropy (RandomGenerator * random_generator, int size, const std::string& name) {
+void calculateEntropy (cv::usac::RandomGenerator * random_generator, int size, const std::string& name) {
     std::cout << name << " random generator, size =  " << size << "\n";
     random_generator->resetGenerator(0, size);
 
@@ -115,7 +122,7 @@ void calculateEntropy (RandomGenerator * random_generator, int size, const std::
 //    std::cout << "------------------------------------------------------------\n";
 }
 
-void getAverageTime (RandomGenerator * random_generator, int size, int unique_set_size, const std::string& name) {
+void getAverageTime (cv::usac::RandomGenerator * random_generator, int size, int unique_set_size, const std::string& name) {
 //    std::cout << name << " random generator, size =  " << size << " unique_set_size = " << unique_set_size << "\n";
 
     random_generator->resetGenerator(0, size);

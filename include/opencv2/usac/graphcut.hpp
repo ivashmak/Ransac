@@ -5,22 +5,22 @@
 #ifndef USAC_GRAPHCUT_H
 #define USAC_GRAPHCUT_H
 
-#include "../precomp.hpp"
 
-#include "../estimator/estimator.hpp"
-#include "../../include/gco-v3.0/GCoptimization.h"
+#include "estimator.hpp"
+#include "../../gco-v3.0/GCoptimization.h"
 #include "local_optimization.hpp"
-#include "../sampler/uniform_sampler.hpp"
-#include "../random_generator/uniform_random_generator.hpp"
+#include "uniform_sampler.hpp"
+#include "uniform_random_generator.hpp"
+#include "quality.hpp"
 
-
+namespace cv { namespace  usac {
 class GraphCut : public LocalOptimization {
 protected:
-    Estimator * estimator;
-    Quality * quality;
-    Score * gc_score;
-    Model * gc_model;
-    UniformRandomGenerator * uniform_random_generator;
+    Estimator *estimator;
+    Quality *quality;
+    Score *gc_score;
+    Model *gc_model;
+    UniformRandomGenerator *uniform_random_generator;
 
     std::vector<std::vector<int>> neighbors_v;
     NeighborsSearch neighborsType;
@@ -30,16 +30,20 @@ protected:
     float threshold, spatial_coherence, sqr_thr;
 
     int *inliers, *sample, *neighbors;
-    float * errors;
+    float *errors;
 public:
     unsigned int gc_iterations = 0;
 
     ~GraphCut() override {
-        delete[] errors; delete[] inliers; delete[] sample;
-        delete (gc_score); delete (gc_model); delete (uniform_random_generator);
+        delete[] errors;
+        delete[] inliers;
+        delete[] sample;
+        delete (gc_score);
+        delete (gc_model);
+        delete (uniform_random_generator);
     }
-    
-    GraphCut (Model * model, Estimator * estimator_, Quality * quality_, unsigned int points_size_) {
+
+    GraphCut(Model *model, Estimator *estimator_, Quality *quality_, unsigned int points_size_) {
         spatial_coherence = model->spatial_coherence_gc;
         knn = model->k_nearest_neighbors;
         threshold = model->threshold;
@@ -49,15 +53,15 @@ public:
         points_size = points_size_;
 
         gc_score = new Score;
-        gc_model = new Model (model);
+        gc_model = new Model(model);
 
         sample_limit = 7 * model->sample_size;
 
         sample_size = model->sample_size;
 
         errors = new float[points_size];
-        inliers = new int [points_size];
-        sample = new int [sample_limit];
+        inliers = new int[points_size];
+        sample = new int[sample_limit];
 
         // set uniform random generator
         uniform_random_generator = new UniformRandomGenerator;
@@ -72,8 +76,8 @@ public:
         //
     }
 
-    void setNeighbors (cv::InputArray neighbors_, NeighborsSearch search) {
-        assert(! neighbors_.empty());
+    void setNeighbors(cv::InputArray neighbors_, NeighborsSearch search) {
+        assert(!neighbors_.empty());
         assert(search != NeighborsSearch::NullN);
         neighborsType = search;
 
@@ -81,7 +85,7 @@ public:
             neighbor_number = knn * points_size;
             neighbors = (int *) neighbors_.getMat().data;
         } else {
-            neighbors_v = *(std::vector<std::vector<int>>*) neighbors_.getObj();
+            neighbors_v = *(std::vector<std::vector<int>> *) neighbors_.getObj();
             neighbor_number = 0;
             for (int i = 0; i < points_size; i++) {
                 neighbor_number += neighbors_v[i].size();
@@ -90,13 +94,13 @@ public:
     }
 
     // calculate lambda
-    void calculateSpatialCoherence (float inlier_number) {
+    void calculateSpatialCoherence(float inlier_number) {
         spatial_coherence = (points_size * (inlier_number / points_size)) / static_cast<float>(neighbor_number);
     }
 
-	void labeling (const cv::Mat& model, Score * score, int * inliers);
+    void labeling(const cv::Mat &model, Score *score, int *inliers);
 
-    void GetModelScore (Model * best_model, Score * best_score) override {
+    void GetModelScore(Model *best_model, Score *best_score) override {
         // improve best model by non minimal estimation
 //        oneStepLO (best_model);
 
@@ -115,12 +119,12 @@ public:
                 // sample to generate min (|I_7m|, |I|)
                 if (labeling_inliers_size > sample_limit) {
                     // generate random subset in range <0; |I|>
-                    uniform_random_generator->generateUniqueRandomSet(sample, labeling_inliers_size-1);
+                    uniform_random_generator->generateUniqueRandomSet(sample, labeling_inliers_size - 1);
                     // sample from inliers of labeling
                     for (unsigned int smpl = 0; smpl < sample_limit; smpl++) {
                         sample[smpl] = inliers[sample[smpl]];
                     }
-                    if (! estimator->EstimateModelNonMinimalSample(sample, sample_limit, *gc_model)) {
+                    if (!estimator->EstimateModelNonMinimalSample(sample, sample_limit, *gc_model)) {
                         break;
                     }
                 } else {
@@ -132,7 +136,7 @@ public:
                          */
                         break;
                     }
-                    if (! estimator->EstimateModelNonMinimalSample(inliers, labeling_inliers_size, *gc_model)) {
+                    if (!estimator->EstimateModelNonMinimalSample(inliers, labeling_inliers_size, *gc_model)) {
                         break;
                     }
                 }
@@ -153,7 +157,7 @@ public:
     }
 
 private:
-    void oneStepLO (Model * model) {
+    void oneStepLO(Model *model) {
         /*
          * Do one step local optimization on min (|I|, max_I) before doing Graph Cut.
          * This LSQ must give better model for next GC labeling.
@@ -179,7 +183,8 @@ private:
                     sample[smpl] = inliers[smpl];
                 }
             } else {
-                uniform_random_generator->generateUniqueRandomSet(sample, one_step_lo_sample_limit, gc_score->inlier_number-1);
+                uniform_random_generator->generateUniqueRandomSet(sample, one_step_lo_sample_limit,
+                                                                  gc_score->inlier_number - 1);
                 for (unsigned int smpl = 0; smpl < one_step_lo_sample_limit; smpl++) {
                     sample[smpl] = inliers[sample[smpl]];
                 }
@@ -189,5 +194,5 @@ private:
         }
     }
 };
-
+}}
 #endif //USAC_GRAPHCUT_H

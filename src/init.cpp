@@ -1,6 +1,11 @@
-#include "init.hpp"
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
 
-void initEstimator (Estimator *& estimator, ESTIMATOR est, const cv::Mat& points) {
+#include "precomp.hpp"
+#include "../include/opencv2/usac/init.hpp"
+
+void cv::usac::initEstimator (Estimator *& estimator, ESTIMATOR est, const cv::Mat& points) {
     if (est == ESTIMATOR::Line2d) {
         estimator = new Line2DEstimator(points);
 
@@ -20,7 +25,7 @@ void initEstimator (Estimator *& estimator, ESTIMATOR est, const cv::Mat& points
 }
 
 // ----------------------------------------------------------------------------------------
-void initSampler (Sampler *& sampler, const Model * const model, const cv::Mat& points) {
+void cv::usac::initSampler (Sampler *& sampler, const Model * const model, const cv::Mat& points) {
      unsigned int points_size = points.rows;
 
      if (model->sampler == SAMPLER::Uniform) {
@@ -36,25 +41,17 @@ void initSampler (Sampler *& sampler, const Model * const model, const cv::Mat& 
      } else if (model->sampler == SAMPLER::Napsac) {
 		 sampler = new NapsacSampler(model, points_size, model->reset_random_generator);
 
-     } else if (model->sampler == SAMPLER::Evsac) {
-	     sampler = new EvsacSampler(points, points_size, model->k_nearest_neighbors, model->sample_size);
-    
-     } else if (model->sampler == SAMPLER::ProgressiveNAPSAC) {
-	     sampler = new ProgressiveNapsac(points, model->sample_size, model->reset_random_generator);
-    
-     } else if (model->sampler == SAMPLER::ProsacNapsac) {
-    
      } else {
          std::cout << "UNKOWN Sampler IN Init Sampler\n";
          exit (111);
      }
 }
-void initTerminationCriteria (TerminationCriteria *& termination_criteria,
+void cv::usac::initTerminationCriteria (TerminationCriteria *& termination_criteria,
         const Model * const model, unsigned int points_size) {
     termination_criteria = new StandardTerminationCriteria (model, points_size);
 }
 
-void initProsacTerminationCriteria (TerminationCriteria *& termination_criteria, Sampler *& prosac_sampler,
+void cv::usac::initProsacTerminationCriteria (TerminationCriteria *& termination_criteria, Sampler *& prosac_sampler,
             const Model * const model, Estimator * estimator, unsigned int points_size) {
 
     termination_criteria = new ProsacTerminationCriteria
@@ -65,7 +62,7 @@ void initProsacTerminationCriteria (TerminationCriteria *& termination_criteria,
     ((ProsacTerminationCriteria *) termination_criteria)->setLargestSampleSize(((ProsacSampler *) prosac_sampler)->getLargestSampleSize());
 }
 
-void initLocalOptimization (LocalOptimization *& local_optimization, Model * model, Estimator * estimator,
+void cv::usac::initLocalOptimization (LocalOptimization *& local_optimization, Model * model, Estimator * estimator,
           Quality * quality, unsigned int points_size) {
 
      if (model->lo == LocOpt::InItLORsc || model->lo == LocOpt::InItFLORsc) {
@@ -73,9 +70,6 @@ void initLocalOptimization (LocalOptimization *& local_optimization, Model * mod
 
      } else if (model->lo == LocOpt::GC) {
         local_optimization = new GraphCut (model, estimator, quality, points_size);
-
-     } else if (model->lo == LocOpt::IRLS) {
-         local_optimization = new Irls(model, estimator, quality, points_size);
 
      } else {
 //         std::cout << "UNKOWN LO method in Init\n";

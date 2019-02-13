@@ -5,11 +5,11 @@
 #ifndef RANSAC_QUALITY_H
 #define RANSAC_QUALITY_H
 
-#include "../precomp.hpp"
+#include "estimator.hpp"
+#include "model.hpp"
+#include "cassert"
 
-#include "../estimator/estimator.hpp"
-#include "../model.hpp"
-
+namespace cv {namespace usac {
 /*
  * Score for model estimation
  */
@@ -19,18 +19,19 @@ public:
     float score = 0;
 
     // priority for inlier number
-    inline bool bigger (const Score * const score2) {
+    inline bool bigger(const Score *const score2) {
         if (inlier_number > score2->inlier_number) return true;
         if (inlier_number == score2->inlier_number) return score > score2->score;
         return false;
     }
-    inline bool bigger (const Score& score2) {
+
+    inline bool bigger(const Score &score2) {
         if (inlier_number > score2.inlier_number) return true;
         if (inlier_number == score2.inlier_number) return score > score2.score;
         return false;
     }
 
-    void copyFrom (const Score * const score_to_copy) {
+    void copyFrom(const Score *const score_to_copy) {
         score = score_to_copy->score;
         inlier_number = score_to_copy->inlier_number;
     }
@@ -41,12 +42,12 @@ class Quality {
 protected:
     unsigned int points_size;
     float threshold;
-    Estimator * estimator;
+    Estimator *estimator;
     bool isinit = false;
 public:
-    bool isInit () { return isinit; }
+    bool isInit() { return isinit; }
 
-    void init (unsigned int points_size_, float theshold_, Estimator * estimator_) {
+    void init(unsigned int points_size_, float theshold_, Estimator *estimator_) {
         points_size = points_size_;
         threshold = theshold_;
         estimator = estimator_;
@@ -57,8 +58,9 @@ public:
      * calculating number of inliers of current model.
      * score is sum of distances to estimated inliers.
      */
-    inline void getNumberInliers (Score * score, const cv::Mat& model, float threshold=0, bool get_inliers=false,
-                                  int * inliers= nullptr, bool parallel=false) {
+    inline void
+    getNumberInliers(Score *score, const cv::Mat &model, float threshold = 0, bool get_inliers = false,
+                     int *inliers = nullptr, bool parallel = false) {
         if (threshold == 0) {
             threshold = this->threshold;
         }
@@ -69,12 +71,12 @@ public:
         float sum_errors = 0;
 
         if (parallel && !get_inliers) {
-           #pragma omp parallel for reduction (+:inlier_number)
-           for (unsigned int point = 0; point < points_size; point++) {
-               if (estimator->GetError(point) < threshold) {
-                   inlier_number++;
-               }
-           }
+#pragma omp parallel for reduction (+:inlier_number)
+            for (unsigned int point = 0; point < points_size; point++) {
+                if (estimator->GetError(point) < threshold) {
+                    inlier_number++;
+                }
+            }
         } else {
             float err;
             if (get_inliers) {
@@ -83,7 +85,7 @@ public:
                     if (err < threshold) {
                         inliers[inlier_number++] = point;
                         sum_errors += err;
-                    }    
+                    }
                 }
             } else {
                 for (unsigned int point = 0; point < points_size; point++) {
@@ -100,19 +102,14 @@ public:
         score->score = sum_errors;
     }
 
-
-	virtual void getScore (const float * const points, Score * score, const cv::Mat& model, int * inliers) {
-        std::cout << "NOT IMPEMENTED getScore IN QUALITY\n";
-    }
-
-    void getInliers (const cv::Mat& model, int * inliers) {
+    void getInliers(const cv::Mat &model, int *inliers) {
         // Note class Quality should be initialized
         assert(isinit);
 
         estimator->setModelParameters(model);
 
-	    int num_inliers = 0;
-	    for (unsigned int point = 0; point < points_size; point++) {
+        int num_inliers = 0;
+        for (unsigned int point = 0; point < points_size; point++) {
             if (estimator->GetError(point) < threshold) {
                 inliers[num_inliers] = point;
                 num_inliers++;
@@ -120,7 +117,9 @@ public:
         }
     }
 
-    static void getInliers (Estimator * estimator, const cv::Mat &model, float threshold, unsigned int points_size, std::vector<int> &inliers) {
+    static void
+    getInliers(Estimator *estimator, const cv::Mat &model, float threshold, unsigned int points_size,
+               std::vector<int> &inliers) {
         estimator->setModelParameters(model);
         inliers.clear();
         for (unsigned int p = 0; p < points_size; p++) {
@@ -131,7 +130,7 @@ public:
     }
 
     // Get average error to GT inliers.
-    static float getErrorGT_inl (Estimator * estimator, Model * model, const std::vector<int>& gt_inliers) {
+    static float getErrorGT_inl(Estimator *estimator, Model *model, const std::vector<int> &gt_inliers) {
 
         // return -1 (unknown) to avoid division by zero
         if (gt_inliers.size() == 0)
@@ -145,6 +144,6 @@ public:
         return sum_errors / gt_inliers.size();
     }
 };
-
+}}
 
 #endif //RANSAC_QUALITY_H

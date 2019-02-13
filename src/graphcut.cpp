@@ -2,9 +2,10 @@
 // It is subject to the license terms in the LICENSE file found in the top-level directory
 // of this distribution and at http://opencv.org/license.html.
 
-#include "graphcut.hpp"
+#include "precomp.hpp"
+#include "../include/opencv2/usac/graphcut.hpp"
 
-void GraphCut::labeling (const cv::Mat& model, Score * score, int * inliers) {
+void cv::usac::GraphCut::labeling (const cv::Mat& model, Score * score, int * inliers) {
 
     estimator->setModelParameters(model);
 

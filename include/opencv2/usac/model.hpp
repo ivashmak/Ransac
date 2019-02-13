@@ -5,27 +5,36 @@
 #ifndef RANSAC_MODEL_H
 #define RANSAC_MODEL_H
 
-#include "../dataset/Dataset.h"
+#include <opencv2/core/core.hpp>
 
-enum ESTIMATOR  { NullE, Line2d, Homography, Fundamental, Essential };
-enum SAMPLER  { NullS, Uniform, ProgressiveNAPSAC, Napsac, Prosac, Evsac, ProsacNapsac };
-enum NeighborsSearch {NullN, Nanoflann, Grid};
-enum LocOpt {NullLO, InItLORsc, InItFLORsc, GC, IRLS};
+namespace cv { namespace usac {
+enum ESTIMATOR {
+    NullE, Line2d, Homography, Fundamental, Essential
+};
+enum SAMPLER {
+    NullS, Uniform, Napsac, Prosac
+};
+enum NeighborsSearch {
+    NullN, Nanoflann, Grid
+};
+enum LocOpt {
+    NullLO, InItLORsc, InItFLORsc, GC
+};
 
 class Model {
 public:
-	float threshold = 2;
-	float desired_prob = 0.95;
+    float threshold = 2;
+    float desired_prob = 0.95;
 
     unsigned int sample_size;
     unsigned int min_iterations = 20;
     unsigned int max_iterations = 10000;
-	unsigned int k_nearest_neighbors = 5;
+    unsigned int k_nearest_neighbors = 5;
 
-	// Local Optimization parameters
-	LocOpt lo = NullLO;
+    // Local Optimization parameters
+    LocOpt lo = NullLO;
     unsigned int lo_sample_size = 14;
-	unsigned int lo_iterative_iterations = 4;
+    unsigned int lo_iterative_iterations = 4;
     unsigned int lo_inner_iterations = 20; // 10
     unsigned int lo_threshold_multiplier = 10;
 
@@ -37,90 +46,89 @@ public:
 
     // sprt
     bool sprt = false;
-	unsigned int max_hypothesis_test_before_sprt = 20;
-	
+    unsigned int max_hypothesis_test_before_sprt = 20;
+
     NeighborsSearch neighborsType = NeighborsSearch::NullN;
     int cell_size = 50; // for grid neighbors searching
 
     bool reset_random_generator = true;
 
-    // for debug
-    std::string img_name;
-    DATASET dataset;
 private:
     cv::Mat descriptor;
-	
+
 public:
-	~Model () {}
+    ~Model() {}
 
-    Model (const Model * const model) {
-	    copyFrom(model);
-	}
+    Model(const Model *const model) {
+        copyFrom(model);
+    }
 
-	Model (float threshold_, unsigned int sample_number_, float desired_prob_, unsigned int knn,
-		ESTIMATOR estimator_, SAMPLER sampler_) {
-		
-		threshold = threshold_;
-		sample_size = sample_number_;
-		desired_prob = desired_prob_;
-		k_nearest_neighbors = knn;
-		estimator = estimator_;
-		sampler = sampler_;
-	}
+    Model(float threshold_, unsigned int sample_number_, float desired_prob_, unsigned int knn,
+          ESTIMATOR estimator_, SAMPLER sampler_) {
 
-	void ResetRandomGenerator (bool reset) {
-		reset_random_generator = reset;
-	}
+        threshold = threshold_;
+        sample_size = sample_number_;
+        desired_prob = desired_prob_;
+        k_nearest_neighbors = knn;
+        estimator = estimator_;
+        sampler = sampler_;
+    }
 
-	void setNeighborsType (NeighborsSearch neighborsType_) {
+    void ResetRandomGenerator(bool reset) {
+        reset_random_generator = reset;
+    }
+
+    void setNeighborsType(NeighborsSearch neighborsType_) {
         neighborsType = neighborsType_;
     }
 
-    void setCellSize (int cell_size_) {
-		cell_size = cell_size_;
-	}
+    void setCellSize(int cell_size_) {
+        cell_size = cell_size_;
+    }
 
-	void setSprt (bool SprtLO_) {
-		sprt = SprtLO_;
-	}
+    void setSprt(bool SprtLO_) {
+        sprt = SprtLO_;
+    }
 
-	void setLOParametres (unsigned int lo_iterative_iters, unsigned int lo_inner_iters, unsigned int lo_thresh_mult) {
-	    lo_iterative_iterations = lo_iterative_iters;
-	    lo_inner_iterations = lo_inner_iters;
+    void
+    setLOParametres(unsigned int lo_iterative_iters, unsigned int lo_inner_iters, unsigned int lo_thresh_mult) {
+        lo_iterative_iterations = lo_iterative_iters;
+        lo_inner_iterations = lo_inner_iters;
         lo_threshold_multiplier = lo_thresh_mult;
-	}
+    }
 
     void setDescriptor(cv::Mat desc) {
 //    	descriptor = desc;
         descriptor = desc.clone();
     }
 
-    cv::Mat returnDescriptor () {
+    cv::Mat returnDescriptor() {
         return descriptor;
     }
 
-	void setThreshold (float threshold) {
-		this->threshold = threshold;
-	}
+    void setThreshold(float threshold) {
+        this->threshold = threshold;
+    }
 
-	void setSampleNumber (float sample_number) {
-		this->sample_size = sample_number;
-	}
+    void setSampleNumber(float sample_number) {
+        this->sample_size = sample_number;
+    }
 
-	void setDesiredProbability (float desired_prob) {
-		this->desired_prob = desired_prob;
-	}
+    void setDesiredProbability(float desired_prob) {
+        this->desired_prob = desired_prob;
+    }
 
-	void setKNearestNeighbors (int k_nearest_neighbors) {
-	    this->k_nearest_neighbors = k_nearest_neighbors;
-	}
-	void copyFrom (const Model * const model) {
+    void setKNearestNeighbors(int k_nearest_neighbors) {
+        this->k_nearest_neighbors = k_nearest_neighbors;
+    }
+
+    void copyFrom(const Model *const model) {
         threshold = model->threshold;
         sample_size = model->sample_size;
         desired_prob = model->desired_prob;
         max_iterations = model->max_iterations;
-		min_iterations = model->min_iterations;
-		estimator = model->estimator;
+        min_iterations = model->min_iterations;
+        estimator = model->estimator;
         sampler = model->sampler;
         k_nearest_neighbors = model->k_nearest_neighbors;
         lo_sample_size = model->lo_sample_size;
@@ -135,7 +143,7 @@ public:
         neighborsType = model->neighborsType;
         max_hypothesis_test_before_sprt = model->max_hypothesis_test_before_sprt;
 //        descriptor = model->descriptor;
-	}
+    }
 };
-
+}}
 #endif //RANSAC_MODEL_H

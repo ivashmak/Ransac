@@ -5,28 +5,28 @@
 #ifndef USAC_UTILS_MATH_H
 #define USAC_UTILS_MATH_H
 
-#include "../precomp.hpp"
-
+namespace cv { namespace usac {
 class Time {
-public:	
+public:
     long minutes;
     long seconds;
     long milliseconds;
     long microseconds;
 
-    friend std::ostream& operator<< (std::ostream& stream, const Time * time) {
+    friend std::ostream &operator<<(std::ostream &stream, const Time *time) {
         return stream << time->seconds << " secs " << time->milliseconds << " ms " <<
-               time->microseconds << " mcs\n";
+                      time->microseconds << " mcs\n";
     }
 };
 
-bool inverse3x3 (cv::Mat& A);
-bool inverse3x3 (const cv::Mat& A, cv::Mat& A_inv);
+bool inverse3x3(cv::Mat &A);
 
-float fast_pow (float n, int k);
+bool inverse3x3(const cv::Mat &A, cv::Mat &A_inv);
 
-int fast_factorial (int n);
+float fast_pow(float n, int k);
 
-void splitTime (Time * time, long time_mcs);
+int fast_factorial(int n);
 
+void splitTime(Time *time, long time_mcs);
+}}
 #endif //USAC_UTILS_MATH_H

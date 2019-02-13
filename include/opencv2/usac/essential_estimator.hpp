@@ -5,18 +5,20 @@
 #ifndef USAC_ESSENTIALESTIMATOR_H
 #define USAC_ESSENTIALESTIMATOR_H
 
+#include <cassert>
 #include "estimator.hpp"
-#include "fundamental/fundamental_solver.hpp"
-#include "essential/five_points.hpp"
+#include "fundamental_solver.hpp"
+#include "five_points.hpp"
 
+namespace cv { namespace usac {
 class EssentialEstimator : public Estimator {
 private:
-    const float * const points;
+    const float *const points;
     float e11, e12, e13, e21, e22, e23, e31, e32, e33;
-    EssentialSolver * e_solver;
-    FundamentalSolver * f_solver;
+    cv::usac::EssentialSolver *e_solver;
+    FundamentalSolver *f_solver;
 public:
-    ~EssentialEstimator () {
+    ~EssentialEstimator() {
         delete (e_solver);
         delete (f_solver);
     }
@@ -29,17 +31,23 @@ public:
      *
      * Y^T E Y = 0
      */
-    EssentialEstimator(cv::InputArray input_points) : points((float *)input_points.getMat().data) {
+    EssentialEstimator(cv::InputArray input_points) : points((float *) input_points.getMat().data) {
         assert(!input_points.empty());
-        e_solver = new EssentialSolver (points);
-        f_solver = new FundamentalSolver (points);
+        e_solver = new EssentialSolver(points);
+        f_solver = new FundamentalSolver(points);
     }
 
-    void setModelParameters (const cv::Mat& model) override {
-        float *  E_ptr = (float *) model.data;
-        e11 = E_ptr[0]; e12 = E_ptr[1]; e13 = E_ptr[2];
-        e21 = E_ptr[3]; e22 = E_ptr[4]; e23 = E_ptr[5];
-        e31 = E_ptr[6]; e32 = E_ptr[7]; e33 = E_ptr[8];
+    void setModelParameters(const cv::Mat &model) override {
+        float *E_ptr = (float *) model.data;
+        e11 = E_ptr[0];
+        e12 = E_ptr[1];
+        e13 = E_ptr[2];
+        e21 = E_ptr[3];
+        e22 = E_ptr[4];
+        e23 = E_ptr[5];
+        e31 = E_ptr[6];
+        e32 = E_ptr[7];
+        e33 = E_ptr[8];
     }
 
     /*
@@ -49,10 +57,10 @@ public:
      * x' = (y'1 y'2 y'3) / y'3
      * x  = (y1  y2  y3)  / y3
      */
-    unsigned int EstimateModel(const int * const sample, std::vector<Model*>& models) override {
+    unsigned int EstimateModel(const int *const sample, std::vector<Model *> &models) override {
         cv::Mat_<float> E;
 
-        unsigned int models_count = e_solver->FivePoints (sample, E);
+        unsigned int models_count = e_solver->FivePoints(sample, E);
 
         for (unsigned int i = 0; i < models_count; i++) {
             models[i]->setDescriptor(E.rowRange(i * 3, i * 3 + 3));
@@ -61,10 +69,11 @@ public:
         return models_count;
     }
 
-    bool EstimateModelNonMinimalSample(const int * const sample, unsigned int sample_size, Model &model) override {
+    bool
+    EstimateModelNonMinimalSample(const int *const sample, unsigned int sample_size, Model &model) override {
         cv::Mat_<float> E;
 
-        if (! f_solver->EightPointsAlgorithm(sample, sample_size, E)) {
+        if (!f_solver->EightPointsAlgorithm(sample, sample_size, E)) {
             return false;
         }
 
@@ -74,11 +83,11 @@ public:
     }
 
     float GetError(unsigned int pidx) override {
-        unsigned int smpl = 4*pidx;
+        unsigned int smpl = 4 * pidx;
         float x1 = points[smpl];
-        float y1 = points[smpl+1];
-        float x2 = points[smpl+2];
-        float y2 = points[smpl+3];
+        float y1 = points[smpl + 1];
+        float x2 = points[smpl + 2];
+        float y2 = points[smpl + 3];
 
         // pt2^T * E, line 1
         float l1 = e11 * x2 + e21 * y2 + e31;
@@ -107,13 +116,13 @@ public:
     }
 
 
-    static void getModelbyCameraMatrix (const cv::Mat &K1, const cv::Mat &K2, const cv::Mat &F, cv::Mat &E) {
-        E =  K2.t() * F * K1;
+    static void getModelbyCameraMatrix(const cv::Mat &K1, const cv::Mat &K2, const cv::Mat &F, cv::Mat &E) {
+        E = K2.t() * F * K1;
     }
 
     int SampleNumber() override {
         return 5;
     }
 };
-
+}}
 #endif //USAC_ESSENTIALESTIMATOR_H

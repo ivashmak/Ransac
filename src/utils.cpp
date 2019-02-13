@@ -2,10 +2,11 @@
 // It is subject to the license terms in the LICENSE file found in the top-level directory
 // of this distribution and at http://opencv.org/license.html.
 
-#include "utils.hpp"
-#include "nearest_neighbors.hpp"
+#include "precomp.hpp"
+#include "../include/opencv2/usac/utils.hpp"
+#include "../include/opencv2/usac/nearest_neighbors.hpp"
 
-void densitySort (const cv::Mat &points, int knn, cv::Mat &sorted_points) {
+void cv::usac::densitySort (const cv::Mat &points, int knn, cv::Mat &sorted_points) {
     // get neighbors
     cv::Mat neighbors, neighbors_dists;
     NearestNeighbors::getNearestNeighbors_nanoflann(points, knn, neighbors, true, neighbors_dists);
@@ -37,7 +38,7 @@ void densitySort (const cv::Mat &points, int knn, cv::Mat &sorted_points) {
  * name
  * ext
  */
-void splitFilename (const std::string &filename, std::string &path, std::string &name, std::string &ext) {
+void cv::usac::splitFilename (const std::string &filename, std::string &path, std::string &name, std::string &ext) {
     const unsigned long dot = filename.find_last_of('.');
     const unsigned long slash = filename.find_last_of('/');
     // substr (pos, n) take substring of size n starting from position pos.
@@ -46,13 +47,7 @@ void splitFilename (const std::string &filename, std::string &path, std::string 
     ext = filename.substr(dot+1, filename.length()-1);
 }
 
-void swap(int* a, int* b) {
-    int t = *a;
-    *a = *b;
-    *b = t;
-}
-
-int quicksort_median (int * array, unsigned int k_minth, unsigned int left, unsigned int right) {
+int cv::usac::quicksort_median (int * array, unsigned int k_minth, unsigned int left, unsigned int right) {
     unsigned int lenght = right - left;
     if (lenght == 0) {
         return array[left];
@@ -66,7 +61,9 @@ int quicksort_median (int * array, unsigned int k_minth, unsigned int left, unsi
             j++;
             values_less_eq++;
         } else {
-            swap(&array[j], &array[right_]);
+            int temp = array[j];
+            array[j] = array[right_];
+            array[right_] = temp;
             right_--;
         }
     }
@@ -80,7 +77,7 @@ int quicksort_median (int * array, unsigned int k_minth, unsigned int left, unsi
 }
 
 // find median using quicksort with average O(n) complexity. Worst case is O(n^2).
-int findMedian (int * array, unsigned int length, bool make_copy) {
+int cv::usac::findMedian (int * array, unsigned int length, bool make_copy) {
     if (make_copy) {
         int * arr = new int [length];
         std::copy (array, array+length, arr);

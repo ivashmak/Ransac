@@ -5,31 +5,33 @@
 #ifndef RANSAC_UNIFORMSAMPLER_H
 #define RANSAC_UNIFORMSAMPLER_H
 
-#include "../estimator/estimator.hpp"
-#include "../random_generator/array_random_generator.hpp"
+#include "estimator.hpp"
+#include "array_random_generator.hpp"
+#include "sampler.hpp"
 
 // https://stackoverflow.com/questions/288739/generate-random-numbers-uniformly-over-an-entire-range
 
+namespace cv { namespace usac {
 class UniformSampler : public Sampler {
 private:
-    unsigned int * points_random_pool;
+    unsigned int *points_random_pool;
     int max;
 public:
     ~UniformSampler() override {
         if (isInit()) delete[] points_random_pool;
     }
 
-    UniformSampler (bool reset_time) {
+    UniformSampler(bool reset_time) {
         if (reset_time) {
-            srand (time(NULL));
+            srand(time(NULL));
         }
     }
 
-    void setSampleSize (unsigned int sample_size_) {
+    void setSampleSize(unsigned int sample_size_) {
         sample_size = sample_size_;
     }
 
-    void setPointsSize (unsigned int points_size_) {
+    void setPointsSize(unsigned int points_size_) {
         points_size = points_size_;
         points_random_pool = new unsigned int[points_size];
         for (unsigned int i = 0; i < points_size; i++) {
@@ -39,12 +41,12 @@ public:
     }
 
 
-    void generateSample (int * sample) override {
+    void generateSample(int *sample) override {
         for (unsigned int i = 0; i < sample_size; i++) {
             if (max == 0) {
                 max = points_size;
             }
-            unsigned int array_random_index = (unsigned int) random () % max;
+            unsigned int array_random_index = (unsigned int) random() % max;
             unsigned int random_number = points_random_pool[array_random_index];
             max--;
             points_random_pool[array_random_index] = points_random_pool[max];
@@ -53,10 +55,10 @@ public:
         }
     }
 
-    bool isInit () override {
+    bool isInit() override {
         return sample_size != 0 && points_size != 0;
     }
 };
-
+}}
 
 #endif //RANSAC_UNIFORMSAMPLER_H

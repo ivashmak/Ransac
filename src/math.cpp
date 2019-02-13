@@ -2,13 +2,14 @@
 // It is subject to the license terms in the LICENSE file found in the top-level directory
 // of this distribution and at http://opencv.org/license.html.
 
-#include "math.hpp"
+#include "precomp.hpp"
+#include "../include/opencv2/usac/math.hpp"
 
 /*
  * Fast finding inverse matrix 3x3
  * A^-1 = adj(A)/det(A)
  */
-bool inverse3x3 (cv::Mat& A) {
+bool cv::usac::inverse3x3 (cv::Mat& A) {
 //    assert (A.rows == 3 && A.cols == 3);
 
     float * A_ptr = (float *) A.data;
@@ -46,7 +47,7 @@ bool inverse3x3 (cv::Mat& A) {
     return true;
 }
 
-bool inverse3x3 (const cv::Mat& A, cv::Mat& A_inv){
+bool cv::usac::inverse3x3 (const cv::Mat& A, cv::Mat& A_inv){
     A_inv = A.clone();
     inverse3x3(A_inv);
 }
@@ -60,7 +61,7 @@ bool inverse3x3 (const cv::Mat& A, cv::Mat& A_inv){
  * Assume that my pow is called for power at least 2.
  *
  */
-float fast_pow (float n, int k) {
+float cv::usac::fast_pow (float n, int k) {
     float res = n * n;
     while (k > 2) {
         res *= n; k--;
@@ -68,7 +69,7 @@ float fast_pow (float n, int k) {
     return res;
 }
 
-int fast_factorial (int n) {
+int cv::usac::fast_factorial (int n) {
     int res = n;
     while (n > 2) {
         res *= --n;
@@ -76,7 +77,7 @@ int fast_factorial (int n) {
     return res;
 }
 
-void splitTime (Time * time, long time_mcs) {
+void cv::usac::splitTime (Time * time, long time_mcs) {
     time->microseconds = time_mcs % 1000;
     time->milliseconds = ((time_mcs - time->microseconds)/1000) % 1000;
     time->seconds = ((time_mcs - 1000*time->milliseconds - time->microseconds)/(1000*1000)) % 60;

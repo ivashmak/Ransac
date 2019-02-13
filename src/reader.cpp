@@ -1,7 +1,9 @@
-#include <opencv2/opencv.hpp>
-#include <opencv2/core.hpp>
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
 
-#include "Reader.h"
+#include "precomp.hpp"
+#include "../include/opencv2/usac/reader.hpp"
 
 /*
  * Get correspondence points from file
@@ -10,7 +12,7 @@
  * ...
  * xN yN zN xN yN zN isinlierN
  */
-void Reader::read_points (cv::Mat &pts1, cv::Mat &pts2, const std::string &filename) {
+void cv::usac::Reader::read_points (cv::Mat &pts1, cv::Mat &pts2, const std::string &filename) {
     std::fstream file(filename, std::ios_base::in);
 
     float x1, y1, z1, x2, y2, z2, inl;
@@ -55,7 +57,7 @@ void Reader::read_points (cv::Mat &pts1, cv::Mat &pts2, const std::string &filen
  * x1i y1i x2i y2i
  */
 
-void Reader::getPointsNby6 (const std::string& filename, cv::Mat &points) {
+void cv::usac::Reader::getPointsNby6 (const std::string& filename, cv::Mat &points) {
     std::fstream file(filename, std::ios_base::in);
 
     float x1, y1, z1, x2, y2, z2;
@@ -72,7 +74,7 @@ void Reader::getPointsNby6 (const std::string& filename, cv::Mat &points) {
  * ...
  * xN yN zN xN yN zN isinlierN
  */
-void Reader::getInliers (const std::string &filename, std::vector<int> &inliers) {
+void cv::usac::Reader::getInliers (const std::string &filename, std::vector<int> &inliers) {
     std::fstream file(filename, std::ios_base::in);
     inliers.clear();
 
@@ -126,7 +128,7 @@ void Reader::getInliers (const std::string &filename, std::vector<int> &inliers)
  * a21 a22 a23
  * a31 a32 a33
  */
-void Reader::getMatrix3x3 (const std::string &filename, cv::Mat &model) {
+void cv::usac::Reader::getMatrix3x3 (const std::string &filename, cv::Mat &model) {
     model = cv::Mat_<float>(3,3);
     std::fstream file(filename, std::ios_base::in);
     if (! file.is_open()) {
@@ -146,7 +148,7 @@ void Reader::getMatrix3x3 (const std::string &filename, cv::Mat &model) {
 
 
 
-bool Reader::SavePointsToFile(const cv::Mat &points, const char* file, std::vector<int> *inliers) {
+bool cv::usac::Reader::SavePointsToFile(const cv::Mat &points, const char* file, std::vector<int> *inliers) {
     std::ofstream outfile(file, std::ios::out);
 
     float *points_ptr = reinterpret_cast<float*>(points.data);
@@ -179,7 +181,7 @@ bool Reader::SavePointsToFile(const cv::Mat &points, const char* file, std::vect
     return true;
 }
 
-bool Reader::LoadPointsFromFile(cv::Mat &points, const char* file)
+bool cv::usac::Reader::LoadPointsFromFile(cv::Mat &points, const char* file)
 {
     std::ifstream infile(file);
 
@@ -216,7 +218,7 @@ bool Reader::LoadPointsFromFile(cv::Mat &points, const char* file)
  * Format
  * x1,y1,x2,y2,FGINN_ratio,SNN_ratio,detector,descriptor,is_correct
  */
-void Reader::readEVDPointsInliers (cv::Mat &points, std::vector<int>&inliers, const std::string &filename) {
+void cv::usac::Reader::readEVDPointsInliers (cv::Mat &points, std::vector<int>&inliers, const std::string &filename) {
     std::fstream file(filename, std::ios_base::in);
     inliers.clear();
 
@@ -269,7 +271,7 @@ void Reader::readEVDPointsInliers (cv::Mat &points, std::vector<int>&inliers, co
 }
 
 
-void Reader::readProjectionMatrix (cv::Mat &P, const std::string &filename) {
+void cv::usac::Reader::readProjectionMatrix (cv::Mat &P, const std::string &filename) {
     P = cv::Mat_<float>(3,4);
     std::fstream file(filename, std::ios_base::in);
 
@@ -287,7 +289,7 @@ void Reader::readProjectionMatrix (cv::Mat &P, const std::string &filename) {
     }
 }
 
-void Reader::readInliers (std::vector<int>&inliers, const std::string &filename) {
+void cv::usac::Reader::readInliers (std::vector<int>&inliers, const std::string &filename) {
     inliers.clear();
     std::fstream file(filename, std::ios_base::in);
 

@@ -44,9 +44,10 @@
 // http://cvrs.whu.edu.cn/downloads/ebooks/Multiple%20View%20Geometry%20in%20Computer%20Vision%20(Second%20Edition).pdf
 // page 279
 
-#include "fundamental_solver.hpp"
+#include "precomp.hpp"
+#include "../include/opencv2/usac/fundamental_solver.hpp"
 
-unsigned int FundamentalSolver::SevenPointsAlgorithm (const int * const sample, cv::Mat &F) {
+unsigned int cv::usac::FundamentalSolver::SevenPointsAlgorithm (const int * const sample, cv::Mat &F) {
     float w[7], u[9*9], v[9*9], c[4], r[3];
     float* f1, *f2;
     float t0, t1, t2;

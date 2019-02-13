@@ -1,26 +1,31 @@
-#include "tests.h"
-#include "../helper/Logging.h"
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
 
-void Tests::test (cv::Mat points,
-                   Model * model,
-                   const std::string &img_name,
-                   DATASET dataset,
-                   bool gt,
-                   const std::vector<int>& gt_inliers) {
+#include "test_precomp.hpp"
+#include "tests.hpp"
+#include "../include/opencv2/usac/math.hpp"
+#include "../include/opencv2/usac/drawing.hpp"
+
+void Tests::test (const cv::Mat &points,
+                  cv::usac::Model * model,
+                  const std::string &img_name1,
+                  const std::string &img_name2,
+                  bool gt,
+                  const std::vector<int>& gt_inliers) {
 
     cv::Mat neighbors, neighbors_dists;
 
-//    std::cout << "get neighbors\n";
     std::vector<std::vector<int>> neighbors_v;
 
     long nn_time = 0;
-    if (model->sampler == SAMPLER::Napsac || model->lo == LocOpt::GC) {
+    if (model->sampler == cv::usac::SAMPLER::Napsac || model->lo == cv::usac::LocOpt::GC) {
         // calculate time of nearest neighbor calculating
         auto begin_time = std::chrono::steady_clock::now();
-        if (model->neighborsType == NeighborsSearch::Nanoflann) {
-            NearestNeighbors::getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
+        if (model->neighborsType == cv::usac::NeighborsSearch::Nanoflann) {
+            cv::usac::NearestNeighbors::getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
         } else {
-            NearestNeighbors::getGridNearestNeighbors(points, model->cell_size, neighbors_v);
+            cv::usac::NearestNeighbors::getGridNearestNeighbors(points, model->cell_size, neighbors_v);
             std::cout << "GOT neighbors\n";
         }
         auto end_time = std::chrono::steady_clock::now();
@@ -28,22 +33,22 @@ void Tests::test (cv::Mat points,
         nn_time = std::chrono::duration_cast<std::chrono::microseconds>(fs).count();
     }
 
-    Ransac ransac (model, points);
+    cv::usac::Ransac ransac (model, points);
 
 //    std::cout << "RUN ransac\n";
     ransac.run();
 
-    RansacOutput * ransacOutput = ransac.getRansacOutput();
+    cv::usac::RansacOutput * ransacOutput = ransac.getRansacOutput();
 
     std::cout << Tests::sampler2string(model->sampler) +"_"+Tests::estimator2string(model->estimator) << "\n";
     std::cout << "\ttime: ";
     long time_mcs = ransacOutput->getTimeMicroSeconds();
-    if (model->sampler == SAMPLER::Napsac || model->lo == LocOpt::GC) {
+    if (model->sampler == cv::usac::SAMPLER::Napsac || model->lo == cv::usac::LocOpt::GC) {
         time_mcs += nn_time;
     }
-    Time * time = new Time;
-    splitTime(time, time_mcs);
-    std::cout << time;
+    cv::usac::Time time;
+    cv::usac::splitTime(&time, time_mcs);
+    std::cout << &time;
     std::cout << "\tMain iterations: " << ransacOutput->getNumberOfMainIterations() << "\n";
     std::cout << "\tLO iterations: " << ransacOutput->getLOIters() <<
     " (where " << ransacOutput->getLOInnerIters () << " (inner iters) and " <<
@@ -54,17 +59,13 @@ void Tests::test (cv::Mat points,
     std::cout << "Best model = ...\n" << ransacOutput->getModel ()->returnDescriptor() << "\n";
 
     if (gt) {
-        Estimator * estimator;
+        cv::usac::Estimator * estimator;
         initEstimator(estimator, model->estimator, points);
-        float error = Quality::getErrorGT_inl(estimator, ransacOutput->getModel(), gt_inliers);
+        float error = cv::usac::Quality::getErrorGT_inl(estimator, ransacOutput->getModel(), gt_inliers);
         std::cout << "Ground Truth number of inliers for same model parametres is " << gt_inliers.size() << "\n";
         std::cout << "Error to GT inliers " << error << "\n";
     }
-
-    // save result and compare with last run
-    Logging::compare(model, ransacOutput);
-    Logging::saveResult(model, ransacOutput);
     std::cout << "-----------------------------------------------------------------------------------------\n";
 
-    Drawing::draw(ransacOutput->getModel(), dataset, img_name);
+    cv::usac::draw::draw(ransacOutput->getModel(), points, img_name1, img_name2);
 }

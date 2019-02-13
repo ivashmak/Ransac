@@ -5,98 +5,84 @@ project (usac)
 find_package (OpenCV REQUIRED)
 
 add_executable(
-        ransac main.cpp
+        ransac test/test_main.cpp
 
-        generator/generator.cpp
-        generator/generator.h
+        src/reader.cpp
+        include/opencv2/usac/reader.hpp
 
-        detector/Reader.cpp
-        detector/Reader.h
-        detector/detector.cpp
-        detector/detector.h
+        include/opencv2/usac/quality.hpp
 
-        usac/quality/quality.hpp
-        usac/quality/line_quality.hpp
+        include/opencv2/usac/standard_termination_criteria.hpp
+        include/opencv2/usac/prosac_termination_criteria.hpp
+        include/opencv2/usac/termination_criteria.hpp
 
-        usac/termination_criteria/standard_termination_criteria.hpp
-        usac/termination_criteria/prosac_termination_criteria.hpp
-        usac/termination_criteria/termination_criteria.hpp
+        include/opencv2/usac/sampler.hpp
+        include/opencv2/usac/uniform_sampler.hpp
+        include/opencv2/usac/napsac_sampler.hpp
+        include/opencv2/usac/prosac_sampler.hpp
 
-        usac/sampler/sampler.hpp
-        usac/sampler/uniform_sampler.hpp
-        usac/sampler/napsac_sampler.hpp
-        usac/sampler/progressive_sampler.hpp
-        usac/sampler/evsac_sampler.hpp
-        usac/sampler/prosac_simple_sampler.hpp
-        usac/sampler/prosac_sampler.hpp
-        usac/sampler/prosac_napsac_sampler.hpp
+        src/ransac.cpp
+        include/opencv2/usac/ransac.hpp
+        include/opencv2/usac/ransac_output.hpp
+        include/opencv2/usac/init.hpp
+        src/init.cpp
 
-        usac/ransac/ransac.cpp
-        usac/ransac/ransac.hpp
-        usac/ransac/ransac_output.hpp
-        usac/ransac/init.hpp
-        usac/ransac/init.cpp
-        
-        usac/estimator/estimator.hpp
-        usac/estimator/line2d_estimator.hpp
-        usac/estimator/homography_estimator.hpp
-        usac/estimator/essential_estimator.hpp
-        usac/estimator/fundamental_estimator.hpp
+        include/opencv2/usac/estimator.hpp
+        include/opencv2/usac/line2d_estimator.hpp
+        include/opencv2/usac/homography_estimator.hpp
+        include/opencv2/usac/essential_estimator.hpp
+        include/opencv2/usac/fundamental_estimator.hpp
 
-        usac/estimator/dlt/dlt.hpp usac/estimator/dlt/dlt.cpp
-        usac/estimator/dlt/normalized_dlt.cpp
-        usac/estimator/dlt/normalizing_transformation.cpp
+        include/opencv2/usac/dlt.hpp
+        src/dlt.cpp
+        src/normalized_dlt.cpp
+        src/normalizing_transformation.cpp
 
-        usac/estimator/essential/five_points.hpp
-        usac/estimator/essential/five_points.cpp
-        usac/estimator/essential/rpoly.cpp usac/estimator/essential/rpoly.hpp
-        usac/estimator/essential/polynomial.hpp
+        include/opencv2/usac/five_points.hpp
+        src/five_points.cpp
+        src/rpoly.cpp
+        include/opencv2/usac/rpoly.hpp
+        include/opencv2/usac/polynomial.hpp
 
-        usac/estimator/fundamental/seven_points.cpp
-        usac/estimator/fundamental/eight_points.cpp
-        usac/estimator/fundamental/fundamental_solver.hpp
+        src/seven_points.cpp
+        src/eight_points.cpp
+        include/opencv2/usac/fundamental_solver.hpp
 
-        usac/local_optimization/local_optimization.hpp
-        usac/local_optimization/inner_local_optimization.hpp
-        usac/local_optimization/iterative_local_optimization.hpp
-        usac/local_optimization/graphcut.cpp usac/local_optimization/graphcut.hpp
-        usac/local_optimization/irls.hpp
-        usac/local_optimization/greedy_local_optimization.hpp
-        usac/local_optimization/sorted_lo.hpp
-        
-        usac/model.hpp
-        usac/sprt.hpp
-        usac/precomp.hpp
+        include/opencv2/usac/local_optimization.hpp
+        include/opencv2/usac/inner_local_optimization.hpp
+        include/opencv2/usac/iterative_local_optimization.hpp
+        src/graphcut.cpp
+        include/opencv2/usac/graphcut.hpp
 
-        test/tests.h
+        include/opencv2/usac/model.hpp
+        include/opencv2/usac/sprt.hpp
+        src/precomp.hpp
+
+        test/tests.hpp
         test/test_homography_fitting.cpp
         test/test_line2d_fitting.cpp
         test/test_essential_fitting.cpp
         test/test_fundamental_fitting.cpp
         test/test.cpp
-        test/statistical_results.h
-        test/test_neighbors_search.cpp
         test/test_precomp.hpp
         test/test_utils.cpp
+        test/test_random_generator.cpp
 
-        helper/Logging.h
-        helper/drawing/Drawing.h
-        helper/drawing/DrawPanorama.cpp
-        helper/drawing/DrawEpipolarLines.cpp
+        include/opencv2/usac/drawing.hpp
+        src/drawing.cpp
+        src/draw_epipolar_lines.cpp
+        src/draw_panorama.cpp
 
-        usac/random_generator/random_generator.hpp
-        usac/random_generator/array_random_generator.hpp
-        usac/random_generator/uniform_random_generator.hpp
-        test/test_random_generator.h
+        include/opencv2/usac/random_generator.hpp
+        include/opencv2/usac/array_random_generator.hpp
+        include/opencv2/usac/uniform_random_generator.hpp
 
-        dataset/Dataset.h dataset/Dataset.cpp
-        dataset/SaveGTModel.h dataset/SaveGTModel.cpp
-        dataset/GetImage.h
-
-        usac/utils/math.cpp usac/utils/math.hpp
-        usac/utils/nearest_neighbors.cpp usac/utils/nearest_neighbors.hpp
-        usac/utils/utils.hpp
-        usac/utils/utils.cpp
+        src/math.cpp
+        include/opencv2/usac/math.hpp
+        src/nearest_neighbors.cpp
+        include/opencv2/usac/nearest_neighbors.hpp
+        include/opencv2/usac/utils.hpp
+        src/utils.cpp
 )
 
 # parallel

@@ -23,11 +23,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#include "precomp.hpp"
-
+#include <iostream>
 #include "model.hpp"
-#include "utils/math.hpp"
-#include "estimator/estimator.hpp"
+#include "math.hpp"
+#include "estimator.hpp"
 
 #define LOG_ETA_0 log(0.05)
 /*
@@ -39,6 +38,7 @@
  * https://ieeexplore.ieee.org/document/1544925
  */
 
+namespace cv { namespace usac {
 class SPRT {
 private:
     class SPRT_history {
@@ -71,13 +71,11 @@ private:
 
     double t_M, m_S, threshold, confidence;
     unsigned int points_size, sample_size, max_iterations, random_pool_idx;
-    std::vector<SPRT_history*> sprt_histories;
+    std::vector<SPRT_history *> sprt_histories;
 
-    Estimator * estimator;
+    Estimator *estimator;
 
-    int number_rejected_models;
-    int sum_fraction_data_points;
-    unsigned int * points_random_pool;
+    unsigned int *points_random_pool;
 
     int max_hypothesis_test_before_sprt;
 public:
@@ -86,11 +84,11 @@ public:
         delete[] points_random_pool;
     }
 
-    SPRT (Model * model, Estimator * estimator_, unsigned int points_size_) {
+    SPRT(Model *model, Estimator *estimator_, unsigned int points_size_) {
         if (model->reset_random_generator) srand(time(NULL));
 
         // Generate array of points
-        points_random_pool = new unsigned int [points_size_];
+        points_random_pool = new unsigned int[points_size_];
         for (unsigned int i = 0; i < points_size_; i++) {
             points_random_pool[i] = i;
         }
@@ -98,7 +96,7 @@ public:
         int max = points_size_;
         // Shuffle random pool of points.
         for (unsigned int i = 0; i < points_size_; i++) {
-            random_pool_idx = (unsigned int) random () % max;
+            random_pool_idx = (unsigned int) random() % max;
             temp = points_random_pool[random_pool_idx];
             max--;
             points_random_pool[random_pool_idx] = points_random_pool[max];
@@ -107,7 +105,7 @@ public:
         random_pool_idx = 0;
         //
 
-        sprt_histories = std::vector<SPRT_history*>();
+        sprt_histories = std::vector<SPRT_history *>();
         sprt_histories.push_back(new SPRT_history);
         estimator = estimator_;
 
@@ -132,7 +130,7 @@ public:
             sprt_histories[0]->epsilon = 0.2;
             t_M = 300;
             m_S = 4; // up to 10 models
-        } else if (model->estimator == ESTIMATOR::Line2d){
+        } else if (model->estimator == ESTIMATOR::Line2d) {
             t_M = 100;
             m_S = 1;
             /*
@@ -153,7 +151,7 @@ public:
 
         } else {
             std::cout << "UNDEFINED ESTIMATOR\n";
-            exit (111);
+            exit(111);
         }
 
         current_sprt_idx = 0;
@@ -167,9 +165,6 @@ public:
 
         sprt_histories[0]->A = estimateThresholdA(sprt_histories[0]->epsilon, sprt_histories[0]->delta);
         sprt_histories[0]->k = 0;
-
-        number_rejected_models = 0;
-        sum_fraction_data_points = 0;
 
         max_hypothesis_test_before_sprt = model->max_hypothesis_test_before_sprt;
     }
@@ -188,18 +183,14 @@ public:
      *
      * Verifies model and returns model score.
      */
-    bool verifyModelAndGetModelScore (Model * model, int current_hypothese, unsigned int maximum_score, 
-                                                                            Score *score) {
+    bool verifyModelAndGetModelScore(Model *model, int current_hypothese, unsigned int maximum_score,
+                                     Score *score) {
 
         estimator->setModelParameters(model->returnDescriptor());
 
         double epsilon = sprt_histories[current_sprt_idx]->epsilon;
         double delta = sprt_histories[current_sprt_idx]->delta;
         double A = sprt_histories[current_sprt_idx]->A;
-
-//         std::cout << "epsilon = " << epsilon << "\n";
-//         std::cout << "delta =  " << delta << "\n";
-//         std::cout << "A =  " << A << "\n";
 
         double lambda_new, lambda = 1;
 
@@ -222,25 +213,20 @@ public:
             }
             random_pool_idx++;
 
-//              std::cout << "λ = " << lambda_new << " vs A = " << A << "\n";
             if (lambda_new > A) {
-//                std::cout << "\n";
-//                std::cout << "BAD MODEL IN " << tested_point << "/" << points_size << "\n";
                 good = false;
                 tested_point++;
                 break;
             }
             lambda = lambda_new;
         }
-//        std::cout << "\n";
 
         if (good) {
             // Assume that model is good or current iteration is less than threshold of tested hypothesis before applying sprt.
             // Otherwise we don't need model score, because model is bad.
             score->inlier_number = tested_inliers;
             score->score = score->inlier_number;
-        } else
-        if (current_hypothese < max_hypothesis_test_before_sprt) {
+        } else if (current_hypothese < max_hypothesis_test_before_sprt) {
             // we still need the score in this case
             unsigned int inliers_after_test = 0;
             for (unsigned int p = tested_point; p < points_size; p++) {
@@ -264,16 +250,12 @@ public:
              * Store the current model parameters θ
              */
             if (tested_inliers > maximum_score) {
-                auto * new_sprt_history = new SPRT_history;
-//                 std::cout << "UPDATE. GOOD MODEL\n";
+                auto *new_sprt_history = new SPRT_history;
 
                 new_sprt_history->epsilon = (float) tested_inliers / points_size;
 
                 new_sprt_history->delta = delta;
-                new_sprt_history->A = estimateThresholdA (new_sprt_history->epsilon, delta);
-
-//                 new_sprt_history->delta = delta_estimated;
-//                 new_sprt_history->A = estimateThresholdA (new_sprt_history->epsilon, delta_estimated);
+                new_sprt_history->A = estimateThresholdA(new_sprt_history->epsilon, delta);
 
                 new_sprt_history->k = current_hypothese - last_sprt_update;
                 last_sprt_update = current_hypothese;
@@ -287,17 +269,10 @@ public:
             * δ can be estimated as the average fraction of consistent data points
             * in rejected models.
             */
-//             std::cout << "Reject model\n";
             float delta_estimated = (float) tested_inliers / tested_point;
 
-//             number_rejected_models++;
-//             sum_fraction_data_points += (float) tested_inliers / (float) tested_point;
-//             float delta_estimated = (float) sum_fraction_data_points / (float) number_rejected_models;
-
-//             std::cout << delta_estimated << " = delta est\n";
             if (delta_estimated > 0 && fabs(delta - delta_estimated) / delta > 0.05) {
-                auto * new_sprt_history = new SPRT_history;
-//                std::cout << "UPDATE. BAD MODEL\n";
+                auto *new_sprt_history = new SPRT_history;
 
                 /*
                 * Model rejected: re-estimate δ. If the estimate δ_ differs
@@ -329,22 +304,18 @@ public:
     * C = p(0|Hb) log (---------) + p(1|Hb) log (---------)
     *                   p (0|Hg)                  p (1|Hg)
     */
-    double estimateThresholdA (double epsilon, double delta) {
+    double estimateThresholdA(double epsilon, double delta) {
         double C;
-        C = (1 - delta) * log ((1 - delta)/(1-epsilon)) + delta * (log(delta/epsilon));
+        C = (1 - delta) * log((1 - delta) / (1 - epsilon)) + delta * (log(delta / epsilon));
         // K = K1/K2 + 1 = (t_M / P_g) / (m_S / (C * P_g)) + 1 = (t_M * S)/m_S + 1
         double K = (t_M * C) / m_S + 1;
         double An_1 = K;
-//         std::cout << "C = " << C << "\n";
-//         std::cout << "K = " << K << "\n";
-//         std::cout << An_1 << " An 1\n";
         // compute A using a recursive relation
         // A* = lim(n->inf)(An), the series typically converges within 4 iterations
         double An;
         for (unsigned int i = 0; i < 10; ++i) {
             An = K + log(An_1);
 
-//             std::cout << An_1 << " An\n";
             if (fabs(An - An_1) < 1.5e-8) {
                 break;
             }
@@ -368,63 +339,24 @@ public:
      * this equation does not have to be evaluated before nR < n0
      * nR = (1 - P_g)^k
      */
-    unsigned int getUpperBoundIterations (int inliers_size) {
+    unsigned int getUpperBoundIterations(int inliers_size) {
         double epsilon = (double) inliers_size / points_size;
-        double P_g = pow (epsilon, sample_size);
+        double P_g = pow(epsilon, sample_size);
         double log_eta_l_1 = 0;
         double h;
         for (unsigned int test = 0; test < current_sprt_idx; test++) {
             h = computeExponentH(sprt_histories[test]->epsilon, epsilon, sprt_histories[test]->delta);
-            log_eta_l_1 += log (1 - P_g * (1 - pow (sprt_histories[test]->A, -h))) * sprt_histories[test]->k;
+            log_eta_l_1 += log(1 - P_g * (1 - pow(sprt_histories[test]->A, -h))) * sprt_histories[test]->k;
         }
-//         std::cout << n_l_1 << "\n";
         double numerator = LOG_ETA_0 - log_eta_l_1;
-//         std::cout << numerator << " = numerator\n";
         if (numerator >= 0) return 0;
-        double denumerator = log (1 - P_g * (1 - 1/sprt_histories[current_sprt_idx]->A));
-//         std::cout << denumerator << " = denumerator\n";
-        if (std::isnan(denumerator) || fabs (denumerator) < 0.00001)
+        double denumerator = log(1 - P_g * (1 - 1 / sprt_histories[current_sprt_idx]->A));
+        if (std::isnan(denumerator) || fabs(denumerator) < 0.00001)
             return max_iterations;
 
-//         std::cout << log (1 - P_g/sprt_histories[current_sprt_idx]->A) << " down\n";
         double kl = numerator / denumerator;
-//         std::cout << kl << " = kl\n";
-        return (unsigned int) std::min ((unsigned int)kl , max_iterations);
+        return (unsigned int) std::min((unsigned int) kl, max_iterations);
     }
-
-
-    // ------------ Usac version (Raguram, et.al) (not using, just for compare) ----------
-    unsigned int updateSPRTStopping(unsigned int numInliers) {
-        double n_inliers = 1.0;
-        double n_pts = 1.0;
-        double h = 0.0, k = 0.0, prob_reject_good_model = 0.0, log_eta = 0.0;
-        double new_eps = (double)numInliers/points_size;
-
-        for (unsigned int i = 0; i < sample_size; ++i) {
-            n_inliers *= numInliers - i;
-            n_pts *= points_size - i;
-        }
-        double prob_good_model = n_inliers/n_pts;
-
-        if ( prob_good_model < std::numeric_limits<double>::epsilon() ) {
-            return max_iterations;
-        }
-        else if ( 1 - prob_good_model < std::numeric_limits<double>::epsilon() )
-        {
-            return 1;
-        }
-
-        for (unsigned int test = 0; test < current_sprt_idx; test++) {
-            k += sprt_histories[test]->k;
-            h = computeExponentH(new_eps, sprt_histories[test]->epsilon, sprt_histories[test]->delta);
-            prob_reject_good_model = 1/(exp( h*log(sprt_histories[test]->A) ));
-            log_eta += (double) sprt_histories[test]->k * log( 1 - prob_good_model*(1-prob_reject_good_model) );
-        }
-
-        double nusample_s = k + ( log(1-confidence) - log_eta ) / log( 1-prob_good_model * (1-(1/sprt_histories[current_sprt_idx]->A)) );
-        return (unsigned int) ceil(nusample_s);
-    }
-    //-----------------------------
 
     /*
      * h(i) must hold
@@ -434,38 +366,18 @@ public:
      *     ε(i)                  1 - ε
      *
      * ε * a^h + (1 - ε) * b^h = 1
-     * f (h) = ε * a^h + (1 - ε) * b^h - 1, h = ? => f(h) = 0 (roots searching)
-     * f'(h) = ε * a^h + (1 - ε) * b^h
-     * Leads to numerical solution (bisection, newton, taylor, ...)
-     * Newton: h(k+1) = h(k) - f(h(k))/f'(h(k))
      */
-    double computeExponentH (double epsilon, double epsilon_new, double delta) {
+    double computeExponentH(double epsilon, double epsilon_new, double delta) {
 
         double a, b, x0, x1, v0, v1;
-        a = log(delta/epsilon);
-        b = log ((1-delta)/(1-epsilon));
+        a = log(delta / epsilon);
+        b = log((1 - delta) / (1 - epsilon));
 
-        x0 = log (1/(1-epsilon_new))/b;
+        x0 = log(1 / (1 - epsilon_new)) / b;
         v0 = epsilon_new * exp(x0 * a);
-        x1 = log ((1-2*v0) / (1-epsilon_new))/b;
+        x1 = log((1 - 2 * v0) / (1 - epsilon_new)) / b;
         v1 = epsilon_new * exp(x1 * a) + (1 - epsilon_new) * exp(x1 * b);
-        double h = x0 - (x0 - x1)/(1+v0 - v1)*v0;
-
-        // OR:
-//         a = delta / epsilon;
-//         b = (1 - delta) / (1 - epsilon);
-//         auto fh = [&] (double h) { return epsilon_new * pow (a, h) + (1 - epsilon_new) * pow (b, h) - 1; };
-//         auto dfh = [&] (double h) { return epsilon_new * pow (a, h) + (1 - epsilon_new) * pow (b, h); };
-//         unsigned int iter = 0;
-//         double hn = 0, hn_1 = 2;
-//         while (abs (fh (hn_1)) > 0.0001 || iter < 100) {
-//             hn = hn_1 - fh (hn_1) / dfh(hn_1);
-//             hn_1 = hn;
-//             iter++;
-//         }
-
-//         std::cout << "h = " << h << "\n";
-//         std::cout << "hn = " << hn << "\n";
+        double h = x0 - (x0 - x1) / (1 + v0 - v1) * v0;
 
         if (std::isnan(h)) {
             // The equation always has solution for h = 0
@@ -473,22 +385,8 @@ public:
             // ε + 1 - ε = 1 -> 1 = 1
             return 0;
         }
-
-        // std::cout << "------compute h--------\n";
-//          std::cout << "epsilon " << epsilon << '\n';
-//          std::cout << "epsilon_new " << epsilon_new << '\n';
-//          std::cout << "delta " << delta << '\n';
-//          std::cout << "al " << al << '\n';
-//            std::cout << "h = " << (x0 - (x0 - x1)/(1+v0 - v1)*v0) << "\n";
-        // std::cout << "be " << be << '\n';
-        // std::cout << "v0 " << v0 << '\n';
-        // std::cout << "v1 " << v1 << '\n';
-        // std::cout << "x0 " << x0 << '\n';
-        // std::cout << "x1 " << x1 << '\n';
-        // std::cout << "------------------------------------------\n";
-
-        return h;
+  return h;
     }
 };
-
+}}
 #endif // SPRT_H

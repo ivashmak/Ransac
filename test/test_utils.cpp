@@ -1,9 +1,14 @@
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
 #ifndef USAC_TEST_UTILS_CPP_H
 #define USAC_TEST_UTILS_CPP_H
 
 #include "test_precomp.hpp"
-#include "../usac/utils/utils.hpp"
-#include "tests.h"
+#include "tests.hpp"
+#include "../include/opencv2/usac/utils.hpp"
+#include "../include/opencv2/usac/reader.hpp"
 
 void Tests::testFindMedian () {
 
@@ -25,7 +30,7 @@ void Tests::testFindMedian () {
         }
 
         auto begin_time = std::chrono::steady_clock::now();
-        int med = findMedian(arr, arr_size);
+        int med = cv::usac::findMedian(arr, arr_size);
         time1 += std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - begin_time).count();
 
         // check
@@ -58,11 +63,11 @@ void Tests::testFindNearestNeighbors (int knn) {
 
     std::string img_name = "Brussels";
     cv::Mat points, points1, points2;
-    Reader::read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
+    cv::usac::Reader::read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
     cv::hconcat(points1, points2, points);
     std::vector<std::vector<int>> neighbors;
     start = std::clock();
-    NearestNeighbors::getGridNearestNeighbors(points, 50, neighbors);
+    cv::usac::NearestNeighbors::getGridNearestNeighbors(points, 50, neighbors);
     duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
     std::cout << "duration grid: "<< duration <<'\n';
 
@@ -104,7 +109,7 @@ void Tests::testFindNearestNeighbors (int knn) {
 //
     start = std::clock();
     cv::Mat neighbors_distances;
-    NearestNeighbors::getNearestNeighbors_nanoflann(points, knn, nearest_neighbors_nanoflann, false, neighbors_distances);
+    cv::usac::NearestNeighbors::getNearestNeighbors_nanoflann(points, knn, nearest_neighbors_nanoflann, false, neighbors_distances);
     duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
     std::cout << "duration nanoflann: "<< duration <<'\n';
 //    std::cout << nearest_neighbors_nanoflann << "\n";
@@ -151,7 +156,7 @@ void Tests::testInv () {
 
     start = std::clock();
     for (int i = 0; i < test_size; i++) {
-        inverse3x3(A, A_inv);
+        cv::usac::inverse3x3(A, A_inv);
     }
     duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
     std::cout<< "duration: "<< duration <<'\n';
