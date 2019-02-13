@@ -1,4 +1,4 @@
 build/
-tmp/
-.idea/
-dataset/MVS/
+main.cpp
+.gitignore
+

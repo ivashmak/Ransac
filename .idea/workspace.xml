@@ -1,0 +1,1975 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="true">
+    <generated>
+      <config projectName="usac" targetName="ransac" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Default" GENERATION_DIR="build" BUILD_OPTIONS="-j 8" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2349f0c5-205e-48e6-8262-3d8b481d3476" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/USAC 2019 M. Ivashechkin, D. Barath, J. Matas.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Dataset.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Dataset.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/1/adam.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/1/cafe.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/1/cat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/1/dum.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/1/face.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/1/fox.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/1/girl.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/1/graf.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/1/grand.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/1/index.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/1/mag.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/1/pkk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/1/shop.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/1/there.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/1/vin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/2/adam.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/2/cafe.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/2/cat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/2/dum.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/2/face.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/2/fox.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/2/girl.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/2/graf.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/2/grand.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/2/index.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/2/mag.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/2/pkk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/2/shop.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/2/there.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/2/vin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/EVD_tentatives/adam.png_m.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/EVD_tentatives/cafe.png_m.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/EVD_tentatives/cat.png_m.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/EVD_tentatives/dum.png_m.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/EVD_tentatives/face.png_m.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/EVD_tentatives/fox.png_m.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/EVD_tentatives/girl.png_m.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/EVD_tentatives/graf.png_m.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/EVD_tentatives/grand.png_m.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/EVD_tentatives/index.png_m.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/EVD_tentatives/mag.png_m.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/EVD_tentatives/pkk.png_m.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/EVD_tentatives/shop.png_m.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/EVD_tentatives/there.png_m.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/EVD_tentatives/vin.png_m.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/h/adam.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/h/cafe.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/h/cat.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/h/dum.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/h/face.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/h/fox.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/h/girl.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/h/graf.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/h/grand.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/h/index.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/h/mag.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/h/pkk.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/h/shop.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/h/there.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/EVD/h/vin.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/GetImage.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/BostonA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/BostonB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/BostonLibA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/BostonLibB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/BostonLib_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/Boston_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/BruggeSquareA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/BruggeSquareB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/BruggeSquare_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/BruggeTowerA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/BruggeTowerB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/BruggeTower_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/BrusselsA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/BrusselsB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/Brussels_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/CapitalRegionA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/CapitalRegionB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/CapitalRegion_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/EiffelA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/EiffelB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/Eiffel_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/ExtremeZoomA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/ExtremeZoomB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/ExtremeZoom_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/LePoint1A.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/LePoint1B.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/LePoint1_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/LePoint2A.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/LePoint2B.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/LePoint2_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/LePoint3A.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/LePoint3B.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/LePoint3_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/README.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/WhiteBoardA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/WhiteBoardB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/WhiteBoard_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/adamA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/adamB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/adam_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/boatA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/boatB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/boat_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/cityA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/cityB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/city_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/grafA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/grafB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/graf_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/homogr.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/ren/ren_aA" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_new/BostonLib_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_new/Boston_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_new/BruggeSquare_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_new/BruggeTower_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_new/Brussels_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_new/CapitalRegion_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_new/Eiffel_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_new/ExtremeZoom_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_new/LePoint1_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_new/LePoint2_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_new/LePoint3_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_new/WhiteBoard_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_new/adam_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_new/boat_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_new/city_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_new/graf_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_old/BostonLib_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_old/Boston_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_old/BruggeSquare_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_old/BruggeTower_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_old/Brussels_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_old/CapitalRegion_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_old/Eiffel_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_old/ExtremeZoom_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_old/LePoint1_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_old/LePoint2_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_old/LePoint3_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_old/WhiteBoard_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_old/adam_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_old/boat_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_old/city_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/homogr/vpts_old/graf_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/KyotoA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/KyotoB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/Kyoto_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/Kyoto_vpts_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/Kyoto_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/README.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/bookshA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/bookshB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/booksh_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/booksh_vpts_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/booksh_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/boxA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/boxB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/box_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/box_vpts_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/box_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/castleA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/castleB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/castle_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/castle_vpts_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/castle_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/corrA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/corrB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/corr_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/corr_vpts_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/corr_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/graffA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/graffB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/graff_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/graff_vpts_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/graff_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/headA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/headB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/head_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/head_vpts_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/head_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/input.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/inputHA16.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/inputHA16_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/inputHA16_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/inputHA4.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/inputHA4_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/inputHA4_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/input_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/input_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/kampaA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/kampaB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/kampa_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/kampa_vpts_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/kampa_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/leafsA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/leafsB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/leafs_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/leafs_vpts_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/leafs_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/makeInput.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/plantA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/plantB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/plant_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/plant_vpts_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/plant_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/rotundaA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/rotundaB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/rotunda_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/rotunda_vpts_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/rotunda_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/shoutA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/shoutB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/shout_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/shout_vpts_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/shout_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/Kyoto_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/Kyoto_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/Kyoto_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/booksh_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/booksh_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/booksh_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/box_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/box_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/box_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/castle_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/castle_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/castle_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/corr_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/corr_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/corr_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/graff_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/graff_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/graff_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/head_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/head_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/head_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/kampa_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/kampa_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/kampa_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/leafs_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/leafs_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/leafs_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/plant_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/plant_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/plant_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/rotunda_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/rotunda_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/rotunda_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/shout_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/shout_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/shout_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/valbonne_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/valbonne_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/valbonne_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/wall_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/wall_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/wall_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/wash_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/wash_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/wash_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/zoom_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/zoom_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/sift_update/zoom_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/valbonneA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/valbonneB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/valbonne_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/valbonne_vpts_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/valbonne_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/wallA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/wallB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/wall_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/wall_vpts_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/wall_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/washA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/washB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/wash_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/wash_vpts_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/wash_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/zoomA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/zoomB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/zoom_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/zoom_vpts_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/kusvod2/zoom_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/middlebury-mview/README.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/middlebury-mview/dino1A.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/middlebury-mview/dino1B.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/middlebury-mview/dino1_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/middlebury-mview/dino2A.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/middlebury-mview/dino2B.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/middlebury-mview/dino2_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/middlebury-mview/temple1A.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/middlebury-mview/temple1B.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/middlebury-mview/temple1_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/middlebury-mview/temple2A.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/middlebury-mview/temple2B.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/middlebury-mview/temple2_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/BrusselsA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/BrusselsB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/Brussels_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/Brussels_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/DresdenA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/DresdenB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/Dresden_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/Dresden_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/Leuven1A.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/Leuven1B.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/Leuven1_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/Leuven1_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/Leuven2A.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/Leuven2B.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/Leuven2_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/Leuven2_vpts_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/Lebeda/strechamvs/README.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/SaveGTModel.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/SaveGTModel.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/barrsmith.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/barrsmithA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/barrsmithB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/barrsmith_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/barrsmith_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/bonhall.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/bonhallA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/bonhallB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/bonhall_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/bonhall_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/bonython.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/bonythonA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/bonythonB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/bonython_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/bonython_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/elderhallb.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/elderhallbA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/elderhallbB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/elderhallb_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/elderhallb_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/hartley.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/hartleyA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/hartleyB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/hartley_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/hartley_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/johnsona.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/johnsonaA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/johnsonaB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/johnsona_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/johnsona_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/johnsonb.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/johnsonbA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/johnsonbB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/johnsonb_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/johnsonb_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/ladysymon.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/ladysymonA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/ladysymonB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/ladysymon_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/ladysymon_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/library.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/libraryA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/libraryB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/library_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/library_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/napiera.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/napieraA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/napieraB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/napiera_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/napiera_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/napierb.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/napierbA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/napierbB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/napierb_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/napierb_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/neem.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/neemA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/neemB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/neem_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/neem_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/nese.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/neseA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/neseB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/nese_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/nese_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/oldclassicswing.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/oldclassicswingA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/oldclassicswingB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/oldclassicswing_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/oldclassicswing_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/physics.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/physicsA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/physicsB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/physics_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/physics_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sene.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/seneA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/seneB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sene_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sene_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/barrsmith_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/barrsmith_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/barrsmith_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/bonhall_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/bonhall_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/bonhall_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/bonython_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/bonython_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/bonython_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/elderhallb_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/elderhallb_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/elderhallb_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/hartley_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/hartley_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/hartley_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/johnsona_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/johnsona_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/johnsona_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/johnsonb_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/johnsonb_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/johnsonb_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/ladysymon_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/ladysymon_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/ladysymon_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/library_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/library_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/library_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/napiera_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/napiera_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/napiera_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/napierb_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/napierb_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/napierb_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/neem_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/neem_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/neem_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/nese_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/nese_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/nese_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/oldclassicswing_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/oldclassicswing_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/oldclassicswing_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/physics_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/physics_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/physics_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/sene_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/sene_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/sene_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/unihouse_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/unihouse_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/unihouse_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/unionhouse_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/unionhouse_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/sift_update/unionhouse_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/unihouse.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/unihouseA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/unihouseB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/unihouse_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/unihouse_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/unionhouse.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/unionhouseA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/unionhouseB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/unionhouse_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/adelaidermf/unionhouse_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/barrsmithA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/barrsmithB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/barrsmith_annot.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/barrsmith_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/bonhall.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/bonhallA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/bonhallB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/bonhall_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/bonythonA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/bonythonB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/bonython_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/breadcube.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/breadcubechips.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/cube.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/cubechips.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/dinobooks.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/elderhalla.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/elderhallaA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/elderhallaB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/elderhalla_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/elderhallbA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/elderhallbB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/elderhallb_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/hartleyA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/hartleyB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/hartley_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/johnssonaA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/johnssonaB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/johnssona_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/johnssonbA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/johnssonbB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/johnssonb_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/ladysymonA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/ladysymonB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/ladysymon_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/libraryA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/libraryB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/library_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/napieraA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/napieraB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/napiera_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/napierbA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/napierbB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/napierb_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/neemA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/neemB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/neem_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/oldclassicswingA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/oldclassicswingB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/oldclassicswing_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/physicsA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/physicsB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/physics_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/seneA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/seneB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/sene_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/unihouseA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/unihouseB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/unihouse_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/unionhouseA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/unionhouseB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/fundamental/unionhouse_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BostonA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BostonB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BostonLibA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BostonLibB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BostonLib_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BostonLib_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BostonLib_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/Boston_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/Boston_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/Boston_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BruggeSquareA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BruggeSquareB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BruggeSquare_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BruggeSquare_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BruggeSquare_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BruggeTowerA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BruggeTowerB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BruggeTower_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BruggeTower_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BruggeTower_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BrusselsA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/BrusselsB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/Brussels_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/Brussels_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/Brussels_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/CapitalRegionA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/CapitalRegionB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/CapitalRegion_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/CapitalRegion_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/CapitalRegion_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/EiffelA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/EiffelB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/Eiffel_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/Eiffel_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/Eiffel_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/ExtremeZoomA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/ExtremeZoomB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/ExtremeZoom_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/ExtremeZoom_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/ExtremeZoom_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/LePoint1A.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/LePoint1B.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/LePoint1_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/LePoint1_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/LePoint1_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/LePoint2A.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/LePoint2B.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/LePoint2_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/LePoint2_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/LePoint2_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/LePoint3A.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/LePoint3B.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/LePoint3_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/LePoint3_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/LePoint3_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/README.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/WhiteBoardA.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/WhiteBoardB.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/WhiteBoard_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/WhiteBoard_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/WhiteBoard_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/adamA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/adamB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/adam_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/adam_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/adam_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/boatA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/boatB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/boat_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/boat_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/boat_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/cityA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/cityB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/city_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/city_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/city_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/adamA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/adamB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/adam_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/cafeA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/cafeB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/cafe_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/catA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/catB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/cat_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/dumA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/dumB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/dum_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/faceA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/faceB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/face_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/foxA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/foxB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/fox_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/girlA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/girlB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/girl_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/grafA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/grafB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/graf_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/grandA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/grandB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/grand_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/indexA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/indexB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/index_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/magA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/magB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/mag_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/pkkA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/pkkB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/pkk_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/shopA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/shopB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/shop_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/thereA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/thereB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/there_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/vinA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/vinB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/extremeview/vin_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/grafA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/grafB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/graf_model.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/graf_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/graf_vpts.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/homogr.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/makeInput.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/BostonLib_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/BostonLib_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/BostonLib_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/Boston_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/Boston_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/Boston_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/BruggeSquare_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/BruggeSquare_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/BruggeSquare_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/BruggeTower_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/BruggeTower_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/BruggeTower_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/Brussels_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/Brussels_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/Brussels_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/Eiffel_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/Eiffel_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/Eiffel_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/ExtremeZoom_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/ExtremeZoom_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/ExtremeZoom_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/WhiteBoard_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/WhiteBoard_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/WhiteBoard_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/adam_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/adam_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/adam_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/boat_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/boat_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/boat_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/city_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/city_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/city_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/graf_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/graf_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/sift_update/graf_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/BostonLib_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/BostonLib_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/BostonLib_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/Boston_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/Boston_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/Boston_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/BruggeSquare_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/BruggeSquare_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/BruggeSquare_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/BruggeTower_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/BruggeTower_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/BruggeTower_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/Brussels_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/Brussels_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/Brussels_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/CapitalRegion_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/CapitalRegion_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/CapitalRegion_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/Eiffel_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/Eiffel_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/Eiffel_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/ExtremeZoom_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/ExtremeZoom_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/ExtremeZoom_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/LePoint1_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/LePoint1_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/LePoint1_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/LePoint2_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/LePoint2_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/LePoint2_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/LePoint3_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/LePoint3_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/LePoint3_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/WhiteBoard_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/WhiteBoard_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/WhiteBoard_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/adam_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/adam_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/adam_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/boat_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/boat_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/boat_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/city_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/city_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/city_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/graf_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/graf_score.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/homography/surf_update/graf_spts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/image1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/dataset.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/w=1000_h=1000_n=3.000000_I=200_N=10200.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/w=1000_h=1000_n=3.000000_I=200_N=10200.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/w=1000_h=1000_n=3.000000_I=500_N=10500.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/w=1000_h=1000_n=3.000000_I=500_N=10500.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/w=1000_h=1200_n=3.000000_I=200_N=10200.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/w=1000_h=1200_n=3.000000_I=200_N=10200.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/w=1000_h=1200_n=3.000000_I=500_N=10500.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/w=1000_h=1200_n=3.000000_I=500_N=10500.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/w=1200_h=1000_n=3.000000_I=200_N=10200.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/w=1200_h=1000_n=3.000000_I=200_N=10200.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/w=1200_h=1000_n=3.000000_I=500_N=10500.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/w=1200_h=1000_n=3.000000_I=500_N=10500.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/w=1200_h=1200_n=3.000000_I=200_N=10200.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/w=1200_h=1200_n=3.000000_I=200_N=10200.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/w=1200_h=1200_n=3.000000_I=500_N=10500.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/line2d/w=1200_h=1200_n=3.000000_I=500_N=10500.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/biscuit.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/biscuitA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/biscuitB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/biscuit_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/biscuitbook.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/biscuitbookA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/biscuitbookB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/biscuitbook_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/biscuitbookbox.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/biscuitbookboxA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/biscuitbookboxB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/biscuitbookbox_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/boardgame.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/boardgameA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/boardgameB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/boardgame_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/book.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/bookA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/bookB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/book_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/breadcartoychips.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/breadcartoychipsA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/breadcartoychipsB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/breadcartoychips_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/breadtoy.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/breadtoyA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/breadtoyB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/breadtoy_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/breadtoycar.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/breadtoycarA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/breadtoycarB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/breadtoycar_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/carchipscube.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/carchipscubeA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/carchipscubeB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/carchipscube_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/cubebreadtoychips.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/cubebreadtoychipsA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/cubebreadtoychipsB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/cubebreadtoychips_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/cubetoy.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/cubetoyA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/cubetoyB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/cubetoy_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/game.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/gameA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/gameB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/game_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/gamebiscuit.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/gamebiscuitA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/gamebiscuitB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/gamebiscuit_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/toycubecar.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/toycubecarA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/toycubecarB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/multi-h/toycubecar_pts.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/detector/Reader.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/detector/Reader.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/detector/detector.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/detector/detector.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/ransac.markdown" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/generator.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/generator.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/git-push.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/helper/Logging.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/helper/drawing/DrawEpipolarLines.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/helper/drawing/DrawPanorama.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/helper/drawing/Drawing.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/DLT.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/DLT_eigen.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/GetNormalizingTransformation.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/NeighborsEvaluation.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/NormalizedDLT.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/RESULTS_EVD.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/RESULTS_adelaidermf.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/RESULTS_homogr.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/RESULTS_kusvod2.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/check.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/check2.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/checkFundamentalMatrix.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/constraints.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/ess_matrix.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/essentialMatEst.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/final_table.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/fundm.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/mat2pts.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/nn1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/nn2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/points.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/ransac.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/read_points.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/save_results.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/sprt_h.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/store_results.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/store_results2.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/store_results3.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/store_results4.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/svd_eig.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/matlab/test_cov.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/opencv_contribute_condition.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/readme.markdown" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/errors.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/fails1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/fails2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/fails3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/inliers.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/iters.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/lo_iters.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/prosac_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/prosac_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/prosac_gc_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/prosac_gc_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/prosac_gc_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/prosac_gc_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/prosac_gc_sprt_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/prosac_gc_sprt_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/prosac_gc_sprt_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/prosac_gc_sprt_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/prosac_lo_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/prosac_lo_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/prosac_sprt_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/prosac_sprt_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/time.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_gc_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_gc_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_gc_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_gc_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_gc_grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_gc_grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_gc_sprt_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_gc_sprt_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_gc_sprt_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_gc_sprt_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_lo_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_lo_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_sprt_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/EVD/uniform_sprt_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/Essential_estimator_Uniform_sampler.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/Fundamental_estimator_Prosac_sampler.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/Fundamental_estimator_Uniform_sampler.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/Homography_estimator_Napsac_sampler.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/Homography_estimator_Prosac_sampler.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/Homography_estimator_Uniform_sampler.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/Line2d_estimator_GradualNapsacSampler_sampler.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/Line2d_estimator_Napsac_sampler.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/Line2d_estimator_Prosac_sampler.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/Line2d_estimator_Uniform_sampler.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/gt_nonprosac/errors.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/gt_nonprosac/fails1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/gt_nonprosac/fails2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/gt_nonprosac/fails3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/gt_nonprosac/inliers.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/gt_nonprosac/iters.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/gt_nonprosac/lo_iters.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/gt_nonprosac/time.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/gt_nonprosac/uniform_gc_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/gt_nonprosac/uniform_gc_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/gt_nonprosac/uniform_gc_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/gt_nonprosac/uniform_gc_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/gt_nonprosac/uniform_gc_sprt_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/gt_nonprosac/uniform_gc_sprt_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/gt_nonprosac/uniform_gc_sprt_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/gt_nonprosac/uniform_gc_sprt_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/errors.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/fails1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/fails2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/fails3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/inliers.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/iters.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/lo_iters.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/prosac_gc_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/prosac_gc_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/prosac_gc_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/prosac_gc_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/prosac_gc_sprt_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/prosac_gc_sprt_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/prosac_gc_sprt_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/prosac_gc_sprt_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/time.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/uniform_gc_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/uniform_gc_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/uniform_gc_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/uniform_gc_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/uniform_gc_sprt_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/uniform_gc_sprt_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/uniform_gc_sprt_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/adelaidermf/prosac_nongt/uniform_gc_sprt_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/blocks.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/ALL.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/barrsmith_annot.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/barrsmith_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/bonhall_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/bonython_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/elderhalla_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/elderhallb_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/hartley_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/johnssona_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/johnssonb_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/ladysymon_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/library_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/napiera_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/napierb_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/neem_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/oldclassicswing_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/physics_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/sene_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/unihouse_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/fundamental/unionhouse_pts.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/errors.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/fails1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/fails2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/fails3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/grid_size/errors.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/grid_size/fails1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/grid_size/fails2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/grid_size/fails3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/grid_size/inliers.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/grid_size/iters.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/grid_size/lo_iters.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/grid_size/time.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/inliers.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/iters.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/lo_iters.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/problem_images/errors.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/problem_images/fails1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/problem_images/fails2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/problem_images/fails3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/problem_images/inliers.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/problem_images/iters.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/problem_images/lo_iters.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/problem_images/time.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/problem_images/uniform_010_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/problem_images/uniform_010_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/problem_images/uniform_010_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/problem_images/uniform_010_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/problem_images/uniform_011_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/problem_images/uniform_011_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/problem_images/uniform_011_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/problem_images/uniform_011_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/prosac_gc_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/prosac_gc_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/prosac_gc_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/prosac_gc_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/prosac_gc_sprt_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/prosac_gc_sprt_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/prosac_gc_sprt_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/prosac_gc_sprt_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/time.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/uniform_gc_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/uniform_gc_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/uniform_gc_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/uniform_gc_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/uniform_gc_sprt_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/uniform_gc_sprt_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/uniform_gc_sprt_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/homography/uniform_gc_sprt_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/errors.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/fails1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/fails2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/fails3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/inliers.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/iters.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/lo_iters.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/prosac_gc_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/prosac_gc_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/prosac_gc_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/prosac_gc_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/prosac_gc_sprt_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/prosac_gc_sprt_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/prosac_gc_sprt_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/prosac_gc_sprt_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/time.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/uniform_gc_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/uniform_gc_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/uniform_gc_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/uniform_gc_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/uniform_gc_sprt_Grid_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/uniform_gc_sprt_Grid_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/uniform_gc_sprt_Nanoflann_c_sz_50.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/kusvod2/uniform_gc_sprt_Nanoflann_c_sz_50_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/fails_line2d.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/inliers_line2d.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/iters_line2d.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/napsac_000.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/napsac_000_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/napsac_001.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/napsac_001_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/napsac_010.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/napsac_010_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/napsac_100.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/napsac_100_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/napsac_111.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/napsac_111_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/prosac_000.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/prosac_000_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/prosac_001.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/prosac_001_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/prosac_010.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/prosac_010_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/prosac_100.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/prosac_100_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/prosac_111.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/prosac_111_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/time_line2d.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/uniform_000.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/uniform_000_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/uniform_001.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/uniform_001_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/uniform_010.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/uniform_010_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/uniform_100.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/uniform_100_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/uniform_111.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/line2d/uniform_111_m.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/linefitting_Line2d_estimator_GradualNapsacSampler_sampler.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/linefitting_Line2d_estimator_Napsac_sampler.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/linefitting_Line2d_estimator_Prosac_sampler.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/linefitting_Line2d_estimator_Uniform_sampler.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/linefitting_evsac.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/linefitting_napsac.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/linefitting_napsac_near.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/linefitting_prosac.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/linefitting_ransac.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/linefitting_sampler.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/napsac_near_0.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/napsac_near_1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/napsac_near_10.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/napsac_near_11.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/napsac_near_12.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/napsac_near_13.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/napsac_near_2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/napsac_near_3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/napsac_near_4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/napsac_near_5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/napsac_near_6.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/napsac_near_7.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/napsac_near_8.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/napsac_near_9.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/prosac_essential.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/prosac_fundamental.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/prosac_line2d.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/ransac_0.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/ransac_1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/ransac_10.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/ransac_11.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/ransac_12.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/ransac_13.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/ransac_2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/ransac_3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/ransac_4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/ransac_5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/ransac_6.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/ransac_7.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/ransac_8.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/ransac_9.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/uniform_essential.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/uniform_fundamental.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/uniform_homography.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/uniform_line2d.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/dlt/dlt.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/dlt/dlt.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/dlt/normalized_dlt.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/dlt/normalizing_transformation.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/essential/five_points.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/essential/five_points.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/essential/mblock.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/essential/polynomial.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/essential/rpoly.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/essential/rpoly.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/essential_estimator.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/estimator.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/fundamental/eight_points.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/fundamental/fundamental_solver.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/fundamental/seven_points.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/fundamental_estimator.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/homography_estimator.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/estimator/line2d_estimator.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/local_optimization/graphcut.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/local_optimization/graphcut.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/local_optimization/greedy_local_optimization.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/local_optimization/inner_local_optimization.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/local_optimization/irls.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/local_optimization/iterative_local_optimization.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/local_optimization/local_optimization.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/local_optimization/sorted_lo.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/quality/line_quality.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/quality/quality.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/random_generator/array_random_generator.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/random_generator/random_generator.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/random_generator/uniform_random_generator.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ransac/init.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ransac/init.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ransac/ransac.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ransac/ransac.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ransac/ransac_output.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sampler/evsac_sampler.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sampler/napsac_sampler.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sampler/progressive_sampler.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sampler/prosac_napsac_sampler.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sampler/prosac_sampler.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sampler/prosac_simple_sampler.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sampler/sampler.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sampler/uniform_sampler.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sprt.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/termination_criteria/prosac_termination_criteria.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/termination_criteria/standard_termination_criteria.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/termination_criteria/termination_criteria.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/math.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/math.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/nearest_neighbors.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/nearest_neighbors.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/utils.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/utils.hpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/statistical_results.h" beforeDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/CMakeFiles/" />
+    <ignored path="$PROJECT_DIR$/build/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Default" />
+  <component name="FavoritesManager">
+    <favorites_list name="Usac" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="test_homography_fitting.cpp" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/test/test_homography_fitting.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="235">
+              <caret line="68" selection-start-line="68" selection-end-line="68" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>res.</find>
+      <find>k_nearest_neighbors_indices_ptr</find>
+      <find>.txt</find>
+      <find>_pts</find>
+      <find>stopping_length</find>
+      <find>.mat</find>
+      <find>drawEpipolarLines</find>
+      <find>i</find>
+      <find>neighbors</find>
+      <find>spatial_coherence</find>
+      <find>prob_threshold</find>
+      <find>sift</find>
+      <find>reduce_threshold</find>
+      <find>generate_sample_size</find>
+      <find>max_sample</find>
+      <find>num_sample</find>
+      <find>model</find>
+      <find>Usac</find>
+      <find>Sampler</find>
+      <find>std::cout</find>
+      <find>array_randomGenerator</find>
+      <find>block</find>
+      <find>c2y</find>
+      <find>block_</find>
+      <find>decomposeProjectionMatrix</find>
+      <find>Eigen::Dynamic</find>
+      <find>-1 /*Eigen::Dynamic*/</find>
+      <find>drawHomographies</find>
+      <find>inl</find>
+      <find>input_points</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>cv::Mat</replace>
+      <replace>lo_score</replace>
+      <replace>lo_model</replace>
+      <replace>double</replace>
+      <replace>epsilon</replace>
+      <replace>EPSILON</replace>
+      <replace>estimator-&gt;getError</replace>
+      <replace>dim</replace>
+      <replace>float</replace>
+      <replace>delta</replace>
+      <replace>current_hypothese</replace>
+      <replace>res-&gt;</replace>
+      <replace>neighbors</replace>
+      <replace>termination_length</replace>
+      <replace>mat&quot;,</replace>
+      <replace>&quot;,</replace>
+      <replace>confidence</replace>
+      <replace>lambda</replace>
+      <replace>threshold_step</replace>
+      <replace>max_sample</replace>
+      <replace>sample_limit</replace>
+      <replace>.hpp</replace>
+      <replace>usac</replace>
+      <replace>random_generator</replace>
+      <replace>y2</replace>
+      <replace>cell_</replace>
+      <replace>-1 /*Eigen::Dynamic*/</replace>
+      <replace>Eigen::Dynamic</replace>
+      <replace>drawHomography</replace>
+      <replace>points</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/detector/detector.cpp" />
+        <option value="$PROJECT_DIR$/include/Matrix.h" />
+        <option value="$PROJECT_DIR$/usac/precomp.hpp" />
+        <option value="$PROJECT_DIR$/test/test.cpp" />
+        <option value="$PROJECT_DIR$/test/test_line2d_fitting.cpp" />
+        <option value="$PROJECT_DIR$/dataset/Dataset.cpp" />
+        <option value="$PROJECT_DIR$/detector/Reader.cpp" />
+        <option value="$PROJECT_DIR$/dataset/GetImage.h" />
+        <option value="$PROJECT_DIR$/helper/drawing/DrawEpipolarLines.cpp" />
+        <option value="$PROJECT_DIR$/usac/sprt.hpp" />
+        <option value="$PROJECT_DIR$/test/test_essential_fitting.cpp" />
+        <option value="$PROJECT_DIR$/usac/ransac/ransac.hpp" />
+        <option value="$PROJECT_DIR$/usac/estimator/essential/five_points.hpp" />
+        <option value="$PROJECT_DIR$/helper/drawing/Drawing.h" />
+        <option value="$PROJECT_DIR$/test/test_precomp.hpp" />
+        <option value="$PROJECT_DIR$/test/test_fundamental_fitting.cpp" />
+        <option value="$PROJECT_DIR$/usac/model.hpp" />
+        <option value="$PROJECT_DIR$/usac/local_optimization/local_optimization.hpp" />
+        <option value="$PROJECT_DIR$/usac/local_optimization/iterative_local_optimization.hpp" />
+        <option value="$PROJECT_DIR$/usac/local_optimization/inner_local_optimization.hpp" />
+        <option value="$PROJECT_DIR$/usac/local_optimization/graphcut.cpp" />
+        <option value="$PROJECT_DIR$/usac/local_optimization/graphcut.hpp" />
+        <option value="$PROJECT_DIR$/test/test_utils.cpp.h" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/usac/utils/nearest_neighbors.cpp" />
+        <option value="$PROJECT_DIR$/usac/utils/nearest_neighbors.hpp" />
+        <option value="$PROJECT_DIR$/usac/utils/math.cpp" />
+        <option value="$PROJECT_DIR$/usac/utils/math.hpp" />
+        <option value="$PROJECT_DIR$/test/tests.h" />
+        <option value="$PROJECT_DIR$/test/test_utils.cpp" />
+        <option value="$PROJECT_DIR$/usac/estimator/fundamental/eight_points.cpp" />
+        <option value="$PROJECT_DIR$/usac/estimator/dlt/dlt.cpp" />
+        <option value="$PROJECT_DIR$/usac/estimator/dlt/normalized_dlt.cpp" />
+        <option value="$PROJECT_DIR$/usac/estimator/estimator.hpp" />
+        <option value="$PROJECT_DIR$/usac/estimator/fundamental_estimator.hpp" />
+        <option value="$PROJECT_DIR$/usac/estimator/essential_estimator.hpp" />
+        <option value="$PROJECT_DIR$/usac/estimator/homography_estimator.hpp" />
+        <option value="$PROJECT_DIR$/usac/random_generator/random_generator.hpp" />
+        <option value="$PROJECT_DIR$/usac/sampler/sampler.hpp" />
+        <option value="$PROJECT_DIR$/usac/sampler/uniform_sampler.hpp" />
+        <option value="$PROJECT_DIR$/usac/ransac/init.cpp" />
+        <option value="$PROJECT_DIR$/usac/ransac/ransac_output.hpp" />
+        <option value="$PROJECT_DIR$/usac/estimator/line2d_estimator.hpp" />
+        <option value="$PROJECT_DIR$/main.cpp" />
+        <option value="$PROJECT_DIR$/usac/estimator/dlt/normalizing_transformation.cpp" />
+        <option value="$PROJECT_DIR$/usac/utils/utils.cpp" />
+        <option value="$PROJECT_DIR$/usac/utils/utils.hpp" />
+        <option value="$PROJECT_DIR$/usac/sampler/napsac_sampler.hpp" />
+        <option value="$PROJECT_DIR$/usac/ransac/ransac.cpp" />
+        <option value="$PROJECT_DIR$/test/test_homography_fitting.cpp" />
+        <option value="$PROJECT_DIR$/usac/quality/quality.hpp" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths />
+  </component>
+  <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="65" />
+    <option name="y" value="12" />
+    <option name="width" value="1187" />
+    <option name="height" value="928" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="usac" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Ransac" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="usac" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Ransac" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SearchEverywhereHistoryKey" value="logs&#9;null&#9;null" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/build" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.language" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Tests" />
+      <recent name="$PROJECT_DIR$/usac" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/Usac/TerminationCriteria" />
+      <recent name="$PROJECT_DIR$/Usac/LocalOptimization" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.Build All">
+    <configuration name="Build All" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Default" RUN_TARGET_PROJECT_NAME="usac" RUN_TARGET_NAME="ransac" EXPLICIT_BUILD_TARGET_NAME="all" />
+    <configuration name="ransac" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="usac" TARGET_NAME="ransac" CONFIG_NAME="Default" RUN_TARGET_PROJECT_NAME="usac" RUN_TARGET_NAME="ransac" />
+    <list>
+      <item itemvalue="Application.Build All" />
+      <item itemvalue="Application.ransac" />
+    </list>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2349f0c5-205e-48e6-8262-3d8b481d3476" name="Default" comment="" />
+      <created>1533719964450</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1533719964450</updated>
+      <workItem from="1533719967287" duration="9114000" />
+      <workItem from="1533832355888" duration="3431000" />
+      <workItem from="1533892952425" duration="13525000" />
+      <workItem from="1533909210602" duration="2664000" />
+      <workItem from="1533995336129" duration="204000" />
+      <workItem from="1533995564858" duration="822000" />
+      <workItem from="1533997808530" duration="2300000" />
+      <workItem from="1534069424127" duration="13206000" />
+      <workItem from="1534321634327" duration="23123000" />
+      <workItem from="1534435992540" duration="3682000" />
+      <workItem from="1534503212727" duration="18310000" />
+      <workItem from="1534589306560" duration="14997000" />
+      <workItem from="1534678437824" duration="10624000" />
+      <workItem from="1534924155321" duration="17957000" />
+      <workItem from="1535041751279" duration="6489000" />
+      <workItem from="1535102487408" duration="12403000" />
+      <workItem from="1535388656969" duration="5034000" />
+      <workItem from="1535445122205" duration="4828000" />
+      <workItem from="1535537263822" duration="20446000" />
+      <workItem from="1535710102517" duration="19793000" />
+      <workItem from="1535799418297" duration="13839000" />
+      <workItem from="1535886580880" duration="13093000" />
+      <workItem from="1536143774746" duration="4458000" />
+      <workItem from="1536315925252" duration="21619000" />
+      <workItem from="1536406573573" duration="6280000" />
+      <workItem from="1536652947399" duration="598000" />
+      <workItem from="1536736986090" duration="12234000" />
+      <workItem from="1536856170772" duration="4637000" />
+      <workItem from="1536914584321" duration="18799000" />
+      <workItem from="1537002554360" duration="19918000" />
+      <workItem from="1537108759182" duration="11392000" />
+      <workItem from="1537348894050" duration="31686000" />
+      <workItem from="1537525112559" duration="16853000" />
+      <workItem from="1537609685320" duration="23217000" />
+      <workItem from="1537700547445" duration="16628000" />
+      <workItem from="1537769353675" duration="3829000" />
+      <workItem from="1537858645495" duration="596000" />
+      <workItem from="1537893024545" duration="3193000" />
+      <workItem from="1537954847984" duration="27908000" />
+      <workItem from="1538126327403" duration="22778000" />
+      <workItem from="1538213061364" duration="17108000" />
+      <workItem from="1538308415820" duration="16539000" />
+      <workItem from="1538409818762" duration="4423000" />
+      <workItem from="1538497775158" duration="6793000" />
+      <workItem from="1538662450158" duration="10073000" />
+      <workItem from="1538750352035" duration="8095000" />
+      <workItem from="1539014528194" duration="599000" />
+      <workItem from="1539100390935" duration="11319000" />
+      <workItem from="1539256906923" duration="5925000" />
+      <workItem from="1539277867323" duration="4756000" />
+      <workItem from="1539355066485" duration="6151000" />
+      <workItem from="1539590358643" duration="5246000" />
+      <workItem from="1539863236226" duration="1488000" />
+      <workItem from="1540207256924" duration="2509000" />
+      <workItem from="1540477312876" duration="7627000" />
+      <workItem from="1540565932029" duration="16085000" />
+      <workItem from="1540645607306" duration="17765000" />
+      <workItem from="1540721051673" duration="17345000" />
+      <workItem from="1540816317574" duration="7980000" />
+      <workItem from="1540911598110" duration="660000" />
+      <workItem from="1540988464733" duration="6969000" />
+      <workItem from="1540995814199" duration="7148000" />
+      <workItem from="1541063377827" duration="20532000" />
+      <workItem from="1541173331589" duration="9572000" />
+      <workItem from="1541239454066" duration="5988000" />
+      <workItem from="1541421220144" duration="8553000" />
+      <workItem from="1541503505241" duration="14069000" />
+      <workItem from="1542027030305" duration="2880000" />
+      <workItem from="1542111246383" duration="12595000" />
+      <workItem from="1542724340518" duration="1657000" />
+      <workItem from="1542882591225" duration="21434000" />
+      <workItem from="1543067512956" duration="4846000" />
+      <workItem from="1543145718245" duration="18415000" />
+      <workItem from="1543235336039" duration="641000" />
+      <workItem from="1543326066106" duration="6278000" />
+      <workItem from="1543494508562" duration="22678000" />
+      <workItem from="1543664436308" duration="26011000" />
+      <workItem from="1543826756858" duration="17525000" />
+      <workItem from="1543916697400" duration="31061000" />
+      <workItem from="1544094361791" duration="13386000" />
+      <workItem from="1544263754714" duration="14774000" />
+      <workItem from="1544365838288" duration="17382000" />
+      <workItem from="1544461221954" duration="10651000" />
+      <workItem from="1544527479850" duration="10383000" />
+      <workItem from="1544617473287" duration="6581000" />
+      <workItem from="1544699846242" duration="10722000" />
+      <workItem from="1544722251625" duration="6104000" />
+      <workItem from="1544728836318" duration="3464000" />
+      <workItem from="1544803519745" duration="7040000" />
+      <workItem from="1544872142671" duration="15468000" />
+      <workItem from="1545072801061" duration="2919000" />
+      <workItem from="1545076527381" duration="2002000" />
+      <workItem from="1545129167779" duration="12703000" />
+      <workItem from="1545145011950" duration="7475000" />
+      <workItem from="1545159446115" duration="2232000" />
+      <workItem from="1545225851136" duration="11333000" />
+      <workItem from="1545302498194" duration="12091000" />
+      <workItem from="1545907471773" duration="20243000" />
+      <workItem from="1546000577005" duration="9775000" />
+      <workItem from="1546432535730" duration="4128000" />
+      <workItem from="1546685711285" duration="22344000" />
+      <workItem from="1546858880411" duration="12731000" />
+      <workItem from="1546944542676" duration="13134000" />
+      <workItem from="1547029268859" duration="18100000" />
+      <workItem from="1547109229321" duration="2807000" />
+      <workItem from="1547200731044" duration="599000" />
+      <workItem from="1547565634355" duration="1217000" />
+      <workItem from="1547812332023" duration="9028000" />
+      <workItem from="1548338455020" duration="5320000" />
+      <workItem from="1548761825998" duration="24697000" />
+      <workItem from="1549019985379" duration="8122000" />
+      <workItem from="1549275825981" duration="3445000" />
+      <workItem from="1549365457181" duration="595000" />
+      <workItem from="1549452223204" duration="22913000" />
+      <workItem from="1549634652257" duration="12730000" />
+      <workItem from="1549711430957" duration="17860000" />
+      <workItem from="1549888747782" duration="19498000" />
+      <workItem from="1549978780800" duration="18410000" />
+      <workItem from="1550050943926" duration="9209000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="1319640000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="64" y="-11" width="1217" height="1036" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49891305" visible="true" weight="0.18372484" />
+      <window_info anchor="bottom" id="TODO" order="7" weight="0.32998884" />
+      <window_info anchor="bottom" id="Messages" order="6" sideWeight="0.4979424" weight="0.46488294" />
+      <window_info anchor="bottom" id="CMake" order="11" weight="0.32887402" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5041946" side_tool="true" weight="0.39130434" />
+      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49580538" visible="true" weight="0.32552955" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49876544" weight="0.32887402" />
+      <window_info id="Favorites" order="2" sideWeight="0.50108695" side_tool="true" weight="0.13744856" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39910814" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24938272" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32887402" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints-dialog>
+        <breakpoints-dialog />
+      </breakpoints-dialog>
+      <option name="time" value="53" />
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/usac/random_generator/array_random_generator.hpp">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="37" lean-forward="true" selection-start-line="18" selection-start-column="37" selection-end-line="18" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/local_optimization/iterative_local_optimization.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="388">
+          <caret line="34" column="47" lean-forward="true" selection-start-line="34" selection-start-column="47" selection-end-line="34" selection-end-column="47" />
+          <folding>
+            <element signature="e#280#313#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/local_optimization/graphcut.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-556">
+          <caret line="38" column="52" selection-start-line="38" selection-start-column="52" selection-end-line="38" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/local_optimization/inner_local_optimization.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="85" column="65" selection-start-line="85" selection-start-column="42" selection-end-line="85" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/local_optimization/local_optimization.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="40" selection-start-line="16" selection-start-column="40" selection-end-line="16" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/local_optimization/graphcut.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-136">
+          <caret line="151" column="30" selection-start-line="151" selection-start-column="30" selection-end-line="151" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="430">
+          <caret line="80" selection-start-line="80" selection-end-line="80" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test_precomp.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/utils/nearest_neighbors.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="201" column="1" selection-start-line="201" selection-start-column="1" selection-end-line="201" selection-end-column="1" />
+          <folding>
+            <element signature="e#195#220#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/utils/math.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="76" column="1" selection-start-line="76" selection-start-column="1" selection-end-line="76" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/utils/math.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/tests.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-745">
+          <caret line="40" column="41" selection-start-line="40" selection-start-column="41" selection-end-line="40" selection-end-column="41" />
+          <folding>
+            <element signature="e#45#72#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/local_optimization/sorted_lo.hpp">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/estimator/dlt/normalized_dlt.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="25" lean-forward="true" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/estimator/fundamental/eight_points.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1456">
+          <caret line="209" column="41" selection-start-line="209" selection-start-column="41" selection-end-line="209" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/estimator/estimator.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="17" column="31" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="31" />
+          <folding>
+            <element signature="e#250#275#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/estimator/essential_estimator.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="40" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="40" />
+          <folding>
+            <element signature="e#264#288#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/estimator/homography_estimator.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="22" column="40" selection-start-line="22" selection-start-column="40" selection-end-line="22" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/quality/line_quality.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-180" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/random_generator/random_generator.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/random_generator/uniform_random_generator.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="35" column="72" selection-start-line="35" selection-start-column="61" selection-end-line="35" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/model.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="640">
+          <caret line="134" column="37" selection-start-line="134" selection-start-column="37" selection-end-line="134" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/sampler/uniform_sampler.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="52" column="8" selection-start-line="52" selection-start-column="8" selection-end-line="52" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/ransac/init.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="28" column="52" lean-forward="true" selection-start-line="28" selection-start-column="52" selection-end-line="28" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/sampler/sampler.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" column="35" selection-start-line="23" selection-start-column="35" selection-end-line="23" selection-end-column="35" />
+          <folding>
+            <element signature="e#246#271#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/sampler/prosac_simple_sampler.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-675" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/sampler/evsac_sampler.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2010">
+          <caret line="134" selection-start-line="134" selection-end-line="134" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/random_generator/array_random_generator.hpp">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/ransac/ransac_output.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="23" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
+          <folding>
+            <element signature="e#252#275#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/ransac/ransac.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
+          <folding>
+            <element signature="e#244#263#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/estimator/fundamental_estimator.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="40" selection-start-line="22" selection-start-column="40" selection-end-line="22" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/estimator/line2d_estimator.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2190">
+          <caret line="146" column="28" selection-start-line="146" selection-start-column="28" selection-end-line="146" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/utils/nearest_neighbors.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
+          <folding>
+            <element signature="e#260#285#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test_utils.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1950">
+          <caret line="130" column="7" selection-start-line="130" selection-start-column="7" selection-end-line="130" selection-end-column="7" />
+          <folding>
+            <element signature="e#61#88#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/utils/utils.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="71" selection-start-line="13" selection-start-column="71" selection-end-line="13" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/utils/utils.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1067">
+          <caret line="87" column="35" lean-forward="true" selection-start-line="87" selection-start-column="35" selection-end-line="87" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/sampler/progressive_sampler.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-300">
+          <caret line="99" column="23" lean-forward="true" selection-start-line="99" selection-start-column="23" selection-end-line="99" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/sampler/prosac_napsac_sampler.hpp">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/sampler/prosac_sampler.hpp">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/sampler/napsac_sampler.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="98" column="52" selection-start-line="98" selection-start-column="52" selection-end-line="98" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generator/generator.h">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generator/generator.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="98" column="41" selection-start-line="98" selection-start-column="33" selection-end-line="98" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/helper/drawing/Drawing.h">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/estimator/dlt/normalizing_transformation.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="147" column="43" selection-start-line="147" selection-start-column="43" selection-end-line="147" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/ransac/ransac.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="175" column="60" selection-start-line="175" selection-start-column="60" selection-end-line="175" selection-end-column="60" />
+          <folding>
+            <element signature="e#195#216#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/estimator/dlt/dlt.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="870">
+          <caret line="63" column="31" selection-start-line="63" selection-start-column="31" selection-end-line="63" selection-end-column="31" />
+          <folding>
+            <element signature="e#238#266#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/estimator/dlt/dlt.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="59" column="38" selection-start-line="59" selection-start-column="25" selection-end-line="59" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/usac/quality/quality.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="520">
+          <caret line="96" column="9" lean-forward="true" selection-start-line="96" selection-start-column="9" selection-end-line="96" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test_homography_fitting.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="68" selection-start-line="68" selection-end-line="68" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

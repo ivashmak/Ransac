@@ -1,9 +1,0 @@
-#! /bin/bash
-
-a=`ls -1 *.*`
-
-for name in $a; do
-	newname=`echo $name | sed 's/_a/A/' | sed 's/_b/B/'`
-	echo $newname
-	mv $name $newname
-done
