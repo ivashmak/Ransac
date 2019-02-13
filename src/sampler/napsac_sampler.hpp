@@ -16,11 +16,10 @@
 class NapsacSampler : public Sampler {
 private:
     RandomGenerator * random_generator;
-    int knn = 0;
-    int * neighbors = 0;
     std::vector<std::vector<int>> neighbors_v;
-    int * next_neighbors;
     NeighborsSearch search;
+    int knn = 0;
+    int *next_neighbors, *neighbors = 0;
     bool do_uniform = false;
 
 public:
@@ -77,12 +76,9 @@ public:
         int initial_point = random_generator->getRandomNumber();
         sample[0] = initial_point;
 
-//        std::cout << sample[0] << " ";
         for (int i = 1; i < sample_size; i++) {
             // Get the farthest neighbor
             sample[i] = neighbors[(knn * initial_point) + next_neighbors[initial_point] + knn-1];
-//            next_neighbors[initial_point] = (next_neighbors[initial_point] - 1) % -knn;
-//            std::cout << sample[i] << " ";
 
             // move next neighbor
             next_neighbors[initial_point]--;
@@ -93,8 +89,6 @@ public:
         // n1 n2 ... nk
         // first sample is nk nk-1 ... nk-m, m is sample_size
         // next sample is nk-1 nk2-2 ... nk-1-m
-
-//        std::cout << '\n';
     }
 
     void generateSampleGrid (int *sample) {
@@ -102,7 +96,7 @@ public:
         int i;
         for (i = 0; i < points_size; i++) {
             initial_point = random_generator->getRandomNumber();
-//            std::cout << neighbors_v[initial_point].size() << "\n";
+            // continue if small number of neighbors
             if (neighbors_v[initial_point].size() < sample_size) continue;
             break;
         }

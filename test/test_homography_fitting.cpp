@@ -14,7 +14,7 @@ void Tests::testHomographyFitting() {
 //    exit (0);
 
     DATASET dataset = DATASET::Homogr_SIFT;
-    std::string img_name = "adam";
+    std::string img_name = "graf";
 
     ImageData gt_data (dataset, img_name);
 
@@ -24,6 +24,11 @@ void Tests::testHomographyFitting() {
     std::vector<int> gt_inliers = gt_data.getGTInliers(threshold);
     std::vector<int> gt_sorted_inliers = gt_data.getGTInliersSorted(threshold);
 
+    std::cout << "gt inliers:\n";
+    for (int inl : gt_inliers) {
+        std::cout << inl << " ";
+    }
+    std::cout << "\n";
 
     unsigned int points_size = (unsigned int) points.rows;
     std::cout << "points size " << points_size << "\n";
@@ -50,7 +55,7 @@ void Tests::testHomographyFitting() {
 //     -------------------------------------------------
 
 
-     model->lo = LocOpt ::GC;
+     model->lo = LocOpt ::NullLO;
      model->setSprt(0);
      model->setCellSize(50);
      model->setNeighborsType(NeighborsSearch::Grid);

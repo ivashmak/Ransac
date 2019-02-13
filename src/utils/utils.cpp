@@ -80,12 +80,23 @@ int quicksort_median (int * array, unsigned int k_minth, unsigned int left, unsi
 }
 
 // find median using quicksort with average O(n) complexity. Worst case is O(n^2).
-int findMedian (int * array, unsigned int length) {
-    if (length % 2 == 1) {
-        // odd number of values
-        return quicksort_median (array, length/2+1, 0, length-1);
+int findMedian (int * array, unsigned int length, bool make_copy) {
+    if (make_copy) {
+        int * arr = new int [length];
+        std::copy (array, array+length, arr);
+        if (length % 2 == 1) {
+            // odd number of values
+            return quicksort_median (arr, length/2+1, 0, length-1);
+        } else {
+            // even: return average
+            return (quicksort_median(arr, length/2, 0, length-1) + quicksort_median(array, length/2+1, 0, length-1))/2;
+        }
     } else {
-        // even: return average
-        return (quicksort_median(array, length/2, 0, length-1) + quicksort_median(array, length/2+1, 0, length-1))/2;
+        if (length % 2 == 1) {
+            return quicksort_median (array, length/2+1, 0, length-1);
+        } else {
+            return (quicksort_median(array, length/2, 0, length-1) + quicksort_median(array, length/2+1, 0, length-1))/2;
+        }
+
     }
 }
