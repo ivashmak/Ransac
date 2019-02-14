@@ -63,7 +63,6 @@ public:
     }
 
     unsigned int getNumberOfMainIterations() {
-        // number_iterations > number_lo_iterations
         return number_iterations;
     }
 

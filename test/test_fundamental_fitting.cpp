@@ -6,8 +6,8 @@
 #include "tests.hpp"
 #include "../include/opencv2/usac/reader.hpp"
 
-void Tests::testFundamentalFitting() {
-    std::string img_name = "../test/dataset/fundamental/unihouse";
+void opencv_test::testFundamentalFitting() {
+    std::string img_name = "../test/dataset/fundamental/barrsmith";
     cv::Mat_<float> sorted_points, points;
     cv::usac::Reader::LoadPointsFromFile(points, (img_name+"_pts.txt").c_str());
     cv::usac::Reader::LoadPointsFromFile(sorted_points, (img_name+"_spts.txt").c_str());
@@ -28,16 +28,16 @@ void Tests::testFundamentalFitting() {
     cv::usac::Model * model;
 
     // -------------------------- uniform -------------------------------------
-    model = new cv::usac::Model (threshold, 7, confidence, knn,
+    model = new cv::usac::Model (threshold, confidence, knn,
             cv::usac::ESTIMATOR::Fundamental, cv::usac::SAMPLER::Uniform);
     // ------------------------------------------------------------------------
 
 //     -------------------------- Prosac -------------------------------------
-//    model = new cv::usac::Model (threshold, 7, confidence, knn,
+//    model = new cv::usac::Model (threshold, confidence, knn,
 //          cv::usac::ESTIMATOR::Fundamental, cv::usac::SAMPLER::Prosac);
     // ------------------------------------------------------------------------
 
-    model->lo = cv::usac::LocOpt ::NullLO;
+    model->lo = cv::usac::LocOpt ::GC;
     model->setSprt(0);
     model->setCellSize(50);
     model->setNeighborsType(cv::usac::NeighborsSearch::Nanoflann);
@@ -48,4 +48,8 @@ void Tests::testFundamentalFitting() {
     } else {
         test (points, model, img_name+"A.png", img_name+"B.png", true, gt_inliers);
     }
+
+    delete(model);
 }
+
+//TEST (usac_test, fundamental_matrix_test) {opencv_test::testFundamentalFitting();}

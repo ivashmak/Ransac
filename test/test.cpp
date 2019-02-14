@@ -7,7 +7,7 @@
 #include "../include/opencv2/usac/math.hpp"
 #include "../include/opencv2/usac/drawing.hpp"
 
-void Tests::test (const cv::Mat &points,
+void opencv_test::test (const cv::Mat &points,
                   cv::usac::Model * model,
                   const std::string &img_name1,
                   const std::string &img_name2,
@@ -26,7 +26,6 @@ void Tests::test (const cv::Mat &points,
             cv::usac::NearestNeighbors::getNearestNeighbors_nanoflann(points, model->k_nearest_neighbors, neighbors, false, neighbors_dists);
         } else {
             cv::usac::NearestNeighbors::getGridNearestNeighbors(points, model->cell_size, neighbors_v);
-            std::cout << "GOT neighbors\n";
         }
         auto end_time = std::chrono::steady_clock::now();
         std::chrono::duration<float> fs = end_time - begin_time;
@@ -35,12 +34,22 @@ void Tests::test (const cv::Mat &points,
 
     cv::usac::Ransac ransac (model, points);
 
-//    std::cout << "RUN ransac\n";
     ransac.run();
 
     cv::usac::RansacOutput * ransacOutput = ransac.getRansacOutput();
 
-    std::cout << Tests::sampler2string(model->sampler) +"_"+Tests::estimator2string(model->estimator) << "\n";
+    if (model->sampler == cv::usac::SAMPLER::Prosac) std::cout << "prosac\n";
+    else if (model->sampler == cv::usac::SAMPLER::Uniform) std::cout <<  "uniform\n";
+    else if (model->sampler == cv::usac::SAMPLER::Napsac) std::cout <<  "napsac\n";
+    if (model->estimator == cv::usac::ESTIMATOR::Line2d) std::cout <<  "line2d\n";
+    else if (model->estimator == cv::usac::ESTIMATOR::Homography) std::cout <<  "homography\n";
+    else if (model->estimator == cv::usac::ESTIMATOR::Fundamental) std::cout <<  "fundamental\n";
+    else if (model->estimator == cv::usac::ESTIMATOR::Essential) std::cout <<  "essential\n";
+    if (model->lo == cv::usac::LocOpt::GC) std::cout << "Graph Cut LO\n";
+    else if (model->lo == cv::usac::LocOpt::InItFLORsc) std::cout << "Locally Optimized\n";
+    else if (model->lo == cv::usac::LocOpt::InItLORsc) std::cout << "Fixing Locally Optimized\n";
+    if (model->sprt) std::cout << "Seq. Prob. test is on\n";
+
     std::cout << "\ttime: ";
     long time_mcs = ransacOutput->getTimeMicroSeconds();
     if (model->sampler == cv::usac::SAMPLER::Napsac || model->lo == cv::usac::LocOpt::GC) {
@@ -65,4 +74,5 @@ void Tests::test (const cv::Mat &points,
     std::cout << "-----------------------------------------------------------------------------------------\n";
 
     cv::usac::draw::draw(ransacOutput->getModel(), points, img_name1, img_name2);
+    delete(ransacOutput);
 }

@@ -60,9 +60,9 @@ void cv::usac::GraphCut::labeling (const cv::Mat& model, Score * score, int * in
                 // l > 0 => (e01 - e00 + e10 - e11) >= 0
                 // e01 + e10 >= e00 + e11
                 if (e00 + e11 > e01 + e10 || std::isnan(e00)) {
-                    //                std::cout << "\033[1;31m"
-                    //                             "Non-submodular expansion term detected;"
-                    //                             "smooth costs must be a metric for expansion  \033[0m\n";
+//                    std::cout << "\033[1;31m"
+//                                 "Non-submodular expansion term detected;"
+//                                 "smooth costs must be a metric for expansion  \033[0m\n";
                     continue;
                 }
                 e->add_term2(i, n_idx, e00 * spatial_coherence, e01 * spatial_coherence, e10 * spatial_coherence, e11 * spatial_coherence);

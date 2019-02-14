@@ -40,10 +40,4 @@
 #include <opencv2/xfeatures2d.hpp>
 #include <opencv2/highgui.hpp>
 
-//#include "model.hpp"
-//#include "sampler/sampler.hpp"
-//#include "estimator/estimator.hpp"
-//#include "local_optimization/local_optimization.hpp"
-//#include "random_generator/random_generator.hpp"
-
 #endif // PRECOMP_H

@@ -6,7 +6,7 @@
 #include "tests.hpp"
 #include "../include/opencv2/usac/reader.hpp"
 
-void Tests::testEssentialFitting() {
+void opencv_test::testEssentialFitting() {
     std::string img_name = "../test/dataset/essential/fountain_dense";
 
     float threshold = 2, confidence = 0.95;
@@ -20,7 +20,7 @@ void Tests::testEssentialFitting() {
 
     // get sorted inliers using threshold 1!
     cv::usac::EssentialEstimator essentialEstimator(points);
-    cv::usac::Model m (0, 0, 0, 0, cv::usac::ESTIMATOR::Essential, cv::usac::SAMPLER::Uniform);
+    cv::usac::Model m (0, 0, 0, cv::usac::ESTIMATOR::Essential, cv::usac::SAMPLER::Uniform);
     essentialEstimator.estimateModelNonMinimalSample(&gt_inliers[0], gt_inliers.size(), m);
     cv::Mat gt_model = m.returnDescriptor().clone();
     cv::usac::EssentialEstimator essentialEstimator2(sorted_points);
@@ -30,14 +30,14 @@ void Tests::testEssentialFitting() {
     cv::usac::Model * model;
 
     // -------------------------- uniform -------------------------------------
-//    model = new Model (threshold, 5, confidence, knn, cv::usac::ESTIMATOR::Essential, cv::usac::SAMPLER::Uniform);
+    model = new cv::usac::Model (threshold, confidence, knn, cv::usac::ESTIMATOR::Essential, cv::usac::SAMPLER::Uniform);
     // ------------------------------------------------------------------------
 
     // -------------------------- Prosac -------------------------------------
-    model = new cv::usac::Model (threshold, 5, confidence, knn, cv::usac::ESTIMATOR::Essential, cv::usac::SAMPLER::Prosac);
+//    model = new cv::usac::Model (threshold, confidence, knn, cv::usac::ESTIMATOR::Essential, cv::usac::SAMPLER::Prosac);
     // ------------------------------------------------------------------------
 
-    model->lo = cv::usac::LocOpt ::GC;
+    model->lo = cv::usac::LocOpt ::NullLO;
     model->setSprt(0);
     model->setCellSize(50);
     model->setNeighborsType(cv::usac::NeighborsSearch::Grid);
@@ -47,4 +47,8 @@ void Tests::testEssentialFitting() {
         test (sorted_points, model, img_name+"A.png", img_name+"B.png", true, gt_sorted_inliers);
     else
         test (points, model, img_name+"A.png", img_name+"B.png", true, gt_inliers);
+
+    delete (model);
 }
+
+//TEST (usac_test, essential_matrix_test) {opencv_test::testEssentialFitting();}

@@ -28,16 +28,7 @@ void cv::usac::GetNormalizingTransformation (const float * const pts, cv::Mat& n
     float avg_dist1 = 0, avg_dist2 = 0, x1_m, y1_m, x2_m, y2_m;
     for (unsigned int i = 0; i < sample_number; i++) {
         smpl = 4 * sample[i];
-        /*
-         * Compute a similarity transform T that takes points xi
-         * to a new set of points x̃i such that the centroid of
-         * the points x̃i is the coordinate origin and their
-         * average distance from the origin is √2
-         *
-         * origin O(0,0)
-         * sqrt(x̃*x̃ + ỹ*ỹ) = sqrt(2)
-         * ax*ax + by*by = 2
-         */
+
         x1_m = pts[smpl    ] - mean_pts1_x;
         y1_m = pts[smpl + 1] - mean_pts1_y;
         x2_m = pts[smpl + 2] - mean_pts2_x;
@@ -51,20 +42,6 @@ void cv::usac::GetNormalizingTransformation (const float * const pts, cv::Mat& n
     avg_dist1 = M_SQRT2 / (avg_dist1 / sample_number);
     avg_dist2 = M_SQRT2 / (avg_dist2 / sample_number);
 
-    /*
-     * pts1_T1 = [ 1 0 -mean_pts1_x;
-     *             0 1 -mean_pts1_y
-     *             0 0 1]
-     *
-     * pts1_T2 = [ avg_dist1  0         0
-     *             0         avg_dist1  0
-     *             0          0         1]
-     *
-     * T1 = [avg_dist1  0          -mean_pts1_x*avg_dist1
-     *       0         avg_dist1   -mean_pts1_y*avg_dist1
-     *       0         0          1]
-     *
-     */
 
     T1 = (cv::Mat_<float>(3, 3) << avg_dist1, 0, -mean_pts1_x * avg_dist1,
                                     0, avg_dist1, -mean_pts1_y * avg_dist1,
@@ -80,27 +57,6 @@ void cv::usac::GetNormalizingTransformation (const float * const pts, cv::Mat& n
 
     auto *norm_points_ptr = (float *) norm_points.data;
 
-    /*
-     * Normalized points
-     * Norm_img1_x1 Norm_img1_y1 Norm_img2_x1 Norm_img2_y1
-     * Norm_img1_x2 Norm_img1_y2 Norm_img2_x2 Norm_img2_y2
-     * ...
-     * Norm_img1_xn Norm_img1_yn Norm_img2_xn Norm_img2_yn
-     *
-     * Npts1 = T1*pts1    3x3 * 3xN
-     * Npts2 = T2*pts2    3x3 * 3xN
-     *
-     * Npts = [Npts1; Npts2]
-     *
-     * Fast T*pts multiplication below
-     * We don't need third coordinate for points and third row for T,
-     * because third column for output points is z(i) = 1
-     *
-     * N_x1 = T(1,1) * x1 + T(1,3)
-     * N_y1 = T(2,2) * y1 + T(2,3)
-     *
-     * We don't need T(1,2) * y1 and T(2,2) * x1 because T(1,2) = T(2,1) = 0
-     */
     unsigned int norm_pts_idx;
     for (unsigned int i = 0; i < sample_number; i++) {
         smpl = 4 * sample[i];

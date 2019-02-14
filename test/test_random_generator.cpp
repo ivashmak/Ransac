@@ -16,7 +16,7 @@ void getAverageTime (cv::usac::RandomGenerator * random_generator, int size, int
 void checkUnique (cv::usac::RandomGenerator * random_generator, int size, const std::string& name);
 void checkReset (cv::usac::RandomGenerator * random_generator, const std::string& name);
 
-void Tests::evaluateRandomGenerators () {
+void opencv_test::evaluateRandomGenerators () {
     cv::usac::RandomGenerator * array_random_generator = new cv::usac::ArrayRandomGenerator;
     cv::usac::RandomGenerator * uniform_random_generator = new cv::usac::UniformRandomGenerator;
 
@@ -29,8 +29,11 @@ void Tests::evaluateRandomGenerators () {
     calculateEntropy (array_random_generator, size, "array");
     getAverageTime (array_random_generator, size, uniques_set_size, "array");
 
-    calculateEntropy (uniform_random_generator, size, "shuffle");
-    getAverageTime (uniform_random_generator, size, uniques_set_size, "shuffle");
+    calculateEntropy (uniform_random_generator, size, "uniform");
+    getAverageTime (uniform_random_generator, size, uniques_set_size, "uniform");
+
+    delete (array_random_generator);
+    delete (uniform_random_generator);
 }
 
 void checkReset (cv::usac::RandomGenerator * random_generator, const std::string& name) {

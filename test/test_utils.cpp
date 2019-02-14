@@ -10,7 +10,7 @@
 #include "../include/opencv2/usac/utils.hpp"
 #include "../include/opencv2/usac/reader.hpp"
 
-void Tests::testFindMedian () {
+void opencv_test::testFindMedian () {
 
     long time1 = 0, time2 = 0;
     int num_tests = 10000;
@@ -55,16 +55,14 @@ void Tests::testFindMedian () {
 
 }
 
-void Tests::testFindNearestNeighbors (int knn) {
+void opencv_test::testFindNearestNeighbors (int knn) {
     knn = 7;
 
     std::clock_t start;
     double duration;
 
-    std::string img_name = "Brussels";
-    cv::Mat points, points1, points2;
-    cv::usac::Reader::read_points (points1, points2, "../dataset/homography/"+img_name+"_pts.txt");
-    cv::hconcat(points1, points2, points);
+    cv::Mat points;
+    cv::usac::Reader::LoadPointsFromFile (points, "../test/dataset/homography/graf_pts.txt");
     std::vector<std::vector<int>> neighbors;
     start = std::clock();
     cv::usac::NearestNeighbors::getGridNearestNeighbors(points, 50, neighbors);
@@ -136,7 +134,7 @@ void Tests::testFindNearestNeighbors (int knn) {
 //    }
 }
 
-void Tests::testInv () {
+void opencv_test::testInv () {
     cv::Mat A;
     A = (cv::Mat_<float>(3,3) << 12, 2, 6, 12, 88, 0, 17, 90, 1);
     cv::Mat A_inv;

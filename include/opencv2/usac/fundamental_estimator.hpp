@@ -16,13 +16,9 @@ class FundamentalEstimator : public Estimator {
 private:
     const float *const points;
     float f11, f12, f13, f21, f22, f23, f31, f32, f33;
-    unsigned int points_size;
-    FundamentalSolver *solver;
+    FundamentalSolver solver;
 public:
-    ~FundamentalEstimator() {
-        delete (solver);
-    }
-
+    
     /*
      * @input_points: is matrix of size: number of points x 4
      * x1 y1 x'1 y'1
@@ -31,10 +27,9 @@ public:
      *
      * X^T F X = 0
      */
-    FundamentalEstimator(cv::InputArray input_points) : points((float *) input_points.getMat().data) {
+    FundamentalEstimator(cv::InputArray input_points) : points((float *) input_points.getMat().data), solver (points) {
         assert(!input_points.empty());
-        points_size = input_points.getMat().rows;
-        solver = new FundamentalSolver(points);
+        assert(input_points.getMat().cols == 4 && input_points.getMat().rows >= 7);
     }
 
     void setModelParameters(const cv::Mat &model) override {
@@ -44,21 +39,15 @@ public:
          * So this->F and this->F_inv must be global in class
          */
         auto *F_ptr = (float *) model.data;
-        f11 = F_ptr[0];
-        f12 = F_ptr[1];
-        f13 = F_ptr[2];
-        f21 = F_ptr[3];
-        f22 = F_ptr[4];
-        f23 = F_ptr[5];
-        f31 = F_ptr[6];
-        f32 = F_ptr[7];
-        f33 = F_ptr[8];
+        f11 = F_ptr[0]; f12 = F_ptr[1]; f13 = F_ptr[2];
+        f21 = F_ptr[3]; f22 = F_ptr[4]; f23 = F_ptr[5];
+        f31 = F_ptr[6]; f32 = F_ptr[7]; f33 = F_ptr[8];
     }
 
     unsigned int estimateModel(const int *const sample, std::vector<Model *> &models) override {
         cv::Mat_<float> F;
 
-        unsigned int roots = solver->SevenPointsAlgorithm(sample, F);
+        unsigned int roots = solver.SevenPointsAlgorithm(sample, F);
 
         unsigned int valid_solutions = 0;
         for (unsigned int i = 0; i < roots; i++) {
@@ -74,7 +63,7 @@ public:
     estimateModelNonMinimalSample(const int *const sample, unsigned int sample_size, Model &model) override {
         cv::Mat_<float> F;
 
-        if (!solver->EightPointsAlgorithm(sample, sample_size, F)) {
+        if (!solver.EightPointsAlgorithm(sample, sample_size, F)) {
             return false;
         }
 

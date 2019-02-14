@@ -50,7 +50,6 @@ void cv::usac::Ransac::run() {
     unsigned int max_iters = model->max_iterations;
 
     while (iters < max_iters) {
-//        std::cout << "generate sample\n";
         sampler->generateSample(sample);
 
         number_of_models = estimator->estimateModel(sample, models);
@@ -63,37 +62,17 @@ void cv::usac::Ransac::run() {
                                                                  current_score);
 
                 if (!is_good_model) {
-//                    std::cout << "model is bad\n";
-
                     // do not skip bad model until predefined iterations reached
                     if (iters >= model->max_hypothesis_test_before_sprt) {
                         iters++;
-//                        std::cout << "skip bad model in iteration " << iters << "\n";
                         continue;
                     }
-//                    else {
-//                        std::cout << "sprt " << current_score->inlier_number << "\n";
-//                        quality->getNumberInliers(current_score, models[i]);
-//                        std::cout << "std " << current_score->inlier_number << "\n";
-//                    }
                 }
-//                else {
-//                    std::cout << "model is good\n";
-//                }
             } else {
-//                std::cout << "Get quality score\n";
                  quality->getNumberInliers(current_score, models[i]->returnDescriptor());
             }
-//
-//           std::cout << "Ransac, iteration " << iters << "; score " << current_score->inlier_number << "\n";
-//            std::cout << models[i]->returnDescriptor() << "\n\n";
 
             if (current_score->bigger(best_score)) {
-
-//                  std::cout << "update best score\n";
-
-                // update current model and current score by inner and iterative local optimization
-                // if inlier number is too small, do not update
 
                 if (LO) {
                     local_optimization->getModelScore(models[i], current_score);
@@ -105,8 +84,6 @@ void cv::usac::Ransac::run() {
                 // remember best model
                 best_model->setDescriptor (models[i]->returnDescriptor());
 
-//                  std::cout << "Ransac, update best score " << best_score->inlier_number << '\n';
-
                 // Termination conditions:
                 if (is_prosac) {
                     max_iters = ((ProsacTerminationCriteria *) termination_criteria)->
@@ -115,23 +92,16 @@ void cv::usac::Ransac::run() {
                     max_iters = termination_criteria->getUpBoundIterations (best_score->inlier_number);
                 }
                 if (is_sprt) {
-//                     std::cout << "std = " << max_iters << " vs sprt = " << sprt->getUpperBoundIterations(best_score->inlier_number) << "\n";
-//                    std::cout << "sprt (usac) = " << sprt->updateSPRTStopping(best_score->inlier_number) << "\n";
                     max_iters = std::min (max_iters, sprt->getUpperBoundIterations(best_score->inlier_number));
-//                    std::cout << "got max iters \n";
                 }
-//                 std::cout << "max iters prediction = " << max_iters << '\n';
             } // end of if so far the best score
         } // end loop of number of models
         iters++;
     } // end main while loop
 
-//    std::cout << "end:\n";
-
     if (best_score->inlier_number == 0) {
         std::cout << "Best score is 0. Check it!\n";
-        best_model->setDescriptor(cv::Mat_<float>::eye(3,3));
-        exit (111);
+        exit (1);
     }
 
     // Graph Cut lo was set, but did not run, run it
@@ -140,11 +110,7 @@ void cv::usac::Ransac::run() {
         local_optimization->getModelScore(best_model, best_score);
     }
 
-//    std::cout << "Calculate Non minimal model\n";
-
     Model *non_minimal_model = new Model (model);
-
-//    std::cout << "end best inl num " << best_score->inlier_number << '\n';
 
     unsigned int previous_non_minimal_num_inlier = 0;
 

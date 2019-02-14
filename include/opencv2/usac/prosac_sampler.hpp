@@ -60,7 +60,7 @@ public:
      * The similarity was defined as the ratio of the distances in
      * the SIFT space of the best and second match.
      */
-    void initProsacSampler(unsigned int sample_size_, unsigned int points_size_, bool reset_time = true) {
+    void initProsacSampler(unsigned int sample_size_, unsigned int points_size_, bool reset_time) {
         sample_size = sample_size_;
         points_size = points_size_;
 
@@ -116,37 +116,11 @@ public:
 
 
     void generateSample(int *sample) override {
-//        std::cout << "subset size " << subset_size << "\n";
-//        std::cout << "stopping length " << termination_length << "\n";
-
         // revert to RANSAC-style sampling if maximum number of PROSAC samples have been tested
         if (hypCount > growth_max_samples) {
             randomGenerator->generateUniqueRandomSet(sample, sample_size, points_size);
             return;
         }
-
-
-/*
-//-----------------------------------------------------------------------
-// Choice of the hypothesis generation set
-// if (t = T'_n) & (n < n*) then n = n + 1 (eqn. 4)
-if (hypCount == growth_function[subset_size] && subset_size < termination_length) {
-    subset_size++;
-}
-
-// Semi-random sample M_t of size m
-if (growth_function[subset_size] < hypCount) {
-    // The sample contains m-1 points selected from U_(n-1) at random and u_n
-    randomGenerator->generateUniqueRandomSet(sample, sample_size-1, subset_size-2);
-    sample[sample_size-1] = subset_size-1;
-} else {
-    // Select m points from U_n at random.
-    randomGenerator->generateUniqueRandomSet(sample, sample_size, subset_size-1);
-}
-hypCount++;
-return;
-//-----------------------------------------------------------------------
-*/
 
         // if current stopping length is less than size of current pool, use only points up to the stopping length
         if (subset_size > *termination_length) {

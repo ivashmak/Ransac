@@ -6,7 +6,7 @@
 #include "tests.hpp"
 #include "../include/opencv2/usac/reader.hpp"
 
-void Tests::testHomographyFitting() {
+void opencv_test::testHomographyFitting() {
     float threshold = 2;
     unsigned int knn = 7;
     float confidence = 0.95;
@@ -22,25 +22,25 @@ void Tests::testHomographyFitting() {
     cv::usac::Reader::getMatrix3x3(img_name+"_model.txt", gt_model);
     cv::usac::HomographyEstimator est1(points);
     cv::usac::HomographyEstimator est2(sorted_points);
-    cv::usac::Quality::getInliers(&est1, gt_model, 1/*threshold*/, points.rows, gt_inliers);
-    cv::usac::Quality::getInliers(&est2, gt_model, 1/*threshold*/, sorted_points.rows, gt_sorted_inliers);
+    cv::usac::Quality::getInliers(&est1, gt_model.inv(), 1/*threshold*/, points.rows, gt_inliers);
+    cv::usac::Quality::getInliers(&est2, gt_model.inv(), 1/*threshold*/, sorted_points.rows, gt_sorted_inliers);
     //
 
     cv::usac::Model * model;
 
 //     ---------------------- uniform ----------------------------------
-   model = new cv::usac::Model (threshold, 4, confidence, knn,
-           cv::usac::ESTIMATOR::Homography, cv::usac::SAMPLER::Uniform);
+//   model = new cv::usac::Model (threshold, confidence, knn,
+//           cv::usac::ESTIMATOR::Homography, cv::usac::SAMPLER::Uniform);
 //     --------------------------------------------------------------
 
 //     ---------------------- napsac ----------------------------------
-//    model = new cv::usac::Model (threshold, 4, confidence, knn,
+//    model = new cv::usac::Model (threshold, confidence, knn,
 // cv::usac::ESTIMATOR::Homography, cv::usac::SAMPLER::Napsac);
 //     --------------------------------------------------------------
 
 // ------------------ prosac ---------------------
-//     model = new cv::usac::Model (threshold, 4, confidence, knn,
-// cv::usac::ESTIMATOR::Homography, cv::usac::SAMPLER::Prosac);
+     model = new cv::usac::Model (threshold, confidence, knn,
+ cv::usac::ESTIMATOR::Homography, cv::usac::SAMPLER::Prosac);
 //     -------------------------------------------------
 
 
@@ -55,4 +55,8 @@ void Tests::testHomographyFitting() {
      } else {
          test (points, model, img_name+"A.png", img_name+"B.png", true, gt_inliers);
      }
+
+     delete(model);
 }
+
+//TEST (usac_test, homography_matrix_test) {opencv_test::testHomographyFitting();}

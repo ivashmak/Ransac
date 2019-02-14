@@ -48,44 +48,6 @@ bool cv::usac::FundamentalSolver::EightPointsAlgorithm (const int * const sample
 
     F = cv::Mat_<float> (Vt.row(Vt.rows-1).reshape (3,3));
 
-    // ------------------------
-     /*
-     make F singular (of rank 2) by decomposing it with SVD,
-     zeroing the last diagonal element of W and then composing the matrices back.
-     F = USV^T
-
-     This step is not really necessary, because
-     A*(f11 f12 ... f33)^T = 0 is singular (7 equations for 9 variables), so
-     the solution is linear subspace of dimensionality 2.
-     => use the last two singular std::vectors as a basis of the space
-
-     But numerically F usually has rank 3 and det F is almost zero (10^-3).
-     */
-
-//    cv::SVD::compute (F, S, U, Vt);
-//
-//    // create from S (singular/eigen values) diagonal matrix with S(3,3) = 0
-//    S = (cv::Mat_<float> (3, 3) << S.at<float>(0), 0, 0,
-//                                    0, S.at<float>(1), 0,
-//                                    0, 0, 0);
-//
-//    // last eigen value in S is 0, so F must have rank 2
-//    F = U*S*Vt;
-    // -------------------------
-
-
-    /*
-     * T1 = (t11 0   t13)
-     *      (0   t22 t23)
-     *      (0   0   1)
-     *
-     * T2^t = (t'11 0    0)
-     *        (0    t'22 0)
-     *        (t'13 t'23 1)
-     * F = T2^t * F * T1
-     *
-     */
-
     auto * t2 = (float *) T2.data;
 
     // Transpose T2

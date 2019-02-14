@@ -6,65 +6,6 @@
 #include "../include/opencv2/usac/reader.hpp"
 
 /*
- * Get correspondence points from file
- * Assume syntax as
- * x1 y1 z1 x2 y2 z2 isinlier1
- * ...
- * xN yN zN xN yN zN isinlierN
- */
-void cv::usac::Reader::read_points (cv::Mat &pts1, cv::Mat &pts2, const std::string &filename) {
-    std::fstream file(filename, std::ios_base::in);
-
-    float x1, y1, z1, x2, y2, z2, inl;
-    cv::Mat tmp = cv::Mat_<float>(1, 2);
-    while (file >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> inl) {
-        tmp.at<float>(0) = x1;
-        tmp.at<float>(1) = y1;
-
-        pts1.push_back(tmp);
-
-        tmp.at<float>(0) = x2;
-        tmp.at<float>(1) = y2;
-
-        pts2.push_back(tmp);
-
-    }
-}
-
-/*
- * Get inliers (isinlier1, ..., isinlierN) from file with syntax
- * x1 y1 z1 x2 y2 z2 isinlier1
- * ...
- * xN yN zN xN yN zN isinlierN
- */
-void cv::usac::Reader::getInliers (const std::string &filename, std::vector<int> &inliers) {
-    std::fstream file(filename, std::ios_base::in);
-    inliers.clear();
-
-    cv::Mat tmp = cv::Mat_<float>(1, 2), pts1, pts2;
-    float x1, y1, z1, x2, y2, z2;
-    int inl;
-    int p = 0;
-    while (file >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> inl) {
-
-        if (inl > 0) {
-            inliers.push_back(p);
-        }
-        p++;
-
-        tmp.at<float>(0) = x1;
-        tmp.at<float>(1) = y1;
-
-        pts1.push_back(tmp);
-
-        tmp.at<float>(0) = x2;
-        tmp.at<float>(1) = y2;
-
-        pts2.push_back(tmp);
-    }
-}
-
-/*
  * Get matrix from file.
  * Assume file syntax as
  * a11 a12 a13

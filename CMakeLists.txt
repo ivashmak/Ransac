@@ -92,12 +92,14 @@ add_executable(
 # optimalization
 # set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -O3" )
 
-target_link_libraries (ransac ${OpenCV_LIBS} )
-
 # theia
 #find_package(Theia REQUIRED)
 #include_directories(${THEIA_INCLUDE_DIRS})
 #target_link_libraries (ransac ${THEIA_LIBRARIES})
+
+# Google test
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
 
 # Nanoflann
 find_package(nanoflann)
@@ -106,3 +108,5 @@ target_link_libraries(ransac nanoflann::nanoflann)
 # Eigen
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 target_link_libraries (ransac Eigen3::Eigen)
+
+target_link_libraries (ransac ${OpenCV_LIBS} ${GTEST_LIBRARIES} pthread)

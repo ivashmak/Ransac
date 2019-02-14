@@ -36,10 +36,10 @@ void cv::usac::initSampler (Sampler *& sampler, const Model * const model, const
      } else if (model->sampler == SAMPLER::Prosac) {
     	    sampler = new ProsacSampler;
 	     ProsacSampler * prosac_sampler = (ProsacSampler *)sampler;
-	     prosac_sampler->initProsacSampler (model->sample_size, points_size);
+	     prosac_sampler->initProsacSampler (model->sample_size, points_size, model->reset_random_generator);
 
      } else if (model->sampler == SAMPLER::Napsac) {
-		 sampler = new NapsacSampler(model, points_size, model->reset_random_generator);
+		 sampler = new NapsacSampler(model, points_size);
 
      } else {
          std::cout << "UNKOWN Sampler IN Init Sampler\n";
@@ -71,8 +71,6 @@ void cv::usac::initLocalOptimization (LocalOptimization *& local_optimization, M
      } else if (model->lo == LocOpt::GC) {
         local_optimization = new GraphCut (model, estimator, quality, points_size);
 
-     } else {
-//         std::cout << "UNKOWN LO method in Init\n";
      }
 }
 

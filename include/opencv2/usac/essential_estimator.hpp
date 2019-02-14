@@ -15,13 +15,9 @@ class EssentialEstimator : public Estimator {
 private:
     const float *const points;
     float e11, e12, e13, e21, e22, e23, e31, e32, e33;
-    cv::usac::EssentialSolver *e_solver;
-    FundamentalSolver *f_solver;
+    cv::usac::EssentialSolver e_solver;
+    FundamentalSolver f_solver;
 public:
-    ~EssentialEstimator() {
-        delete (e_solver);
-        delete (f_solver);
-    }
 
     /*
      * @input_points: is matrix of size: number of points x 4
@@ -31,23 +27,17 @@ public:
      *
      * Y^T E Y = 0
      */
-    EssentialEstimator(cv::InputArray input_points) : points((float *) input_points.getMat().data) {
+    EssentialEstimator(cv::InputArray input_points) : points((float *) input_points.getMat().data),
+                e_solver(points), f_solver(points) {
         assert(!input_points.empty());
-        e_solver = new EssentialSolver(points);
-        f_solver = new FundamentalSolver(points);
+        assert(input_points.getMat().cols == 4 && input_points.getMat().rows >= 5);
     }
 
     void setModelParameters(const cv::Mat &model) override {
         float *E_ptr = (float *) model.data;
-        e11 = E_ptr[0];
-        e12 = E_ptr[1];
-        e13 = E_ptr[2];
-        e21 = E_ptr[3];
-        e22 = E_ptr[4];
-        e23 = E_ptr[5];
-        e31 = E_ptr[6];
-        e32 = E_ptr[7];
-        e33 = E_ptr[8];
+        e11 = E_ptr[0]; e12 = E_ptr[1]; e13 = E_ptr[2];
+        e21 = E_ptr[3]; e22 = E_ptr[4]; e23 = E_ptr[5];
+        e31 = E_ptr[6]; e32 = E_ptr[7]; e33 = E_ptr[8];
     }
 
     /*
@@ -60,7 +50,7 @@ public:
     unsigned int estimateModel(const int *const sample, std::vector<Model *> &models) override {
         cv::Mat_<float> E;
 
-        unsigned int models_count = e_solver->FivePoints(sample, E);
+        unsigned int models_count = e_solver.FivePoints(sample, E);
 
         for (unsigned int i = 0; i < models_count; i++) {
             models[i]->setDescriptor(E.rowRange(i * 3, i * 3 + 3));
@@ -73,7 +63,7 @@ public:
     estimateModelNonMinimalSample(const int *const sample, unsigned int sample_size, Model &model) override {
         cv::Mat_<float> E;
 
-        if (!f_solver->EightPointsAlgorithm(sample, sample_size, E)) {
+        if (!f_solver.EightPointsAlgorithm(sample, sample_size, E)) {
             return false;
         }
 

@@ -33,10 +33,9 @@ public:
      * ...
      * neighbor1_of_(xN,yN) ... neighborK_of_(xN,yN)
      */
-    NapsacSampler(const Model *const model, unsigned int points_size_, bool reset_time = true) {
+    NapsacSampler(const Model *const model, unsigned int points_size_) {
         assert(points_size_ != 0);
 
-//        std::cout << k_nearest_neighbors_indices.getMat() << "\n";
         knn = model->k_nearest_neighbors;
         sample_size = model->sample_size;
         points_size = points_size_;
@@ -45,7 +44,7 @@ public:
         assert (knn >= sample_size - 1);
 
         random_generator = new ArrayRandomGenerator;
-        if (reset_time) random_generator->resetTime();
+        if (model->reset_random_generator) random_generator->resetTime();
         random_generator->resetGenerator(0, points_size - 1);
         random_generator->setSubsetSize(1);
 
@@ -105,7 +104,6 @@ public:
 
         sample[0] = initial_point;
 
-//        std::cout << sample[0] << " ";
         for (i = 1; i < sample_size; i++) {
             sample[i] = neighbors_v[initial_point][next_neighbors[initial_point]];
 
@@ -115,7 +113,6 @@ public:
                 next_neighbors[initial_point] = 0;
             }
         }
-//        std::cout << '\n';
     }
 
     void generateSample(int *sample) override {

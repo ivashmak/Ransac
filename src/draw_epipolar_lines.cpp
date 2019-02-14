@@ -153,4 +153,6 @@ void cv::usac::draw::drawEpipolarLines (cv::usac::Model * model, const cv::Mat &
 //    imshow("Matches", out_image);
     imshow("Epipolar lines", img1);
     cv::waitKey (0);
+
+    delete (est);
 }

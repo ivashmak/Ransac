@@ -13,10 +13,11 @@
 #include <vector>
 #include <fstream>
 
+// Google test
+#include <gtest/gtest.h>
+
 // OpenCV
 #include <opencv2/core/types.hpp>
-
-//#include "tests.h"
-//#include "statistical_results.h"
+#include <opencv2/core/mat.hpp>
 
 #endif //USAC_TEST_PRECOMP_HPP

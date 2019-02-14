@@ -147,8 +147,7 @@ public:
      * In∗ inliers in Un∗ exists and was not found after k
      * samples is smaller than η0 (typically set to 5%).
      */
-    inline unsigned int getUpBoundIterations(unsigned int hypCount,
-                                             const cv::Mat &model) {
+    inline unsigned int getUpBoundIterations(unsigned int hypCount, const cv::Mat &model) {
 
         unsigned int max_samples = maximality_samples[termination_length - 1];
 
@@ -179,7 +178,6 @@ public:
                 if ((i == points_size - 1) || (is_inlier_i && !is_inlier_iplus1)) {
                     unsigned int new_samples = standart_termination_criteria->
                             getUpBoundIterations(inlier_count, i + 1);
-//                    std::cout << new_samples << "\n";
                     if (i + 1 < *largest_sample_size) {
                         // correct for number of samples that have points in [i+1, largest_sample_size-1]
                         new_samples += hypCount - growth_function[i];

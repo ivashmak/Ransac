@@ -3,16 +3,15 @@
 // of this distribution and at http://opencv.org/license.html.
 
 #include "test_precomp.hpp"
-#include <opencv2/core/mat.hpp>
 #include "tests.hpp"
 
 int main (int args, char ** argv) {
 
 //     run tests
-//     Tests::testLineFitting();
-//     Tests::testHomographyFitting();
-//     Tests::testFundamentalFitting();
-     Tests::testEssentialFitting();
+//     opencv_test::testLineFitting();
+//     opencv_test::testHomographyFitting();
+//     opencv_test::testFundamentalFitting();
+     opencv_test::testEssentialFitting();
 
-	return 0;
+    return 0;
 }

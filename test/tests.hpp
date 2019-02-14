@@ -11,46 +11,23 @@
 #include "../include/opencv2/usac/model.hpp"
 #include "../include/opencv2/usac/nearest_neighbors.hpp"
 
-class Tests {
-public:
-    static void testLineFitting ();
-    static void testHomographyFitting ();
-    static void testFundamentalFitting ();
-    static void testEssentialFitting ();
+namespace opencv_test {
+    void testLineFitting ();
+    void testHomographyFitting ();
+    void testFundamentalFitting ();
+    void testEssentialFitting ();
 
-    static void testFindMedian ();
-    static void testFindNearestNeighbors (int knn=7);
-    static void evaluateRandomGenerators();
-    static void testInv ();
+    void testFindMedian ();
+    void testFindNearestNeighbors (int knn=7);
+    void evaluateRandomGenerators();
+    void testInv ();
 
-        static void test (const cv::Mat &points,
+    void test (const cv::Mat &points,
                           cv::usac::Model * model,
                           const std::string &img_name1,
                           const std::string &img_name2,
                           bool gt,
                           const std::vector<int>& gt_inliers);
-
-    static std::string sampler2string (cv::usac::SAMPLER sampler) {
-        if (sampler == cv::usac::SAMPLER::Prosac) return "prosac";
-        if (sampler == cv::usac::SAMPLER::Uniform) return "uniform";
-        if (sampler == cv::usac::SAMPLER::Napsac) return "napsac";
-        return "";
-    }
-
-    static std::string estimator2string (cv::usac::ESTIMATOR estimator) {
-        if (estimator == cv::usac::ESTIMATOR::Line2d) return "line2d";
-        if (estimator == cv::usac::ESTIMATOR::Homography) return "homography";
-        if (estimator == cv::usac::ESTIMATOR::Fundamental) return "fundamental";
-        if (estimator == cv::usac::ESTIMATOR::Essential) return "essential";
-        return "";
-    }
-
-    static std::string nearestNeighbors2string (cv::usac::NeighborsSearch nn) {
-        if (nn == cv::usac::NeighborsSearch::Grid) return "grid";
-        if (nn == cv::usac::NeighborsSearch::Nanoflann) return "nanoflann";
-        return "";
-    }
-
-};
+}
 
 #endif //TESTS_TESTS_H

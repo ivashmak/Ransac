@@ -14,21 +14,17 @@ private:
     const float *const points;
     float h11, h12, h13, h21, h22, h23, h31, h32, h33;
     float hi11, hi12, hi13, hi21, hi22, hi23, hi31, hi32, hi33;
-    DLt *dlt;
+    DLt dlt;
 public:
-    ~HomographyEstimator() {
-        delete (dlt);
-    }
-
     /*
      * @input_points: is matrix of size: number of points x 4
      * x1 y1 x'1 y'1
      * ...
      * xN yN x'N y'N
      */
-    HomographyEstimator(cv::InputArray input_points) : points((float *) input_points.getMat().data) {
+    HomographyEstimator(cv::InputArray input_points) : points((float *) input_points.getMat().data), dlt (points){
         assert(!input_points.empty());
-        dlt = new DLt(points);
+        assert(input_points.getMat().cols == 4 && input_points.getMat().rows >= 4);
     }
 
     void setModelParameters(const cv::Mat &model) override {
@@ -36,30 +32,18 @@ public:
         cv::Mat H_inv = model.inv();
         auto *H_inv_ptr = (float *) H_inv.data;
 
-        h11 = H_ptr[0];
-        h12 = H_ptr[1];
-        h13 = H_ptr[2];
-        h21 = H_ptr[3];
-        h22 = H_ptr[4];
-        h23 = H_ptr[5];
-        h31 = H_ptr[6];
-        h32 = H_ptr[7];
-        h33 = H_ptr[8];
+        h11 = H_ptr[0]; h12 = H_ptr[1]; h13 = H_ptr[2];
+        h21 = H_ptr[3]; h22 = H_ptr[4]; h23 = H_ptr[5];
+        h31 = H_ptr[6]; h32 = H_ptr[7]; h33 = H_ptr[8];
 
-        hi11 = H_inv_ptr[0];
-        hi12 = H_inv_ptr[1];
-        hi13 = H_inv_ptr[2];
-        hi21 = H_inv_ptr[3];
-        hi22 = H_inv_ptr[4];
-        hi23 = H_inv_ptr[5];
-        hi31 = H_inv_ptr[6];
-        hi32 = H_inv_ptr[7];
-        hi33 = H_inv_ptr[8];
+        hi11 = H_inv_ptr[0]; hi12 = H_inv_ptr[1]; hi13 = H_inv_ptr[2];
+        hi21 = H_inv_ptr[3]; hi22 = H_inv_ptr[4]; hi23 = H_inv_ptr[5];
+        hi31 = H_inv_ptr[6]; hi32 = H_inv_ptr[7]; hi33 = H_inv_ptr[8];
     }
 
     unsigned int estimateModel(const int *const sample, std::vector<Model *> &models) override {
         cv::Mat H;
-        if (!dlt->DLT4p(sample, H)) {
+        if (!dlt.DLT4p(sample, H)) {
             return 0;
         }
 
@@ -71,7 +55,7 @@ public:
     bool
     estimateModelNonMinimalSample(const int *const sample, unsigned int sample_size, Model &model) override {
         cv::Mat H;
-        if (!dlt->NormalizedDLT(sample, sample_size, H)) {
+        if (!dlt.NormalizedDLT(sample, sample_size, H)) {
 //            std::cout << "Normalized DLT failed\n";
             return false;
         }

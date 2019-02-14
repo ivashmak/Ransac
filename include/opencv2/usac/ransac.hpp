@@ -47,9 +47,7 @@ public:
 
         assert(!points_.empty());
         assert(model != nullptr);
-
         points_size = points_.getMat().rows;
-//        std::cout << "points size = " << points_size << "\n";
 
         initEstimator(estimator, model->estimator, points_.getMat());
         initSampler(sampler, model, points_.getMat());
@@ -98,22 +96,6 @@ public:
     }
 
     void run();
-
-    void setSampler(Sampler *sampler_) {
-        sampler = sampler_;
-    }
-
-    void setModel(Model *model_) {
-        model = model_;
-    }
-
-    void setTerminationCriteria(TerminationCriteria *termination_criteria_) {
-        termination_criteria = termination_criteria_;
-    }
-
-    void setQuality(Quality *quality_) {
-        quality = quality_;
-    }
 
     RansacOutput *getRansacOutput() {
         return ransac_output;

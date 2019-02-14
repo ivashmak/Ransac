@@ -6,7 +6,7 @@
 #include "tests.hpp"
 #include "../include/opencv2/usac/utils.hpp"
 
-void Tests::testLineFitting() {
+void opencv_test::testLineFitting() {
     std::string img_name = "../test/dataset/line2d/1";
 
     cv::Mat points, sorted_points;
@@ -54,18 +54,18 @@ void Tests::testLineFitting() {
     float threshold = 8, confidence = 0.99;
 
     // ---------------- uniform -------------------
-//     model = new cv::usac::Model (threshold, 2, confidence, knn,
-        // cv::usac::ESTIMATOR::Line2d, cv::usac::SAMPLER::Uniform);
+//     model = new cv::usac::Model (threshold, confidence, knn,
+//         cv::usac::ESTIMATOR::Line2d, cv::usac::SAMPLER::Uniform);
 //------------------------------------------
 
     // --------------  prosac ---------------------
-    model = new cv::usac::Model (threshold, 2, confidence, knn,
+    model = new cv::usac::Model (threshold, confidence, knn,
             cv::usac::ESTIMATOR::Line2d, cv::usac::SAMPLER::Prosac);
      // ------------------------------------------------
 
     // ---------------- napsac -------------------------------
-    // model = new cv::usac::Model (threshold, 2, confidence, knn,
-            // cv::usac::ESTIMATOR::Line2d, cv::usac::SAMPLER::Napsac);
+//     model = new cv::usac::Model (threshold, confidence, knn,
+//             cv::usac::ESTIMATOR::Line2d, cv::usac::SAMPLER::Napsac);
     // ---------------------------------------------------------------------
 
      model->lo = cv::usac::LocOpt ::NullLO;
@@ -77,4 +77,8 @@ void Tests::testLineFitting() {
      } else {
          test (points, model, img_name+".png", std::string(), true, gt_inliers);
      }
+
+     delete (model);
 }
+
+//TEST (usac_test, line2d_test) {opencv_test::testLineFitting();}

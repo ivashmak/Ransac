@@ -25,14 +25,10 @@ bool cv::usac::inverse3x3 (cv::Mat& A) {
 
     float detA = a11*a22*a33 - a11*a23*a32 - a12*a21*a33 + a12*a23*a31 + a13*a21*a32 - a13*a22*a31;
 
-    if (detA == 0) {
-        std::cout << "\033[1;31mDeterminant of A is 0\033[0m\n";
-        return false;
+
+    if (fabsf(detA) < 0.000001) {
+        std::cout << "\033[1;33mDeterminant is closed to 0\033[0m\n";
     }
-//    else if (fabsf(detA) < 0.0000001) {
-//        std::cout << detA << "\n";
-//        std::cout << "\033[1;33mDeterminant of A is very small\033[0m\n";
-//    }
 
     A_ptr[0] = (a22*a33 - a23*a32)/detA;
     A_ptr[1] = (a13*a32 - a12*a33)/detA;

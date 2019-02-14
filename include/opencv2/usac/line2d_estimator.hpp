@@ -23,6 +23,7 @@ public:
      */
     Line2DEstimator(cv::InputArray input_points) : points((float *) input_points.getMat().data) {
         assert(!input_points.empty());
+        assert(input_points.getMat().cols == 2 && input_points.getMat().rows > 0);
     }
 
     /*
