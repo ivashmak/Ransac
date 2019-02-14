@@ -205,7 +205,7 @@ public:
             }
 
 //            std::cout << point << " ";
-            if (estimator->GetError(points_random_pool[random_pool_idx]) < threshold) {
+            if (estimator->getError(points_random_pool[random_pool_idx]) < threshold) {
                 tested_inliers++;
                 lambda_new = lambda * (delta / epsilon);
             } else {
@@ -233,7 +233,7 @@ public:
                 if (random_pool_idx >= points_size) {
                     random_pool_idx = 0;
                 }
-                if (estimator->GetError(points_random_pool[random_pool_idx]) < threshold) {
+                if (estimator->getError(points_random_pool[random_pool_idx]) < threshold) {
                     inliers_after_test++;
                 }
                 random_pool_idx++;

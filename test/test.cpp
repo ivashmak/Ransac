@@ -50,10 +50,7 @@ void Tests::test (const cv::Mat &points,
     cv::usac::splitTime(&time, time_mcs);
     std::cout << &time;
     std::cout << "\tMain iterations: " << ransacOutput->getNumberOfMainIterations() << "\n";
-    std::cout << "\tLO iterations: " << ransacOutput->getLOIters() <<
-    " (where " << ransacOutput->getLOInnerIters () << " (inner iters) and " <<
-              ransacOutput->getLOIterativeIters() << " (iterative iters) and " << ransacOutput->getGCIters() << " (GC iters))\n";
-
+    std::cout << "\tLO iterations: " << ransacOutput->getNUmberOfLOIterarations() << "\n";
     std::cout << "\tpoints under threshold: " << ransacOutput->getNumberOfInliers() << "\n";
 
     std::cout << "Best model = ...\n" << ransacOutput->getModel ()->returnDescriptor() << "\n";

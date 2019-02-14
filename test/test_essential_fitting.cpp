@@ -21,7 +21,7 @@ void Tests::testEssentialFitting() {
     // get sorted inliers using threshold 1!
     cv::usac::EssentialEstimator essentialEstimator(points);
     cv::usac::Model m (0, 0, 0, 0, cv::usac::ESTIMATOR::Essential, cv::usac::SAMPLER::Uniform);
-    essentialEstimator.EstimateModelNonMinimalSample(&gt_inliers[0], gt_inliers.size(), m);
+    essentialEstimator.estimateModelNonMinimalSample(&gt_inliers[0], gt_inliers.size(), m);
     cv::Mat gt_model = m.returnDescriptor().clone();
     cv::usac::EssentialEstimator essentialEstimator2(sorted_points);
     cv::usac::Quality::getInliers(&essentialEstimator2, gt_model, 1/*threshold*/, sorted_points.rows, gt_sorted_inliers);
@@ -37,7 +37,7 @@ void Tests::testEssentialFitting() {
     model = new cv::usac::Model (threshold, 5, confidence, knn, cv::usac::ESTIMATOR::Essential, cv::usac::SAMPLER::Prosac);
     // ------------------------------------------------------------------------
 
-    model->lo = cv::usac::LocOpt ::NullLO;
+    model->lo = cv::usac::LocOpt ::GC;
     model->setSprt(0);
     model->setCellSize(50);
     model->setNeighborsType(cv::usac::NeighborsSearch::Grid);

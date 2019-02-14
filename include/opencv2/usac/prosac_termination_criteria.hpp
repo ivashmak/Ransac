@@ -158,16 +158,16 @@ public:
         estimator->setModelParameters(model);
         // just accumulate the count for the first min_termination_length points
         for (unsigned int i = 0; i < min_termination_length; i++) {
-            inlier_count += estimator->GetError(i) < threshold;
+            inlier_count += estimator->getError(i) < threshold;
         }
 
         bool is_inlier_iplus1;
-        bool is_inlier_i = estimator->GetError(min_termination_length) < threshold;
+        bool is_inlier_i = estimator->getError(min_termination_length) < threshold;
 
         // after this initial subset, try to update the stopping length if possible
         for (unsigned int i = min_termination_length; i < points_size; ++i) {
             if (i != points_size - 1) {
-                is_inlier_iplus1 = estimator->GetError(i + 1) < threshold;
+                is_inlier_iplus1 = estimator->getError(i + 1) < threshold;
             }
 
             inlier_count += is_inlier_i;

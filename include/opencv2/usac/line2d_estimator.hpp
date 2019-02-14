@@ -35,7 +35,7 @@ public:
      * c = --------------------------------
      *     sqrt ((x1 - x2)^2 + (y2 - y1)^2)
      */
-    unsigned int EstimateModel(const int *const sample, std::vector<Model *> &models) override {
+    unsigned int estimateModel(const int *const sample, std::vector<Model *> &models) override {
         const int idx1 = sample[0];
         const int idx2 = sample[1];
 
@@ -59,7 +59,7 @@ public:
      * Principal Component Analysis
      */
     bool
-    EstimateModelNonMinimalSample(const int *const sample, unsigned int sample_size, Model &model) override {
+    estimateModelNonMinimalSample(const int *const sample, unsigned int sample_size, Model &model) override {
 
         /*
          * cov (i, j) = sum ((xi - mean_x) * (yi - mean_y)) =
@@ -109,7 +109,7 @@ public:
         return true;
     }
 
-    bool LeastSquaresFitting(const int *const sample, unsigned int sample_size, Model &model) override {
+    bool leastSquaresFitting(const int *const sample, unsigned int sample_size, Model &model) override {
         float a = 0, b = 0, c;
         float x, y, x_mean = 0, y_mean = 0;
         unsigned int smpl;
@@ -148,11 +148,11 @@ public:
     /*
      * |ax + by + c|, where ||(a b)|| = 1
      */
-    inline float GetError(unsigned int pidx) override {
+    inline float getError(unsigned int pidx) override {
         return fabsf(a * points[2 * pidx] + b * points[2 * pidx + 1] + c);
     }
 
-    int SampleNumber() override {
+    int sampleNumber() override {
         return 2;
     }
 

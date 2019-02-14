@@ -13,18 +13,18 @@ public:
     virtual ~Estimator() = default;
 
     // minimal model estimation
-    virtual unsigned int EstimateModel(const int *const sample, std::vector<Model *> &models) = 0;
+    virtual unsigned int estimateModel(const int *const sample, std::vector<Model *> &models) = 0;
 
     virtual bool
-    EstimateModelNonMinimalSample(const int *const sample, unsigned int sample_size, Model &model) = 0;
+    estimateModelNonMinimalSample(const int *const sample, unsigned int sample_size, Model &model) = 0;
 
-    virtual bool LeastSquaresFitting(const int *const sample, unsigned int sample_size, Model &model) {
-        return EstimateModelNonMinimalSample(sample, sample_size, model);
+    virtual bool leastSquaresFitting(const int *const sample, unsigned int sample_size, Model &model) {
+        return estimateModelNonMinimalSample(sample, sample_size, model);
     }
 
-    virtual float GetError(unsigned int pidx) = 0;
+    virtual float getError(unsigned int pidx) = 0;
 
-    virtual int SampleNumber() = 0;
+    virtual int sampleNumber() = 0;
 
     virtual void setModelParameters(const cv::Mat &model) = 0;
 

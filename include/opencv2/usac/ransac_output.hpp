@@ -18,9 +18,7 @@ private:
     unsigned int number_inliers;
     unsigned int number_iterations;
 
-    unsigned int lo_inner_iters;
-    unsigned int lo_iterative_iters;
-    unsigned int gc_iters;
+    unsigned int lo_iterations;
 public:
 
     ~RansacOutput() {
@@ -33,9 +31,7 @@ public:
                  long time_mcs_,
                  unsigned int number_inliers_,
                  unsigned int number_iterations_,
-                 unsigned int lo_inner_iters_,
-                 unsigned int lo_iterative_iters_,
-                 unsigned int gc_iters_) {
+                 unsigned int lo_iters) {
 
         /*
          * Let's make a deep copy to avoid changing variables from origin input.
@@ -48,9 +44,7 @@ public:
         number_inliers = number_inliers_;
         number_iterations = number_iterations_;
 
-        lo_inner_iters = lo_inner_iters_;
-        lo_iterative_iters = lo_iterative_iters_;
-        gc_iters = gc_iters_;
+        lo_iterations = lo_iters;
 
         time = new Time;
         splitTime(time, time_mcs);
@@ -73,21 +67,8 @@ public:
         return number_iterations;
     }
 
-    unsigned int getLOIters() {
-        // number_iterations > number_lo_iterations
-        return lo_inner_iters + lo_iterative_iters + gc_iters;
-    }
-
-    unsigned int getLOInnerIters() {
-        return lo_inner_iters;
-    }
-
-    unsigned int getLOIterativeIters() {
-        return lo_iterative_iters;
-    }
-
-    unsigned int getGCIters() {
-        return gc_iters;
+    unsigned int getNUmberOfLOIterarations() {
+        return lo_iterations;
     }
 
     Time *getTime() {

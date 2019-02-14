@@ -57,7 +57,7 @@ public:
      * x' = (y'1 y'2 y'3) / y'3
      * x  = (y1  y2  y3)  / y3
      */
-    unsigned int EstimateModel(const int *const sample, std::vector<Model *> &models) override {
+    unsigned int estimateModel(const int *const sample, std::vector<Model *> &models) override {
         cv::Mat_<float> E;
 
         unsigned int models_count = e_solver->FivePoints(sample, E);
@@ -70,7 +70,7 @@ public:
     }
 
     bool
-    EstimateModelNonMinimalSample(const int *const sample, unsigned int sample_size, Model &model) override {
+    estimateModelNonMinimalSample(const int *const sample, unsigned int sample_size, Model &model) override {
         cv::Mat_<float> E;
 
         if (!f_solver->EightPointsAlgorithm(sample, sample_size, E)) {
@@ -82,7 +82,7 @@ public:
         return true;
     }
 
-    float GetError(unsigned int pidx) override {
+    float getError(unsigned int pidx) override {
         unsigned int smpl = 4 * pidx;
         float x1 = points[smpl];
         float y1 = points[smpl + 1];
@@ -120,7 +120,7 @@ public:
         E = K2.t() * F * K1;
     }
 
-    int SampleNumber() override {
+    int sampleNumber() override {
         return 5;
     }
 };

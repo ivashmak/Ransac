@@ -31,8 +31,8 @@ protected:
 
     int *inliers, *sample, *neighbors;
     float *errors;
+    unsigned int gc_iterations;
 public:
-    unsigned int gc_iterations = 0;
 
     ~GraphCut() override {
         delete[] errors;
@@ -100,7 +100,7 @@ public:
 
     void labeling(const cv::Mat &model, Score *score, int *inliers);
 
-    void GetModelScore(Model *best_model, Score *best_score) override {
+    void getModelScore(Model *best_model, Score *best_score) override {
         // improve best model by non minimal estimation
 //        oneStepLO (best_model);
 
@@ -124,7 +124,7 @@ public:
                     for (unsigned int smpl = 0; smpl < sample_limit; smpl++) {
                         sample[smpl] = inliers[sample[smpl]];
                     }
-                    if (!estimator->EstimateModelNonMinimalSample(sample, sample_limit, *gc_model)) {
+                    if (!estimator->estimateModelNonMinimalSample(sample, sample_limit, *gc_model)) {
                         break;
                     }
                 } else {
@@ -136,7 +136,7 @@ public:
                          */
                         break;
                     }
-                    if (!estimator->EstimateModelNonMinimalSample(inliers, labeling_inliers_size, *gc_model)) {
+                    if (!estimator->estimateModelNonMinimalSample(inliers, labeling_inliers_size, *gc_model)) {
                         break;
                     }
                 }
@@ -155,7 +155,9 @@ public:
             } // end of inner GC local optimization
         } // end of while loop
     }
-
+    unsigned int getNumberIterations () override {
+        return gc_iterations;
+    }
 private:
     void oneStepLO(Model *model) {
         /*
@@ -173,7 +175,7 @@ private:
 
         if (gc_score->inlier_number < one_step_lo_sample_limit) {
             // if score is less than limit number sample then take estimation of all inliers
-            estimator->EstimateModelNonMinimalSample(inliers, gc_score->inlier_number, *model);
+            estimator->estimateModelNonMinimalSample(inliers, gc_score->inlier_number, *model);
         } else {
             // otherwise take some inliers as sample at random
             if (model->sampler == SAMPLER::Prosac) {
@@ -190,7 +192,7 @@ private:
                 }
             }
 
-            estimator->EstimateModelNonMinimalSample(sample, one_step_lo_sample_limit, *model);
+            estimator->estimateModelNonMinimalSample(sample, one_step_lo_sample_limit, *model);
         }
     }
 };

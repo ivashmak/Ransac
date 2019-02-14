@@ -57,7 +57,7 @@ public:
         hi33 = H_inv_ptr[8];
     }
 
-    unsigned int EstimateModel(const int *const sample, std::vector<Model *> &models) override {
+    unsigned int estimateModel(const int *const sample, std::vector<Model *> &models) override {
         cv::Mat H;
         if (!dlt->DLT4p(sample, H)) {
             return 0;
@@ -69,7 +69,7 @@ public:
     }
 
     bool
-    EstimateModelNonMinimalSample(const int *const sample, unsigned int sample_size, Model &model) override {
+    estimateModelNonMinimalSample(const int *const sample, unsigned int sample_size, Model &model) override {
         cv::Mat H;
         if (!dlt->NormalizedDLT(sample, sample_size, H)) {
 //            std::cout << "Normalized DLT failed\n";
@@ -80,14 +80,14 @@ public:
         return true;
     }
 
-    bool LeastSquaresFitting(const int *const sample, unsigned int sample_size, Model &model) override {
-        return EstimateModelNonMinimalSample(sample, sample_size, model);
+    bool leastSquaresFitting(const int *const sample, unsigned int sample_size, Model &model) override {
+        return estimateModelNonMinimalSample(sample, sample_size, model);
     }
 
     /*
      * Error = mean (distance (pt(i)H, pt'(i)) + distance (pt(i), pt'(i)H^-1))
      */
-    float GetError(unsigned int pidx) override {
+    float getError(unsigned int pidx) override {
         unsigned int smpl = 4 * pidx;
         float x1 = points[smpl];
         float y1 = points[smpl + 1];
@@ -114,7 +114,7 @@ public:
         return error / 2;
     }
 
-    int SampleNumber() override {
+    int sampleNumber() override {
         return 4;
     }
 };

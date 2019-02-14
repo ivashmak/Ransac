@@ -16,8 +16,8 @@ public:
     /*
      * Update best model and best score.
      */
-    virtual void GetModelScore(Model *best_model, Score *best_score) = 0;
-
+    virtual void getModelScore(Model *best_model, Score *best_score) = 0;
+    virtual unsigned int getNumberIterations () = 0;
 };
 }}
 

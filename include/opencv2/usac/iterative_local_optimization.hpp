@@ -9,9 +9,9 @@
 #include "uniform_random_generator.hpp"
 
 namespace cv { namespace usac {
-class IterativeLocalOptimization {
+class IterativeLocalOptimization : LocalOptimization {
 private:
-    unsigned int max_iters, threshold_multiplier, sample_limit;
+    unsigned int max_iters, threshold_multiplier, sample_limit, points_size;
     bool is_sample_limit;
     float threshold_step, threshold;
     UniformRandomGenerator *uniformRandomGenerator;
@@ -19,8 +19,8 @@ private:
     Quality *quality;
 
     int *lo_sample;
+    unsigned int lo_iterative_iters;
 public:
-    unsigned int lo_iterative_iters = 0;
 
     ~IterativeLocalOptimization() {
         if (is_sample_limit) {
@@ -28,9 +28,10 @@ public:
         }
     }
 
-    IterativeLocalOptimization(unsigned int points_size, Model *model,
+    IterativeLocalOptimization(unsigned int points_size_, Model *model,
                                UniformRandomGenerator *uniformRandomGenerator_,
                                Estimator *estimator_, Quality *quality_) {
+        points_size = points_size_;
         max_iters = model->lo_iterative_iterations;
         threshold_multiplier = model->lo_threshold_multiplier;
         is_sample_limit = model->lo == LocOpt::InItFLORsc;
@@ -53,6 +54,13 @@ public:
         lo_iterative_iters = 0;
     }
 
+    void getModelScore (Model * model, Score * score) override {
+        int * inliers = new int[points_size];
+        quality->getInliers(model->returnDescriptor(), inliers);
+        getScoreLimited(score, model, inliers);
+        delete[] inliers;
+    }
+
     /*
      * Iterative LO Ransac
      * Reduce threshold of current model
@@ -62,7 +70,7 @@ public:
      * Repeat until iteration < lo iterative iterations
      */
 
-    bool GetScoreLimited(Score *lo_score, Model *lo_model, int *lo_inliers) {
+    bool getScoreLimited(Score *lo_score, Model *lo_model, int *lo_inliers) {
         for (unsigned int iterations = 0; iterations < max_iters; iterations++) {
             lo_model->threshold -= threshold_step;
 
@@ -75,11 +83,11 @@ public:
                 for (unsigned int smpl = 0; smpl < sample_limit; smpl++) {
                     lo_sample[smpl] = lo_inliers[lo_sample[smpl]];
                 }
-                if (!estimator->LeastSquaresFitting(lo_sample, sample_limit, *lo_model)) continue;
+                if (!estimator->leastSquaresFitting(lo_sample, sample_limit, *lo_model)) continue;
             } else {
                 // if inliers less than sample limit then use all of them to estimate model.
                 // if estimation fails break iterative loop.
-                if (!estimator->LeastSquaresFitting(lo_inliers, lo_score->inlier_number, *lo_model)) break;
+                if (!estimator->leastSquaresFitting(lo_inliers, lo_score->inlier_number, *lo_model)) break;
             }
 
             quality->getNumberInliers(lo_score, lo_model->returnDescriptor(), lo_model->threshold, true,
@@ -110,13 +118,13 @@ public:
      * Get inliers
      * Repeat until iteration < lo iterative iterations
      */
-    bool GetScoreUnlimited(Score *lo_score, Model *lo_model, Score *best_score, int *lo_inliers) {
+    bool getScoreUnlimited(Score *lo_score, Model *lo_model, Score *best_score, int *lo_inliers) {
         for (unsigned int iterations = 0; iterations < max_iters; iterations++) {
             lo_model->threshold -= threshold_step;
 
             // break if there are not enough inliers to estimate non minimal model
             if (lo_score->inlier_number <= lo_model->sample_size) break;
-            if (!estimator->LeastSquaresFitting(lo_inliers, lo_score->inlier_number, *lo_model)) break;
+            if (!estimator->leastSquaresFitting(lo_inliers, lo_score->inlier_number, *lo_model)) break;
             quality->getNumberInliers(lo_score, lo_model->returnDescriptor(), lo_model->threshold, true,
                                       lo_inliers);
 
@@ -139,6 +147,11 @@ public:
         }
 
         return fail;
+    }
+
+
+    unsigned int getNumberIterations () override {
+        return lo_iterative_iters;
     }
 
 };

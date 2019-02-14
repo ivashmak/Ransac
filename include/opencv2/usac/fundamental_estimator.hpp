@@ -55,7 +55,7 @@ public:
         f33 = F_ptr[8];
     }
 
-    unsigned int EstimateModel(const int *const sample, std::vector<Model *> &models) override {
+    unsigned int estimateModel(const int *const sample, std::vector<Model *> &models) override {
         cv::Mat_<float> F;
 
         unsigned int roots = solver->SevenPointsAlgorithm(sample, F);
@@ -71,7 +71,7 @@ public:
     }
 
     bool
-    EstimateModelNonMinimalSample(const int *const sample, unsigned int sample_size, Model &model) override {
+    estimateModelNonMinimalSample(const int *const sample, unsigned int sample_size, Model &model) override {
         cv::Mat_<float> F;
 
         if (!solver->EightPointsAlgorithm(sample, sample_size, F)) {
@@ -94,7 +94,7 @@ public:
      *               [ F(3,1)  F(3,2)  F(3,3) ]   [ 1  ]
      *
      */
-    float GetError(unsigned int pidx) override {
+    float getError(unsigned int pidx) override {
         unsigned int smpl = 4 * pidx;
         float x1 = points[smpl];
         float y1 = points[smpl + 1];
@@ -121,7 +121,7 @@ public:
         F = K2.inv().t() * E * K1.inv();
     }
 
-    int SampleNumber() override {
+    int sampleNumber() override {
         return 7;
     }
 

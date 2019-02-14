@@ -33,7 +33,7 @@ void cv::usac::Ransac::run() {
      * Allocate inliers of points_size, to avoid reallocation in getModelScore()
      */
     int * inliers = new int[points_size];
-    int sample [estimator->SampleNumber()];
+    int sample [estimator->sampleNumber()];
 
     // prosac
     bool is_prosac = model->sampler == SAMPLER::Prosac;
@@ -53,7 +53,7 @@ void cv::usac::Ransac::run() {
 //        std::cout << "generate sample\n";
         sampler->generateSample(sample);
 
-        number_of_models = estimator->EstimateModel(sample, models);
+        number_of_models = estimator->estimateModel(sample, models);
 
 
         for (unsigned int i = 0; i < number_of_models; i++) {
@@ -96,7 +96,7 @@ void cv::usac::Ransac::run() {
                 // if inlier number is too small, do not update
 
                 if (LO) {
-                    local_optimization->GetModelScore (models[i], current_score);
+                    local_optimization->getModelScore(models[i], current_score);
                 }
 
                 // copy current score to best score
@@ -135,9 +135,9 @@ void cv::usac::Ransac::run() {
     }
 
     // Graph Cut lo was set, but did not run, run it
-    if (GraphCutLO && ((GraphCut *)local_optimization)->gc_iterations == 0) {
+    if (GraphCutLO && ((GraphCut *)local_optimization)->getNumberIterations() == 0) {
         // update best model and best score
-        local_optimization->GetModelScore(best_model, best_score);
+        local_optimization->getModelScore(best_model, best_score);
     }
 
 //    std::cout << "Calculate Non minimal model\n";
@@ -154,7 +154,7 @@ void cv::usac::Ransac::run() {
 
     for (unsigned int norm = 0; norm < 4 /* normalizations count */; norm++) {
         // estimate non minimal model with max inliers
-        if (! estimator->EstimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model)) {
+        if (!estimator->estimateModelNonMinimalSample(max_inliers, best_score->inlier_number, *non_minimal_model)) {
             break;
         }
 
@@ -182,24 +182,13 @@ void cv::usac::Ransac::run() {
     // get final inliers from the best model
     quality->getInliers(best_model->returnDescriptor(), max_inliers);
 
-    unsigned int lo_inner_iters = 0;
-    unsigned int lo_iterative_iters = 0;
-    if (model->lo == LocOpt::InItLORsc || model->lo == LocOpt::InItFLORsc) {
-        lo_inner_iters = ((InnerLocalOptimization *) local_optimization)->lo_inner_iters;
-        lo_iterative_iters = ((InnerLocalOptimization *) local_optimization)->lo_iterative_iters;
-    }
-    unsigned int gc_iters = 0;
-    if (GraphCutLO) {
-        gc_iters = ((GraphCut *)local_optimization)->gc_iterations;
-    }
+    unsigned int num_lo_iters = model->lo == NullLO ? 0 : local_optimization->getNumberIterations();
+
     // Store results
     ransac_output = new RansacOutput (best_model, max_inliers,
             std::chrono::duration_cast<std::chrono::microseconds>(fs).count(),
-                                      best_score->inlier_number, iters, lo_inner_iters, lo_iterative_iters, gc_iters);
+                                      best_score->inlier_number, iters, num_lo_iters);
 
-    delete[] inliers;
-    delete[] max_inliers;
-    delete (current_score);
-    delete (best_score);
-    delete (best_model);
+    delete[] inliers; delete[] max_inliers;
+    delete (current_score); delete (best_score); delete (best_model);
 }

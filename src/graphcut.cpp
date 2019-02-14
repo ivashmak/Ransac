@@ -18,7 +18,7 @@ void cv::usac::GraphCut::labeling (const cv::Mat& model, Score * score, int * in
     float energy, energy1, energy2, distance, distance1, distance2;
 
     for (unsigned int i = 0; i < points_size; ++i) {
-        distance = estimator->GetError(i);
+        distance = estimator->getError(i);
         // save errors to avoid next error calculating
         errors[i] = distance;
 

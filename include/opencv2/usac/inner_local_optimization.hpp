@@ -24,17 +24,13 @@ private:
     int *lo_inliers, *max_inliers, *lo_sample;
     unsigned int lo_inner_max_iterations, sample_limit;
     bool limited;
+    unsigned int lo_inner_iters, lo_iterative_iters;
 public:
-    unsigned int lo_inner_iters = 0, lo_iterative_iters = 0;
 
     ~InnerLocalOptimization() override {
-        delete[] lo_inliers;
-        delete[] lo_sample;
-        delete[] max_inliers;
-        delete (lo_score);
-        delete (lo_model);
-        delete (uniform_random_generator);
-        delete (iterativeLocalOptimization);
+        delete[] lo_inliers; delete[] lo_sample; delete[] max_inliers;
+        delete (lo_score); delete (lo_model);delete (uniform_random_generator);
+        (iterativeLocalOptimization);
     }
 
     InnerLocalOptimization(Model *model, Estimator *estimator_, Quality *quality_, unsigned int points_size) {
@@ -72,7 +68,7 @@ public:
      * Implementation of Locally Optimized Ransac
      * Inner + Iterative
      */
-    void GetModelScore(Model *best_model, Score *best_score) override {
+    void getModelScore(Model *best_model, Score *best_score) override {
         // return if there are not many inliers for LO.
         if (best_score->inlier_number < 12) return;
 
@@ -90,11 +86,11 @@ public:
                     lo_sample[smpl] = max_inliers[lo_sample[smpl]];
                 }
 
-                if (!estimator->LeastSquaresFitting(lo_sample, sample_limit, *lo_model)) continue;
+                if (!estimator->leastSquaresFitting(lo_sample, sample_limit, *lo_model)) continue;
             } else {
                 // if inliers are less than limited number of sample then take all of them for estimation
                 // if it fails -> end Lo.
-                if (!estimator->LeastSquaresFitting(max_inliers, best_score->inlier_number, *lo_model)) return;
+                if (!estimator->leastSquaresFitting(max_inliers, best_score->inlier_number, *lo_model)) return;
             }
 
             // Start evaluating a model with new threshold. And get inliers for iterative lo ransac.
@@ -110,15 +106,15 @@ public:
             bool fail;
             if (limited) {
                 // fixing locally optimized ransac: with limited samples.
-                fail = iterativeLocalOptimization->GetScoreLimited(lo_score, lo_model, lo_inliers);
+                fail = iterativeLocalOptimization->getScoreLimited(lo_score, lo_model, lo_inliers);
             } else {
                 // unlimited iterative lo
-                fail = iterativeLocalOptimization->GetScoreUnlimited(lo_score, lo_model, best_score,
+                fail = iterativeLocalOptimization->getScoreUnlimited(lo_score, lo_model, best_score,
                                                                      lo_inliers);
             }
 
             // only for test
-            lo_iterative_iters = iterativeLocalOptimization->lo_iterative_iters;
+            lo_iterative_iters = iterativeLocalOptimization->getNumberIterations();
             //
 
             // update best model
@@ -133,6 +129,10 @@ public:
             lo_inner_iters++;
             //
         }
+    }
+
+    unsigned int getNumberIterations () override {
+        return lo_inner_iters + lo_iterative_iters;
     }
 };
 }}

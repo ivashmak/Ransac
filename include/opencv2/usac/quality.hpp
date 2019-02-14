@@ -73,7 +73,7 @@ public:
         if (parallel && !get_inliers) {
 #pragma omp parallel for reduction (+:inlier_number)
             for (unsigned int point = 0; point < points_size; point++) {
-                if (estimator->GetError(point) < threshold) {
+                if (estimator->getError(point) < threshold) {
                     inlier_number++;
                 }
             }
@@ -81,7 +81,7 @@ public:
             float err;
             if (get_inliers) {
                 for (unsigned int point = 0; point < points_size; point++) {
-                    err = estimator->GetError(point);
+                    err = estimator->getError(point);
                     if (err < threshold) {
                         inliers[inlier_number++] = point;
                         sum_errors += err;
@@ -89,7 +89,7 @@ public:
                 }
             } else {
                 for (unsigned int point = 0; point < points_size; point++) {
-                    err = estimator->GetError(point);
+                    err = estimator->getError(point);
                     if (err < threshold) {
                         inlier_number++;
                         sum_errors += err;
@@ -110,7 +110,7 @@ public:
 
         int num_inliers = 0;
         for (unsigned int point = 0; point < points_size; point++) {
-            if (estimator->GetError(point) < threshold) {
+            if (estimator->getError(point) < threshold) {
                 inliers[num_inliers] = point;
                 num_inliers++;
             }
@@ -123,7 +123,7 @@ public:
         estimator->setModelParameters(model);
         inliers.clear();
         for (unsigned int p = 0; p < points_size; p++) {
-            if (estimator->GetError(p) < threshold) {
+            if (estimator->getError(p) < threshold) {
                 inliers.push_back(p);
             }
         }
@@ -139,7 +139,7 @@ public:
         float sum_errors = 0;
         estimator->setModelParameters(model->returnDescriptor());
         for (unsigned int inl : gt_inliers) {
-            sum_errors += estimator->GetError(inl);
+            sum_errors += estimator->getError(inl);
         }
         return sum_errors / gt_inliers.size();
     }
