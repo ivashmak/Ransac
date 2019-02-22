@@ -130,14 +130,14 @@ public:
     }
 
     // Get average error to GT inliers.
-    static float getErrorGT_inl(Estimator *estimator, Model *model, const std::vector<int> &gt_inliers) {
+    static float getErrorToGTInliers(Estimator *estimator, const cv::Mat &model, const std::vector<int> &gt_inliers) {
 
         // return -1 (unknown) to avoid division by zero
         if (gt_inliers.size() == 0)
             return -1;
 
         float sum_errors = 0;
-        estimator->setModelParameters(model->returnDescriptor());
+        estimator->setModelParameters(model);
         for (unsigned int inl : gt_inliers) {
             sum_errors += estimator->getError(inl);
         }

@@ -13,7 +13,6 @@ class HomographyEstimator : public Estimator {
 private:
     const float *const points;
     float h11, h12, h13, h21, h22, h23, h31, h32, h33;
-    float hi11, hi12, hi13, hi21, hi22, hi23, hi31, hi32, hi33;
     DLt dlt;
 public:
     /*
@@ -29,16 +28,10 @@ public:
 
     void setModelParameters(const cv::Mat &model) override {
         auto *H_ptr = (float *) model.data;
-        cv::Mat H_inv = model.inv();
-        auto *H_inv_ptr = (float *) H_inv.data;
 
         h11 = H_ptr[0]; h12 = H_ptr[1]; h13 = H_ptr[2];
         h21 = H_ptr[3]; h22 = H_ptr[4]; h23 = H_ptr[5];
         h31 = H_ptr[6]; h32 = H_ptr[7]; h33 = H_ptr[8];
-
-        hi11 = H_inv_ptr[0]; hi12 = H_inv_ptr[1]; hi13 = H_inv_ptr[2];
-        hi21 = H_inv_ptr[3]; hi22 = H_inv_ptr[4]; hi23 = H_inv_ptr[5];
-        hi31 = H_inv_ptr[6]; hi32 = H_inv_ptr[7]; hi33 = H_inv_ptr[8];
     }
 
     unsigned int estimateModel(const int *const sample, std::vector<Model *> &models) override {
@@ -85,17 +78,9 @@ public:
         est_x2 /= est_z2;
         est_y2 /= est_z2;
 
-        float est_x1 = hi11 * x2 + hi12 * y2 + hi13;
-        float est_y1 = hi21 * x2 + hi22 * y2 + hi23;
-        float est_z1 = hi31 * x2 + hi32 * y2 + hi33;
+        float error = sqrt((x2 - est_x2) * (x2 - est_x2) + (y2 - est_y2) * (y2 - est_y2));
 
-        est_x1 /= est_z1;
-        est_y1 /= est_z1;
-
-        float error = sqrt((x2 - est_x2) * (x2 - est_x2) + (y2 - est_y2) * (y2 - est_y2))
-                      + sqrt((x1 - est_x1) * (x1 - est_x1) + (y1 - est_y1) * (y1 - est_y1));
-        // error >= 0
-        return error / 2;
+        return error;
     }
 
     int sampleNumber() override {

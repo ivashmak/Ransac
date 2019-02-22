@@ -67,7 +67,7 @@ void opencv_test::test (const cv::Mat &points,
     if (gt) {
         cv::usac::Estimator * estimator;
         initEstimator(estimator, model->estimator, points);
-        float error = cv::usac::Quality::getErrorGT_inl(estimator, ransacOutput->getModel(), gt_inliers);
+        float error = cv::usac::Quality::getErrorToGTInliers(estimator, ransacOutput->getModel()->returnDescriptor(), gt_inliers);
         std::cout << "Ground Truth number of inliers for same model parametres is " << gt_inliers.size() << "\n";
         std::cout << "Error to GT inliers " << error << "\n";
     }

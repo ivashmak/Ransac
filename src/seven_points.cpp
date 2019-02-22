@@ -48,13 +48,12 @@
 #include "../include/opencv2/usac/fundamental_solver.hpp"
 
 unsigned int cv::usac::FundamentalSolver::SevenPointsAlgorithm (const int * const sample, cv::Mat &F) {
-    float w[7], u[9*9], v[9*9], c[4], r[3];
+    float v[9*9], c[4], r[3];
     float* f1, *f2;
     float t0, t1, t2;
     cv::Mat_<float> A (7, 9);
-    cv::Mat_<float> U (7, 9, u);
+    cv::Mat_<float> U, W;
     cv::Mat_<float> Vt (9, 9, v);
-    cv::Mat_<float> W (7, 1, w);
     cv::Mat_<float> coeffs (1, 4, c);
     cv::Mat_<float> roots (1, 3, r);
 

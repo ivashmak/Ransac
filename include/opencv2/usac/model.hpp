@@ -24,7 +24,7 @@ enum LocOpt {
 class Model {
 public:
     float threshold = 2;
-    float desired_prob = 0.95;
+    float confidence = 0.95;
 
     unsigned int sample_size;
     unsigned int min_iterations = 20;
@@ -74,7 +74,7 @@ public:
         }
 
         threshold = threshold_;
-        desired_prob = desired_prob_;
+        confidence = desired_prob_;
         k_nearest_neighbors = knn;
         estimator = estimator_;
         sampler = sampler_;
@@ -121,7 +121,7 @@ public:
     }
 
     void setDesiredProbability(float desired_prob) {
-        this->desired_prob = desired_prob;
+        this->confidence = desired_prob;
     }
 
     void setKNearestNeighbors(int k_nearest_neighbors) {
@@ -131,7 +131,7 @@ public:
     void copyFrom(const Model *const model) {
         threshold = model->threshold;
         sample_size = model->sample_size;
-        desired_prob = model->desired_prob;
+        confidence = model->confidence;
         max_iterations = model->max_iterations;
         min_iterations = model->min_iterations;
         estimator = model->estimator;

@@ -9,9 +9,9 @@ int main (int args, char ** argv) {
 
 //     run tests
 //     opencv_test::testLineFitting();
-//     opencv_test::testHomographyFitting();
+     opencv_test::testHomographyFitting();
 //     opencv_test::testFundamentalFitting();
-     opencv_test::testEssentialFitting();
+//     opencv_test::testEssentialFitting();
 
     return 0;
 }

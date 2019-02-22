@@ -158,7 +158,7 @@ public:
 
         sample_size = model->sample_size;
         threshold = model->threshold;
-        confidence = model->desired_prob;
+        confidence = model->confidence;
         max_iterations = model->max_iterations;
         points_size = points_size_;
 

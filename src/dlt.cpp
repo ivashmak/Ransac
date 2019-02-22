@@ -7,47 +7,49 @@
 
 bool cv::usac::DLt::DLT4p (const int * const sample, cv::Mat &H) {
     float x1, y1, x2, y2;
-    int smpl;
-
-    cv::Mat_<float> A (8, 9), w, u, vt;
-    auto * A_ptr = (float *) A.data;
+    unsigned int smpl;
+    AtA = cv::Mat_<float> (9, 9, float (0));
+    float * AtA_ptr = (float *) AtA.data;
 
     for (int i = 0; i < 4; i++) {
         smpl = 4*sample[i];
         x1 = points[smpl];
         y1 = points[smpl+1];
-
         x2 = points[smpl+2];
         y2 = points[smpl+3];
 
-        (*A_ptr++) = -x1;
-        (*A_ptr++) = -y1;
-        (*A_ptr++) = -1;
-        (*A_ptr++) = 0;
-        (*A_ptr++) = 0;
-        (*A_ptr++) = 0;
-        (*A_ptr++) = x2*x1;
-        (*A_ptr++) = x2*y1;
-        (*A_ptr++) = x2;
+        a1[0] = -x1;
+        a1[1] = -y1;
+        a1[6] = x2*x1;
+        a1[7] = x2*y1;
+        a1[8] = x2;
 
-        (*A_ptr++) = 0;
-        (*A_ptr++) = 0;
-        (*A_ptr++) = 0;
-        (*A_ptr++) = -x1;
-        (*A_ptr++) = -y1;
-        (*A_ptr++) = -1;
-        (*A_ptr++) = y2*x1;
-        (*A_ptr++) = y2*y1;
-        (*A_ptr++) = y2;
+        a2[3] = -x1;
+        a2[4] = -y1;
+        a2[6] = y2*x1;
+        a2[7] = y2*y1;
+        a2[8] = y2;
+
+        for (unsigned int j = 0; j < 9; j++) {
+            for (unsigned int z = j; z < 9; z++) {
+                AtA_ptr[j*9+z] += a1[j]*a1[z] + a2[j]*a2[z];
+            }
+        }
     }
 
-    cv::SVD::compute(A, w, u, vt);
-    if (vt.empty()) {
+    for (unsigned int row = 1; row < 9; row++) {
+        for (unsigned int col = 0; col < row; col++) {
+            AtA_ptr[row*9+col] = AtA_ptr[col*9+row];
+        }
+    }
+
+    cv::eigen(AtA, D, Vt);
+
+    if (Vt.empty ()) {
         return false;
     }
 
-    H = cv::Mat_<float>(vt.row(vt.rows-1).reshape (3,3));
-    // normalize H by last h33
+    H = cv::Mat_<float>(Vt.row(Vt.rows-1).reshape (3,3));
     H = H / H.at<float>(2,2);
 
     return true;

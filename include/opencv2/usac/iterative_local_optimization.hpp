@@ -9,7 +9,7 @@
 #include "uniform_random_generator.hpp"
 
 namespace cv { namespace usac {
-class IterativeLocalOptimization : LocalOptimization {
+class IterativeLocalOptimization : public LocalOptimization {
 private:
     unsigned int max_iters, threshold_multiplier, sample_limit, points_size;
     bool is_sample_limit;

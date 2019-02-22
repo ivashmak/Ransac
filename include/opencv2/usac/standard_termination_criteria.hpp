@@ -25,7 +25,7 @@ public:
     StandardTerminationCriteria(const Model *const model, unsigned int points_size_) {
         assert (model != nullptr);
         this->model = model;
-        log_1_p = (float) log(1 - model->desired_prob);
+        log_1_p = (float) log(1 - model->confidence);
         sample_size = model->sample_size;
         max_iterations = model->max_iterations;
         points_size = points_size_;
