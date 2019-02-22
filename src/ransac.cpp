@@ -156,5 +156,8 @@ void cv::usac::Ransac::run() {
                                       best_score->inlier_number, iters, num_lo_iters);
 
     delete[] inliers; delete[] max_inliers;
-    delete (current_score); delete (best_score); delete (best_model);
+    delete (current_score); delete (best_score); delete (best_model); delete (non_minimal_model);
+    for (int i = 0; i < models.size(); i++) {
+        delete models[i];
+    }
 }

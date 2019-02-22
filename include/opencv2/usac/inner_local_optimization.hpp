@@ -30,7 +30,7 @@ public:
     ~InnerLocalOptimization() override {
         delete[] lo_inliers; delete[] lo_sample; delete[] max_inliers;
         delete (lo_score); delete (lo_model);delete (uniform_random_generator);
-        (iterativeLocalOptimization);
+        delete (iterativeLocalOptimization);
     }
 
     InnerLocalOptimization(Model *model, Estimator *estimator_, Quality *quality_, unsigned int points_size) {

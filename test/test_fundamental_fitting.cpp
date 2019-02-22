@@ -37,7 +37,7 @@ void opencv_test::testFundamentalFitting() {
 //          cv::usac::ESTIMATOR::Fundamental, cv::usac::SAMPLER::Prosac);
     // ------------------------------------------------------------------------
 
-    model->lo = cv::usac::LocOpt ::GC;
+    model->lo = cv::usac::LocOpt ::NullLO;
     model->setSprt(0);
     model->setCellSize(50);
     model->setNeighborsType(cv::usac::NeighborsSearch::Nanoflann);

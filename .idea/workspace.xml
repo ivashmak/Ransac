@@ -13,15 +13,15 @@
   <component name="ChangeListManager">
     <list default="true" id="2349f0c5-205e-48e6-8262-3d8b481d3476" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/opencv2/usac/homography_estimator.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/opencv2/usac/homography_estimator.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/opencv2/usac/iterative_local_optimization.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/opencv2/usac/iterative_local_optimization.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/opencv2/usac/model.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/opencv2/usac/model.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/opencv2/usac/quality.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/opencv2/usac/quality.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/opencv2/usac/sprt.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/opencv2/usac/sprt.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/opencv2/usac/inner_local_optimization.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/opencv2/usac/inner_local_optimization.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/opencv2/usac/prosac_termination_criteria.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/opencv2/usac/prosac_termination_criteria.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/opencv2/usac/ransac.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/opencv2/usac/ransac.hpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/opencv2/usac/standard_termination_criteria.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/opencv2/usac/standard_termination_criteria.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dlt.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/dlt.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/seven_points.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/seven_points.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/opencv2/usac/termination_criteria.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/opencv2/usac/termination_criteria.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ransac.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/ransac.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/test.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_essential_fitting.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_essential_fitting.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_fundamental_fitting.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_fundamental_fitting.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/test_main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/CMakeFiles/" />
@@ -39,68 +39,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="model.hpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/include/opencv2/usac/model.hpp">
+      <file leaf-file-name="prosac_termination_criteria.hpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/include/opencv2/usac/prosac_termination_criteria.hpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="26" column="20" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
+            <state relative-caret-position="291">
+              <caret line="44" column="23" selection-start-line="44" selection-start-column="23" selection-end-line="44" selection-end-column="23" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="iterative_local_optimization.hpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/include/opencv2/usac/iterative_local_optimization.hpp">
+      <file leaf-file-name="ransac.hpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/include/opencv2/usac/ransac.hpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-75">
-              <caret line="11" column="41" selection-start-line="11" selection-start-column="41" selection-end-line="11" selection-end-column="41" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/test.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="69" column="116" selection-start-line="69" selection-start-column="116" selection-end-line="69" selection-end-column="116" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="draw_epipolar_lines.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/draw_epipolar_lines.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="125" selection-start-line="125" selection-end-line="125" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dlt.cpp" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/dlt.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="810">
-              <caret line="55" column="1" selection-start-line="55" selection-start-column="1" selection-end-line="55" selection-end-column="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="homography_estimator.hpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/include/opencv2/usac/homography_estimator.hpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="296">
-              <caret line="83" column="5" lean-forward="true" selection-start-line="83" selection-start-column="5" selection-end-line="83" selection-end-column="5" />
+            <state relative-caret-position="176">
+              <caret line="42" column="29" selection-start-line="42" selection-start-column="29" selection-end-line="42" selection-end-column="29" />
               <folding>
-                <element signature="e#270#294#0" expanded="true" />
+                <element signature="e#244#263#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="seven_points.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/seven_points.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="27">
-              <caret line="54" column="24" selection-start-line="54" selection-start-column="24" selection-end-line="54" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -108,8 +63,8 @@
       <file leaf-file-name="test_main.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/test_main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" column="18" selection-start-line="13" selection-start-column="18" selection-end-line="13" selection-end-column="18" />
+            <state relative-caret-position="180">
+              <caret line="12" column="23" selection-start-line="12" selection-start-column="23" selection-end-line="12" selection-end-column="23" />
               <folding>
                 <element signature="e#195#222#0" expanded="true" />
               </folding>
@@ -117,23 +72,64 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="fundamental_estimator.hpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/include/opencv2/usac/fundamental_estimator.hpp">
+      <file leaf-file-name="test_fundamental_fitting.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/test_fundamental_fitting.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="43" column="40" selection-start-line="43" selection-start-column="40" selection-end-line="43" selection-end-column="40" />
-              <folding>
-                <element signature="e#268#299#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="555">
+              <caret line="39" column="41" selection-start-line="39" selection-start-column="41" selection-end-line="39" selection-end-column="41" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="fundamental_solver.hpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/include/opencv2/usac/fundamental_solver.hpp">
+      <file leaf-file-name="test_essential_fitting.cpp" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/test/test_essential_fitting.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="22" column="2" lean-forward="true" selection-start-line="22" selection-start-column="2" selection-end-line="22" selection-end-column="2" />
+            <state relative-caret-position="513">
+              <caret line="39" column="45" selection-start-line="39" selection-start-column="35" selection-end-line="39" selection-end-column="45" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="local_optimization.hpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/include/opencv2/usac/local_optimization.hpp">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file leaf-file-name="inner_local_optimization.hpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/include/opencv2/usac/inner_local_optimization.hpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="409">
+              <caret line="37" column="31" lean-forward="true" selection-start-line="37" selection-start-column="31" selection-end-line="37" selection-end-column="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/test.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="522">
+              <caret line="73" column="5" selection-start-line="73" selection-start-column="5" selection-end-line="73" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="termination_criteria.hpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/include/opencv2/usac/termination_criteria.hpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ransac.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ransac.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="611">
+              <caret line="159" column="5" selection-start-line="159" selection-start-column="5" selection-end-line="159" selection-end-column="5" />
+              <folding>
+                <element signature="e#195#217#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -142,8 +138,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>_pts</find>
-      <find>stopping_length</find>
       <find>.mat</find>
       <find>drawEpipolarLines</find>
       <find>i</find>
@@ -172,6 +166,8 @@
       <find>dlt-&gt;</find>
       <find>-&gt;</find>
       <find>solver-&gt;</find>
+      <find>calloc</find>
+      <find>new</find>
     </findStrings>
     <replaceStrings>
       <replace>lo_model</replace>
@@ -212,8 +208,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/draw_panorama.cpp" />
-        <option value="$PROJECT_DIR$/src/utils.cpp" />
         <option value="$PROJECT_DIR$/src/nearest_neighbors.cpp" />
         <option value="$PROJECT_DIR$/include/opencv2/usac/array_random_generator.hpp" />
         <option value="$PROJECT_DIR$/include/opencv2/usac/drawing.hpp" />
@@ -225,10 +219,8 @@
         <option value="$PROJECT_DIR$/include/opencv2/usac/local_optimization.hpp" />
         <option value="$PROJECT_DIR$/include/opencv2/usac/estimator.hpp" />
         <option value="$PROJECT_DIR$/include/opencv2/usac/graphcut.hpp" />
-        <option value="$PROJECT_DIR$/include/opencv2/usac/inner_local_optimization.hpp" />
         <option value="$PROJECT_DIR$/src/eight_points.cpp" />
         <option value="$PROJECT_DIR$/include/opencv2/usac/fundamental_solver.hpp" />
-        <option value="$PROJECT_DIR$/src/ransac.cpp" />
         <option value="$PROJECT_DIR$/include/opencv2/usac/reader.hpp" />
         <option value="$PROJECT_DIR$/src/reader.cpp" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
@@ -239,30 +231,34 @@
         <option value="$PROJECT_DIR$/include/opencv2/usac/line2d_estimator.hpp" />
         <option value="$PROJECT_DIR$/src/draw_epipolar_lines.cpp" />
         <option value="$PROJECT_DIR$/include/opencv2/usac/ransac_output.hpp" />
-        <option value="$PROJECT_DIR$/include/opencv2/usac/ransac.hpp" />
         <option value="$PROJECT_DIR$/src/precomp.hpp" />
         <option value="$PROJECT_DIR$/src/math.cpp" />
         <option value="$PROJECT_DIR$/include/opencv2/usac/sprt.hpp" />
         <option value="$PROJECT_DIR$/src/normalizing_transformation.cpp" />
         <option value="$PROJECT_DIR$/src/graphcut.cpp" />
         <option value="$PROJECT_DIR$/test/test_line2d_fitting.cpp" />
-        <option value="$PROJECT_DIR$/include/opencv2/usac/prosac_termination_criteria.hpp" />
         <option value="$PROJECT_DIR$/include/opencv2/usac/essential_estimator.hpp" />
         <option value="$PROJECT_DIR$/include/opencv2/usac/fundamental_estimator.hpp" />
         <option value="$PROJECT_DIR$/include/opencv2/usac/napsac_sampler.hpp" />
         <option value="$PROJECT_DIR$/src/init.cpp" />
         <option value="$PROJECT_DIR$/include/opencv2/usac/prosac_sampler.hpp" />
         <option value="$PROJECT_DIR$/test/test_homography_fitting.cpp" />
-        <option value="$PROJECT_DIR$/test/test_fundamental_fitting.cpp" />
-        <option value="$PROJECT_DIR$/test/test_essential_fitting.cpp" />
         <option value="$PROJECT_DIR$/include/opencv2/usac/model.hpp" />
         <option value="$PROJECT_DIR$/include/opencv2/usac/quality.hpp" />
         <option value="$PROJECT_DIR$/include/opencv2/usac/iterative_local_optimization.hpp" />
         <option value="$PROJECT_DIR$/include/opencv2/usac/homography_estimator.hpp" />
         <option value="$PROJECT_DIR$/src/seven_points.cpp" />
-        <option value="$PROJECT_DIR$/test/test_main.cpp" />
-        <option value="$PROJECT_DIR$/test/test.cpp" />
         <option value="$PROJECT_DIR$/src/dlt.cpp" />
+        <option value="$PROJECT_DIR$/include/opencv2/usac/standard_termination_criteria.hpp" />
+        <option value="$PROJECT_DIR$/include/opencv2/usac/termination_criteria.hpp" />
+        <option value="$PROJECT_DIR$/test/test.cpp" />
+        <option value="$PROJECT_DIR$/include/opencv2/usac/ransac.hpp" />
+        <option value="$PROJECT_DIR$/src/ransac.cpp" />
+        <option value="$PROJECT_DIR$/test/test_fundamental_fitting.cpp" />
+        <option value="$PROJECT_DIR$/include/opencv2/usac/prosac_termination_criteria.hpp" />
+        <option value="$PROJECT_DIR$/test/test_main.cpp" />
+        <option value="$PROJECT_DIR$/test/test_essential_fitting.cpp" />
+        <option value="$PROJECT_DIR$/include/opencv2/usac/inner_local_optimization.hpp" />
       </list>
     </option>
   </component>
@@ -509,7 +505,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1344900000" />
+    <option name="totallyTimeSpent" value="1348709000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -524,13 +520,13 @@
     <frame x="64" y="-11" width="1217" height="1036" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49891305" visible="true" weight="0.26090604" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49891305" visible="true" weight="0.26090604" />
       <window_info anchor="bottom" id="TODO" order="7" weight="0.32998884" />
       <window_info anchor="bottom" id="Messages" order="6" sideWeight="0.4979424" weight="0.46488294" />
       <window_info anchor="bottom" id="CMake" order="11" weight="0.32887402" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5041946" side_tool="true" weight="0.39130434" />
       <window_info anchor="bottom" id="Version Control" order="10" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49580538" visible="true" weight="0.39130434" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49580538" weight="0.39130434" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49876544" weight="0.32887402" />
       <window_info id="Favorites" order="2" sideWeight="0.50108695" side_tool="true" weight="0.13744856" />
@@ -570,61 +566,10 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/usac/model.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="29" lean-forward="true" selection-start-line="19" selection-start-column="29" selection-end-line="19" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/tests.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1182">
-          <caret line="288" column="46" selection-start-line="288" selection-start-column="46" selection-end-line="288" selection-end-column="46" />
-          <folding>
-            <element signature="e#45#72#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/test.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="3" column="89" selection-start-line="3" selection-start-column="89" selection-end-line="3" selection-end-column="89" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/test_homography_fitting.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1098">
-          <caret line="63" column="24" selection-start-line="63" selection-start-column="24" selection-end-line="63" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/test_essential_fitting.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="936">
-          <caret line="218" column="9" lean-forward="true" selection-start-line="218" selection-start-column="9" selection-end-line="218" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/test_utils.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1908">
           <caret line="12" column="16" selection-start-line="12" selection-start-column="16" selection-end-line="12" selection-end-column="16" />
-          <folding>
-            <element signature="e#256#283#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/include/opencv2/usac/ransac.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1001">
-          <caret line="98" selection-start-line="98" selection-end-line="98" />
-          <folding>
-            <element signature="e#244#263#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -663,20 +608,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/opencv2/usac/inner_local_optimization.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="501">
-          <caret line="133" column="49" selection-start-line="133" selection-start-column="49" selection-end-line="133" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/include/opencv2/usac/init.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="19" selection-start-line="19" selection-end-line="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/include/opencv2/usac/graphcut.hpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1473">
@@ -709,13 +640,6 @@
     <entry file="file://$PROJECT_DIR$/include/opencv2/usac/dlt.hpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-124" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/include/opencv2/usac/sampler.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="30" column="49" lean-forward="true" selection-start-line="30" selection-start-column="49" selection-end-line="30" selection-end-column="49" />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/reader.cpp">
@@ -773,27 +697,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ransac.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="39" selection-start-line="39" selection-end-line="39" />
-          <folding>
-            <element signature="e#195#217#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/math.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="29" column="33" selection-start-line="29" selection-start-column="33" selection-end-line="29" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/include/opencv2/usac/prosac_termination_criteria.hpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="49" column="37" selection-start-line="49" selection-start-column="8" selection-end-line="49" selection-end-column="37" />
         </state>
       </provider>
     </entry>
@@ -809,41 +716,10 @@
         <state relative-caret-position="-64" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/init.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="41" column="55" selection-start-line="41" selection-start-column="55" selection-end-line="41" selection-end-column="55" />
-          <folding>
-            <element signature="e#195#217#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/test_precomp.hpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
           <caret line="21" selection-start-line="21" selection-end-line="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/test_homography_fitting.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-280">
-          <caret line="51" selection-start-line="51" selection-end-line="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/test_fundamental_fitting.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-115">
-          <caret line="55" selection-start-line="55" selection-end-line="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/test_essential_fitting.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="54" selection-start-line="54" selection-end-line="54" />
         </state>
       </provider>
     </entry>
@@ -893,9 +769,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="43" column="40" selection-start-line="43" selection-start-column="40" selection-end-line="43" selection-end-column="40" />
-          <folding>
-            <element signature="e#268#299#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -910,9 +783,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="296">
           <caret line="83" column="5" lean-forward="true" selection-start-line="83" selection-start-column="5" selection-end-line="83" selection-end-column="5" />
-          <folding>
-            <element signature="e#270#294#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -920,23 +790,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="27">
           <caret line="54" column="24" selection-start-line="54" selection-start-column="24" selection-end-line="54" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/test_main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="18" selection-start-line="13" selection-start-column="18" selection-end-line="13" selection-end-column="18" />
-          <folding>
-            <element signature="e#195#222#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/test.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="69" column="116" selection-start-line="69" selection-start-column="116" selection-end-line="69" selection-end-column="116" />
         </state>
       </provider>
     </entry>
@@ -951,6 +804,129 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="810">
           <caret line="55" column="1" selection-start-line="55" selection-start-column="1" selection-end-line="55" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/c++/4.9/bits/stl_vector.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="690">
+          <caret line="417" column="34" selection-start-line="417" selection-start-column="31" selection-end-line="417" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test_homography_fitting.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="735">
+          <caret line="51" selection-start-line="51" selection-end-line="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/opencv2/usac/uniform_sampler.hpp">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/opencv2/usac/sampler.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="326">
+          <caret line="30" column="49" lean-forward="true" selection-start-line="30" selection-start-column="49" selection-end-line="30" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/opencv2/usac/init.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="81">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/init.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-12">
+          <caret line="41" column="55" selection-start-line="41" selection-start-column="55" selection-end-line="41" selection-end-column="55" />
+          <folding>
+            <element signature="e#195#217#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/opencv2/usac/standard_termination_criteria.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/opencv2/usac/termination_criteria.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="522">
+          <caret line="73" column="5" selection-start-line="73" selection-start-column="5" selection-end-line="73" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/opencv2/usac/prosac_termination_criteria.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="44" column="23" selection-start-line="44" selection-start-column="23" selection-end-line="44" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/opencv2/usac/ransac.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="42" column="29" selection-start-line="42" selection-start-column="29" selection-end-line="42" selection-end-column="29" />
+          <folding>
+            <element signature="e#244#263#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ransac.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="611">
+          <caret line="159" column="5" selection-start-line="159" selection-start-column="5" selection-end-line="159" selection-end-column="5" />
+          <folding>
+            <element signature="e#195#217#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test_main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="23" selection-start-line="12" selection-start-column="23" selection-end-line="12" selection-end-column="23" />
+          <folding>
+            <element signature="e#195#222#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test_fundamental_fitting.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="39" column="41" selection-start-line="39" selection-start-column="41" selection-end-line="39" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/opencv2/usac/local_optimization.hpp">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/opencv2/usac/inner_local_optimization.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="409">
+          <caret line="37" column="31" lean-forward="true" selection-start-line="37" selection-start-column="31" selection-end-line="37" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test_essential_fitting.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="39" column="45" selection-start-line="39" selection-start-column="35" selection-end-line="39" selection-end-column="45" />
         </state>
       </provider>
     </entry>

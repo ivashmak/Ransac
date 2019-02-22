@@ -37,7 +37,7 @@ void opencv_test::testEssentialFitting() {
 //    model = new cv::usac::Model (threshold, confidence, knn, cv::usac::ESTIMATOR::Essential, cv::usac::SAMPLER::Prosac);
     // ------------------------------------------------------------------------
 
-    model->lo = cv::usac::LocOpt ::NullLO;
+    model->lo = cv::usac::LocOpt ::InItFLORsc;
     model->setSprt(0);
     model->setCellSize(50);
     model->setNeighborsType(cv::usac::NeighborsSearch::Grid);

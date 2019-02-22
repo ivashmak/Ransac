@@ -29,10 +29,10 @@ private:
     float threshold;
 public:
 
-    ~ProsacTerminationCriteria() {
+    ~ProsacTerminationCriteria() override {
         delete[] maximality_samples;
-        delete[] non_random_inliers;
-        delete (standart_termination_criteria);
+        free (non_random_inliers);
+        delete standart_termination_criteria;
     }
 
     void setLargestSampleSize(unsigned int *largest_sample_size_) {
@@ -74,14 +74,16 @@ public:
         // i-th entry - inlier counts for termination up to i-th point (term length = i+1)
         non_random_inliers = (unsigned int *) calloc(points_size, sizeof(unsigned int));
         double pn_i = 1.0;    // prob(i inliers) with subset size n
-        double *pn_i_vec;
+        std::vector<double> pn_i_vec (points_size);
+//        double *pn_i_vec;
         for (size_t n = sample_size + 1; n <= points_size; ++n) {
             if (n - 1 > 1000) {
                 non_random_inliers[n - 1] = non_random_inliers[n - 2];
                 continue;
             }
 
-            pn_i_vec = (double *) calloc(points_size, sizeof(double));
+            // zero array
+            memset(&pn_i_vec[0], 0, points_size*sizeof(*&pn_i_vec[0]));
 
             // initial value for i = m+1 inliers
             pn_i_vec[sample_size] =

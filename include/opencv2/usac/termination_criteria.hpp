@@ -11,6 +11,7 @@ protected:
     bool isinit = false;
 public:
     bool isInit() { return isinit; }
+    virtual ~TerminationCriteria () = default;
 
     virtual unsigned int getUpBoundIterations(unsigned int inlier_size) = 0;
 
