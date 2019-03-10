@@ -44,7 +44,7 @@ void opencv_test::testHomographyFitting() {
 //     -------------------------------------------------
 
 
-     model->lo = cv::usac::LocOpt ::NullLO;
+     model->lo = cv::usac::LocOpt ::GC;
      model->setSprt(0);
      model->setCellSize(50);
      model->setNeighborsType(cv::usac::NeighborsSearch::Grid);

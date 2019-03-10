@@ -21,12 +21,10 @@
 #include <algorithm>
 #include <iomanip>
 
-// Eigen (is need only for nanoflann neighbors searching. We should try to get rid of it).
-#include <Eigen/Dense>
-
 // Nanoflann (only for nearest neighbors searching, maybe we should try to move nanoflann 
 // source code to include folder and don't inlcude whole library)
-#include <nanoflann.hpp>
+#include "../include/nanoflann/nanoflann.hpp"
+#include "../include/nanoflann/KDTreeVectorOfVectorsAdaptor.h"
 
 // OpenCV
 #include <opencv2/flann/flann.hpp>
@@ -34,7 +32,6 @@
 #include <opencv2/core/mat.hpp>
 #include <opencv2/core/types.hpp>
 #include <opencv2/core.hpp>
-#include <opencv2/core/eigen.hpp>
 #include <opencv2/opencv.hpp>
 #include <opencv2/features2d.hpp>
 #include <opencv2/xfeatures2d.hpp>
